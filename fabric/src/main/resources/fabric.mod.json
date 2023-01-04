@@ -1,0 +1,39 @@
+{
+  "schemaVersion": 1,
+  "id": "wizards",
+  "version": "${version}",
+  "name": "Wizards",
+  "description": "Craft wizards to serve as ammo for spells.",
+  "authors": [
+    "Daedelus"
+  ],
+  "contact": {
+    "repo": "https://github.com/ZsoltMolnarrr/Wizards",
+    "issues": "https://github.com/ZsoltMolnarrr/Wizards/issues"
+  },
+  "license": "All Rights Reserved",
+  "icon": "icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "client": [
+      "net.wizards.fabric.client.FabricClientMod"
+    ],
+    "main": [
+      "net.wizards.fabric.FabricMod"
+    ]
+  },
+  "mixins": [
+    "wizards.mixins.json"
+  ],
+  "depends": {
+    "minecraft": ">=1.19.0 <1.19.3",
+    "fabricloader": ">=0.14.0"
+  },
+  "custom": {
+    "modmenu": {
+      "links": {
+        "modmenu.discord": "https://discord.gg/KN9b3pjFTM"
+      }
+    }
+  }
+}
