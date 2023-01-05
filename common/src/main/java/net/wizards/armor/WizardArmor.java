@@ -20,14 +20,13 @@ public class WizardArmor extends ArmorItem implements IAnimatable {
     }
 
     private <P extends IAnimatable> PlayState predicate(AnimationEvent<P> event) {
-        event.getController().setAnimation(new AnimationBuilder().addAnimation("idle", ILoopType.EDefaultLoopTypes.LOOP));
-        return PlayState.CONTINUE;
+        return PlayState.STOP;
     }
 
 
     @Override
     public void registerControllers(AnimationData data) {
-        data.addAnimationController(new AnimationController(this, "controller", 20, this::predicate));
+//        data.addAnimationController(new AnimationController(this, "controller", 20, this::predicate));
     }
 
     @Override
