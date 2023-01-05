@@ -17,6 +17,7 @@ architectury {
 
 repositories {
     maven { url 'https://jitpack.io' }
+    maven { url 'https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/' }
 }
 
 configurations {
@@ -36,6 +37,7 @@ dependencies {
     shadowCommon(project(path: ":common", configuration: "transformProductionForge")) { transitive = false }
 
     shadowCommon(common("com.github.ZsoltMolnarrr:TinyConfig:${project.tiny_config_version}"))
+    modImplementation("software.bernie.geckolib:geckolib-forge-${project.gecko_lib_version_forge}")
 }
 
 processResources {

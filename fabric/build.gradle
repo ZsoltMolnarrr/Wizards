@@ -20,6 +20,7 @@ configurations {
 
 repositories {
     maven { url 'https://jitpack.io' }
+    maven { url 'https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/' }
 }
 
 dependencies {
@@ -30,6 +31,7 @@ dependencies {
     shadowCommon(project(path: ":common", configuration: "transformProductionFabric")) { transitive false }
 
     shadowCommon(implementation("com.github.ZsoltMolnarrr:TinyConfig:${project.tiny_config_version}"))
+    modImplementation("software.bernie.geckolib:geckolib-fabric-${project.gecko_lib_version_fabric}")
 }
 
 processResources {
