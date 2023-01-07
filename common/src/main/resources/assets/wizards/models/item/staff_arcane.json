@@ -1,6 +1,6 @@
 {
   "parent": "wizards:item/medium_staff",
   "textures": {
-    "layer0": "wizards:item/staff_fire"
+    "layer0": "wizards:item/staff_arcane"
   }
 }
