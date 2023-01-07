@@ -44,5 +44,9 @@ public class ItemConfig {
         }
     }
 
+    public static class ArmorSet {
+
+    }
+
     public Map<String, Weapon> weapons;
 }

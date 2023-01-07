@@ -1,4 +1,4 @@
-package net.wizards.item;
+package net.wizards.item.weapon;
 
 import com.google.common.collect.Multimap;
 import net.minecraft.block.BlockState;

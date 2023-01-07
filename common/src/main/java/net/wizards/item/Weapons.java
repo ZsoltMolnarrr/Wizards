@@ -14,6 +14,7 @@ import net.spell_power.api.MagicSchool;
 import net.spell_power.api.attributes.EntityAttributes_SpellPower;
 import net.wizards.WizardsMod;
 import net.wizards.config.ItemConfig;
+import net.wizards.item.weapon.StaffItem;
 
 import java.util.ArrayList;
 import java.util.UUID;

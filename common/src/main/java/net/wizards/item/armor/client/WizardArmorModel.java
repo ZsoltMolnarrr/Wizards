@@ -1,8 +1,8 @@
-package net.wizards.armor.client;
+package net.wizards.item.armor.client;
 
 import net.minecraft.util.Identifier;
 import net.wizards.WizardsMod;
-import net.wizards.armor.WizardArmor;
+import net.wizards.item.armor.WizardArmor;
 import software.bernie.geckolib3.model.AnimatedGeoModel;
 
 public class WizardArmorModel extends AnimatedGeoModel<WizardArmor> {
