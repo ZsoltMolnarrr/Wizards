@@ -40,7 +40,7 @@
               "max_speed": 0.1
             }
           ],
-          "model_id": "spell_engine:fireball_projectile",
+          "model_id": "wizards:fireball_projectile",
           "render": "DEEP",
           "scale": 0.75
         }
@@ -70,7 +70,7 @@
         }
       ],
       "sound": {
-        "id": "spell_engine:fireball_impact"
+        "id": "wizards:fireball_impact"
       }
     }
   ],

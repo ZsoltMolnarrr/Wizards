@@ -40,7 +40,7 @@
               "max_speed": 0.1
             }
           ],
-          "model_id": "spell_engine:arcane_missile",
+          "model_id": "wizards:arcane_missile",
           "render": "DEEP",
           "scale": 0.5
         }
@@ -48,7 +48,7 @@
     },
     "animation": "spell_engine:one_handed_projectile_release",
     "sound": {
-      "id": "spell_engine:arcane_missile_release"
+      "id": "wizards:arcane_missile_release"
     }
   },
   "impact": [
@@ -71,7 +71,7 @@
         }
       ],
       "sound": {
-        "id": "spell_engine:arcane_missile_impact"
+        "id": "wizards:arcane_missile_impact"
       }
     }
   ],

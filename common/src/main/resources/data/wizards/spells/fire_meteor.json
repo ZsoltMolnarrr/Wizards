@@ -55,7 +55,7 @@
           }
         ],
         "impact_sound": {
-          "id": "spell_engine:fire_meteor_impact",
+          "id": "wizards:fire_meteor_impact",
           "volume": 1.5
         }
       },
@@ -94,7 +94,7 @@
               "max_speed": 0.05
             }
           ],
-          "model_id": "spell_engine:fireball_projectile",
+          "model_id": "wizards:fireball_projectile",
           "render": "DEEP",
           "scale": 2
         }
@@ -102,7 +102,7 @@
     },
     "animation": "spell_engine:one_handed_area_release",
     "sound": {
-      "id": "spell_engine:fire_meteor_release"
+      "id": "wizards:fire_meteor_release"
     }
   },
   "impact": [
@@ -125,7 +125,7 @@
         }
       ],
       "sound": {
-        "id": "spell_engine:fire_breath_impact"
+        "id": "wizards:fire_breath_impact"
       }
     }
   ],

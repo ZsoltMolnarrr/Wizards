@@ -29,7 +29,7 @@
     },
     "animation": "spell_engine:one_handed_projectile_release",
     "sound": {
-      "id": "spell_engine:arcane_missile_release"
+      "id": "wizards:arcane_missile_release"
     }
   },
   "impact": [
@@ -60,7 +60,7 @@
         }
       ],
       "sound": {
-        "id": "spell_engine:arcane_blast_impact"
+        "id": "wizards:arcane_blast_impact"
       }
     },
     {

@@ -8,11 +8,11 @@
     "duration": 10,
     "animation": "spell_engine:two_handed_channeling",
     "sound": {
-      "id": "spell_engine:fire_breath_casting",
+      "id": "wizards:fire_breath_casting",
       "randomness": 0
     },
     "start_sound": {
-      "id": "spell_engine:fire_breath_start"
+      "id": "wizards:fire_breath_start"
     },
     "particles": [
       {
@@ -37,7 +37,7 @@
       }
     },
     "sound": {
-      "id": "spell_engine:fire_breath_release"
+      "id": "wizards:fire_breath_release"
     }
   },
   "impact": [
@@ -59,7 +59,7 @@
         }
       ],
       "sound": {
-        "id": "spell_engine:fire_breath_impact"
+        "id": "wizards:fire_breath_impact"
       }
     },
     {

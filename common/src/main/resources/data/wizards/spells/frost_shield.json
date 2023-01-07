@@ -13,7 +13,7 @@
     },
     "animation": "spell_engine:one_handed_area_release",
     "sound": {
-      "id": "spell_engine:frost_shield_release"
+      "id": "wizards:frost_shield_release"
     },
     "particles": [
       {
@@ -39,7 +39,7 @@
       "action": {
         "type": "STATUS_EFFECT",
         "status_effect": {
-          "effect_id": "spell_engine:frost_shield",
+          "effect_id": "wizards:frost_shield",
           "duration": 10,
           "apply_mode": "SET",
           "show_particles": false

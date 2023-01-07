@@ -31,7 +31,7 @@
     },
     "animation": "spell_engine:one_handed_area_release",
     "sound": {
-      "id": "spell_engine:frost_nova_release"
+      "id": "wizards:frost_nova_release"
     },
     "particles": [
       {
@@ -71,14 +71,14 @@
         }
       ],
       "sound": {
-        "id": "spell_engine:frost_nova_damage_impact"
+        "id": "wizards:frost_nova_damage_impact"
       }
     },
     {
       "action": {
         "type": "STATUS_EFFECT",
         "status_effect": {
-          "effect_id": "spell_engine:frozen",
+          "effect_id": "wizards:frozen",
           "duration": 10,
           "apply_mode": "ADD",
           "apply_limit": {
@@ -89,7 +89,7 @@
         }
       },
       "sound": {
-        "id": "spell_engine:frost_nova_effect_impact"
+        "id": "wizards:frost_nova_effect_impact"
       }
     }
   ],
