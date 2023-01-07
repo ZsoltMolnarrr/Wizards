@@ -1,6 +1,9 @@
 package net.wizards.item;
 
+import com.google.common.collect.ImmutableMultimap;
 import net.minecraft.entity.EquipmentSlot;
+import net.minecraft.entity.attribute.EntityAttribute;
+import net.minecraft.entity.attribute.EntityAttributeModifier;
 import net.minecraft.item.*;
 import net.minecraft.recipe.Ingredient;
 import net.minecraft.sound.SoundEvent;
@@ -8,6 +11,8 @@ import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.Lazy;
 import net.minecraft.util.registry.Registry;
+import net.spell_power.api.MagicSchool;
+import net.spell_power.api.attributes.EntityAttributes_SpellPower;
 import net.wizards.WizardsMod;
 import net.wizards.item.armor.WizardArmor;
 
@@ -111,5 +116,24 @@ public class Armors {
 
     public static void register() {
         wizardRobeSet.register();
+        for(var piece: wizardRobeSet.pieces()) {
+            ImmutableMultimap.Builder<EntityAttribute, EntityAttributeModifier> builder = ImmutableMultimap.builder();
+            builder.put(EntityAttributes_SpellPower.POWER.get(MagicSchool.ARCANE),
+                    new EntityAttributeModifier(
+                            "Armor modifier",
+                            1,
+                            EntityAttributeModifier.Operation.ADDITION));
+            builder.put(EntityAttributes_SpellPower.POWER.get(MagicSchool.FIRE),
+                    new EntityAttributeModifier(
+                            "Armor modifier",
+                            1,
+                            EntityAttributeModifier.Operation.ADDITION));
+            builder.put(EntityAttributes_SpellPower.POWER.get(MagicSchool.FROST),
+                    new EntityAttributeModifier(
+                            "Armor modifier",
+                            1,
+                            EntityAttributeModifier.Operation.ADDITION));
+            piece.setAttributes(builder.build());
+        }
     }
 }
