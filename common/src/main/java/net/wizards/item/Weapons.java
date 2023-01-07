@@ -31,9 +31,6 @@ public class Weapons {
         }
     }
 
-//    public static List<Entry> all() {
-//        entries.
-//    }
     private static final ArrayList<Entry> entries = new ArrayList<>();
     private static Entry entry(String name, Material material, ItemConfig.Weapon defaults) {
         var entry = new Entry(name, material, defaults);
@@ -120,13 +117,13 @@ public class Weapons {
         return entry(name, material, new ItemConfig.Weapon(staffAttackDamage, staffAttackSpeed));
     }
 
-    public static final Entry arcaneStaff = wand("staff_arcane",
+    public static final Entry arcaneStaff = staff("staff_arcane",
             Material.matching(ToolMaterials.IRON, () -> Ingredient.ofItems(Items.GOLD_INGOT)))
             .add(ItemConfig.Attribute.bonus(EntityAttributes_SpellPower.POWER.get(MagicSchool.ARCANE), 4));
-    public static final Entry fireStaff = wand("staff_fire",
+    public static final Entry fireStaff = staff("staff_fire",
             Material.matching(ToolMaterials.IRON, () -> Ingredient.ofItems(Items.GOLD_INGOT)))
             .add(ItemConfig.Attribute.bonus(EntityAttributes_SpellPower.POWER.get(MagicSchool.FIRE), 4));
-    public static final Entry frostStaff = wand("staff_frost",
+    public static final Entry frostStaff = staff("staff_frost",
             Material.matching(ToolMaterials.IRON, () -> Ingredient.ofItems(Items.GOLD_INGOT)))
             .add(ItemConfig.Attribute.bonus(EntityAttributes_SpellPower.POWER.get(MagicSchool.FROST), 4));
 
