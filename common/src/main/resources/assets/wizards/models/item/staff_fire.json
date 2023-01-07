@@ -1,0 +1,6 @@
+{
+  "parent": "wizards:item/handheld",
+  "textures": {
+    "layer0": "wizards:item/staff_fire"
+  }
+}

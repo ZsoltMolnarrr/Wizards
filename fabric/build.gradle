@@ -30,8 +30,11 @@ dependencies {
     common(project(path: ":common", configuration: "namedElements")) { transitive false }
     shadowCommon(project(path: ":common", configuration: "transformProductionFabric")) { transitive false }
 
+    // Dependencies
     shadowCommon(implementation("com.github.ZsoltMolnarrr:TinyConfig:${project.tiny_config_version}"))
     modImplementation("software.bernie.geckolib:geckolib-fabric-${project.gecko_lib_version_fabric}")
+    modImplementation(files("../fabric/run/mods/spell_engine-fabric-${project.spell_engine_version}.jar"))
+    modImplementation(files("../fabric/run/mods/spell_power-fabric-${project.spell_power_version}.jar"))
 }
 
 processResources {
