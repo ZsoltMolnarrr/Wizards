@@ -1,2 +1,108 @@
 {
+  "arcane_missile_release": {
+    "sounds": [
+      "wizards:arcane_missile_release"
+    ]
+  },
+  "arcane_missile_impact": {
+    "sounds": [
+      "wizards:arcane_missile_impact"
+    ]
+  },
+
+  "arcane_blast_release": {
+    "sounds": [
+      "wizards:arcane_blast_release"
+    ]
+  },
+  "arcane_blast_impact": {
+    "sounds": [
+      "wizards:arcane_blast_impact"
+    ]
+  },
+
+  "arcane_beam_start": {
+    "sounds": [
+      "wizards:arcane_beam_start"
+    ]
+  },
+  "arcane_beam_casting": {
+    "sounds": [
+      "wizards:arcane_beam_casting"
+    ]
+  },
+  "arcane_beam_impact": {
+    "sounds": [
+      "wizards:arcane_beam_impact"
+    ]
+  },
+  "arcane_beam_release": {
+    "sounds": [
+      "wizards:arcane_beam_release"
+    ]
+  },
+
+  "fireball_impact": {
+    "sounds": [
+      "wizards:fireball_impact"
+    ]
+  },
+  "fire_breath_start": {
+    "sounds": [
+      "wizards:fire_breath_start"
+    ]
+  },
+  "fire_breath_casting": {
+    "sounds": [
+      "wizards:fire_breath_casting"
+    ]
+  },
+  "fire_breath_release": {
+    "sounds": [
+      "wizards:fire_breath_release"
+    ]
+  },
+  "fire_breath_impact": {
+    "sounds": [
+      "wizards:fire_breath_impact"
+    ]
+  },
+
+  "fire_meteor_release": {
+    "sounds": [
+      "wizards:fire_meteor_release"
+    ]
+  },
+  "fire_meteor_impact": {
+    "sounds": [
+      "wizards:fire_meteor_impact"
+    ]
+  },
+
+  "frost_nova_release": {
+    "sounds": [
+      "wizards:frost_nova_release"
+    ]
+  },
+  "frost_nova_damage_impact": {
+    "sounds": [
+      "wizards:frost_nova_damage_impact"
+    ]
+  },
+  "frost_nova_effect_impact": {
+    "sounds": [
+      "wizards:frost_nova_effect_impact"
+    ]
+  },
+
+  "frost_shield_release": {
+    "sounds": [
+      "wizards:frost_shield_release"
+    ]
+  },
+  "frost_shield_impact": {
+    "sounds": [
+      "wizards:frost_shield_impact"
+    ]
+  }
 }

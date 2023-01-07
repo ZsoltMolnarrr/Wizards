@@ -10,5 +10,28 @@
   "item.wizards.wizard_robe_head": "Wizard Hat",
   "item.wizards.wizard_robe_chest": "Wizard Robe Top",
   "item.wizards.wizard_robe_legs": "Wizard Robe Bottom",
-  "item.wizards.wizard_robe_feet": "Wizard Boots"
+  "item.wizards.wizard_robe_feet": "Wizard Boots",
+
+  "spell.wizards.arcane_missile.name": "Arcane Missile",
+  "spell.wizards.arcane_missile.description": "Shoots a bolt of energy, causing {damage} arcane spell damage.",
+  "spell.wizards.arcane_blast.name": "Arcane Blast",
+  "spell.wizards.arcane_blast.description": "Blasts the target, causing {damage} arcane damage. Grants Arcane Power, stacking up to {effect_amplifier} times.",
+  "spell.wizards.arcane_beam.name": "Arcane Beam",
+  "spell.wizards.arcane_beam.description": "Channels a beam of energy, dealing {damage} arcane damage every second. Consumes Arcane Power.",
+
+  "spell.wizards.fireball.name": "Fireball",
+  "spell.wizards.fireball.description": "Launches a ball of fire, causing {damage} fire spell damage.",
+  "spell.wizards.fire_breath.name": "Fire Breath",
+  "spell.wizards.fire_breath.description": "Incinerates targets in front, dealing up to {damage} fire spell damage every second.",
+  "spell.wizards.fire_meteor.name": "Meteor",
+  "spell.wizards.fire_meteor.description": "Crashes a meteor on the target, causing up to {damage} fire spell damage within {impact_range} blocks.",
+
+  "spell.wizards.frostbolt.name": "Frostbolt",
+  "spell.wizards.frostbolt.description": "Launches a ball of frost, causing {damage} frost spell damage and slowing the target on impact.",
+  "spell.wizards.frost_nova.name": "Frost Nova",
+  "spell.wizards.frost_nova.description": "Freezes targets around you, causing {damage} frost spell damage and blocking their movement. Frozen targets are vulnerable to frost magic.",
+  "effect.wizards.frozen": "Frozen",
+  "spell.wizards.frost_shield.name": "Frost Shield",
+  "spell.wizards.frost_shield.description": "Protects you from attacks, projectiles and fire for {effect_duration} seconds, but also slows down your movement.",
+  "effect.wizards.frost_shield": "Frost Shield"
 }
