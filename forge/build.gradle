@@ -37,7 +37,7 @@ dependencies {
     shadowCommon(project(path: ":common", configuration: "transformProductionForge")) { transitive = false }
 
     shadowCommon(common("com.github.ZsoltMolnarrr:TinyConfig:${project.tiny_config_version}"))
-    modImplementation("software.bernie.geckolib:geckolib-forge-${project.gecko_lib_version_forge}")
+    modImplementation("software.bernie.geckolib:geckolib-forge-${project.gecko_mc_prefix}${project.gecko_lib_version_forge}")
 }
 
 processResources {

@@ -32,7 +32,7 @@ dependencies {
 
     // Dependencies
     shadowCommon(implementation("com.github.ZsoltMolnarrr:TinyConfig:${project.tiny_config_version}"))
-    modImplementation("software.bernie.geckolib:geckolib-fabric-${project.gecko_lib_version_fabric}")
+    modImplementation("software.bernie.geckolib:geckolib-fabric-${project.gecko_mc_prefix}${project.gecko_lib_version_fabric}")
     modImplementation(files("../fabric/run/mods/spell_engine-fabric-${project.spell_engine_version}.jar"))
     modImplementation(files("../fabric/run/mods/spell_power-fabric-${project.spell_power_version}.jar"))
 }
@@ -41,7 +41,7 @@ processResources {
     inputs.property "version", project.version
 
     filesMatching("fabric.mod.json") {
-        expand "version": project.version
+        expand(project.properties)
     }
 }
 
