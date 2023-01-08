@@ -1,8 +1,8 @@
 {
 	"credit": "Made with Blockbench",
 	"textures": {
-		"0": "spell_engine:spell_projectile/arcane_missile",
-		"particle": "spell_engine:spell_projectile/arcane_missile"
+		"0": "wizards:spell_projectile/arcane_missile",
+		"particle": "wizards:spell_projectile/arcane_missile"
 	},
 	"elements": [
 		{

@@ -2,8 +2,8 @@
 	"credit": "Made with Blockbench",
 	"texture_size": [64, 64],
 	"textures": {
-		"1": "spell_engine:spell_projectile/frost_shield_overlay",
-		"particle": "spell_engine:spell_projectile/frost_shield_overlay"
+		"1": "wizards:spell_projectile/frost_shield_overlay",
+		"particle": "wizards:spell_projectile/frost_shield_overlay"
 	},
 	"elements": [
 		{

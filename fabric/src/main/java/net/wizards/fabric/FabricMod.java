@@ -8,12 +8,14 @@ import net.spell_power.SpellPowerMod;
 import net.wizards.WizardsMod;
 import net.wizards.item.Armors;
 import net.wizards.item.Group;
+import net.wizards.util.SoundHelper;
 
 public class FabricMod implements ModInitializer {
     @Override
     public void onInitialize() {
         preInit();
         WizardsMod.init();
+        SoundHelper.registerSounds();
     }
 
     // Loader framework specific pre-init
