@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "L": {
+      "item": "minecraft:lapis_lazuli"
+    },
+    "W": {
+      "tag": "minecraft:wool"
+    }
+  },
+  "pattern": [
+    "L L",
+    "WLW",
+    "WWW"
+  ],
+  "result": {
+    "item": "wizards:wizard_robe_chest"
+  }
+}
