@@ -7,9 +7,9 @@ import net.minecraft.client.texture.SpriteAtlasTexture;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.Identifier;
-import net.spell_engine.api.client.CustomModels;
+import net.spell_engine.api.render.CustomModels;
 import net.spell_engine.api.status_effect.CustomModelStatusEffect;
-import net.spell_engine.client.render.CustomLayers;
+import net.spell_engine.api.render.CustomLayers;
 import net.wizards.WizardsMod;
 
 public class FrostShieldRenderer implements CustomModelStatusEffect.Renderer {

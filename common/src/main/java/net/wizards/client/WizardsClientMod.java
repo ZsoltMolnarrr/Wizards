@@ -1,7 +1,7 @@
 package net.wizards.client;
 
 import net.minecraft.util.Identifier;
-import net.spell_engine.api.client.CustomModels;
+import net.spell_engine.api.render.CustomModels;
 import net.spell_engine.api.status_effect.CustomModelStatusEffect;
 import net.spell_engine.api.status_effect.CustomParticleStatusEffect;
 import net.wizards.WizardsMod;
@@ -29,7 +29,6 @@ public class WizardsClientMod {
                 FrostShieldRenderer.modelId_base,
                 FrostShieldRenderer.modelId_overlay
         ));
-
         CustomModelStatusEffect.register(Effects.frozen, new FrozenRenderer());
         CustomParticleStatusEffect.register(Effects.frozen, new FrozenRenderer());
         CustomModelStatusEffect.register(Effects.frostShield, new FrostShieldRenderer());

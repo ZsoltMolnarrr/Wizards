@@ -7,12 +7,12 @@ import net.minecraft.entity.attribute.EntityAttributeModifier;
 import net.minecraft.item.*;
 import net.minecraft.recipe.Ingredient;
 import net.minecraft.sound.SoundEvent;
-import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.Lazy;
 import net.minecraft.util.registry.Registry;
 import net.spell_power.api.MagicSchool;
 import net.spell_power.api.attributes.EntityAttributes_SpellPower;
+import net.spell_power.api.enchantment.MagicArmorEnchanting;
 import net.wizards.WizardsMod;
 import net.wizards.item.armor.WizardArmor;
 
@@ -93,6 +93,7 @@ public class Armors {
             for (var piece: pieces()) {
                 var name = piece.getMaterial().getName() + "_" + piece.getSlotType().getName();
                 Registry.register(Registry.ITEM, new Identifier(WizardsMod.ID, name), piece);
+                MagicArmorEnchanting.register(piece);
             }
         }
     }
