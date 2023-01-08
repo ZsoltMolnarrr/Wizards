@@ -1,4 +1,12 @@
 {
+  "wizard_robes_equip": {
+    "sounds": [
+      "wizards:wizard_robes_equip_1",
+      "wizards:wizard_robes_equip_2",
+      "wizards:wizard_robes_equip_3"
+    ]
+  },
+
   "arcane_missile_release": {
     "sounds": [
       "wizards:arcane_missile_release"

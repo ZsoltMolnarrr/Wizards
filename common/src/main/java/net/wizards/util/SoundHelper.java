@@ -9,6 +9,7 @@ import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
 import net.wizards.WizardsMod;
 import net.wizards.effect.FrostShieldStatusEffect;
+import net.wizards.item.armor.WizardArmor;
 
 import java.util.List;
 import java.util.Map;
@@ -53,6 +54,7 @@ public class SoundHelper {
         }
 
         Registry.register(Registry.SOUND_EVENT, FrostShieldStatusEffect.soundId, FrostShieldStatusEffect.sound);
+        Registry.register(Registry.SOUND_EVENT, WizardArmor.equipSoundId, WizardArmor.equipSound);
     }
 
     public static void playSoundEvent(World world, Entity entity, SoundEvent soundEvent) {

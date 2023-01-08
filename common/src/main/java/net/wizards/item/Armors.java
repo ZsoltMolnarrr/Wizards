@@ -102,7 +102,7 @@ public class Armors {
             10,
             new int[]{1, 2, 3, 1},
             10,
-            SoundEvents.ITEM_ARMOR_EQUIP_LEATHER,
+            WizardArmor.equipSound,
             0,
             0, () -> {
         return Ingredient.ofItems(new ItemConvertible[]{Items.LAPIS_LAZULI});
