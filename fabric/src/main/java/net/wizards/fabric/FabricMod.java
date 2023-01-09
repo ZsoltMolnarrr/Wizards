@@ -4,7 +4,6 @@ import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.client.itemgroup.FabricItemGroupBuilder;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Identifier;
-import net.spell_power.SpellPowerMod;
 import net.wizards.WizardsMod;
 import net.wizards.item.Armors;
 import net.wizards.item.Group;

@@ -5,7 +5,10 @@ import com.google.common.collect.Multimap;
 import net.minecraft.entity.attribute.EntityAttribute;
 import net.minecraft.entity.attribute.EntityAttributeModifier;
 import net.minecraft.entity.attribute.EntityAttributes;
-import net.minecraft.item.*;
+import net.minecraft.item.Item;
+import net.minecraft.item.Items;
+import net.minecraft.item.ToolMaterial;
+import net.minecraft.item.ToolMaterials;
 import net.minecraft.recipe.Ingredient;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.Lazy;
@@ -170,7 +173,7 @@ public class Weapons {
 
     private static abstract class ItemAccessor extends Item {
         public ItemAccessor(Settings settings) { super(settings); }
-        public static final UUID ATTACK_DAMAGE_MODIFIER_ID() { return ATTACK_DAMAGE_MODIFIER_ID; }
-        public static final UUID ATTACK_SPEED_MODIFIER_ID() { return ATTACK_SPEED_MODIFIER_ID; }
+        public static UUID ATTACK_DAMAGE_MODIFIER_ID() { return ATTACK_DAMAGE_MODIFIER_ID; }
+        public static UUID ATTACK_SPEED_MODIFIER_ID() { return ATTACK_SPEED_MODIFIER_ID; }
     }
 }
