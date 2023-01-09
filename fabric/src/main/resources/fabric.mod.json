@@ -28,9 +28,10 @@
   "depends": {
     "minecraft": ">=1.19.0 <1.19.3",
     "fabricloader": ">=0.14.0",
+    "geckolib3": ">=${gecko_lib_version_fabric}",
     "spell_power": ">=${spell_power_version}",
     "spell_engine": ">=${spell_engine_version}",
-    "geckolib3": ">=${gecko_lib_version_fabric}"
+    "runes": "*"
   },
   "custom": {
     "modmenu": {

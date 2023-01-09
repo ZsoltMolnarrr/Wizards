@@ -11,7 +11,7 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.Lazy;
 import net.minecraft.util.registry.Registry;
 import net.spell_power.api.MagicSchool;
-import net.spell_power.api.attributes.EntityAttributes_SpellPower;
+import net.spell_power.api.attributes.Attributes;
 import net.wizards.WizardsMod;
 import net.wizards.config.ItemConfig;
 import net.wizards.item.weapon.StaffItem;
@@ -26,7 +26,7 @@ public class Weapons {
         public Identifier id() {
             return new Identifier(WizardsMod.ID, name);
         }
-        public Entry add(ItemConfig.Attribute attribute) {
+        public Entry add(ItemConfig.SpellAttribute attribute) {
             defaults.add(attribute);
             return this;
         }
@@ -99,16 +99,16 @@ public class Weapons {
 
     public static final Entry noviceWand = wand("wand_novice",
             Material.matching(ToolMaterials.WOOD, () -> Ingredient.ofItems(Items.STICK)))
-            .add(ItemConfig.Attribute.bonus(EntityAttributes_SpellPower.POWER.get(MagicSchool.FIRE), 1));
+            .add(ItemConfig.SpellAttribute.bonus(Attributes.POWER.get(MagicSchool.ARCANE), 1));
     public static final Entry arcaneWand = wand("wand_arcane",
             Material.matching(ToolMaterials.IRON, () -> Ingredient.ofItems(Items.GOLD_INGOT)))
-            .add(ItemConfig.Attribute.bonus(EntityAttributes_SpellPower.POWER.get(MagicSchool.ARCANE), 2));
+            .add(ItemConfig.SpellAttribute.bonus(Attributes.POWER.get(MagicSchool.ARCANE), 2));
     public static final Entry fireWand = wand("wand_fire",
             Material.matching(ToolMaterials.IRON, () -> Ingredient.ofItems(Items.GOLD_INGOT)))
-            .add(ItemConfig.Attribute.bonus(EntityAttributes_SpellPower.POWER.get(MagicSchool.FIRE), 2));
+            .add(ItemConfig.SpellAttribute.bonus(Attributes.POWER.get(MagicSchool.FIRE), 2));
     public static final Entry frostWand = wand("wand_frost",
             Material.matching(ToolMaterials.IRON, () -> Ingredient.ofItems(Items.IRON_INGOT)))
-            .add(ItemConfig.Attribute.bonus(EntityAttributes_SpellPower.POWER.get(MagicSchool.FROST), 2));
+            .add(ItemConfig.SpellAttribute.bonus(Attributes.POWER.get(MagicSchool.FROST), 2));
 
     // MARK: Staves
 
@@ -120,13 +120,13 @@ public class Weapons {
 
     public static final Entry arcaneStaff = staff("staff_arcane",
             Material.matching(ToolMaterials.IRON, () -> Ingredient.ofItems(Items.GOLD_INGOT)))
-            .add(ItemConfig.Attribute.bonus(EntityAttributes_SpellPower.POWER.get(MagicSchool.ARCANE), 4));
+            .add(ItemConfig.SpellAttribute.bonus(Attributes.POWER.get(MagicSchool.ARCANE), 4));
     public static final Entry fireStaff = staff("staff_fire",
             Material.matching(ToolMaterials.IRON, () -> Ingredient.ofItems(Items.GOLD_INGOT)))
-            .add(ItemConfig.Attribute.bonus(EntityAttributes_SpellPower.POWER.get(MagicSchool.FIRE), 4));
+            .add(ItemConfig.SpellAttribute.bonus(Attributes.POWER.get(MagicSchool.FIRE), 4));
     public static final Entry frostStaff = staff("staff_frost",
-            Material.matching(ToolMaterials.IRON, () -> Ingredient.ofItems(Items.GOLD_INGOT)))
-            .add(ItemConfig.Attribute.bonus(EntityAttributes_SpellPower.POWER.get(MagicSchool.FROST), 4));
+            Material.matching(ToolMaterials.IRON, () -> Ingredient.ofItems(Items.IRON_INGOT)))
+            .add(ItemConfig.SpellAttribute.bonus(Attributes.POWER.get(MagicSchool.FROST), 4));
 
 
     // MARK: Register
@@ -154,9 +154,9 @@ public class Weapons {
                         "Weapon modifier",
                         config.attack_speed,
                         EntityAttributeModifier.Operation.ADDITION));
-        for(var attribute: config.attributes) {
+        for(var attribute: config.spell_attributes) {
             try {
-                builder.put(Registry.ATTRIBUTE.get(new Identifier(attribute.id)),
+                builder.put(Attributes.all.get(attribute.name).attribute,
                         new EntityAttributeModifier(
                                 "Weapon modifier",
                                 attribute.value,

@@ -20,7 +20,6 @@ public class FabricMod implements ModInitializer {
 
     // Loader framework specific pre-init
     private void preInit() {
-        SpellPowerMod.registerAttributes();
         Group.WIZARDS = FabricItemGroupBuilder.build(
                 new Identifier(WizardsMod.ID, "general"),
                 () -> new ItemStack(Armors.wizardRobeSet.head));
