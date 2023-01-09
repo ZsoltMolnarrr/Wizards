@@ -29,7 +29,7 @@
   "spell.wizards.frostbolt.name": "Frostbolt",
   "spell.wizards.frostbolt.description": "Launches a ball of frost, causing {damage} frost spell damage and slowing the target on impact.",
   "spell.wizards.frost_nova.name": "Frost Nova",
-  "spell.wizards.frost_nova.description": "Freezes targets around you, causing {damage} frost spell damage and blocking their movement. Frozen targets are vulnerable to frost magic.",
+  "spell.wizards.frost_nova.description": "Freezes targets around you for {effect_duration} seconds, causing {damage} frost spell damage and blocking their movement. Frozen targets are vulnerable to frost magic.",
   "effect.wizards.frozen": "Frozen",
   "spell.wizards.frost_shield.name": "Frost Shield",
   "spell.wizards.frost_shield.description": "Protects you from attacks, projectiles and fire for {effect_duration} seconds, but also slows down your movement.",

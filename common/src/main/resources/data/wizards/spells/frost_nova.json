@@ -79,7 +79,7 @@
         "type": "STATUS_EFFECT",
         "status_effect": {
           "effect_id": "wizards:frozen",
-          "duration": 10,
+          "duration": 6,
           "apply_mode": "ADD",
           "apply_limit": {
             "health_base": 50,
@@ -96,6 +96,6 @@
   "cost": {
     "exhaust": 0.2,
     "item_id": "runes:frost_stone",
-    "cooldown_duration": 10
+    "cooldown_duration": 12
   }
 }
