@@ -1,11 +1,11 @@
 {
-  "range": 64.0,
   "school": "FROST",
+  "range": 64,
   "learn": {
     "tier": 1
   },
   "cast": {
-    "duration": 2.0,
+    "duration": 1.2,
     "animation": "spell_engine:one_handed_projectile_charge",
     "sound": {
       "id": "spell_engine:generic_frost_casting",
@@ -58,7 +58,7 @@
       "action": {
         "type": "DAMAGE",
         "damage": {
-          "spell_power_coefficient": 1.0
+          "spell_power_coefficient": 0.8
         }
       },
       "sound": {

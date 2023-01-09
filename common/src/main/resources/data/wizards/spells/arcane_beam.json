@@ -5,7 +5,7 @@
     "tier": 3
   },
   "cast": {
-    "duration": 10.0,
+    "duration": 5,
     "animation": "spell_engine:two_handed_channeling",
     "sound": {
       "id": "wizards:arcane_beam_casting",
@@ -73,7 +73,9 @@
     {
       "action": {
         "type": "DAMAGE",
-        "damage": { }
+        "damage": {
+          "spell_power_coefficient": 1
+        }
       },
       "particles": [
         {
@@ -102,7 +104,7 @@
     "item_id": "runes:arcane_stone",
     "effect_id": "spell_power:arcane",
     "exhaust" : 0.3,
-    "cooldown_duration": 0,
+    "cooldown_duration": 10,
     "cooldown_proportional": true
   }
 }

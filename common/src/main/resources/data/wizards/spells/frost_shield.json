@@ -40,7 +40,7 @@
         "type": "STATUS_EFFECT",
         "status_effect": {
           "effect_id": "wizards:frost_shield",
-          "duration": 10,
+          "duration": 8,
           "apply_mode": "SET",
           "show_particles": false
         }
@@ -49,6 +49,7 @@
   ],
   "cost": {
     "exhaust": 0.3,
-    "item_id": "runes:frost_stone"
+    "item_id": "runes:frost_stone",
+    "cooldown_duration": 40
   }
 }

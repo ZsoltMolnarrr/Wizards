@@ -5,7 +5,7 @@
     "tier": 2
   },
   "cast": {
-    "duration": 10,
+    "duration": 5,
     "animation": "spell_engine:two_handed_channeling",
     "sound": {
       "id": "wizards:fire_breath_casting",
@@ -45,7 +45,7 @@
       "action": {
         "type": "DAMAGE",
         "damage": {
-          "spell_power_coefficient": 1.0
+          "spell_power_coefficient": 0.9
         }
       },
       "particles": [
@@ -74,7 +74,7 @@
   "cost": {
     "item_id": "runes:fire_stone",
     "exhaust" : 0.2,
-    "durability": 1,
-    "cooldown_duration": 0.0
+    "cooldown_duration": 10,
+    "cooldown_proportional": true
   }
 }

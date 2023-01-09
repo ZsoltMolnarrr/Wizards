@@ -5,7 +5,7 @@
     "tier": 2
   },
   "cast": {
-    "duration": 1,
+    "duration": 1.5,
     "animation": "spell_engine:two_handed_channeling",
     "sound": {
       "id": "spell_engine:generic_arcane_casting",
@@ -38,7 +38,7 @@
         "type": "DAMAGE",
         "damage": {
           "knockback": 0.5,
-          "spell_power_coefficient": 1
+          "spell_power_coefficient": 0.9
         }
       },
       "particles": [

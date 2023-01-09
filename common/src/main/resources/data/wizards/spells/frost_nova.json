@@ -95,6 +95,7 @@
   ],
   "cost": {
     "exhaust": 0.2,
-    "item_id": "runes:frost_stone"
+    "item_id": "runes:frost_stone",
+    "cooldown_duration": 10
   }
 }

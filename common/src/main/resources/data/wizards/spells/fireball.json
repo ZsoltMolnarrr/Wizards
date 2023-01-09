@@ -1,11 +1,11 @@
 {
   "school": "FIRE",
-  "range": 48.0,
+  "range": 64,
   "learn": {
     "tier": 1
   },
   "cast": {
-    "duration": 1,
+    "duration": 1.5,
     "animation": "spell_engine:one_handed_projectile_charge",
     "sound": {
       "id": "spell_engine:generic_fire_casting",
@@ -56,7 +56,7 @@
       "action": {
         "type": "DAMAGE",
         "damage": {
-          "spell_power_coefficient": 1.0
+          "spell_power_coefficient": 0.9
         }
       },
       "particles": [
