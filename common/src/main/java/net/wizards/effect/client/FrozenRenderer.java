@@ -10,8 +10,8 @@ import net.minecraft.util.Identifier;
 import net.spell_engine.api.render.CustomLayers;
 import net.spell_engine.api.render.CustomModels;
 import net.spell_engine.api.spell.ParticleBatch;
-import net.spell_engine.api.status_effect.CustomModelStatusEffect;
-import net.spell_engine.api.status_effect.CustomParticleStatusEffect;
+import net.spell_engine.api.effect.CustomModelStatusEffect;
+import net.spell_engine.api.effect.CustomParticleStatusEffect;
 import net.spell_engine.particle.ParticleHelper;
 import net.wizards.WizardsMod;
 

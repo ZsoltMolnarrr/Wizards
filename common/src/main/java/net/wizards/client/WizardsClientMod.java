@@ -2,8 +2,8 @@ package net.wizards.client;
 
 import net.minecraft.util.Identifier;
 import net.spell_engine.api.render.CustomModels;
-import net.spell_engine.api.status_effect.CustomModelStatusEffect;
-import net.spell_engine.api.status_effect.CustomParticleStatusEffect;
+import net.spell_engine.api.effect.CustomModelStatusEffect;
+import net.spell_engine.api.effect.CustomParticleStatusEffect;
 import net.wizards.WizardsMod;
 import net.wizards.effect.Effects;
 import net.wizards.effect.client.FrostShieldRenderer;

@@ -13,11 +13,11 @@ import net.minecraft.recipe.Ingredient;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.Lazy;
 import net.minecraft.util.registry.Registry;
+import net.spell_engine.api.item.StaffItem;
 import net.spell_power.api.MagicSchool;
 import net.spell_power.api.attributes.Attributes;
 import net.wizards.WizardsMod;
 import net.wizards.config.ItemConfig;
-import net.wizards.item.weapon.StaffItem;
 
 import java.util.ArrayList;
 import java.util.UUID;
