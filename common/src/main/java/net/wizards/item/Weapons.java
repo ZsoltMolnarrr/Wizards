@@ -102,7 +102,7 @@ public class Weapons {
 
     public static final Entry noviceWand = wand("wand_novice",
             Material.matching(ToolMaterials.WOOD, () -> Ingredient.ofItems(Items.STICK)))
-            .add(ItemConfig.SpellAttribute.bonus(Attributes.POWER.get(MagicSchool.ARCANE), 1));
+            .add(ItemConfig.SpellAttribute.bonus(Attributes.POWER.get(MagicSchool.FIRE), 1));
     public static final Entry arcaneWand = wand("wand_arcane",
             Material.matching(ToolMaterials.IRON, () -> Ingredient.ofItems(Items.GOLD_INGOT)))
             .add(ItemConfig.SpellAttribute.bonus(Attributes.POWER.get(MagicSchool.ARCANE), 2));
