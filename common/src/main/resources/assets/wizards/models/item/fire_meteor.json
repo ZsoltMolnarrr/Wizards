@@ -1,0 +1,61 @@
+{
+	"credit": "Made with Blockbench",
+	"texture_size": [64, 64],
+	"textures": {
+		"1": "wizards:spell_projectile/fire_meteor"
+	},
+	"elements": [
+		{
+			"from": [5, 2, 5],
+			"to": [15, 12, 15],
+			"rotation": {"angle": 22.5, "axis": "z", "origin": [10, 7, 10]},
+			"faces": {
+				"north": {"uv": [2.5, 7.5, 5, 10], "texture": "#1"},
+				"east": {"uv": [0, 7.5, 2.5, 10], "texture": "#1"},
+				"south": {"uv": [7.5, 7.5, 10, 10], "texture": "#1"},
+				"west": {"uv": [5, 7.5, 7.5, 10], "texture": "#1"},
+				"up": {"uv": [5, 7.5, 2.5, 5], "texture": "#1"},
+				"down": {"uv": [7.5, 5, 5, 7.5], "texture": "#1"}
+			}
+		},
+		{
+			"from": [-1, 5, 1.9],
+			"to": [9, 15, 11.9],
+			"rotation": {"angle": -22.5, "axis": "x", "origin": [10, 7, 10]},
+			"faces": {
+				"north": {"uv": [2.5, 2.5, 5, 5], "texture": "#1"},
+				"east": {"uv": [0, 2.5, 2.5, 5], "texture": "#1"},
+				"south": {"uv": [7.5, 2.5, 10, 5], "texture": "#1"},
+				"west": {"uv": [5, 2.5, 7.5, 5], "texture": "#1"},
+				"up": {"uv": [5, 2.5, 2.5, 0], "texture": "#1"},
+				"down": {"uv": [7.5, 0, 5, 2.5], "texture": "#1"}
+			}
+		},
+		{
+			"from": [1, 5.45, 9],
+			"to": [9, 13.45, 17],
+			"rotation": {"angle": 0, "axis": "y", "origin": [5, 10, 6]},
+			"faces": {
+				"north": {"uv": [10, 10, 12, 12], "texture": "#1"},
+				"east": {"uv": [8, 10, 10, 12], "texture": "#1"},
+				"south": {"uv": [14, 10, 16, 12], "texture": "#1"},
+				"west": {"uv": [12, 10, 14, 12], "texture": "#1"},
+				"up": {"uv": [12, 10, 10, 8], "texture": "#1"},
+				"down": {"uv": [14, 8, 12, 10], "texture": "#1"}
+			}
+		},
+		{
+			"from": [8, 8, 2],
+			"to": [16, 16, 10],
+			"rotation": {"angle": 0, "axis": "y", "origin": [5, 10, 6]},
+			"faces": {
+				"north": {"uv": [10, 5, 12, 7], "texture": "#1"},
+				"east": {"uv": [8, 5, 10, 7], "texture": "#1"},
+				"south": {"uv": [14, 5, 16, 7], "texture": "#1"},
+				"west": {"uv": [12, 5, 14, 7], "texture": "#1"},
+				"up": {"uv": [12, 5, 10, 3], "texture": "#1"},
+				"down": {"uv": [14, 3, 12, 5], "texture": "#1"}
+			}
+		}
+	]
+}

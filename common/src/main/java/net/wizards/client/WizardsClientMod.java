@@ -24,6 +24,7 @@ public class WizardsClientMod {
         CustomModels.registerModelIds(List.of(
                 new Identifier(WizardsMod.ID, "arcane_missile"),
                 new Identifier(WizardsMod.ID, "fireball_projectile"),
+                new Identifier(WizardsMod.ID, "fire_meteor"),
                 new Identifier(WizardsMod.ID, "frostbolt_projectile"),
                 FrozenRenderer.modelId,
                 FrostShieldRenderer.modelId_base,

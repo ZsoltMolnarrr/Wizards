@@ -42,7 +42,7 @@ authors = "Daedelus" #optional
 
 # The description text for the mod (multi line!) (#mandatory)
 description = '''
-Craft wizards to serve as ammo for spells.
+Destroy your enemies with Arcane, Fire and Frost magic.
 '''
 # A dependency - use the . to indicate dependency for a specific modid. Dependencies are optional.
 [[dependencies.wizards]] #optional
