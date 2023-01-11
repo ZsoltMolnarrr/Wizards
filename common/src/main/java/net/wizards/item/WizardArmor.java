@@ -17,7 +17,7 @@ import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 import software.bernie.geckolib3.util.GeckoLibUtil;
 
-public class WizardArmor extends ArmorItem implements IAnimatable {
+public class WizardArmor extends ArmorItem implements IAnimatable, ConfigurableAttributes {
     public static final Identifier equipSoundId = new Identifier(WizardsMod.ID, "wizard_robes_equip");
     public static final SoundEvent equipSound = new SoundEvent(equipSoundId);
 

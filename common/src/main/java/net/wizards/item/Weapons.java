@@ -20,6 +20,7 @@ import net.wizards.WizardsMod;
 import net.wizards.config.ItemConfig;
 
 import java.util.ArrayList;
+import java.util.Map;
 import java.util.UUID;
 import java.util.function.Supplier;
 
@@ -35,7 +36,7 @@ public class Weapons {
         }
     }
 
-    private static final ArrayList<Entry> entries = new ArrayList<>();
+    public static final ArrayList<Entry> entries = new ArrayList<>();
     private static Entry entry(String name, Material material, ItemConfig.Weapon defaults) {
         var entry = new Entry(name, material, defaults);
         entries.add(entry);
@@ -134,9 +135,13 @@ public class Weapons {
 
     // MARK: Register
 
-    public static void register() {
+    public static void register(Map<String, ItemConfig.Weapon> configs) {
         for(var entry: entries) {
-            var config = entry.defaults; // TODO get from config
+            var config = configs.get(entry.name);
+            if (config == null) {
+                config = entry.defaults;
+                configs.put(entry.name(), config);
+            };
             var settings = new Item.Settings().group(Group.WIZARDS);
             var item = new StaffItem(entry.material(), attributesFrom(config), settings);
             Registry.register(Registry.ITEM, entry.id(), item);
