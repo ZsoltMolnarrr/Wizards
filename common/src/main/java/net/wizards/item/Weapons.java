@@ -159,8 +159,10 @@ public class Weapons {
                         EntityAttributeModifier.Operation.ADDITION));
         for(var attribute: config.spell_attributes) {
             try {
-                builder.put(Attributes.all.get(attribute.name).attribute,
+                var entityAttribute = Attributes.all.get(attribute.name).attribute;
+                builder.put(entityAttribute,
                         new EntityAttributeModifier(
+                                entityAttribute.weaponUUID,
                                 "Weapon modifier",
                                 attribute.value,
                                 attribute.operation));
