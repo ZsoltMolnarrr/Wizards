@@ -27,7 +27,7 @@
       "type": "METEOR",
       "meteor": {
         "launch_height": 10,
-        "impact_range": 5,
+        "impact_range": 6,
         "impact_particles": [
           {
             "particle_id": "lava",
@@ -63,7 +63,7 @@
         "distance_dropoff": "SQUARED"
       },
       "projectile": {
-        "velocity": 1,
+        "velocity": 0.8,
         "client_data": {
           "travel_particles": [
             {
