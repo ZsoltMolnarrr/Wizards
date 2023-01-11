@@ -1,4 +1,4 @@
-package net.wizards.effect.client;
+package net.wizards.client.effect;
 
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.RenderLayer;
@@ -7,11 +7,11 @@ import net.minecraft.client.texture.SpriteAtlasTexture;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.Identifier;
+import net.spell_engine.api.effect.CustomModelStatusEffect;
+import net.spell_engine.api.effect.CustomParticleStatusEffect;
 import net.spell_engine.api.render.CustomLayers;
 import net.spell_engine.api.render.CustomModels;
 import net.spell_engine.api.spell.ParticleBatch;
-import net.spell_engine.api.effect.CustomModelStatusEffect;
-import net.spell_engine.api.effect.CustomParticleStatusEffect;
 import net.spell_engine.particle.ParticleHelper;
 import net.wizards.WizardsMod;
 

@@ -1,4 +1,4 @@
-package net.wizards.item.armor;
+package net.wizards.item;
 
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;

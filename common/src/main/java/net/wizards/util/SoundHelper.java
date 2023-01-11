@@ -9,7 +9,7 @@ import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
 import net.wizards.WizardsMod;
 import net.wizards.effect.FrostShieldStatusEffect;
-import net.wizards.item.armor.WizardArmor;
+import net.wizards.item.WizardArmor;
 
 import java.util.List;
 import java.util.Map;

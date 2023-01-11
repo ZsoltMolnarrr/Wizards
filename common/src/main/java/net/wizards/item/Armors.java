@@ -14,7 +14,6 @@ import net.spell_power.api.MagicSchool;
 import net.spell_power.api.attributes.EntityAttributes_SpellPower;
 import net.spell_power.api.enchantment.MagicArmorEnchanting;
 import net.wizards.WizardsMod;
-import net.wizards.item.armor.WizardArmor;
 
 import java.util.List;
 import java.util.Objects;

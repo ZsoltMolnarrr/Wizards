@@ -1,15 +1,15 @@
 package net.wizards.client;
 
 import net.minecraft.util.Identifier;
-import net.spell_engine.api.render.CustomModels;
 import net.spell_engine.api.effect.CustomModelStatusEffect;
 import net.spell_engine.api.effect.CustomParticleStatusEffect;
+import net.spell_engine.api.render.CustomModels;
 import net.wizards.WizardsMod;
+import net.wizards.client.armor.WizardArmorRenderer;
+import net.wizards.client.effect.FrostShieldRenderer;
+import net.wizards.client.effect.FrozenRenderer;
 import net.wizards.effect.Effects;
-import net.wizards.effect.client.FrostShieldRenderer;
-import net.wizards.effect.client.FrozenRenderer;
 import net.wizards.item.Armors;
-import net.wizards.item.armor.client.WizardArmorRenderer;
 import software.bernie.geckolib3.renderers.geo.GeoArmorRenderer;
 
 import java.util.List;
