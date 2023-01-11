@@ -3,7 +3,7 @@
   "id": "wizards",
   "version": "${version}",
   "name": "Wizards",
-  "description": "Destroy your enemies with Arcane, Fire and Frost magic.",
+  "description": "Destroy your enemies with Arcane, Fire and Frost magic.\n(Spell casting mechanics can be changed at Spell Engine config.)",
   "authors": [
     "Daedelus"
   ],
