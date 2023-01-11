@@ -4,6 +4,7 @@
 - Improve some wand textures
 - Fine tune Meteor spell properties
 - Fix Novice Wand attributes
+- Fix Wizard Hat clipping and position
 
 # 0.9.1
 
