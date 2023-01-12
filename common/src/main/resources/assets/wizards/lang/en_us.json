@@ -51,5 +51,11 @@
   "advancements.wizards.obtain_fire_rune.title": "Path of Fire",
   "advancements.wizards.obtain_fire_rune.description": "Obtain a Fire Rune",
   "advancements.wizards.obtain_frost_rune.title": "Path of Frost",
-  "advancements.wizards.obtain_frost_rune.description": "Obtain a Frost Rune"
+  "advancements.wizards.obtain_frost_rune.description": "Obtain a Frost Rune",
+  "advancements.wizards.arcane_mastery.title": "Arcane Flows",
+  "advancements.wizards.arcane_mastery.description": "Cast all Arcane Spells",
+  "advancements.wizards.fire_mastery.title": "Pyromaniac",
+  "advancements.wizards.fire_mastery.description": "Cast all Fire Spells",
+  "advancements.wizards.frost_mastery.title": "Icy Veins",
+  "advancements.wizards.frost_mastery.description": "Cast all Frost Spells"
 }

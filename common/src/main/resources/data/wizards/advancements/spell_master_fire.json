@@ -1,0 +1,31 @@
+{
+  "display": {
+    "icon": {
+      "item": "wizards:staff_fire"
+    },
+    "title": {
+      "translate": "advancements.wizards.fire_mastery.title"
+    },
+    "description": {
+      "translate": "advancements.wizards.fire_mastery.description"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "parent": "wizards:obtain_fire_rune",
+  "criteria": {
+    "cast": {
+      "trigger": "spell_engine:spell_cast",
+      "conditions": {
+        "magic_school": "FIRE"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "cast"
+    ]
+  ]
+}
