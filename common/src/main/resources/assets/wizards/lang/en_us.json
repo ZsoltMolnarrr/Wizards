@@ -33,5 +33,9 @@
   "effect.wizards.frozen": "Frozen",
   "spell.wizards.frost_shield.name": "Frost Shield",
   "spell.wizards.frost_shield.description": "Protects you from attacks, projectiles and fire for {effect_duration} seconds, but also slows down your movement.",
-  "effect.wizards.frost_shield": "Frost Shield"
+  "effect.wizards.frost_shield": "Frost Shield",
+
+
+  "advancements.wizards.root.title": "Wizards",
+  "advancements.wizards.root.description": "Destroy enemies with magic!"
 }

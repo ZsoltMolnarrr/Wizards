@@ -1,0 +1,37 @@
+{
+  "display": {
+    "icon": {
+      "item": "wizards:wizard_robe_head"
+    },
+    "title": {
+      "translate": "advancements.wizards.root.title"
+    },
+    "description": {
+      "translate": "advancements.wizards.root.description"
+    },
+    "background": "minecraft:textures/block/chiseled_quartz_block.png",
+    "frame": "task",
+    "show_toast": false,
+    "announce_to_chat": false,
+    "hidden": false
+  },
+  "criteria": {
+    "crafting_table": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "minecraft:crafting_table"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "crafting_table"
+    ]
+  ]
+}
