@@ -1,0 +1,76 @@
+{
+  "display": {
+    "icon": {
+      "item": "wizards:wizard_robe_chest"
+    },
+    "title": {
+      "translate": "advancements.wizards.obtain_armor.title"
+    },
+    "description": {
+      "translate": "advancements.wizards.obtain_armor.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "parent": "wizards:root",
+  "criteria": {
+    "boots": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "wizards:wizard_robe_feet"
+            ]
+          }
+        ]
+      }
+    },
+    "chestplate": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "wizards:wizard_robe_chest"
+            ]
+          }
+        ]
+      }
+    },
+    "helmet": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "wizards:wizard_robe_head"
+            ]
+          }
+        ]
+      }
+    },
+    "leggings": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "wizards:wizard_robe_legs"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "helmet",
+      "chestplate",
+      "leggings",
+      "boots"
+    ]
+  ]
+}

@@ -1,0 +1,37 @@
+{
+  "display": {
+    "icon": {
+      "item": "runes:fire_stone"
+    },
+    "title": {
+      "translate": "advancements.wizards.obtain_fire_rune.title"
+    },
+    "description": {
+      "translate": "advancements.wizards.obtain_fire_rune.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "parent": "wizards:obtain_wand",
+  "criteria": {
+    "runes": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "runes:fire_stone"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "runes"
+    ]
+  ]
+}

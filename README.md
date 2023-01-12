@@ -1,2 +1,3 @@
-# Wizards
-🧙🏻‍♂️ Arcane, Fire, Frost mages
+![Title](.github/title.png)
+
+Destroy enemies with Arcane, Fire and Frost magic.
