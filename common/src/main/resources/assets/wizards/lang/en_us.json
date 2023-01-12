@@ -40,16 +40,16 @@
   "advancements.wizards.root.description": "Destroy enemies with magic!",
   "advancements.wizards.obtain_armor.title": "A Wizard Is Never Late",
   "advancements.wizards.obtain_armor.description": "Acquire a full set of Wizard Robes",
-  "advancements.wizards.obtain_wand.title": "Obtain a Wand",
+  "advancements.wizards.rune_crafter.title": "Tears and Lamps",
+  "advancements.wizards.rune_crafter.description": "Use the Rune Crafting Altar to get twice as many runes",
+  "advancements.wizards.spellbinder.title": "Spellbinder",
+  "advancements.wizards.spellbinder.description": "Bind a spell to an eligible magical weapon",
+  "advancements.wizards.obtain_wand.title": "The Wand Chooses The Wizard",
   "advancements.wizards.obtain_wand.description": "Obtain a Wand",
-
   "advancements.wizards.obtain_arcane_rune.title": "Path of Arcane",
   "advancements.wizards.obtain_arcane_rune.description": "Obtain an Arcane Rune",
   "advancements.wizards.obtain_fire_rune.title": "Path of Fire",
   "advancements.wizards.obtain_fire_rune.description": "Obtain a Fire Rune",
   "advancements.wizards.obtain_frost_rune.title": "Path of Frost",
-  "advancements.wizards.obtain_frost_rune.description": "Obtain a Frost Rune",
-
-  "advancements.wizards.spellbinder.title": "SpellBinder",
-  "advancements.wizards.spellbinder.description": "Obtain a Frost Rune"
+  "advancements.wizards.obtain_frost_rune.description": "Obtain a Frost Rune"
 }
