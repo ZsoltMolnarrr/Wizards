@@ -34,9 +34,9 @@ public class FabricMod implements ModInitializer {
                     for (var itemId: group.items) {
                         var item = WizardItems.entries.get(itemId);
                         if (item == null) { continue; }
-                        System.out.println("XXX Adding to table: " + id.toString() + " item: " + itemId + " weight: " + group.weight);
+                        // System.out.println("XXX Adding to table: " + id.toString() + " item: " + itemId + " weight: " + group.weight);
                         tableBuilder.modifyPools(pool -> pool.with(ItemEntry.builder(item).weight(group.weight)));
-                        // tableBuilder.pool(poolBuilder);
+                        // tableBuilder.pool(poolBuilder); // This is suggested by Fabric wiki, but adds the loot with 100% chance
                     }
                 }
             }
