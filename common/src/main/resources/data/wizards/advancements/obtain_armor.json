@@ -16,31 +16,7 @@
   },
   "parent": "wizards:root",
   "criteria": {
-    "boots": {
-      "trigger": "minecraft:inventory_changed",
-      "conditions": {
-        "items": [
-          {
-            "items": [
-              "wizards:wizard_robe_feet"
-            ]
-          }
-        ]
-      }
-    },
-    "chestplate": {
-      "trigger": "minecraft:inventory_changed",
-      "conditions": {
-        "items": [
-          {
-            "items": [
-              "wizards:wizard_robe_chest"
-            ]
-          }
-        ]
-      }
-    },
-    "helmet": {
+    "wizard_robes": {
       "trigger": "minecraft:inventory_changed",
       "conditions": {
         "items": [
@@ -48,17 +24,20 @@
             "items": [
               "wizards:wizard_robe_head"
             ]
-          }
-        ]
-      }
-    },
-    "leggings": {
-      "trigger": "minecraft:inventory_changed",
-      "conditions": {
-        "items": [
+          },
+          {
+            "items": [
+              "wizards:wizard_robe_chest"
+            ]
+          },
           {
             "items": [
               "wizards:wizard_robe_legs"
+            ]
+          },
+          {
+            "items": [
+              "wizards:wizard_robe_feet"
             ]
           }
         ]
@@ -67,10 +46,7 @@
   },
   "requirements": [
     [
-      "helmet",
-      "chestplate",
-      "leggings",
-      "boots"
+      "wizard_robes"
     ]
   ]
 }
