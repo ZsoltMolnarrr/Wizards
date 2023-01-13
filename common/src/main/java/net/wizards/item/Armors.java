@@ -12,6 +12,7 @@ import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.Lazy;
 import net.minecraft.util.registry.Registry;
+import net.spell_engine.api.item.ConfigurableAttributes;
 import net.spell_power.api.MagicSchool;
 import net.spell_power.api.attributes.Attributes;
 import net.spell_power.api.enchantment.MagicArmorEnchanting;
@@ -101,10 +102,19 @@ public class Armors {
         public List<A> pieces() {
             return Stream.of(head, chest, legs, feet).filter(Objects::nonNull).collect(Collectors.toList());
         }
+
+        public static Identifier idOf(ArmorItem piece) {
+            var name = piece.getMaterial().getName() + "_" + piece.getSlotType().getName();
+            return new Identifier(WizardsMod.ID, name);
+        }
+
+        public List<String> idStrings() {
+            return pieces().stream().map(piece -> idOf(piece).toString()).toList();
+        }
+
         public void register() {
             for (var piece: pieces()) {
-                var name = piece.getMaterial().getName() + "_" + piece.getSlotType().getName();
-                Registry.register(Registry.ITEM, new Identifier(WizardsMod.ID, name), piece);
+                Registry.register(Registry.ITEM, idOf(piece), piece);
                 MagicArmorEnchanting.register(piece);
             }
         }

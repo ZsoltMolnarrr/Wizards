@@ -6,7 +6,6 @@ import net.spell_power.api.attributes.Attributes;
 import net.spell_power.internals.AttributeFamily;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class ItemConfig { public ItemConfig() { }
     public static class SpellAttribute {

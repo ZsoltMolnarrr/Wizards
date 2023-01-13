@@ -1,3 +1,9 @@
+# 0.9.3
+
+- Add advancements
+- Improve wizard robes
+- Add vanilla loot tables with configuration
+
 # 0.9.2
 
 - Add custom model and texture for Meteor projectile

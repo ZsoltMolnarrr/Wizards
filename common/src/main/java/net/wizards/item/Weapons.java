@@ -13,6 +13,7 @@ import net.minecraft.recipe.Ingredient;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.Lazy;
 import net.minecraft.util.registry.Registry;
+import net.spell_engine.api.item.ConfigurableAttributes;
 import net.spell_engine.api.item.StaffItem;
 import net.spell_power.api.MagicSchool;
 import net.spell_power.api.attributes.Attributes;
@@ -25,8 +26,8 @@ import java.util.UUID;
 import java.util.function.Supplier;
 
 public class Weapons {
-
-    public record Entry(String name, Material material, ItemConfig.Weapon defaults) {
+    public static final ArrayList<Entry> entries = new ArrayList<>();
+    public record Entry(String name, Material material, Item item, ItemConfig.Weapon defaults) {
         public Identifier id() {
             return new Identifier(WizardsMod.ID, name);
         }
@@ -35,10 +36,8 @@ public class Weapons {
             return this;
         }
     }
-
-    public static final ArrayList<Entry> entries = new ArrayList<>();
-    private static Entry entry(String name, Material material, ItemConfig.Weapon defaults) {
-        var entry = new Entry(name, material, defaults);
+    private static Entry entry(String name, Material material, Item item, ItemConfig.Weapon defaults) {
+        var entry = new Entry(name, material, item, defaults);
         entries.add(entry);
         return entry;
     }
@@ -98,7 +97,9 @@ public class Weapons {
     private static final float wandAttackDamage = 2;
     private static final float wandAttackSpeed = -2.4F;
     private static Entry wand(String name, Material material) {
-        return entry(name, material, new ItemConfig.Weapon(wandAttackDamage, wandAttackSpeed));
+        var settings = new Item.Settings().group(Group.WIZARDS);
+        var item = new StaffItem(material, settings);
+        return entry(name, material, item, new ItemConfig.Weapon(wandAttackDamage, wandAttackSpeed));
     }
 
     public static final Entry noviceWand = wand("wand_novice",
@@ -119,7 +120,9 @@ public class Weapons {
     private static final float staffAttackDamage = 4;
     private static final float staffAttackSpeed = -3F;
     private static Entry staff(String name, Material material) {
-        return entry(name, material, new ItemConfig.Weapon(staffAttackDamage, staffAttackSpeed));
+        var settings = new Item.Settings().group(Group.WIZARDS);
+        var item = new StaffItem(material, settings);
+        return entry(name, material, item, new ItemConfig.Weapon(staffAttackDamage, staffAttackSpeed));
     }
 
     public static final Entry arcaneStaff = staff("staff_arcane",
@@ -142,8 +145,8 @@ public class Weapons {
                 config = entry.defaults;
                 configs.put(entry.name(), config);
             };
-            var settings = new Item.Settings().group(Group.WIZARDS);
-            var item = new StaffItem(entry.material(), attributesFrom(config), settings);
+            var item = entry.item();
+            ((ConfigurableAttributes)item).setAttributes(attributesFrom(config));
             Registry.register(Registry.ITEM, entry.id(), item);
         }
     }

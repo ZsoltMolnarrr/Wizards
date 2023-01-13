@@ -9,6 +9,7 @@ import net.minecraft.item.ArmorItem;
 import net.minecraft.item.ArmorMaterial;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.Identifier;
+import net.spell_engine.api.item.ConfigurableAttributes;
 import net.wizards.WizardsMod;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
@@ -29,7 +30,7 @@ public class WizardArmor extends ArmorItem implements IAnimatable, ConfigurableA
 
     public void setAttributes(Multimap<EntityAttribute, EntityAttributeModifier> attributes) {
         ImmutableMultimap.Builder<EntityAttribute, EntityAttributeModifier> builder = ImmutableMultimap.builder();
-        builder.putAll(super.getAttributeModifiers(this.slot));
+        // builder.putAll(super.getAttributeModifiers(this.slot));
         builder.putAll(attributes);
         this.attributes = builder.build();
     }
