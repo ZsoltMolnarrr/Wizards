@@ -9,20 +9,17 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.util.registry.RegistryEntry;
 import net.minecraft.util.registry.RegistryKey;
+import net.wizards.WizardsMod;
 import net.wizards.mixin.worldgen.StructurePoolAccessor;
 
 import java.util.ArrayList;
-import java.util.Map;
 
-public class WizardWorldgen {
+public class WizardWorldGen {
     public static void init(MinecraftServer server) {
-        Map<String, String> config = Map.ofEntries(
-            // Map.entry("minecraft:village/desert/houses", "wizards:village/desert/wizard_tower")
-            Map.entry("minecraft:village/desert/houses", "wizards:desert_wizard_tower")
-        );
-        for(var entry: config.entrySet()) {
-            System.out.println("Adding structure: " + entry.getValue() + " to: " + entry.getKey());
-            addToStructurePool(server, new Identifier(entry.getKey()), new Identifier(entry.getValue()), 10000);
+        var config = WizardsMod.worldGenConfig.value;
+        for(var entry: config.entries) {
+            // System.out.println("Adding structure: " + entry.getValue() + " to: " + entry.getKey());
+            addToStructurePool(server, new Identifier(entry.pool), new Identifier(entry.structure), entry.weight);
         }
     }
 
@@ -30,8 +27,7 @@ public class WizardWorldgen {
             Registry.STRUCTURE_PROCESSOR_LIST_KEY, new Identifier("minecraft", "empty"));
 
 
-    public static void addToStructurePool(MinecraftServer server, Identifier poolId, Identifier structureId, int weight) {
-
+    private static void addToStructurePool(MinecraftServer server, Identifier poolId, Identifier structureId, int weight) {
         RegistryEntry<StructureProcessorList> emptyProcessorList = server.getRegistryManager()
                 .get(Registry.STRUCTURE_PROCESSOR_LIST_KEY)
                 .entryOf(EMPTY_PROCESSOR_LIST_KEY);

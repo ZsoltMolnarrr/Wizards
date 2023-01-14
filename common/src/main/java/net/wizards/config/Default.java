@@ -11,6 +11,7 @@ import java.util.stream.Collectors;
 public class Default {
     public final static ItemConfig itemConfig;
     public final static LootConfig lootConfig;
+    public final static WorldGenConfig worldGenConfig;
     static {
         itemConfig = new ItemConfig();
         for (var weapon: Weapons.entries) {
@@ -41,7 +42,6 @@ public class Default {
                 Armors.wizardRobeSet.idStrings()),
                 1
         ));
-
 
         List.of("minecraft:chests/abandoned_mineshaft",
                         "minecraft:chests/pillager_outpost",
@@ -76,6 +76,17 @@ public class Default {
                         "minecraft:chests/underwater_ruin_big",
                         "minecraft:chests/woodland_mansion")
                 .forEach(id -> lootConfig.loot_tables.put(id, List.of("basic_staves", "wizard_robes")));
+
+
+        int towerWeight = 10;
+        worldGenConfig = new WorldGenConfig();
+        worldGenConfig.entries.addAll(List.of(
+                new WorldGenConfig.Entry("minecraft:village/desert/houses", "wizards:desert_wizard_tower", towerWeight),
+                new WorldGenConfig.Entry("minecraft:village/savanna/houses", "wizards:desert_wizard_tower", towerWeight),
+                new WorldGenConfig.Entry("minecraft:village/plains/houses", "wizards:desert_wizard_tower", towerWeight),
+                new WorldGenConfig.Entry("minecraft:village/taiga/houses", "wizards:desert_wizard_tower", towerWeight),
+                new WorldGenConfig.Entry("minecraft:village/snowy/houses", "wizards:desert_wizard_tower", towerWeight)
+        ));
     }
 
     @SafeVarargs
