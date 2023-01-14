@@ -12,6 +12,7 @@ import net.wizards.item.Armors;
 import net.wizards.item.Group;
 import net.wizards.item.WizardItems;
 import net.wizards.util.SoundHelper;
+import net.wizards.worldgen.WizardWorldgen;
 
 public class FabricMod implements ModInitializer {
     @Override
@@ -29,6 +30,7 @@ public class FabricMod implements ModInitializer {
     }
 
     private void subscribeEvents() {
+        ServerLifecycleEvents.SERVER_STARTING.register(WizardWorldgen::init);
         LootTableEvents.MODIFY.register((resourceManager, lootManager, id, tableBuilder, source) -> {
             var config = WizardsMod.lootConfig.value;
             var groups = config.loot_tables.get(id.toString());
