@@ -1,8 +1,9 @@
 # 0.9.3
 
 - Add advancements
-- Improve wizard robes
+- Add equipment attribute configuration
 - Add vanilla loot tables with configuration
+- Improve wizard robes
 
 # 0.9.2
 

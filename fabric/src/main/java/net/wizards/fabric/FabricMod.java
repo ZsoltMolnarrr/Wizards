@@ -2,15 +2,10 @@ package net.wizards.fabric;
 
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.client.itemgroup.FabricItemGroupBuilder;
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.loot.v2.LootTableEvents;
-import net.fabricmc.fabric.api.loot.v2.LootTableSource;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.loot.LootManager;
-import net.minecraft.loot.LootPool;
-import net.minecraft.loot.LootTable;
 import net.minecraft.loot.entry.ItemEntry;
-import net.minecraft.resource.ResourceManager;
 import net.minecraft.util.Identifier;
 import net.wizards.WizardsMod;
 import net.wizards.item.Armors;
@@ -24,6 +19,16 @@ public class FabricMod implements ModInitializer {
         preInit();
         WizardsMod.init();
         SoundHelper.registerSounds();
+        subscribeEvents();
+    }
+
+    private void preInit() {
+        Group.WIZARDS = FabricItemGroupBuilder.build(
+                new Identifier(WizardsMod.ID, "general"),
+                () -> new ItemStack(Armors.wizardRobeSet.head));
+    }
+
+    private void subscribeEvents() {
         LootTableEvents.MODIFY.register((resourceManager, lootManager, id, tableBuilder, source) -> {
             var config = WizardsMod.lootConfig.value;
             var groups = config.loot_tables.get(id.toString());
@@ -41,12 +46,5 @@ public class FabricMod implements ModInitializer {
                 }
             }
         });
-    }
-
-    // Loader framework specific pre-init
-    private void preInit() {
-        Group.WIZARDS = FabricItemGroupBuilder.build(
-                new Identifier(WizardsMod.ID, "general"),
-                () -> new ItemStack(Armors.wizardRobeSet.head));
     }
 }

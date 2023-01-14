@@ -1,4 +1,4 @@
-package net.wizards.mixin;
+package net.wizards.mixin.effect;
 
 import net.minecraft.entity.EntityStatuses;
 import net.minecraft.entity.LivingEntity;
