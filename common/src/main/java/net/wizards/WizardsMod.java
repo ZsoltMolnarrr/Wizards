@@ -8,6 +8,7 @@ import net.wizards.config.WorldGenConfig;
 import net.wizards.effect.Effects;
 import net.wizards.item.Armors;
 import net.wizards.item.Weapons;
+import net.wizards.villager.WizardVillagers;
 
 public class WizardsMod {
     public static final String ID = "wizards";
@@ -39,5 +40,6 @@ public class WizardsMod {
         itemConfig.save();
         worldGenConfig.refresh();
         Effects.register();
+        WizardVillagers.register();
     }
 }

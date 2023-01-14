@@ -59,5 +59,7 @@
   "advancements.wizards.fire_mastery.title": "Pyromaniac",
   "advancements.wizards.fire_mastery.description": "Cast all Fire Spells",
   "advancements.wizards.frost_mastery.title": "Icy Veins",
-  "advancements.wizards.frost_mastery.description": "Cast all Frost Spells"
+  "advancements.wizards.frost_mastery.description": "Cast all Frost Spells",
+
+  "entity.minecraft.villager.wizard_merchant": "Wizard Merchant"
 }
