@@ -83,7 +83,7 @@ public class Default {
                 new WorldGenConfig.Entry("minecraft:village/savanna/houses", "wizards:village/savanna/wizard_tower", 3),
                 new WorldGenConfig.Entry("minecraft:village/plains/houses", "wizards:village/desert/wizard_tower", 4),
                 new WorldGenConfig.Entry("minecraft:village/taiga/houses", "wizards:village/taiga/wizard_tower", 4),
-                new WorldGenConfig.Entry("minecraft:village/snowy/houses", "wizards:village/desert/wizard_tower", 4)
+                new WorldGenConfig.Entry("minecraft:village/snowy/houses", "wizards:village/snowy/wizard_tower", 4)
         ));
     }
 
