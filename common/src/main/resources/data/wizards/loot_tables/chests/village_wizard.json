@@ -7,7 +7,7 @@
         "min": 1,
         "max": 5
       },
-      "bonus_rolls": 0,
+      "bonus_rolls": 1,
       "entries": [
         {
           "type": "minecraft:item",
@@ -42,9 +42,41 @@
           ]
         },
         {
-          "type": "minecraft:tag",
-          "weight": 5,
-          "name": "wizards:wizard_runes",
+          "type": "minecraft:item",
+          "weight": 2,
+          "name": "runes:arcane_stone",
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "type": "minecraft:uniform",
+                "min": 1,
+                "max": 12
+              },
+              "add": false
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 2,
+          "name": "runes:fire_stone",
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "type": "minecraft:uniform",
+                "min": 1,
+                "max": 12
+              },
+              "add": false
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 2,
+          "name": "runes:frost_stone",
           "functions": [
             {
               "function": "minecraft:set_count",
@@ -76,10 +108,6 @@
         {
           "type": "minecraft:item",
           "name": "wizards:wand_novice"
-        },
-        {
-          "type": "minecraft:item",
-          "name": "minecraft:emerald"
         },
         {
           "type": "minecraft:item",

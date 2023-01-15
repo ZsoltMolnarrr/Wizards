@@ -14,7 +14,7 @@ import net.minecraft.village.TradeOffers;
 import net.minecraft.village.VillagerProfession;
 import net.minecraft.world.poi.PointOfInterestType;
 import net.runes.api.RuneItems;
-import net.spell_engine.spellbinding.SpellBindingBlock;
+import net.runes.crafting.RuneCraftingBlock;
 import net.wizards.WizardsMod;
 import net.wizards.item.Armors;
 import net.wizards.item.Weapons;
@@ -73,7 +73,7 @@ public class WizardVillagers {
     }
 
     public static void register() {
-        var wizardPOI = registerPOI(WIZARD_MERCHANT, SpellBindingBlock.INSTANCE);
+        var wizardPOI = registerPOI(WIZARD_MERCHANT, RuneCraftingBlock.INSTANCE);
         var wizardMerchantProfession = registerProfession(
                 WIZARD_MERCHANT,
                 RegistryKey.of(Registry.POINT_OF_INTEREST_TYPE_KEY, new Identifier(WizardsMod.ID, WIZARD_MERCHANT)));
