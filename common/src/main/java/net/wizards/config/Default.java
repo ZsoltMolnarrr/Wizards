@@ -79,11 +79,13 @@ public class Default {
 
         worldGenConfig = new WorldGenConfig();
         worldGenConfig.entries.addAll(List.of(
-                new WorldGenConfig.Entry("minecraft:village/desert/houses", "wizards:village/desert/wizard_tower", 3),
+                new WorldGenConfig.Entry("minecraft:village/desert/houses", "wizards:village/desert/wizard_tower", 2),
+                new WorldGenConfig.Entry("minecraft:village/desert/houses", "wizards:village/desert/wizard_tower_2", 1),
                 new WorldGenConfig.Entry("minecraft:village/savanna/houses", "wizards:village/savanna/wizard_tower", 3),
                 new WorldGenConfig.Entry("minecraft:village/plains/houses", "wizards:village/plains/wizard_tower", 4),
                 new WorldGenConfig.Entry("minecraft:village/taiga/houses", "wizards:village/taiga/wizard_tower", 4),
-                new WorldGenConfig.Entry("minecraft:village/snowy/houses", "wizards:village/snowy/wizard_tower", 3)
+                new WorldGenConfig.Entry("minecraft:village/snowy/houses", "wizards:village/snowy/wizard_tower", 1),
+                new WorldGenConfig.Entry("minecraft:village/snowy/houses", "wizards:village/snowy/wizard_tower_2", 2)
         ));
     }
 
