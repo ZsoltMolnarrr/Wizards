@@ -116,7 +116,7 @@ if(project.hasProperty('release_type')) {
                 requiredDependency 'geckolib'
                 requiredDependency 'spell-engine'
                 requiredDependency 'spell-power'
-                requiredDependency 'runes'
+                requiredDependency 'rune-crafting'
             }
 
             mainArtifact(remapJar)
