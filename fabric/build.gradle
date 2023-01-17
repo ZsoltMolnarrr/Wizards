@@ -155,7 +155,7 @@ if(project.hasProperty('release_type')) {
             required.project 'geckolib'
             required.project 'spell-engine'
             required.project 'spell-power'
-            required.project 'rune-crafting'
+            required.project 'runes'
         }
     }
 
