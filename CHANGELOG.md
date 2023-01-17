@@ -1,6 +1,8 @@
 # 0.9.4
 
+- Add Merchant Markers support
 - Update world gen weight defaults
+- Fix zombie wizard merchant texture
 
 # 0.9.3
 
