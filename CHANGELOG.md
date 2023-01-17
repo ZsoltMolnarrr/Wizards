@@ -1,3 +1,7 @@
+# 0.9.4
+
+- Update world gen weight defaults
+
 # 0.9.3
 
 - Add advancements
