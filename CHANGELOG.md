@@ -1,3 +1,8 @@
+# 0.9.5
+
+- Mod Menu settings opens Spell Engine settings
+- Improve advancements root 
+
 # 0.9.4
 
 - Add Merchant Markers support

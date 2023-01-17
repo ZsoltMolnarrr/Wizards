@@ -16,22 +16,8 @@
     "hidden": false
   },
   "criteria": {
-    "crafting_table": {
-      "trigger": "minecraft:inventory_changed",
-      "conditions": {
-        "items": [
-          {
-            "items": [
-              "minecraft:crafting_table"
-            ]
-          }
-        ]
-      }
+    "always": {
+      "trigger": "minecraft:tick"
     }
-  },
-  "requirements": [
-    [
-      "crafting_table"
-    ]
-  ]
+  }
 }
