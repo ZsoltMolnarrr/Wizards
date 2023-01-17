@@ -21,6 +21,14 @@ configurations {
 repositories {
     maven { url 'https://jitpack.io' }
     maven { url 'https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/' }
+    maven { url 'https://maven.terraformersmc.com/' }
+    maven {
+        name = 'Modrinth'
+        url = 'https://api.modrinth.com/maven'
+        content {
+            includeGroup 'maven.modrinth'
+        }
+    }
 }
 
 dependencies {
@@ -33,9 +41,13 @@ dependencies {
     // Dependencies
     shadowCommon(implementation("com.github.ZsoltMolnarrr:TinyConfig:${project.tiny_config_version}"))
     modImplementation("software.bernie.geckolib:geckolib-fabric-${project.gecko_mc_prefix}${project.gecko_lib_version_fabric}")
-    modImplementation(files("../fabric/run/mods/spell_engine-fabric-${project.spell_engine_version}.jar"))
-    modImplementation(files("../fabric/run/mods/spell_power-fabric-${project.spell_power_version}.jar"))
-    modImplementation(files("../fabric/run/mods/runes-fabric-${project.runes_version}.jar"))
+
+    modImplementation("maven.modrinth:spell-engine:${project.spell_engine_version}-fabric")
+    modImplementation("maven.modrinth:spell-power:${project.spell_power_version}-fabric")
+    modImplementation("maven.modrinth:runes:${project.runes_version}-fabric")
+//    modImplementation(files("../fabric/run/mods/spell_engine-fabric-${project.spell_engine_version}.jar"))
+//    modImplementation(files("../fabric/run/mods/spell_power-fabric-${project.spell_power_version}.jar"))
+//    modImplementation(files("../fabric/run/mods/runes-fabric-${project.runes_version}.jar"))
 }
 
 processResources {
@@ -99,7 +111,7 @@ if(project.hasProperty('release_type')) {
     curseforge {
         apiKey = System.getenv("CURSEFORGE_API_KEY")
         project {
-            id = '775518'
+            id = '734325'
             changelog = changelog_last_section()
             changelogType = 'markdown'
             releaseType = release_type
@@ -110,6 +122,10 @@ if(project.hasProperty('release_type')) {
 
             relations {
                 requiredDependency 'fabric-api'
+                requiredDependency 'geckolib'
+                requiredDependency 'spell-engine'
+                requiredDependency 'spell-power'
+                requiredDependency 'runes'
             }
 
             mainArtifact(remapJar)
@@ -135,7 +151,11 @@ if(project.hasProperty('release_type')) {
             // scope.type
             // The scope can be `required`, `optional`, `incompatible`, or `embedded`
             // The type can either be `project` or `version`
-            required.project "fabric-api"
+            required.project 'fabric-api'
+            required.project 'geckolib'
+            required.project 'spell-engine'
+            required.project 'spell-power'
+            required.project 'runes'
         }
     }
 

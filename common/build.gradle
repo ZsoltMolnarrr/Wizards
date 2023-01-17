@@ -1,6 +1,14 @@
 repositories {
     maven { url 'https://jitpack.io' }
     maven { url 'https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/' }
+    maven { url 'https://maven.terraformersmc.com/' }
+    maven {
+        name = 'Modrinth'
+        url = 'https://api.modrinth.com/maven'
+        content {
+            includeGroup 'maven.modrinth'
+        }
+    }
 }
 
 dependencies {
@@ -14,9 +22,13 @@ dependencies {
     // Dependencies
     implementation("com.github.ZsoltMolnarrr:TinyConfig:${project.tiny_config_version}")
     modImplementation("software.bernie.geckolib:geckolib-fabric-${project.gecko_mc_prefix}${project.gecko_lib_version_fabric}")
-    modImplementation(files("../fabric/run/mods/spell_engine-fabric-${project.spell_engine_version}.jar"))
-    modImplementation(files("../fabric/run/mods/spell_power-fabric-${project.spell_power_version}.jar"))
-    modImplementation(files("../fabric/run/mods/runes-fabric-${project.runes_version}.jar"))
+
+    modImplementation("maven.modrinth:spell-engine:${project.spell_engine_version}-fabric")
+    modImplementation("maven.modrinth:spell-power:${project.spell_power_version}-fabric")
+    modImplementation("maven.modrinth:runes:${project.runes_version}-fabric")
+//    modImplementation(files("../fabric/run/mods/spell_engine-fabric-${project.spell_engine_version}.jar"))
+//    modImplementation(files("../fabric/run/mods/spell_power-fabric-${project.spell_power_version}.jar"))
+//    modImplementation(files("../fabric/run/mods/runes-fabric-${project.runes_version}.jar"))
 }
 
 architectury {
