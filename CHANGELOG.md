@@ -2,8 +2,10 @@
 
 - Mod Menu settings opens Spell Engine settings
 - Improve advancements root 
+- Fix server launch crash alongside Wilder Wild
 - Fix staff textures causing general grainy rendering
 - Fix hat recipe reminiscence
+- Fix Frost Wand texture
 
 # 0.9.4
 
