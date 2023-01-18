@@ -2,6 +2,7 @@
 
 - Mod Menu settings opens Spell Engine settings
 - Improve advancements root 
+- Fix staff textures causing general grainy rendering
 
 # 0.9.4
 
