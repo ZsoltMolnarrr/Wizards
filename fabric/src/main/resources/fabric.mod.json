@@ -31,7 +31,7 @@
   "depends": {
     "minecraft": ">=1.19.0 <1.19.3",
     "fabricloader": ">=0.14.0",
-    "geckolib3": ">=${gecko_lib_version_fabric}",
+    "geckolib3": "*",
     "spell_engine": ">=${spell_engine_version}",
     "spell_power": "*",
     "runes": ">=${runes_version}"

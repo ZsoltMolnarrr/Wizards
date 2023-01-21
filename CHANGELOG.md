@@ -1,3 +1,7 @@
+# 0.9.6
+
+- Fixate status effect raw ids
+
 # 0.9.5
 
 - Mod Menu settings opens Spell Engine settings

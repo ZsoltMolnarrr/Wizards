@@ -30,7 +30,9 @@ public class Effects {
         ((Synchronized)frozen).setSynchronized(true);
         ((RemoveOnHit)frozen).removedOnDirectHit(true);
         ((Synchronized)frostShield).setSynchronized(true);
-        Registry.register(Registry.STATUS_EFFECT, new Identifier(WizardsMod.ID, "frozen"), frozen);
-        Registry.register(Registry.STATUS_EFFECT, new Identifier(WizardsMod.ID, "frost_shield"), frostShield);
+
+        int rawId = 720;
+        Registry.register(Registry.STATUS_EFFECT, rawId++, new Identifier(WizardsMod.ID, "frozen").toString(), frozen);
+        Registry.register(Registry.STATUS_EFFECT, rawId++, new Identifier(WizardsMod.ID, "frost_shield").toString(), frostShield);
     }
 }
