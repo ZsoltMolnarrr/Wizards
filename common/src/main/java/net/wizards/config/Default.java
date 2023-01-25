@@ -1,5 +1,7 @@
 package net.wizards.config;
 
+import net.minecraft.util.Identifier;
+import net.wizards.WizardsMod;
 import net.wizards.item.Armors;
 import net.wizards.item.Weapons;
 
@@ -44,10 +46,8 @@ public class Default {
         ));
 
         List.of("minecraft:chests/abandoned_mineshaft",
-                        "minecraft:chests/pillager_outpost",
                         "minecraft:chests/igloo_chest",
                         "minecraft:chests/ruined_portal",
-                        "minecraft:chests/buried_treasure",
                         "minecraft:chests/shipwreck_supply",
                         "minecraft:chests/jungle_temple")
                 .forEach(id -> lootConfig.loot_tables.put(id, List.of("trash_wands")));
@@ -66,7 +66,6 @@ public class Default {
                 .forEach(id -> lootConfig.loot_tables.put(id, List.of("basic_staves")));
 
         List.of("minecraft:chests/ancient_city",
-                        "minecraft:chests/stronghold_corridor",
                         "minecraft:chests/shipwreck_treasure")
                 .forEach(id -> lootConfig.loot_tables.put(id, List.of("wizard_robes")));
 

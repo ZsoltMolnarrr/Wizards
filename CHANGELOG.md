@@ -1,6 +1,8 @@
 # 0.9.6
 
 - Fixate status effect raw ids
+- Rework loot table injection, wizard items are now much less common
+- Fix wizard hat front clipping
 
 # 0.9.5
 
