@@ -23,20 +23,7 @@ public class LootHelper {
                 LootPool.Builder lootPoolBuilder = LootPool.builder();
                 lootPoolBuilder.rolls(BinomialLootNumberProvider.create(1, 1F / group.ids.size()));
                 lootPoolBuilder.bonusRolls(ConstantLootNumberProvider.create(1.2F));
-
                 for (var entryId: group.ids) {
-//                    switch (group.kind) {
-//                        case ONE_OF -> {
-//                            var tag = itemTagKey(entryId);
-//                            if (tag == null) { continue; }
-//                            tableBuilder.modifyPools(pool -> pool.with(TagEntry.builder(tag).weight(group.weight)) );
-//                        }
-//                        case ALL_OF -> {
-//                            var item = WizardItems.entries.get(entryId);
-//                            if (item == null) { continue; }
-//                            tableBuilder.modifyPools(pool -> pool.with(ItemEntry.builder(item).weight(group.weight)) );
-//                        }
-//                    }
                     var item = WizardItems.entries.get(entryId);
                     if (item == null) { continue; }
                     lootPoolBuilder.with(ItemEntry.builder(item).weight(group.weight));
