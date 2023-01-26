@@ -13,8 +13,8 @@ import net.spell_engine.api.render.CustomModels;
 import net.wizards.WizardsMod;
 
 public class FrostShieldRenderer implements CustomModelStatusEffect.Renderer {
-    public static final Identifier modelId_base = new Identifier(WizardsMod.ID, "frost_shield_base");
-    public static final Identifier modelId_overlay = new Identifier(WizardsMod.ID, "frost_shield_overlay");
+    public static final Identifier modelId_base = new Identifier(WizardsMod.ID, "effect/frost_shield_base");
+    public static final Identifier modelId_overlay = new Identifier(WizardsMod.ID, "effect/frost_shield_overlay");
 
     private static final RenderLayer BASE_RENDER_LAYER = RenderLayer.getTranslucentMovingBlock();
     private static final RenderLayer OVERLAY_RENDER_LAYER = CustomLayers.projectile(SpriteAtlasTexture.BLOCK_ATLAS_TEXTURE, false);

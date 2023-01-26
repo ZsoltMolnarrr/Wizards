@@ -40,7 +40,7 @@
               "max_speed": 0.1
             }
           ],
-          "model_id": "wizards:fireball_projectile",
+          "model_id": "wizards:projectile/fireball_projectile",
           "render": "DEEP",
           "scale": 0.75
         }

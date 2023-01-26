@@ -94,7 +94,7 @@
               "max_speed": 0.05
             }
           ],
-          "model_id": "wizards:fire_meteor",
+          "model_id": "wizards:projectile/fire_meteor",
           "render": "DEEP",
           "scale": 1
         }

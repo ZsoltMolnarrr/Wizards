@@ -22,10 +22,10 @@ public class WizardsClientMod {
                 Armors.wizardRobeSet.legs,
                 Armors.wizardRobeSet.feet);
         CustomModels.registerModelIds(List.of(
-                new Identifier(WizardsMod.ID, "arcane_missile"),
-                new Identifier(WizardsMod.ID, "fireball_projectile"),
-                new Identifier(WizardsMod.ID, "fire_meteor"),
-                new Identifier(WizardsMod.ID, "frostbolt_projectile"),
+                new Identifier(WizardsMod.ID, "projectile/arcane_missile"),
+                new Identifier(WizardsMod.ID, "projectile/fireball_projectile"),
+                new Identifier(WizardsMod.ID, "projectile/fire_meteor"),
+                new Identifier(WizardsMod.ID, "projectile/frostbolt_projectile"),
                 FrozenRenderer.modelId,
                 FrostShieldRenderer.modelId_base,
                 FrostShieldRenderer.modelId_overlay

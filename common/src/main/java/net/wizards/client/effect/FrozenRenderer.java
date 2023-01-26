@@ -20,7 +20,7 @@ public class FrozenRenderer implements CustomModelStatusEffect.Renderer, CustomP
     // MARK: Renderer
 
     private static final RenderLayer RENDER_LAYER = CustomLayers.projectile(SpriteAtlasTexture.BLOCK_ATLAS_TEXTURE, false);
-    public static final Identifier modelId = new Identifier(WizardsMod.ID, "frost_trap");
+    public static final Identifier modelId = new Identifier(WizardsMod.ID, "effect/frost_trap");
     @Override
     public void renderEffect(int amplifier, LivingEntity livingEntity, float delta, MatrixStack matrixStack, VertexConsumerProvider vertexConsumers, int light) {
         matrixStack.push();

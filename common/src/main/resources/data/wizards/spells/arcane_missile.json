@@ -40,7 +40,7 @@
               "max_speed": 0.1
             }
           ],
-          "model_id": "wizards:arcane_missile",
+          "model_id": "wizards:projectile/arcane_missile",
           "render": "DEEP",
           "scale": 0.5
         }

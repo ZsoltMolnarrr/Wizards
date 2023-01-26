@@ -42,7 +42,7 @@
               "max_speed": 0.1
             }
           ],
-          "model_id": "wizards:frostbolt_projectile",
+          "model_id": "wizards:projectile/frostbolt_projectile",
           "render": "DEEP",
           "scale": 0.75
         }
