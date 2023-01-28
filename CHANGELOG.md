@@ -1,3 +1,8 @@
+# 0.9.7
+
+- Update dependencies
+- Fix wizard villager chest loot table
+
 # 0.9.6
 
 - Fixate status effect raw ids

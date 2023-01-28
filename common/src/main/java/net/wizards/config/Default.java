@@ -1,7 +1,5 @@
 package net.wizards.config;
 
-import net.minecraft.util.Identifier;
-import net.wizards.WizardsMod;
 import net.wizards.item.Armors;
 import net.wizards.item.Weapons;
 

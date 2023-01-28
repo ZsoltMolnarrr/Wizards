@@ -24,6 +24,7 @@ public class WizardsMod {
             .builder()
             .setDirectory(ID)
             .sanitize(true)
+            .constrain(LootConfig::constrainValues)
             .build();
     public static ConfigManager<WorldGenConfig> worldGenConfig = new ConfigManager<WorldGenConfig>
             ("world_gen", Default.worldGenConfig)
