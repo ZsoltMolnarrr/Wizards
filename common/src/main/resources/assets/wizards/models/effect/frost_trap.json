@@ -1,7 +1,7 @@
 {
 	"credit": "Made with Blockbench",
 	"textures": {
-		"1": "minecraft:block/ice"
+		"1": "wizards:spell_effect/ice"
 	},
 	"elements": [
 		{
