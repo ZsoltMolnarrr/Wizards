@@ -2,6 +2,7 @@
 
 - Update dependencies
 - Fix wizard villager chest loot table
+- Fix frost trap render while texture packs are used
 
 # 0.9.6
 
