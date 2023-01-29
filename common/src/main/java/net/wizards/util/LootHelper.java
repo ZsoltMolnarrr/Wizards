@@ -4,7 +4,6 @@ import net.minecraft.item.Item;
 import net.minecraft.loot.LootPool;
 import net.minecraft.loot.LootTable;
 import net.minecraft.loot.entry.ItemEntry;
-import net.minecraft.loot.entry.TagEntry;
 import net.minecraft.loot.provider.number.BinomialLootNumberProvider;
 import net.minecraft.loot.provider.number.ConstantLootNumberProvider;
 import net.minecraft.tag.TagKey;
@@ -19,10 +18,11 @@ public class LootHelper {
         if (groups != null) {
             for(var groupName: groups) {
                 var group = config.item_groups.get(groupName);
-                if (group == null || group.ids.isEmpty()) { continue; }
+                if (group == null || group.ids.isEmpty() || group.weight <= 0) { continue; }
+                var chance = group.chance_multiplier > 0 ? group.chance_multiplier : 1F;
                 LootPool.Builder lootPoolBuilder = LootPool.builder();
-                lootPoolBuilder.rolls(BinomialLootNumberProvider.create(1, 1F / group.ids.size()));
-                lootPoolBuilder.bonusRolls(ConstantLootNumberProvider.create(1.2F));
+                lootPoolBuilder.rolls(BinomialLootNumberProvider.create(1, (1F / group.ids.size()) * chance));
+                lootPoolBuilder.bonusRolls(ConstantLootNumberProvider.create(1.2F * chance));
                 for (var entryId: group.ids) {
                     var item = WizardItems.entries.get(entryId);
                     if (item == null) { continue; }

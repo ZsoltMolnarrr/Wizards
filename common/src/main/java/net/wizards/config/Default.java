@@ -22,23 +22,23 @@ public class Default {
         }
 
         lootConfig = new LootConfig();
-        lootConfig.item_groups.put("trash_wands", new LootConfig.ItemGroup(List.of(
+        lootConfig.item_groups.put("wands_tier_0", new LootConfig.ItemGroup(List.of(
                 Weapons.noviceWand.id().toString()),
                 1
         ));
-        lootConfig.item_groups.put("basic_wands", new LootConfig.ItemGroup(List.of(
+        lootConfig.item_groups.put("wands_tier_1", new LootConfig.ItemGroup(List.of(
                 Weapons.arcaneWand.id().toString(),
                 Weapons.fireWand.id().toString(),
                 Weapons.frostWand.id().toString()),
                 1
         ));
-        lootConfig.item_groups.put("basic_staves", new LootConfig.ItemGroup(List.of(
+        lootConfig.item_groups.put("staves_tier_1", new LootConfig.ItemGroup(List.of(
                 Weapons.arcaneStaff.id().toString(),
                 Weapons.fireStaff.id().toString(),
                 Weapons.frostStaff.id().toString()),
                 1
         ));
-        lootConfig.item_groups.put("wizard_robes", new LootConfig.ItemGroup(joinLists(
+        lootConfig.item_groups.put("robes_tier_1", new LootConfig.ItemGroup(joinLists(
                 Armors.wizardRobeSet.idStrings()),
                 1
         ));
@@ -48,7 +48,7 @@ public class Default {
                         "minecraft:chests/ruined_portal",
                         "minecraft:chests/shipwreck_supply",
                         "minecraft:chests/jungle_temple")
-                .forEach(id -> lootConfig.loot_tables.put(id, List.of("trash_wands")));
+                .forEach(id -> lootConfig.loot_tables.put(id, List.of("wands_tier_0")));
 
         List.of("minecraft:chests/desert_pyramid",
                         "minecraft:chests/bastion_bridge",
@@ -56,23 +56,23 @@ public class Default {
                         "minecraft:chests/pillager_outpost",
                         "minecraft:chests/simple_dungeon",
                         "minecraft:chests/stronghold_crossing")
-                .forEach(id -> lootConfig.loot_tables.put(id, List.of("basic_wands")));
+                .forEach(id -> lootConfig.loot_tables.put(id, List.of("wands_tier_1")));
 
         List.of("minecraft:chests/bastion_other",
                         "minecraft:chests/nether_bridge",
                         "minecraft:chests/underwater_ruin_small")
-                .forEach(id -> lootConfig.loot_tables.put(id, List.of("basic_staves")));
+                .forEach(id -> lootConfig.loot_tables.put(id, List.of("staves_tier_1")));
 
         List.of("minecraft:chests/ancient_city",
                         "minecraft:chests/shipwreck_treasure")
-                .forEach(id -> lootConfig.loot_tables.put(id, List.of("wizard_robes")));
+                .forEach(id -> lootConfig.loot_tables.put(id, List.of("robes_tier_1")));
 
         List.of("minecraft:chests/end_city_treasure",
                         "minecraft:chests/bastion_treasure",
                         "minecraft:chests/stronghold_library",
                         "minecraft:chests/underwater_ruin_big",
                         "minecraft:chests/woodland_mansion")
-                .forEach(id -> lootConfig.loot_tables.put(id, List.of("basic_staves", "wizard_robes")));
+                .forEach(id -> lootConfig.loot_tables.put(id, List.of("staves_tier_1", "robes_tier_1")));
 
         worldGenConfig = new WorldGenConfig();
         worldGenConfig.entries.addAll(List.of(

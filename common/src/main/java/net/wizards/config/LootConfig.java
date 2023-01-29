@@ -7,6 +7,7 @@ public class LootConfig {
     public HashMap<String, ItemGroup> item_groups = new HashMap<>();
     public static class ItemGroup { public ItemGroup() { }
         public List<String> ids = List.of();
+        public float chance_multiplier = 1F;
         public int weight = 1;
 
         public ItemGroup(List<String> ids, int weight) {
