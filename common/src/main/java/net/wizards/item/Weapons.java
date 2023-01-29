@@ -115,6 +115,17 @@ public class Weapons {
             Material.matching(ToolMaterials.IRON, () -> Ingredient.ofItems(Items.IRON_INGOT)))
             .add(ItemConfig.SpellAttribute.bonus(Attributes.POWER.get(MagicSchool.FROST), 2));
 
+    public static final Entry netheriteArcaneWand = wand("wand_netherite_arcane",
+            Material.matching(ToolMaterials.NETHERITE, () -> Ingredient.ofItems(Items.NETHERITE_INGOT)))
+            .add(ItemConfig.SpellAttribute.bonus(Attributes.POWER.get(MagicSchool.ARCANE), 3));
+    public static final Entry netheriteFireWand = wand("wand_netherite_fire",
+            Material.matching(ToolMaterials.NETHERITE, () -> Ingredient.ofItems(Items.NETHERITE_INGOT)))
+            .add(ItemConfig.SpellAttribute.bonus(Attributes.POWER.get(MagicSchool.FIRE), 3));
+    public static final Entry netheriteFrostWand = wand("wand_netherite_frost",
+            Material.matching(ToolMaterials.NETHERITE, () -> Ingredient.ofItems(Items.NETHERITE_INGOT)))
+            .add(ItemConfig.SpellAttribute.bonus(Attributes.POWER.get(MagicSchool.FROST), 3));
+
+
     // MARK: Staves
 
     private static final float staffAttackDamage = 4;
@@ -135,6 +146,15 @@ public class Weapons {
             Material.matching(ToolMaterials.IRON, () -> Ingredient.ofItems(Items.IRON_INGOT)))
             .add(ItemConfig.SpellAttribute.bonus(Attributes.POWER.get(MagicSchool.FROST), 4));
 
+    public static final Entry netheriteArcaneStaff = staff("staff_netherite_arcane",
+            Material.matching(ToolMaterials.NETHERITE, () -> Ingredient.ofItems(Items.NETHERITE_INGOT)))
+            .add(ItemConfig.SpellAttribute.bonus(Attributes.POWER.get(MagicSchool.ARCANE), 5));
+    public static final Entry netheriteFireStaff = staff("staff_netherite_fire",
+            Material.matching(ToolMaterials.NETHERITE, () -> Ingredient.ofItems(Items.NETHERITE_INGOT)))
+            .add(ItemConfig.SpellAttribute.bonus(Attributes.POWER.get(MagicSchool.FIRE), 5));
+    public static final Entry netheriteFrostStaff = staff("staff_netherite_frost",
+            Material.matching(ToolMaterials.NETHERITE, () -> Ingredient.ofItems(Items.NETHERITE_INGOT)))
+            .add(ItemConfig.SpellAttribute.bonus(Attributes.POWER.get(MagicSchool.FROST), 5));
 
     // MARK: Register
 

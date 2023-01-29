@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/handheld",
+  "textures": {
+    "layer0": "wizards:item/wand_netherite_arcane"
+  }
+}

@@ -1,3 +1,7 @@
+# 0.9.8
+
+- Add netherite staff and wand variants
+
 # 0.9.7
 
 - Update dependencies
