@@ -14,7 +14,7 @@ import net.minecraft.util.Lazy;
 import net.minecraft.util.registry.Registry;
 import net.spell_engine.api.item.ConfigurableAttributes;
 import net.spell_power.api.MagicSchool;
-import net.spell_power.api.attributes.Attributes;
+import net.spell_power.api.attributes.SpellAttributes;
 import net.spell_power.api.enchantment.MagicArmorEnchanting;
 import net.wizards.WizardsMod;
 import net.wizards.config.ItemConfig;
@@ -140,7 +140,7 @@ public class Armors {
                     new Material(
                         "wizard_robe",
                         10,
-                        10,
+                        9,
                         WizardArmor.equipSound,
                         () -> { return Ingredient.ofItems(new ItemConvertible[]{Items.LAPIS_LAZULI}); }
                     ),
@@ -160,6 +160,36 @@ public class Armors {
                     new WizardArmor(material, EquipmentSlot.LEGS, new Item.Settings().group(Group.WIZARDS)),
                     new WizardArmor(material, EquipmentSlot.FEET, new Item.Settings().group(Group.WIZARDS))
             ));
+
+    public static final ArmorSet arcaneRobeSet =
+            create(
+                    new Material(
+                            "arcane_robe",
+                            20,
+                            10,
+                            WizardArmor.equipSound,
+                            () -> { return Ingredient.ofItems(new ItemConvertible[]{Items.LAPIS_LAZULI}); }
+                    ),
+                    ItemConfig.ArmorSet.with(
+                            new ItemConfig.ArmorSet.Piece(1)
+                                    .addAll(List.of(
+                                            ItemConfig.SpellAttribute.multiply(SpellAttributes.POWER.get(MagicSchool.ARCANE), 0.25F)
+                                            // ItemConfig.SpellAttribute.multiply(Attributes.CRITICAL_DAMAGE, 0.1F)
+                                    )),
+                            new ItemConfig.ArmorSet.Piece(3)
+                                    .addAll(ItemConfig.SpellAttribute.bonuses(EnumSet.of(MagicSchool.ARCANE), 1)),
+                            new ItemConfig.ArmorSet.Piece(2)
+                                    .addAll(ItemConfig.SpellAttribute.bonuses(EnumSet.of(MagicSchool.ARCANE), 1)),
+                            new ItemConfig.ArmorSet.Piece(1)
+                                    .addAll(ItemConfig.SpellAttribute.bonuses(EnumSet.of(MagicSchool.ARCANE), 1))
+                    ))
+                    .armorSet(material -> new ArmorSet(
+                            new WizardArmor(material, EquipmentSlot.HEAD, new Item.Settings().group(Group.WIZARDS)),
+                            new WizardArmor(material, EquipmentSlot.CHEST, new Item.Settings().group(Group.WIZARDS)),
+                            new WizardArmor(material, EquipmentSlot.LEGS, new Item.Settings().group(Group.WIZARDS)),
+                            new WizardArmor(material, EquipmentSlot.FEET, new Item.Settings().group(Group.WIZARDS))
+                    ));
+    
 
     public static void register(Map<String, ItemConfig.ArmorSet> configs) {
         for(var entry: entries) {
@@ -221,7 +251,7 @@ public class Armors {
         }
         for (var attribute: piece.spell_attributes) {
             try {
-                var entityAttribute = Attributes.all.get(attribute.name).attribute;
+                var entityAttribute = SpellAttributes.all.get(attribute.name).attribute;
                 builder.put(entityAttribute,
                         new EntityAttributeModifier(
                                 uuid,

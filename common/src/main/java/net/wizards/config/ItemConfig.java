@@ -2,8 +2,8 @@ package net.wizards.config;
 
 import net.minecraft.entity.attribute.EntityAttributeModifier;
 import net.spell_power.api.MagicSchool;
-import net.spell_power.api.attributes.Attributes;
-import net.spell_power.internals.AttributeFamily;
+import net.spell_power.api.attributes.SpellAttributeEntry;
+import net.spell_power.api.attributes.SpellAttributes;
 
 import java.util.*;
 
@@ -19,7 +19,7 @@ public class ItemConfig { public ItemConfig() { }
             this.value = value;
             this.operation = operation;
         }
-        public static SpellAttribute bonus(AttributeFamily attribute, float value) {
+        public static SpellAttribute bonus(SpellAttributeEntry attribute, float value) {
             return new SpellAttribute(
                     attribute.name,
                     value,
@@ -27,14 +27,22 @@ public class ItemConfig { public ItemConfig() { }
             );
         }
 
+        public static SpellAttribute multiply(SpellAttributeEntry attribute, float value) {
+            return new SpellAttribute(
+                    attribute.name,
+                    value,
+                    EntityAttributeModifier.Operation.MULTIPLY_BASE
+            );
+        }
+
         public static ArrayList<SpellAttribute> bonuses(EnumSet<MagicSchool> attributes, float value) {
             var list = attributes.stream()
-                    .map(school -> Attributes.POWER.get(school))
+                    .map(school -> SpellAttributes.POWER.get(school))
                     .toList();
             return bonuses(list, value);
         }
 
-        public static ArrayList<SpellAttribute> bonuses(List<AttributeFamily> attributes, float value) {
+        public static ArrayList<SpellAttribute> bonuses(List<SpellAttributeEntry> attributes, float value) {
             ArrayList<SpellAttribute> spellAttributes = new ArrayList<>();
             for (var attribute: attributes) {
                 spellAttributes.add(new SpellAttribute(

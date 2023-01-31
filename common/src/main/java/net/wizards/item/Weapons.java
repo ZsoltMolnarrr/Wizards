@@ -16,7 +16,7 @@ import net.minecraft.util.registry.Registry;
 import net.spell_engine.api.item.ConfigurableAttributes;
 import net.spell_engine.api.item.StaffItem;
 import net.spell_power.api.MagicSchool;
-import net.spell_power.api.attributes.Attributes;
+import net.spell_power.api.attributes.SpellAttributes;
 import net.wizards.WizardsMod;
 import net.wizards.config.ItemConfig;
 
@@ -104,26 +104,26 @@ public class Weapons {
 
     public static final Entry noviceWand = wand("wand_novice",
             Material.matching(ToolMaterials.WOOD, () -> Ingredient.ofItems(Items.STICK)))
-            .add(ItemConfig.SpellAttribute.bonus(Attributes.POWER.get(MagicSchool.FIRE), 1));
+            .add(ItemConfig.SpellAttribute.bonus(SpellAttributes.POWER.get(MagicSchool.FIRE), 1));
     public static final Entry arcaneWand = wand("wand_arcane",
             Material.matching(ToolMaterials.IRON, () -> Ingredient.ofItems(Items.GOLD_INGOT)))
-            .add(ItemConfig.SpellAttribute.bonus(Attributes.POWER.get(MagicSchool.ARCANE), 2));
+            .add(ItemConfig.SpellAttribute.bonus(SpellAttributes.POWER.get(MagicSchool.ARCANE), 2));
     public static final Entry fireWand = wand("wand_fire",
             Material.matching(ToolMaterials.IRON, () -> Ingredient.ofItems(Items.GOLD_INGOT)))
-            .add(ItemConfig.SpellAttribute.bonus(Attributes.POWER.get(MagicSchool.FIRE), 2));
+            .add(ItemConfig.SpellAttribute.bonus(SpellAttributes.POWER.get(MagicSchool.FIRE), 2));
     public static final Entry frostWand = wand("wand_frost",
             Material.matching(ToolMaterials.IRON, () -> Ingredient.ofItems(Items.IRON_INGOT)))
-            .add(ItemConfig.SpellAttribute.bonus(Attributes.POWER.get(MagicSchool.FROST), 2));
+            .add(ItemConfig.SpellAttribute.bonus(SpellAttributes.POWER.get(MagicSchool.FROST), 2));
 
     public static final Entry netheriteArcaneWand = wand("wand_netherite_arcane",
             Material.matching(ToolMaterials.NETHERITE, () -> Ingredient.ofItems(Items.NETHERITE_INGOT)))
-            .add(ItemConfig.SpellAttribute.bonus(Attributes.POWER.get(MagicSchool.ARCANE), 3));
+            .add(ItemConfig.SpellAttribute.bonus(SpellAttributes.POWER.get(MagicSchool.ARCANE), 3));
     public static final Entry netheriteFireWand = wand("wand_netherite_fire",
             Material.matching(ToolMaterials.NETHERITE, () -> Ingredient.ofItems(Items.NETHERITE_INGOT)))
-            .add(ItemConfig.SpellAttribute.bonus(Attributes.POWER.get(MagicSchool.FIRE), 3));
+            .add(ItemConfig.SpellAttribute.bonus(SpellAttributes.POWER.get(MagicSchool.FIRE), 3));
     public static final Entry netheriteFrostWand = wand("wand_netherite_frost",
             Material.matching(ToolMaterials.NETHERITE, () -> Ingredient.ofItems(Items.NETHERITE_INGOT)))
-            .add(ItemConfig.SpellAttribute.bonus(Attributes.POWER.get(MagicSchool.FROST), 3));
+            .add(ItemConfig.SpellAttribute.bonus(SpellAttributes.POWER.get(MagicSchool.FROST), 3));
 
 
     // MARK: Staves
@@ -138,23 +138,23 @@ public class Weapons {
 
     public static final Entry arcaneStaff = staff("staff_arcane",
             Material.matching(ToolMaterials.IRON, () -> Ingredient.ofItems(Items.GOLD_INGOT)))
-            .add(ItemConfig.SpellAttribute.bonus(Attributes.POWER.get(MagicSchool.ARCANE), 4));
+            .add(ItemConfig.SpellAttribute.bonus(SpellAttributes.POWER.get(MagicSchool.ARCANE), 4));
     public static final Entry fireStaff = staff("staff_fire",
             Material.matching(ToolMaterials.IRON, () -> Ingredient.ofItems(Items.GOLD_INGOT)))
-            .add(ItemConfig.SpellAttribute.bonus(Attributes.POWER.get(MagicSchool.FIRE), 4));
+            .add(ItemConfig.SpellAttribute.bonus(SpellAttributes.POWER.get(MagicSchool.FIRE), 4));
     public static final Entry frostStaff = staff("staff_frost",
             Material.matching(ToolMaterials.IRON, () -> Ingredient.ofItems(Items.IRON_INGOT)))
-            .add(ItemConfig.SpellAttribute.bonus(Attributes.POWER.get(MagicSchool.FROST), 4));
+            .add(ItemConfig.SpellAttribute.bonus(SpellAttributes.POWER.get(MagicSchool.FROST), 4));
 
     public static final Entry netheriteArcaneStaff = staff("staff_netherite_arcane",
             Material.matching(ToolMaterials.NETHERITE, () -> Ingredient.ofItems(Items.NETHERITE_INGOT)))
-            .add(ItemConfig.SpellAttribute.bonus(Attributes.POWER.get(MagicSchool.ARCANE), 5));
+            .add(ItemConfig.SpellAttribute.bonus(SpellAttributes.POWER.get(MagicSchool.ARCANE), 5));
     public static final Entry netheriteFireStaff = staff("staff_netherite_fire",
             Material.matching(ToolMaterials.NETHERITE, () -> Ingredient.ofItems(Items.NETHERITE_INGOT)))
-            .add(ItemConfig.SpellAttribute.bonus(Attributes.POWER.get(MagicSchool.FIRE), 5));
+            .add(ItemConfig.SpellAttribute.bonus(SpellAttributes.POWER.get(MagicSchool.FIRE), 5));
     public static final Entry netheriteFrostStaff = staff("staff_netherite_frost",
             Material.matching(ToolMaterials.NETHERITE, () -> Ingredient.ofItems(Items.NETHERITE_INGOT)))
-            .add(ItemConfig.SpellAttribute.bonus(Attributes.POWER.get(MagicSchool.FROST), 5));
+            .add(ItemConfig.SpellAttribute.bonus(SpellAttributes.POWER.get(MagicSchool.FROST), 5));
 
     // MARK: Register
 
@@ -187,7 +187,7 @@ public class Weapons {
                         EntityAttributeModifier.Operation.ADDITION));
         for(var attribute: config.spell_attributes) {
             try {
-                var entityAttribute = Attributes.all.get(attribute.name).attribute;
+                var entityAttribute = SpellAttributes.all.get(attribute.name).attribute;
                 builder.put(entityAttribute,
                         new EntityAttributeModifier(
                                 entityAttribute.weaponUUID,
