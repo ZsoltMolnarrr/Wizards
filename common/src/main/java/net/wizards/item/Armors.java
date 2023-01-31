@@ -40,7 +40,7 @@ public class Armors {
         private float toughness;
         private float knockbackResistance;
 
-        private Material(String name, int durabilityMultiplier, int enchantability, SoundEvent equipSound, Supplier repairIngredientSupplier) {
+        private Material(String name, int durabilityMultiplier, int enchantability, SoundEvent equipSound, Supplier<Ingredient> repairIngredientSupplier) {
             this.name = name;
             this.durabilityMultiplier = durabilityMultiplier;
             this.enchantability = enchantability;
@@ -90,6 +90,25 @@ public class Armors {
             this.armor = new int[]{config.head.armor, config.chest.armor, config.legs.armor, config.feet.armor};
         }
     }
+
+    private static final Supplier<Ingredient> WOOL_INGREDIENTS = () -> { return Ingredient.ofItems(
+            Items.WHITE_WOOL,
+            Items.ORANGE_WOOL,
+            Items.MAGENTA_WOOL,
+            Items.LIGHT_BLUE_WOOL,
+            Items.YELLOW_WOOL,
+            Items.LIME_WOOL,
+            Items.PINK_WOOL,
+            Items.GRAY_WOOL,
+            Items.LIGHT_GRAY_WOOL,
+            Items.CYAN_WOOL,
+            Items.PURPLE_WOOL,
+            Items.BLUE_WOOL,
+            Items.BROWN_WOOL,
+            Items.GREEN_WOOL,
+            Items.RED_WOOL,
+            Items.BLACK_WOOL);
+    };
 
     public static class ArmorSet<A extends ArmorItem> {
         public A head, chest, legs, feet;
@@ -142,7 +161,7 @@ public class Armors {
                         10,
                         9,
                         WizardArmor.equipSound,
-                        () -> { return Ingredient.ofItems(new ItemConvertible[]{Items.LAPIS_LAZULI}); }
+                        WOOL_INGREDIENTS
                     ),
                     ItemConfig.ArmorSet.with(
                         new ItemConfig.ArmorSet.Piece(1)
@@ -174,7 +193,7 @@ public class Armors {
                             20,
                             10,
                             WizardArmor.equipSound,
-                            () -> { return Ingredient.ofItems(new ItemConvertible[]{Items.LAPIS_LAZULI}); }
+                            WOOL_INGREDIENTS
                     ),
                     ItemConfig.ArmorSet.with(
                             new ItemConfig.ArmorSet.Piece(1)
@@ -212,7 +231,7 @@ public class Armors {
                             20,
                             10,
                             WizardArmor.equipSound,
-                            () -> { return Ingredient.ofItems(new ItemConvertible[]{Items.LAPIS_LAZULI}); }
+                            WOOL_INGREDIENTS
                     ),
                     ItemConfig.ArmorSet.with(
                             new ItemConfig.ArmorSet.Piece(1)
@@ -250,7 +269,7 @@ public class Armors {
                             20,
                             10,
                             WizardArmor.equipSound,
-                            () -> { return Ingredient.ofItems(new ItemConvertible[]{Items.LAPIS_LAZULI}); }
+                            WOOL_INGREDIENTS
                     ),
                     ItemConfig.ArmorSet.with(
                             new ItemConfig.ArmorSet.Piece(1)
@@ -357,7 +376,13 @@ public class Armors {
         return builder.build();
     }
 
+
     // Copies from ArmorItem
-    private static final UUID[] MODIFIERS = new UUID[]{UUID.fromString("845DB27C-C624-495F-8C9F-6020A9A58B6B"), UUID.fromString("D8499B04-0E66-4726-AB29-64469D734E0D"), UUID.fromString("9F3D476D-C118-4544-8365-64846904B48E"), UUID.fromString("2AD3F246-FEE1-4E67-B886-69FD380BB150")};
+    private static final UUID[] MODIFIERS = new UUID[]{
+            UUID.fromString("845DB27C-C624-495F-8C9F-6020A9A58B6B"),
+            UUID.fromString("D8499B04-0E66-4726-AB29-64469D734E0D"),
+            UUID.fromString("9F3D476D-C118-4544-8365-64846904B48E"),
+            UUID.fromString("2AD3F246-FEE1-4E67-B886-69FD380BB150")
+    };
 }
 

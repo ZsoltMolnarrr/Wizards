@@ -1,6 +1,7 @@
 # 0.9.8
 
 - Add netherite staff and wand variants
+- Wizard robes repairable using wool
 
 # 0.9.7
 

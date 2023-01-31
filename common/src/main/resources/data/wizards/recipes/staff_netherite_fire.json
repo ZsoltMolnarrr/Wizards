@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "P": {
+      "item": "minecraft:blaze_powder"
+    },
+    "M": {
+      "item": "minecraft:netherite_ingot"
+    }
+  },
+  "pattern": [
+    " MP",
+    " MM",
+    "M  "
+  ],
+  "result": {
+    "item": "wizards:staff_netherite_fire"
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "A": {
+      "item": "minecraft:gunpowder"
+    },
+    "G": {
+      "item": "minecraft:netherite_ingot"
+    }
+  },
+  "pattern": [
+    " A",
+    "G "
+  ],
+  "result": {
+    "item": "wizards:wand_netherite_fire"
+  }
+}
