@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "L": {
+      "item": "minecraft:ender_pearl"
+    },
+    "W": {
+      "tag": "minecraft:wool"
+    }
+  },
+  "pattern": [
+    "  W",
+    " W ",
+    "WLW"
+  ],
+  "result": {
+    "item": "wizards:arcane_robe_head"
+  }
+}

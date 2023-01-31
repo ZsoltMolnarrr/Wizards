@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "L": {
+      "item": "minecraft:blaze_powder"
+    },
+    "W": {
+      "tag": "minecraft:wool"
+    }
+  },
+  "pattern": [
+    "LLL",
+    "W W",
+    "W W"
+  ],
+  "result": {
+    "item": "wizards:fire_robe_legs"
+  }
+}

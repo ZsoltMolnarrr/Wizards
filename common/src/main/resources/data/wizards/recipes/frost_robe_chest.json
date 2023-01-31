@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "L": {
+      "item": "minecraft:prismarine_shard"
+    },
+    "W": {
+      "tag": "minecraft:wool"
+    }
+  },
+  "pattern": [
+    "L L",
+    "WLW",
+    "WWW"
+  ],
+  "result": {
+    "item": "wizards:frost_robe_chest"
+  }
+}
