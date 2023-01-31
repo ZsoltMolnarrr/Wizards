@@ -161,6 +161,12 @@ public class Armors {
                     new WizardArmor(material, EquipmentSlot.FEET, new Item.Settings().group(Group.WIZARDS))
             ));
 
+
+    private static final float specializedRobeSpellPower = 0.25F;
+    private static final float specializedRobeCritDamage = 0.1F;
+    private static final float specializedRobeCritChance = 0.02F;
+    private static final float specializedRobeHaste = 0.03F;
+
     public static final ArmorSet arcaneRobeSet =
             create(
                     new Material(
@@ -173,15 +179,24 @@ public class Armors {
                     ItemConfig.ArmorSet.with(
                             new ItemConfig.ArmorSet.Piece(1)
                                     .addAll(List.of(
-                                            ItemConfig.SpellAttribute.multiply(SpellAttributes.POWER.get(MagicSchool.ARCANE), 0.25F)
-                                            // ItemConfig.SpellAttribute.multiply(Attributes.CRITICAL_DAMAGE, 0.1F)
+                                            ItemConfig.SpellAttribute.multiply(SpellAttributes.POWER.get(MagicSchool.ARCANE), specializedRobeSpellPower),
+                                            ItemConfig.SpellAttribute.multiply(SpellAttributes.CRITICAL_DAMAGE, specializedRobeCritDamage)
                                     )),
                             new ItemConfig.ArmorSet.Piece(3)
-                                    .addAll(ItemConfig.SpellAttribute.bonuses(EnumSet.of(MagicSchool.ARCANE), 1)),
+                                    .addAll(List.of(
+                                            ItemConfig.SpellAttribute.multiply(SpellAttributes.POWER.get(MagicSchool.ARCANE), specializedRobeSpellPower),
+                                            ItemConfig.SpellAttribute.multiply(SpellAttributes.CRITICAL_DAMAGE, specializedRobeCritDamage)
+                                    )),
                             new ItemConfig.ArmorSet.Piece(2)
-                                    .addAll(ItemConfig.SpellAttribute.bonuses(EnumSet.of(MagicSchool.ARCANE), 1)),
+                                    .addAll(List.of(
+                                            ItemConfig.SpellAttribute.multiply(SpellAttributes.POWER.get(MagicSchool.ARCANE), specializedRobeSpellPower),
+                                            ItemConfig.SpellAttribute.multiply(SpellAttributes.CRITICAL_DAMAGE, specializedRobeCritDamage)
+                                    )),
                             new ItemConfig.ArmorSet.Piece(1)
-                                    .addAll(ItemConfig.SpellAttribute.bonuses(EnumSet.of(MagicSchool.ARCANE), 1))
+                                    .addAll(List.of(
+                                            ItemConfig.SpellAttribute.multiply(SpellAttributes.POWER.get(MagicSchool.ARCANE), specializedRobeSpellPower),
+                                            ItemConfig.SpellAttribute.multiply(SpellAttributes.CRITICAL_DAMAGE, specializedRobeCritDamage)
+                                    ))
                     ))
                     .armorSet(material -> new ArmorSet(
                             new WizardArmor(material, EquipmentSlot.HEAD, new Item.Settings().group(Group.WIZARDS)),
@@ -189,7 +204,83 @@ public class Armors {
                             new WizardArmor(material, EquipmentSlot.LEGS, new Item.Settings().group(Group.WIZARDS)),
                             new WizardArmor(material, EquipmentSlot.FEET, new Item.Settings().group(Group.WIZARDS))
                     ));
-    
+
+    public static final ArmorSet fireRobeSet =
+            create(
+                    new Material(
+                            "fire_robe",
+                            20,
+                            10,
+                            WizardArmor.equipSound,
+                            () -> { return Ingredient.ofItems(new ItemConvertible[]{Items.LAPIS_LAZULI}); }
+                    ),
+                    ItemConfig.ArmorSet.with(
+                            new ItemConfig.ArmorSet.Piece(1)
+                                    .addAll(List.of(
+                                            ItemConfig.SpellAttribute.multiply(SpellAttributes.POWER.get(MagicSchool.FIRE), specializedRobeSpellPower),
+                                            ItemConfig.SpellAttribute.multiply(SpellAttributes.CRITICAL_CHANCE, specializedRobeCritChance)
+                                    )),
+                            new ItemConfig.ArmorSet.Piece(3)
+                                    .addAll(List.of(
+                                            ItemConfig.SpellAttribute.multiply(SpellAttributes.POWER.get(MagicSchool.FIRE), specializedRobeSpellPower),
+                                            ItemConfig.SpellAttribute.multiply(SpellAttributes.CRITICAL_CHANCE, specializedRobeCritChance)
+                                    )),
+                            new ItemConfig.ArmorSet.Piece(2)
+                                    .addAll(List.of(
+                                            ItemConfig.SpellAttribute.multiply(SpellAttributes.POWER.get(MagicSchool.FIRE), specializedRobeSpellPower),
+                                            ItemConfig.SpellAttribute.multiply(SpellAttributes.CRITICAL_CHANCE, specializedRobeCritChance)
+                                    )),
+                            new ItemConfig.ArmorSet.Piece(1)
+                                    .addAll(List.of(
+                                            ItemConfig.SpellAttribute.multiply(SpellAttributes.POWER.get(MagicSchool.FIRE), specializedRobeSpellPower),
+                                            ItemConfig.SpellAttribute.multiply(SpellAttributes.CRITICAL_CHANCE, specializedRobeCritChance)
+                                    ))
+                    ))
+                    .armorSet(material -> new ArmorSet(
+                            new WizardArmor(material, EquipmentSlot.HEAD, new Item.Settings().group(Group.WIZARDS)),
+                            new WizardArmor(material, EquipmentSlot.CHEST, new Item.Settings().group(Group.WIZARDS)),
+                            new WizardArmor(material, EquipmentSlot.LEGS, new Item.Settings().group(Group.WIZARDS)),
+                            new WizardArmor(material, EquipmentSlot.FEET, new Item.Settings().group(Group.WIZARDS))
+                    ));
+
+    public static final ArmorSet frostRobeSet =
+            create(
+                    new Material(
+                            "frost_robe",
+                            20,
+                            10,
+                            WizardArmor.equipSound,
+                            () -> { return Ingredient.ofItems(new ItemConvertible[]{Items.LAPIS_LAZULI}); }
+                    ),
+                    ItemConfig.ArmorSet.with(
+                            new ItemConfig.ArmorSet.Piece(1)
+                                    .addAll(List.of(
+                                            ItemConfig.SpellAttribute.multiply(SpellAttributes.POWER.get(MagicSchool.FROST), specializedRobeSpellPower),
+                                            ItemConfig.SpellAttribute.multiply(SpellAttributes.HASTE, specializedRobeHaste)
+                                    )),
+                            new ItemConfig.ArmorSet.Piece(3)
+                                    .addAll(List.of(
+                                            ItemConfig.SpellAttribute.multiply(SpellAttributes.POWER.get(MagicSchool.FROST), specializedRobeSpellPower),
+                                            ItemConfig.SpellAttribute.multiply(SpellAttributes.HASTE, specializedRobeHaste)
+                                    )),
+                            new ItemConfig.ArmorSet.Piece(2)
+                                    .addAll(List.of(
+                                            ItemConfig.SpellAttribute.multiply(SpellAttributes.POWER.get(MagicSchool.FROST), specializedRobeSpellPower),
+                                            ItemConfig.SpellAttribute.multiply(SpellAttributes.HASTE, specializedRobeHaste)
+                                    )),
+                            new ItemConfig.ArmorSet.Piece(1)
+                                    .addAll(List.of(
+                                            ItemConfig.SpellAttribute.multiply(SpellAttributes.POWER.get(MagicSchool.FROST), specializedRobeSpellPower),
+                                            ItemConfig.SpellAttribute.multiply(SpellAttributes.HASTE, specializedRobeHaste)
+                                    ))
+                    ))
+                    .armorSet(material -> new ArmorSet(
+                            new WizardArmor(material, EquipmentSlot.HEAD, new Item.Settings().group(Group.WIZARDS)),
+                            new WizardArmor(material, EquipmentSlot.CHEST, new Item.Settings().group(Group.WIZARDS)),
+                            new WizardArmor(material, EquipmentSlot.LEGS, new Item.Settings().group(Group.WIZARDS)),
+                            new WizardArmor(material, EquipmentSlot.FEET, new Item.Settings().group(Group.WIZARDS))
+                    ));
+
 
     public static void register(Map<String, ItemConfig.ArmorSet> configs) {
         for(var entry: entries) {
