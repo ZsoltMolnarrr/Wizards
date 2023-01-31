@@ -19,9 +19,9 @@ public class LootHelper {
             for(var groupName: groups) {
                 var group = config.item_groups.get(groupName);
                 if (group == null || group.ids.isEmpty() || group.weight <= 0) { continue; }
-                var chance = group.chance_multiplier > 0 ? group.chance_multiplier : 1F;
+                var chance = group.chance > 0 ? group.chance : 1F;
                 LootPool.Builder lootPoolBuilder = LootPool.builder();
-                lootPoolBuilder.rolls(BinomialLootNumberProvider.create(1, (1F / group.ids.size()) * chance));
+                lootPoolBuilder.rolls(BinomialLootNumberProvider.create(1, chance));
                 lootPoolBuilder.bonusRolls(ConstantLootNumberProvider.create(1.2F * chance));
                 for (var entryId: group.ids) {
                     var item = WizardItems.entries.get(entryId);

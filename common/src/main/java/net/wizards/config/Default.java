@@ -31,17 +31,23 @@ public class Default {
                 Weapons.fireWand.id().toString(),
                 Weapons.frostWand.id().toString()),
                 1
-        ));
+        ).chance(0.3F));
         lootConfig.item_groups.put("staves_tier_1", new LootConfig.ItemGroup(List.of(
                 Weapons.arcaneStaff.id().toString(),
                 Weapons.fireStaff.id().toString(),
                 Weapons.frostStaff.id().toString()),
                 1
-        ));
+        ).chance(0.3F));
         lootConfig.item_groups.put("robes_tier_1", new LootConfig.ItemGroup(joinLists(
                 Armors.wizardRobeSet.idStrings()),
                 1
-        ));
+        ).chance(0.25F));
+        lootConfig.item_groups.put("robes_tier_2", new LootConfig.ItemGroup(joinLists(
+                Armors.arcaneRobeSet.idStrings(),
+                Armors.fireRobeSet.idStrings(),
+                Armors.frostRobeSet.idStrings()),
+                1
+        ).chance(0.5F));
 
         List.of("minecraft:chests/abandoned_mineshaft",
                         "minecraft:chests/igloo_chest",
@@ -63,16 +69,20 @@ public class Default {
                         "minecraft:chests/underwater_ruin_small")
                 .forEach(id -> lootConfig.loot_tables.put(id, List.of("staves_tier_1")));
 
-        List.of("minecraft:chests/ancient_city",
-                        "minecraft:chests/shipwreck_treasure")
+        List.of("minecraft:chests/shipwreck_treasure")
                 .forEach(id -> lootConfig.loot_tables.put(id, List.of("robes_tier_1")));
 
-        List.of("minecraft:chests/end_city_treasure",
-                        "minecraft:chests/bastion_treasure",
+        List.of("minecraft:chests/bastion_treasure",
                         "minecraft:chests/stronghold_library",
                         "minecraft:chests/underwater_ruin_big",
                         "minecraft:chests/woodland_mansion")
                 .forEach(id -> lootConfig.loot_tables.put(id, List.of("staves_tier_1", "robes_tier_1")));
+
+        List.of("minecraft:chests/end_city_treasure",
+                        "minecraft:chests/ancient_city",
+                        "minecraft:chests/stronghold_library")
+                .forEach(id -> lootConfig.loot_tables.put(id, List.of("staves_tier_1", "robes_tier_2")));
+
 
         worldGenConfig = new WorldGenConfig();
         worldGenConfig.entries.addAll(List.of(
