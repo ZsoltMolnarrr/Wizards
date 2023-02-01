@@ -234,28 +234,31 @@ public class Weapons {
             Material.matching(ToolMaterials.NETHERITE, () -> Ingredient.ofItems(Items.NETHERITE_INGOT)))
             .attribute(ItemConfig.SpellAttribute.bonus(SpellAttributes.POWER.get(MagicSchool.FROST), 5));
 
-    public static final Entry crystalArcaneStaff = staff("betternether", "staff_crystal_arcane",
-            Material.matching(ToolMaterials.NETHERITE, ingredient("betterend:aeternium_ingot")))
-            .attribute(ItemConfig.SpellAttribute.bonus(SpellAttributes.POWER.get(MagicSchool.ARCANE), 6));
-    public static final Entry rubyFireStaff = staff("betterend", "staff_ruby_fire",
-            Material.matching(ToolMaterials.NETHERITE, ingredient("betternether:nether_ruby")))
-            .attribute(ItemConfig.SpellAttribute.bonus(SpellAttributes.POWER.get(MagicSchool.FIRE), 6));
-    public static final Entry smaragdantFrostStaff = staff("betterend", "staff_smaragdant_frost",
-            Material.matching(ToolMaterials.NETHERITE, ingredient("betterend:aeternium_ingot")))
-            .attribute(ItemConfig.SpellAttribute.bonus(SpellAttributes.POWER.get(MagicSchool.FROST), 6));
-
     // MARK: Register
 
     public static void register(Map<String, ItemConfig.Weapon> configs) {
+        if (Platform.isModLoaded("betternether")) {
+            staff("betternether", "staff_crystal_arcane",
+                    Material.matching(ToolMaterials.NETHERITE, ingredient("betterend:aeternium_ingot")))
+                    .attribute(ItemConfig.SpellAttribute.bonus(SpellAttributes.POWER.get(MagicSchool.ARCANE), 6));
+        }
+        if (Platform.isModLoaded("betterend")) {
+            staff("betterend", "staff_ruby_fire",
+                    Material.matching(ToolMaterials.NETHERITE, ingredient("betternether:nether_ruby")))
+                    .attribute(ItemConfig.SpellAttribute.bonus(SpellAttributes.POWER.get(MagicSchool.FIRE), 6));
+            staff("betterend", "staff_smaragdant_frost",
+                    Material.matching(ToolMaterials.NETHERITE, ingredient("betterend:aeternium_ingot")))
+                    .attribute(ItemConfig.SpellAttribute.bonus(SpellAttributes.POWER.get(MagicSchool.FROST), 6));
+        }
+
         for(var entry: entries) {
             var config = configs.get(entry.name);
             if (config == null) {
                 config = entry.defaults;
                 configs.put(entry.name(), config);
-            };
-            var item = entry.item();
-            System.out.println(entry.name + " mod " + entry.requiredMod + " installed: " + entry.isRequiredModInstalled());
+            }
             if (!entry.isRequiredModInstalled()) { continue; }
+            var item = entry.item();
             ((ConfigurableAttributes)item).setAttributes(attributesFrom(config));
             Registry.register(Registry.ITEM, entry.id(), item);
         }
