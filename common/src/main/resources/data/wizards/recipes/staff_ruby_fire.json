@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "P": {
+      "item": "minecraft:blaze_powder"
+    },
+    "R": {
+      "item": "betternether:nether_ruby"
+    },
+    "M": {
+      "item": "betternether:cincinnasite_ingot"
+    }
+  },
+  "pattern": [
+    " RP",
+    " MR",
+    "M  "
+  ],
+  "result": {
+    "item": "wizards:staff_ruby_fire"
+  }
+}

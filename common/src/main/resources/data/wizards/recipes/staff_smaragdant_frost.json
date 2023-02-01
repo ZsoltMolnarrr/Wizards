@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "P": {
+      "item": "minecraft:prismarine_crystals"
+    },
+    "C": {
+      "item": "betterend:smaragdant_crystal_shard"
+    },
+    "M": {
+      "item": "betterend:aeternium_ingot"
+    }
+  },
+  "pattern": [
+    " CP",
+    " MC",
+    "M  "
+  ],
+  "result": {
+    "item": "wizards:staff_smaragdant_frost"
+  }
+}

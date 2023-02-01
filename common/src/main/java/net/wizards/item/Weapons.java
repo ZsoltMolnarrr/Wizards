@@ -19,6 +19,7 @@ import net.spell_power.api.MagicSchool;
 import net.spell_power.api.attributes.SpellAttributes;
 import net.wizards.WizardsMod;
 import net.wizards.config.ItemConfig;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -27,7 +28,7 @@ import java.util.function.Supplier;
 
 public class Weapons {
     public static final ArrayList<Entry> entries = new ArrayList<>();
-    public record Entry(String name, Material material, Item item, ItemConfig.Weapon defaults) {
+    public record Entry(String name, Material material, Item item, ItemConfig.Weapon defaults, @Nullable String requiredMod) {
         public Identifier id() {
             return new Identifier(WizardsMod.ID, name);
         }
@@ -35,9 +36,13 @@ public class Weapons {
             defaults.add(attribute);
             return this;
         }
+
+        public Entry requires(String modName) {
+            return new Entry(name, material, item, defaults, modName);
+        }
     }
     private static Entry entry(String name, Material material, Item item, ItemConfig.Weapon defaults) {
-        var entry = new Entry(name, material, item, defaults);
+        var entry = new Entry(name, material, item, defaults, null);
         entries.add(entry);
         return entry;
     }
@@ -45,7 +50,7 @@ public class Weapons {
     // MARK: Material
 
     public static class Material implements ToolMaterial {
-        public static Material matching(ToolMaterials vanillaMaterial, Supplier repairIngredient) {
+        public static Material matching(ToolMaterials vanillaMaterial, Supplier<Ingredient> repairIngredient) {
             var material = new Material();
             material.miningLevel = vanillaMaterial.getMiningLevel();
             material.durability = vanillaMaterial.getDurability();
@@ -90,6 +95,20 @@ public class Weapons {
         public Ingredient getRepairIngredient() {
             return (Ingredient)this.ingredient.get();
         }
+    }
+
+
+    private static Supplier<Ingredient> ingredient(String idString) {
+        return ingredient(idString, Items.DIAMOND);
+    }
+
+    private static Supplier<Ingredient> ingredient(String idString, Item fallback) {
+        var id = new Identifier(idString);
+        return () -> { 
+            var item = Registry.ITEM.get(id);
+            var ingredient = item != null ? item : fallback;
+            return Ingredient.ofItems(ingredient); 
+        };
     }
 
     // MARK: Wands
@@ -157,14 +176,17 @@ public class Weapons {
             .add(ItemConfig.SpellAttribute.bonus(SpellAttributes.POWER.get(MagicSchool.FROST), 5));
 
     public static final Entry crystalArcaneStaff = staff("staff_crystal_arcane",
-            Material.matching(ToolMaterials.NETHERITE, () -> Ingredient.ofItems(Items.NETHERITE_INGOT)))
-            .add(ItemConfig.SpellAttribute.bonus(SpellAttributes.POWER.get(MagicSchool.ARCANE), 6));
+            Material.matching(ToolMaterials.NETHERITE, ingredient("betterend:aeternium_ingot")))
+            .add(ItemConfig.SpellAttribute.bonus(SpellAttributes.POWER.get(MagicSchool.ARCANE), 6))
+            .requires("betternether");
     public static final Entry rubyFireStaff = staff("staff_ruby_fire",
-            Material.matching(ToolMaterials.NETHERITE, () -> Ingredient.ofItems(Items.NETHERITE_INGOT)))
-            .add(ItemConfig.SpellAttribute.bonus(SpellAttributes.POWER.get(MagicSchool.FIRE), 6));
+            Material.matching(ToolMaterials.NETHERITE, ingredient("betternether:nether_ruby")))
+            .add(ItemConfig.SpellAttribute.bonus(SpellAttributes.POWER.get(MagicSchool.FIRE), 6))
+            .requires("betterend");
     public static final Entry smaragdantFrostStaff = staff("staff_smaragdant_frost",
-            Material.matching(ToolMaterials.NETHERITE, () -> Ingredient.ofItems(Items.NETHERITE_INGOT)))
-            .add(ItemConfig.SpellAttribute.bonus(SpellAttributes.POWER.get(MagicSchool.FROST), 6));
+            Material.matching(ToolMaterials.NETHERITE, ingredient("betterend:aeternium_ingot")))
+            .add(ItemConfig.SpellAttribute.bonus(SpellAttributes.POWER.get(MagicSchool.FROST), 6))
+            .requires("betterend");
 
     // MARK: Register
 
