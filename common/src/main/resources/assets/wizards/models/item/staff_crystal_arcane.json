@@ -1,0 +1,6 @@
+{
+  "parent": "wizards:item/medium_staff",
+  "textures": {
+    "layer0": "wizards:item/staff_crystal_arcane"
+  }
+}

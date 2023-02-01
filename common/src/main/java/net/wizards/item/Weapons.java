@@ -156,6 +156,16 @@ public class Weapons {
             Material.matching(ToolMaterials.NETHERITE, () -> Ingredient.ofItems(Items.NETHERITE_INGOT)))
             .add(ItemConfig.SpellAttribute.bonus(SpellAttributes.POWER.get(MagicSchool.FROST), 5));
 
+    public static final Entry crystalArcaneStaff = staff("staff_crystal_arcane",
+            Material.matching(ToolMaterials.NETHERITE, () -> Ingredient.ofItems(Items.NETHERITE_INGOT)))
+            .add(ItemConfig.SpellAttribute.bonus(SpellAttributes.POWER.get(MagicSchool.ARCANE), 6));
+    public static final Entry rubyFireStaff = staff("staff_ruby_fire",
+            Material.matching(ToolMaterials.NETHERITE, () -> Ingredient.ofItems(Items.NETHERITE_INGOT)))
+            .add(ItemConfig.SpellAttribute.bonus(SpellAttributes.POWER.get(MagicSchool.FIRE), 6));
+    public static final Entry smaragdantFrostStaff = staff("staff_smaragdant_frost",
+            Material.matching(ToolMaterials.NETHERITE, () -> Ingredient.ofItems(Items.NETHERITE_INGOT)))
+            .add(ItemConfig.SpellAttribute.bonus(SpellAttributes.POWER.get(MagicSchool.FROST), 6));
+
     // MARK: Register
 
     public static void register(Map<String, ItemConfig.Weapon> configs) {
