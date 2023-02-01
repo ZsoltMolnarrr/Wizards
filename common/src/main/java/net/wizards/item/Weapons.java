@@ -17,6 +17,7 @@ import net.spell_engine.api.item.ConfigurableAttributes;
 import net.spell_engine.api.item.StaffItem;
 import net.spell_power.api.MagicSchool;
 import net.spell_power.api.attributes.SpellAttributes;
+import net.wizards.Platform;
 import net.wizards.WizardsMod;
 import net.wizards.config.ItemConfig;
 import org.jetbrains.annotations.Nullable;
@@ -28,22 +29,75 @@ import java.util.function.Supplier;
 
 public class Weapons {
     public static final ArrayList<Entry> entries = new ArrayList<>();
-    public record Entry(String name, Material material, Item item, ItemConfig.Weapon defaults, @Nullable String requiredMod) {
+
+    public static final class Entry {
+        private final String namespace;
+        private final String name;
+        private final Material material;
+        private final Item item;
+        private final ItemConfig.Weapon defaults;
+        private @Nullable String requiredMod;
+
+        public Entry(String namespace, String name, Material material, Item item, ItemConfig.Weapon defaults, @Nullable String requiredMod) {
+            this.namespace = namespace;
+            this.name = name;
+            this.material = material;
+            this.item = item;
+            this.defaults = defaults;
+            this.requiredMod = requiredMod;
+        }
+
         public Identifier id() {
             return new Identifier(WizardsMod.ID, name);
         }
-        public Entry add(ItemConfig.SpellAttribute attribute) {
+
+        public Entry attribute(ItemConfig.SpellAttribute attribute) {
             defaults.add(attribute);
             return this;
         }
 
         public Entry requires(String modName) {
-            return new Entry(name, material, item, defaults, modName);
+            this.requiredMod = modName;
+            return this;
+        }
+
+        public boolean isRequiredModInstalled() {
+            if (requiredMod == null || requiredMod.isEmpty()) {
+                return true;
+            }
+            return Platform.isModLoaded(requiredMod);
+        }
+
+        public String name() {
+            return name;
+        }
+
+        public Material material() {
+            return material;
+        }
+
+        public Item item() {
+            return item;
+        }
+
+        public ItemConfig.Weapon defaults() {
+            return defaults;
+        }
+
+        public @Nullable String requiredMod() {
+            return requiredMod;
         }
     }
+
     private static Entry entry(String name, Material material, Item item, ItemConfig.Weapon defaults) {
-        var entry = new Entry(name, material, item, defaults, null);
-        entries.add(entry);
+        return entry(null, name, material, item, defaults);
+    }
+
+    private static Entry entry(String requiredMod, String name, Material material, Item item, ItemConfig.Weapon defaults) {
+        var entry = new Entry(WizardsMod.ID, name, material, item, defaults, null);
+        if (entry.isRequiredModInstalled()) {
+            entries.add(entry);
+        }
         return entry;
     }
 
@@ -123,70 +177,72 @@ public class Weapons {
 
     public static final Entry noviceWand = wand("wand_novice",
             Material.matching(ToolMaterials.WOOD, () -> Ingredient.ofItems(Items.STICK)))
-            .add(ItemConfig.SpellAttribute.bonus(SpellAttributes.POWER.get(MagicSchool.FIRE), 1));
+            .attribute(ItemConfig.SpellAttribute.bonus(SpellAttributes.POWER.get(MagicSchool.FIRE), 1));
     public static final Entry arcaneWand = wand("wand_arcane",
             Material.matching(ToolMaterials.IRON, () -> Ingredient.ofItems(Items.GOLD_INGOT)))
-            .add(ItemConfig.SpellAttribute.bonus(SpellAttributes.POWER.get(MagicSchool.ARCANE), 2));
+            .attribute(ItemConfig.SpellAttribute.bonus(SpellAttributes.POWER.get(MagicSchool.ARCANE), 2));
     public static final Entry fireWand = wand("wand_fire",
             Material.matching(ToolMaterials.IRON, () -> Ingredient.ofItems(Items.GOLD_INGOT)))
-            .add(ItemConfig.SpellAttribute.bonus(SpellAttributes.POWER.get(MagicSchool.FIRE), 2));
+            .attribute(ItemConfig.SpellAttribute.bonus(SpellAttributes.POWER.get(MagicSchool.FIRE), 2));
     public static final Entry frostWand = wand("wand_frost",
             Material.matching(ToolMaterials.IRON, () -> Ingredient.ofItems(Items.IRON_INGOT)))
-            .add(ItemConfig.SpellAttribute.bonus(SpellAttributes.POWER.get(MagicSchool.FROST), 2));
+            .attribute(ItemConfig.SpellAttribute.bonus(SpellAttributes.POWER.get(MagicSchool.FROST), 2));
 
     public static final Entry netheriteArcaneWand = wand("wand_netherite_arcane",
             Material.matching(ToolMaterials.NETHERITE, () -> Ingredient.ofItems(Items.NETHERITE_INGOT)))
-            .add(ItemConfig.SpellAttribute.bonus(SpellAttributes.POWER.get(MagicSchool.ARCANE), 3));
+            .attribute(ItemConfig.SpellAttribute.bonus(SpellAttributes.POWER.get(MagicSchool.ARCANE), 3));
     public static final Entry netheriteFireWand = wand("wand_netherite_fire",
             Material.matching(ToolMaterials.NETHERITE, () -> Ingredient.ofItems(Items.NETHERITE_INGOT)))
-            .add(ItemConfig.SpellAttribute.bonus(SpellAttributes.POWER.get(MagicSchool.FIRE), 3));
+            .attribute(ItemConfig.SpellAttribute.bonus(SpellAttributes.POWER.get(MagicSchool.FIRE), 3));
     public static final Entry netheriteFrostWand = wand("wand_netherite_frost",
             Material.matching(ToolMaterials.NETHERITE, () -> Ingredient.ofItems(Items.NETHERITE_INGOT)))
-            .add(ItemConfig.SpellAttribute.bonus(SpellAttributes.POWER.get(MagicSchool.FROST), 3));
+            .attribute(ItemConfig.SpellAttribute.bonus(SpellAttributes.POWER.get(MagicSchool.FROST), 3));
 
 
     // MARK: Staves
 
     private static final float staffAttackDamage = 4;
     private static final float staffAttackSpeed = -3F;
+
     private static Entry staff(String name, Material material) {
+        return staff(null, name, material);
+    }
+
+    private static Entry staff(String requiredMod, String name, Material material) {
         var settings = new Item.Settings().group(Group.WIZARDS);
         var item = new StaffItem(material, settings);
-        return entry(name, material, item, new ItemConfig.Weapon(staffAttackDamage, staffAttackSpeed));
+        return entry(requiredMod, name, material, item, new ItemConfig.Weapon(staffAttackDamage, staffAttackSpeed));
     }
 
     public static final Entry arcaneStaff = staff("staff_arcane",
             Material.matching(ToolMaterials.IRON, () -> Ingredient.ofItems(Items.GOLD_INGOT)))
-            .add(ItemConfig.SpellAttribute.bonus(SpellAttributes.POWER.get(MagicSchool.ARCANE), 4));
+            .attribute(ItemConfig.SpellAttribute.bonus(SpellAttributes.POWER.get(MagicSchool.ARCANE), 4));
     public static final Entry fireStaff = staff("staff_fire",
             Material.matching(ToolMaterials.IRON, () -> Ingredient.ofItems(Items.GOLD_INGOT)))
-            .add(ItemConfig.SpellAttribute.bonus(SpellAttributes.POWER.get(MagicSchool.FIRE), 4));
+            .attribute(ItemConfig.SpellAttribute.bonus(SpellAttributes.POWER.get(MagicSchool.FIRE), 4));
     public static final Entry frostStaff = staff("staff_frost",
             Material.matching(ToolMaterials.IRON, () -> Ingredient.ofItems(Items.IRON_INGOT)))
-            .add(ItemConfig.SpellAttribute.bonus(SpellAttributes.POWER.get(MagicSchool.FROST), 4));
+            .attribute(ItemConfig.SpellAttribute.bonus(SpellAttributes.POWER.get(MagicSchool.FROST), 4));
 
     public static final Entry netheriteArcaneStaff = staff("staff_netherite_arcane",
             Material.matching(ToolMaterials.NETHERITE, () -> Ingredient.ofItems(Items.NETHERITE_INGOT)))
-            .add(ItemConfig.SpellAttribute.bonus(SpellAttributes.POWER.get(MagicSchool.ARCANE), 5));
+            .attribute(ItemConfig.SpellAttribute.bonus(SpellAttributes.POWER.get(MagicSchool.ARCANE), 5));
     public static final Entry netheriteFireStaff = staff("staff_netherite_fire",
             Material.matching(ToolMaterials.NETHERITE, () -> Ingredient.ofItems(Items.NETHERITE_INGOT)))
-            .add(ItemConfig.SpellAttribute.bonus(SpellAttributes.POWER.get(MagicSchool.FIRE), 5));
+            .attribute(ItemConfig.SpellAttribute.bonus(SpellAttributes.POWER.get(MagicSchool.FIRE), 5));
     public static final Entry netheriteFrostStaff = staff("staff_netherite_frost",
             Material.matching(ToolMaterials.NETHERITE, () -> Ingredient.ofItems(Items.NETHERITE_INGOT)))
-            .add(ItemConfig.SpellAttribute.bonus(SpellAttributes.POWER.get(MagicSchool.FROST), 5));
+            .attribute(ItemConfig.SpellAttribute.bonus(SpellAttributes.POWER.get(MagicSchool.FROST), 5));
 
-    public static final Entry crystalArcaneStaff = staff("staff_crystal_arcane",
+    public static final Entry crystalArcaneStaff = staff("betternether", "staff_crystal_arcane",
             Material.matching(ToolMaterials.NETHERITE, ingredient("betterend:aeternium_ingot")))
-            .add(ItemConfig.SpellAttribute.bonus(SpellAttributes.POWER.get(MagicSchool.ARCANE), 6))
-            .requires("betternether");
-    public static final Entry rubyFireStaff = staff("staff_ruby_fire",
+            .attribute(ItemConfig.SpellAttribute.bonus(SpellAttributes.POWER.get(MagicSchool.ARCANE), 6));
+    public static final Entry rubyFireStaff = staff("betterend", "staff_ruby_fire",
             Material.matching(ToolMaterials.NETHERITE, ingredient("betternether:nether_ruby")))
-            .add(ItemConfig.SpellAttribute.bonus(SpellAttributes.POWER.get(MagicSchool.FIRE), 6))
-            .requires("betterend");
-    public static final Entry smaragdantFrostStaff = staff("staff_smaragdant_frost",
+            .attribute(ItemConfig.SpellAttribute.bonus(SpellAttributes.POWER.get(MagicSchool.FIRE), 6));
+    public static final Entry smaragdantFrostStaff = staff("betterend", "staff_smaragdant_frost",
             Material.matching(ToolMaterials.NETHERITE, ingredient("betterend:aeternium_ingot")))
-            .add(ItemConfig.SpellAttribute.bonus(SpellAttributes.POWER.get(MagicSchool.FROST), 6))
-            .requires("betterend");
+            .attribute(ItemConfig.SpellAttribute.bonus(SpellAttributes.POWER.get(MagicSchool.FROST), 6));
 
     // MARK: Register
 
@@ -198,6 +254,8 @@ public class Weapons {
                 configs.put(entry.name(), config);
             };
             var item = entry.item();
+            System.out.println(entry.name + " mod " + entry.requiredMod + " installed: " + entry.isRequiredModInstalled());
+            if (!entry.isRequiredModInstalled()) { continue; }
             ((ConfigurableAttributes)item).setAttributes(attributesFrom(config));
             Registry.register(Registry.ITEM, entry.id(), item);
         }
