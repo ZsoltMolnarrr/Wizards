@@ -1,7 +1,7 @@
 # 0.9.8
 
 - Add netherite staff and wand variants
-- Better Combat now required (to avoid beam not rendering)
+- Add Better Nether, Better End specific staves
 - Wizard robes repairable using wool
 - Fix wizard robe clipping multi layer skins
 - Improve loot configuration

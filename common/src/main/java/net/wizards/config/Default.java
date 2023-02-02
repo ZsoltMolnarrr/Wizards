@@ -42,12 +42,12 @@ public class Default {
                 Armors.wizardRobeSet.idStrings()),
                 1
         ).chance(0.25F));
-        lootConfig.item_groups.put("robes_tier_2", new LootConfig.ItemGroup(joinLists(
-                Armors.arcaneRobeSet.idStrings(),
-                Armors.fireRobeSet.idStrings(),
-                Armors.frostRobeSet.idStrings()),
-                1
-        ).chance(0.5F));
+//        lootConfig.item_groups.put("robes_tier_2", new LootConfig.ItemGroup(joinLists(
+//                Armors.arcaneRobeSet.idStrings(),
+//                Armors.fireRobeSet.idStrings(),
+//                Armors.frostRobeSet.idStrings()),
+//                1
+//        ).chance(0.5F));
 
         List.of("minecraft:chests/abandoned_mineshaft",
                         "minecraft:chests/igloo_chest",

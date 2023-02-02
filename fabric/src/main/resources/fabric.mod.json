@@ -34,8 +34,7 @@
     "geckolib3": "*",
     "spell_engine": ">=${spell_engine_version}",
     "spell_power": "*",
-    "runes": ">=${runes_version}",
-    "bettercombat": "*"
+    "runes": ">=${runes_version}"
   },
   "custom": {
     "modmenu": {
