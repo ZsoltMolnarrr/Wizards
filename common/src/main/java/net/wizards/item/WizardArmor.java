@@ -21,9 +21,11 @@ import software.bernie.geckolib3.util.GeckoLibUtil;
 public class WizardArmor extends ArmorItem implements IAnimatable, ConfigurableAttributes {
     public static final Identifier equipSoundId = new Identifier(WizardsMod.ID, "wizard_robes_equip");
     public static final SoundEvent equipSound = new SoundEvent(equipSoundId);
+    public final Armors.Material customMaterial;
 
-    public WizardArmor(ArmorMaterial material, EquipmentSlot slot, Settings settings) {
+    public WizardArmor(Armors.Material material, EquipmentSlot slot, Settings settings) {
         super(material, slot, settings);
+        this.customMaterial = material;
     }
 
     private Multimap<EntityAttribute, EntityAttributeModifier> attributes;

@@ -1,3 +1,7 @@
+# 0.9.9
+
+- Add Arcane, Fire, Frost specific robes
+
 # 0.9.8
 
 - Add netherite staff and wand variants

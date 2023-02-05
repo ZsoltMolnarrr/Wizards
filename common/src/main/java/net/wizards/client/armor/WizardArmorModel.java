@@ -12,8 +12,10 @@ public class WizardArmorModel extends AnimatedGeoModel<WizardArmor> {
     }
 
     @Override
-    public Identifier getTextureResource(WizardArmor object) {
-        return new Identifier(WizardsMod.ID, "textures/armor/wizard_robes_blue.png");
+    public Identifier getTextureResource(WizardArmor armor) {
+        var texture = armor.customMaterial.getName();
+        System.out.println("Armor texture: "+ "textures/armor/" + texture + ".png");
+        return new Identifier(WizardsMod.ID, "textures/armor/" + texture + ".png");
     }
 
     @Override

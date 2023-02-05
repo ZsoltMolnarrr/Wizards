@@ -16,11 +16,14 @@ import java.util.List;
 
 public class WizardsClientMod {
     public static void initialize() {
-        GeoArmorRenderer.registerArmorRenderer(new WizardArmorRenderer(),
-                Armors.wizardRobeSet.head,
-                Armors.wizardRobeSet.chest,
-                Armors.wizardRobeSet.legs,
-                Armors.wizardRobeSet.feet);
+        var wizardArmorRenderer = new WizardArmorRenderer();
+        for (var entry: Armors.entries) {
+            GeoArmorRenderer.registerArmorRenderer(wizardArmorRenderer,
+                    entry.armorSet().head,
+                    entry.armorSet().chest,
+                    entry.armorSet().legs,
+                    entry.armorSet().feet);
+        }
         CustomModels.registerModelIds(List.of(
                 new Identifier(WizardsMod.ID, "projectile/arcane_missile"),
                 new Identifier(WizardsMod.ID, "projectile/fireball_projectile"),
