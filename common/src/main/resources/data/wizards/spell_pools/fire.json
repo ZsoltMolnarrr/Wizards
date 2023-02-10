@@ -1,3 +1,7 @@
 {
-  "all_of_schools": ["FIRE", "ARCANE"]
+  "spell_ids": [
+    "wizards:fireball",
+    "wizards:fire_breath",
+    "wizards:fire_meteor"
+  ]
 }
