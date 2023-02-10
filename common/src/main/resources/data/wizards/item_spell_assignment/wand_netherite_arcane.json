@@ -1,5 +1,5 @@
 {
-  "school": "ARCANE",
+  "pool": "wizards:arcane",
   "max_spell_count": 1,
   "spell_ids": [
     "wizards:arcane_missile"

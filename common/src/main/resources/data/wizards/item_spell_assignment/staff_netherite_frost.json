@@ -1,5 +1,5 @@
 {
-  "school": "FROST",
+  "pool": "wizards:frost",
   "max_spell_count": 3,
   "spell_ids": [
   ]
