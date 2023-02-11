@@ -2,7 +2,8 @@
 
 All spell bindings have been reset due to a major API change! We apologize for the inconvenience.
 
-- Update to spell pools API
+- Add spell pool data files
+- Update spell assignment data files
 
 # 0.9.9
 
