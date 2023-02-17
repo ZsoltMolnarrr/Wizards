@@ -1,5 +1,6 @@
 package net.wizards.config;
 
+import net.spell_engine.api.item.ItemConfig;
 import net.wizards.item.Armors;
 import net.wizards.item.Weapons;
 

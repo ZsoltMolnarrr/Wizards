@@ -6,10 +6,10 @@ import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.attribute.EntityAttribute;
 import net.minecraft.entity.attribute.EntityAttributeModifier;
 import net.minecraft.item.ArmorItem;
-import net.minecraft.item.ArmorMaterial;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.Identifier;
 import net.spell_engine.api.item.ConfigurableAttributes;
+import net.spell_engine.api.item.armor.Armor;
 import net.wizards.WizardsMod;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
@@ -21,9 +21,9 @@ import software.bernie.geckolib3.util.GeckoLibUtil;
 public class WizardArmor extends ArmorItem implements IAnimatable, ConfigurableAttributes {
     public static final Identifier equipSoundId = new Identifier(WizardsMod.ID, "wizard_robes_equip");
     public static final SoundEvent equipSound = new SoundEvent(equipSoundId);
-    public final Armors.Material customMaterial;
+    public final Armor.CustomMaterial customMaterial;
 
-    public WizardArmor(Armors.Material material, EquipmentSlot slot, Settings settings) {
+    public WizardArmor(Armor.CustomMaterial material, EquipmentSlot slot, Settings settings) {
         super(material, slot, settings);
         this.customMaterial = material;
     }

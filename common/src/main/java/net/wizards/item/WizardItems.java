@@ -13,9 +13,10 @@ public class WizardItems {
             entries.put(weaponEntry.id().toString(), weaponEntry.item());
         }
         for(var entry: Armors.entries) {
-            for (var piece: entry.armorSet().pieces()) {
+            var set = entry.armorSet();
+            for (var piece: set.pieces()) {
                 var armorItem = (ArmorItem) piece;
-                entries.put(Armors.ArmorSet.idOf(armorItem).toString(), armorItem);
+                entries.put(set.idOf(armorItem).toString(), armorItem);
             }
         }
     }

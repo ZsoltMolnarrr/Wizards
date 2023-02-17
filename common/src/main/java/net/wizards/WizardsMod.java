@@ -1,8 +1,8 @@
 package net.wizards;
 
+import net.spell_engine.api.item.ItemConfig;
 import net.tinyconfig.ConfigManager;
 import net.wizards.config.Default;
-import net.wizards.config.ItemConfig;
 import net.wizards.config.LootConfig;
 import net.wizards.config.WorldGenConfig;
 import net.wizards.effect.Effects;

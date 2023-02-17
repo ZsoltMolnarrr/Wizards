@@ -1,6 +1,7 @@
 # 0.9.11
 
 - Update wand spell assignments data files to new format
+- Move entry and config definitions of armors and weapons to Spell Engine
 
 # 0.9.10
 
