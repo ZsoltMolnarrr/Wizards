@@ -1,3 +1,7 @@
+# 0.9.11
+
+- Update wand spell assignments data files to new format
+
 # 0.9.10
 
 All spell bindings have been reset due to a major API change! We apologize for the inconvenience.
