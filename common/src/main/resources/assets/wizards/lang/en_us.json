@@ -81,5 +81,6 @@
   "advancements.wizards.frost_mastery.title": "Icy Veins",
   "advancements.wizards.frost_mastery.description": "Cast all Frost Spells",
 
-  "entity.minecraft.villager.wizard_merchant": "Wizard Merchant"
+  "entity.minecraft.villager.wizard_merchant": "Wizard Merchant",
+  "entity.minecraft.villager.wizards:wizard_merchant": "Wizard Merchant"
 }
