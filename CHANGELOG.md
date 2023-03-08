@@ -1,3 +1,8 @@
+# 0.9.12
+
+- Add Ukrainian translation, thanks to un_roman
+- Update dependencies
+
 # 0.9.11
 
 - Update wand spell assignments data files to new format
