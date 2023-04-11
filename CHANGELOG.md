@@ -1,3 +1,7 @@
+# 0.9.13
+
+- Add configurable bonus roll chance
+
 # 0.9.12
 
 - Add Ukrainian translation, thanks to un_roman

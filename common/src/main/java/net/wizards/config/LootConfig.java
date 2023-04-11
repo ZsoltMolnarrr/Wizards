@@ -8,6 +8,7 @@ public class LootConfig {
     public static class ItemGroup { public ItemGroup() { }
         public List<String> ids = List.of();
         public float chance = 1F;
+        public float bonus_roll_chance = 1.2F;
         public int weight = 1;
 
         public ItemGroup(List<String> ids, int weight) {
