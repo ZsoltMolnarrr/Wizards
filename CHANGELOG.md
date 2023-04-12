@@ -1,6 +1,7 @@
 # 0.9.13
 
 - Add configurable bonus roll chance
+- Reduce default drop chance for Novice Wand
 
 # 0.9.12
 

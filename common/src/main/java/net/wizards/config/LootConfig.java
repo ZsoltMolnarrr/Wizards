@@ -16,6 +16,13 @@ public class LootConfig {
             this.weight = weight;
         }
 
+        public ItemGroup(List<String> ids, float chance, float bonus_roll_chance, int weight) {
+            this.ids = ids;
+            this.chance = chance;
+            this.bonus_roll_chance = bonus_roll_chance;
+            this.weight = weight;
+        }
+
         public ItemGroup chance(float chance_multiplier) {
             this.chance = chance_multiplier;
             return this;

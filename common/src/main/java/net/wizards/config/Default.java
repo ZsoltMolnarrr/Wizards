@@ -25,6 +25,8 @@ public class Default {
         lootConfig = new LootConfig();
         lootConfig.item_groups.put("wands_tier_0", new LootConfig.ItemGroup(List.of(
                 Weapons.noviceWand.id().toString()),
+                0.25F,
+                1F,
                 1
         ));
         lootConfig.item_groups.put("wands_tier_1", new LootConfig.ItemGroup(List.of(
