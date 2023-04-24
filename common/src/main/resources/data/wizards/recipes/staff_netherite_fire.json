@@ -4,13 +4,16 @@
     "P": {
       "item": "minecraft:blaze_powder"
     },
+    "N": {
+      "item": "minecraft:nether_brick"
+    },
     "M": {
       "item": "minecraft:netherite_ingot"
     }
   },
   "pattern": [
-    " MP",
-    " MM",
+    " NP",
+    " MN",
     "M  "
   ],
   "result": {

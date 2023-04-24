@@ -1,3 +1,7 @@
+# 0.9.14
+
+- Reduce cost of netherite staves based on community feedback
+
 # 0.9.13
 
 - Add configurable bonus roll chance

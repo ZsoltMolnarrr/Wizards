@@ -4,13 +4,16 @@
     "P": {
       "item": "minecraft:prismarine_crystals"
     },
+    "B": {
+      "item": "minecraft:snowball"
+    },
     "M": {
       "item": "minecraft:netherite_ingot"
     }
   },
   "pattern": [
-    " MP",
-    " MM",
+    " BP",
+    " MB",
     "M  "
   ],
   "result": {
