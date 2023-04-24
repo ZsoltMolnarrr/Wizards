@@ -2,6 +2,7 @@
 
 - Reduce cost of netherite staves based on community feedback
 - Phase out deprecated API usage
+- Slightly improve Frost Shield rendering
 
 # 0.9.13
 
