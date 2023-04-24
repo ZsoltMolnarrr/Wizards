@@ -1,28 +1,28 @@
 {
   "display": {
     "icon": {
-      "item": "runes:frost_stone"
+      "item": "wizards:wand_novice"
     },
     "title": {
-      "translate": "advancements.wizards.obtain_frost_rune.title"
+      "translate": "advancements.rpg_classes.obtain_wand.title"
     },
     "description": {
-      "translate": "advancements.wizards.obtain_frost_rune.description"
+      "translate": "advancements.rpg_classes.obtain_wand.description"
     },
     "frame": "task",
     "show_toast": true,
     "announce_to_chat": true,
     "hidden": false
   },
-  "parent": "wizards:obtain_wand",
+  "parent": "rpg_classes:root",
   "criteria": {
-    "runes": {
+    "wand": {
       "trigger": "minecraft:inventory_changed",
       "conditions": {
         "items": [
           {
             "items": [
-              "runes:frost_stone"
+              "wizards:wand_novice", "wizards:wand_arcane", "wizards:wand_fire", "wizards:wand_frost"
             ]
           }
         ]
@@ -31,7 +31,7 @@
   },
   "requirements": [
     [
-      "runes"
+      "wand"
     ]
   ]
 }

@@ -1,20 +1,20 @@
 {
   "display": {
     "icon": {
-      "item": "runes:fire_stone"
+      "item": "runes:frost_stone"
     },
     "title": {
-      "translate": "advancements.wizards.obtain_fire_rune.title"
+      "translate": "advancements.rpg_classes.obtain_frost_rune.title"
     },
     "description": {
-      "translate": "advancements.wizards.obtain_fire_rune.description"
+      "translate": "advancements.rpg_classes.obtain_frost_rune.description"
     },
     "frame": "task",
     "show_toast": true,
     "announce_to_chat": true,
     "hidden": false
   },
-  "parent": "wizards:obtain_wand",
+  "parent": "rpg_classes:obtain_wand",
   "criteria": {
     "runes": {
       "trigger": "minecraft:inventory_changed",
@@ -22,7 +22,7 @@
         "items": [
           {
             "items": [
-              "runes:fire_stone"
+              "runes:frost_stone"
             ]
           }
         ]

@@ -4,17 +4,17 @@
       "item": "wizards:staff_arcane"
     },
     "title": {
-      "translate": "advancements.wizards.arcane_mastery.title"
+      "translate": "advancements.rpg_classes.arcane_mastery.title"
     },
     "description": {
-      "translate": "advancements.wizards.arcane_mastery.description"
+      "translate": "advancements.rpg_classes.arcane_mastery.description"
     },
     "frame": "task",
     "show_toast": true,
     "announce_to_chat": true,
     "hidden": false
   },
-  "parent": "wizards:obtain_arcane_rune",
+  "parent": "rpg_classes:obtain_arcane_rune",
   "criteria": {
     "cast": {
       "trigger": "spell_engine:spell_cast",

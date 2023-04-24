@@ -1,25 +1,25 @@
 {
   "display": {
     "icon": {
-      "item": "wizards:staff_fire"
+      "item": "wizards:staff_frost"
     },
     "title": {
-      "translate": "advancements.wizards.fire_mastery.title"
+      "translate": "advancements.rpg_classes.frost_mastery.title"
     },
     "description": {
-      "translate": "advancements.wizards.fire_mastery.description"
+      "translate": "advancements.rpg_classes.frost_mastery.description"
     },
     "frame": "task",
     "show_toast": true,
     "announce_to_chat": true,
     "hidden": false
   },
-  "parent": "wizards:obtain_fire_rune",
+  "parent": "rpg_classes:obtain_frost_rune",
   "criteria": {
     "cast": {
       "trigger": "spell_engine:spell_cast",
       "conditions": {
-        "magic_school": "FIRE"
+        "magic_school": "FROST"
       }
     }
   },

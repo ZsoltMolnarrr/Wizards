@@ -1,28 +1,28 @@
 {
   "display": {
     "icon": {
-      "item": "wizards:wand_novice"
+      "item": "runes:arcane_stone"
     },
     "title": {
-      "translate": "advancements.wizards.obtain_wand.title"
+      "translate": "advancements.rpg_classes.obtain_arcane_rune.title"
     },
     "description": {
-      "translate": "advancements.wizards.obtain_wand.description"
+      "translate": "advancements.rpg_classes.obtain_arcane_rune.description"
     },
     "frame": "task",
     "show_toast": true,
     "announce_to_chat": true,
     "hidden": false
   },
-  "parent": "wizards:root",
+  "parent": "rpg_classes:obtain_wand",
   "criteria": {
-    "wand": {
+    "runes": {
       "trigger": "minecraft:inventory_changed",
       "conditions": {
         "items": [
           {
             "items": [
-              "wizards:wand_novice", "wizards:wand_arcane", "wizards:wand_fire", "wizards:wand_frost"
+              "runes:arcane_stone"
             ]
           }
         ]
@@ -31,7 +31,7 @@
   },
   "requirements": [
     [
-      "wand"
+      "runes"
     ]
   ]
 }
