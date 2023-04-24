@@ -60,12 +60,14 @@ public class Armors {
                         new ItemConfig.ArmorSet.Piece(1)
                                 .addAll(ItemConfig.SpellAttribute.bonuses(EnumSet.of(MagicSchool.ARCANE, MagicSchool.FIRE, MagicSchool.FROST), 1))
                     ))
-            .armorSet(material -> new Armor.Set(WizardsMod.ID,
+            .bundle(material -> new Armor.Set(WizardsMod.ID,
                     new WizardArmor(material, EquipmentSlot.HEAD, new Item.Settings().group(Group.WIZARDS)),
                     new WizardArmor(material, EquipmentSlot.CHEST, new Item.Settings().group(Group.WIZARDS)),
                     new WizardArmor(material, EquipmentSlot.LEGS, new Item.Settings().group(Group.WIZARDS)),
                     new WizardArmor(material, EquipmentSlot.FEET, new Item.Settings().group(Group.WIZARDS))
-            ), entries);
+            ))
+            .put(entries)
+            .armorSet();
 
 
     private static final float specializedRobeSpellPower = 0.25F;
@@ -104,12 +106,14 @@ public class Armors {
                                             ItemConfig.SpellAttribute.multiply(SpellAttributes.CRITICAL_DAMAGE, specializedRobeCritDamage)
                                     ))
                     ))
-                    .armorSet(material -> new Armor.Set(WizardsMod.ID,
+                    .bundle(material -> new Armor.Set(WizardsMod.ID,
                             new WizardArmor(material, EquipmentSlot.HEAD, new Item.Settings().group(Group.WIZARDS)),
                             new WizardArmor(material, EquipmentSlot.CHEST, new Item.Settings().group(Group.WIZARDS)),
                             new WizardArmor(material, EquipmentSlot.LEGS, new Item.Settings().group(Group.WIZARDS)),
                             new WizardArmor(material, EquipmentSlot.FEET, new Item.Settings().group(Group.WIZARDS))
-                    ), entries);
+                    ))
+                    .put(entries)
+                    .armorSet();
 
     public static final Armor.Set fireRobeSet =
             create(
@@ -142,12 +146,14 @@ public class Armors {
                                             ItemConfig.SpellAttribute.multiply(SpellAttributes.CRITICAL_CHANCE, specializedRobeCritChance)
                                     ))
                     ))
-                    .armorSet(material -> new Armor.Set(WizardsMod.ID,
+                    .bundle(material -> new Armor.Set(WizardsMod.ID,
                             new WizardArmor(material, EquipmentSlot.HEAD, new Item.Settings().group(Group.WIZARDS)),
                             new WizardArmor(material, EquipmentSlot.CHEST, new Item.Settings().group(Group.WIZARDS)),
                             new WizardArmor(material, EquipmentSlot.LEGS, new Item.Settings().group(Group.WIZARDS)),
                             new WizardArmor(material, EquipmentSlot.FEET, new Item.Settings().group(Group.WIZARDS))
-                    ), entries);
+                    ))
+                    .put(entries)
+                    .armorSet();
 
     public static final Armor.Set frostRobeSet =
             create(
@@ -180,12 +186,14 @@ public class Armors {
                                             ItemConfig.SpellAttribute.multiply(SpellAttributes.HASTE, specializedRobeHaste)
                                     ))
                     ))
-                    .armorSet(material -> new Armor.Set(WizardsMod.ID,
+                    .bundle(material -> new Armor.Set(WizardsMod.ID,
                             new WizardArmor(material, EquipmentSlot.HEAD, new Item.Settings().group(Group.WIZARDS)),
                             new WizardArmor(material, EquipmentSlot.CHEST, new Item.Settings().group(Group.WIZARDS)),
                             new WizardArmor(material, EquipmentSlot.LEGS, new Item.Settings().group(Group.WIZARDS)),
                             new WizardArmor(material, EquipmentSlot.FEET, new Item.Settings().group(Group.WIZARDS))
-                    ), entries);
+                    ))
+                    .put(entries)
+                    .armorSet();
 
 
     public static void register(Map<String, ItemConfig.ArmorSet> configs) {

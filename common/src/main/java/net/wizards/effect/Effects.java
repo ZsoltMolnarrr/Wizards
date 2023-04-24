@@ -27,9 +27,9 @@ public class Effects {
                     EntityAttributeModifier.Operation.MULTIPLY_TOTAL);
 
     public static void register() {
-        ((Synchronized)frozen).setSynchronized(true);
-        ((RemoveOnHit)frozen).removedOnDirectHit(true);
-        ((Synchronized)frostShield).setSynchronized(true);
+        RemoveOnHit.configure(frozen, true);
+        Synchronized.configure(frozen, true);
+        Synchronized.configure(frostShield, true);
 
         int rawId = 720;
         Registry.register(Registry.STATUS_EFFECT, rawId++, new Identifier(WizardsMod.ID, "frozen").toString(), frozen);
