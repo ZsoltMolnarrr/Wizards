@@ -19,7 +19,7 @@
     "cast": {
       "trigger": "spell_engine:spell_cast",
       "conditions": {
-        "magic_school": "FROST"
+        "spell_pool": "wizards:frost"
       }
     }
   },
