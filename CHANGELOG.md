@@ -1,5 +1,6 @@
 # 0.9.14
 
+- Restructure advancements
 - Reduce cost of netherite staves based on community feedback
 - Phase out deprecated API usage
 - Slightly improve Frost Shield rendering

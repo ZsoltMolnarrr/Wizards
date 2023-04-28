@@ -17,8 +17,9 @@
   "parent": "rpg_classes:obtain_arcane_rune",
   "criteria": {
     "cast": {
-      "trigger": "spell_engine:spell_cast",
+      "trigger": "spell_engine:spell_binding",
       "conditions": {
+        "complete": true,
         "spell_pool": "wizards:arcane"
       }
     }
