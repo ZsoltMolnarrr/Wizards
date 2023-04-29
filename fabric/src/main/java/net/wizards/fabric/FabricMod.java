@@ -6,10 +6,11 @@ import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.loot.v2.LootTableEvents;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Identifier;
+import net.spell_engine.api.loot.LootHelper;
 import net.wizards.WizardsMod;
 import net.wizards.item.Armors;
 import net.wizards.item.Group;
-import net.wizards.util.LootHelper;
+import net.wizards.item.WizardItems;
 import net.wizards.util.SoundHelper;
 import net.wizards.worldgen.WizardWorldGen;
 
@@ -31,7 +32,7 @@ public class FabricMod implements ModInitializer {
     private void subscribeEvents() {
         ServerLifecycleEvents.SERVER_STARTING.register(WizardWorldGen::init);
         LootTableEvents.MODIFY.register((resourceManager, lootManager, id, tableBuilder, source) -> {
-            LootHelper.configure(id, tableBuilder, WizardsMod.lootConfig.value);
+            LootHelper.configure(id, tableBuilder, WizardsMod.lootConfig.value, WizardItems.entries);
         });
     }
 
