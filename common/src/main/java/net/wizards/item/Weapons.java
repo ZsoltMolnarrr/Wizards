@@ -119,14 +119,14 @@ public class Weapons {
 
     public static void register(Map<String, ItemConfig.Weapon> configs) {
         if (Platform.isModLoaded("betternether")) {
-            staff("betternether", "staff_crystal_arcane",
-                    Weapon.CustomMaterial.matching(ToolMaterials.NETHERITE, ingredient("betterend:aeternium_ingot")))
-                    .attribute(ItemConfig.SpellAttribute.bonus(SpellAttributes.POWER.get(MagicSchool.ARCANE), 6));
-        }
-        if (Platform.isModLoaded("betterend")) {
-            staff("betterend", "staff_ruby_fire",
+            staff("betternether", "staff_ruby_fire",
                     Weapon.CustomMaterial.matching(ToolMaterials.NETHERITE, ingredient("betternether:nether_ruby")))
                     .attribute(ItemConfig.SpellAttribute.bonus(SpellAttributes.POWER.get(MagicSchool.FIRE), 6));
+        }
+        if (Platform.isModLoaded("betterend")) {
+            staff("betterend", "staff_crystal_arcane",
+                    Weapon.CustomMaterial.matching(ToolMaterials.NETHERITE, ingredient("betterend:aeternium_ingot")))
+                    .attribute(ItemConfig.SpellAttribute.bonus(SpellAttributes.POWER.get(MagicSchool.ARCANE), 6));
             staff("betterend", "staff_smaragdant_frost",
                     Weapon.CustomMaterial.matching(ToolMaterials.NETHERITE, ingredient("betterend:aeternium_ingot")))
                     .attribute(ItemConfig.SpellAttribute.bonus(SpellAttributes.POWER.get(MagicSchool.FROST), 6));
