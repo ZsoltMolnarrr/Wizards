@@ -67,11 +67,11 @@
   "advancements.rpg_classes.obtain_frost_rune.title": "Path of Frost",
   "advancements.rpg_classes.obtain_frost_rune.description": "Obtain a Frost Rune",
   "advancements.rpg_classes.arcane_mastery.title": "Arcane Flows",
-  "advancements.rpg_classes.arcane_mastery.description": "Obtain all Arcane Spells",
+  "advancements.rpg_classes.arcane_mastery.description": "Obtain all Arcane Wizard Spells",
   "advancements.rpg_classes.fire_mastery.title": "Pyromaniac",
-  "advancements.rpg_classes.fire_mastery.description": "Obtain all Fire Spells",
+  "advancements.rpg_classes.fire_mastery.description": "Obtain all Fire Wizard Spells",
   "advancements.rpg_classes.frost_mastery.title": "Icy Veins",
-  "advancements.rpg_classes.frost_mastery.description": "Obtain all Frost Spells",
+  "advancements.rpg_classes.frost_mastery.description": "Obtain all Frost Wizard Spells",
 
   "entity.minecraft.villager.wizard_merchant": "Wizard Merchant",
   "entity.minecraft.villager.wizards:wizard_merchant": "Wizard Merchant"
