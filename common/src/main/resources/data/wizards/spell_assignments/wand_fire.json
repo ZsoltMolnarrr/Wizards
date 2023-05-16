@@ -1,5 +1,3 @@
 {
-  "spell_ids": [
-    "wizards:fireball"
-  ]
+  "spell_ids": [ "wizards:fireball" ]
 }

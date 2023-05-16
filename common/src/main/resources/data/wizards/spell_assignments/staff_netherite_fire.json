@@ -1,6 +1,4 @@
 {
-  "pool": "wizards:fire",
-  "max_spell_count": 3,
-  "spell_ids": [
-  ]
+  "is_proxy": true,
+  "spell_ids": [ "wizards:fireball" ]
 }
