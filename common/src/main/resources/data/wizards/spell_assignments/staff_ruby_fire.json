@@ -1,4 +1,3 @@
 {
-  "is_proxy": true,
-  "spell_ids": [ "wizards:fireball" ]
+  "is_proxy": true
 }

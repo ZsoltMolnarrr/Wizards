@@ -1,4 +1,3 @@
 {
-  "is_proxy": true,
-  "spell_ids": [ "wizards:frostbolt" ]
+  "is_proxy": true
 }
