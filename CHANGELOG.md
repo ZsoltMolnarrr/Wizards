@@ -1,3 +1,7 @@
+# 0.9.15
+
+- Add Arcane, Fire and Frost spell books
+
 # 0.9.14
 
 - Restructure advancements

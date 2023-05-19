@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "minecraft:item/book"
+    "layer0": "wizards:item/frost_spell_book"
   }
 }

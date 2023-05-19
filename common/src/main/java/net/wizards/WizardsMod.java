@@ -8,6 +8,7 @@ import net.wizards.config.WorldGenConfig;
 import net.wizards.effect.Effects;
 import net.wizards.item.Armors;
 import net.wizards.item.Weapons;
+import net.wizards.item.WizardBooks;
 import net.wizards.villager.WizardVillagers;
 
 public class WizardsMod {
@@ -36,6 +37,7 @@ public class WizardsMod {
     public static void init() {
         lootConfig.refresh();
         itemConfig.refresh();
+        WizardBooks.register();
         Weapons.register(itemConfig.value.weapons);
         Armors.register(itemConfig.value.armor_sets);
         itemConfig.save();
