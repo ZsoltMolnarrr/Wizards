@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:smithing",
+  "addition": {
+    "item": "minecraft:netherite_ingot"
+  },
+  "base": {
+    "item": "wizards:staff_frost"
+  },
+  "result": {
+    "item": "wizards:staff_netherite_frost"
+  }
+}

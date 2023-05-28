@@ -1,3 +1,7 @@
+# 0.9.16
+
+- Add smithing table upgrade recipes to upgrade to netherite weapons 
+
 # 0.9.15
 
 - Add Arcane, Fire and Frost spell books
