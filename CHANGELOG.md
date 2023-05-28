@@ -1,6 +1,7 @@
 # 0.9.16
 
-- Add smithing table upgrade recipes to upgrade to netherite weapons 
+- Add smithing table upgrade recipes to upgrade to netherite weapons
+- Update default loot table configurations, add some enchanted loot
 
 # 0.9.15
 

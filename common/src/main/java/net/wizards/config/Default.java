@@ -29,7 +29,7 @@ public class Default {
                 0.25F,
                 1F,
                 1
-        ));
+        ).chance(0.3F));
         lootConfig.item_groups.put("wands_tier_1", new LootConfig.ItemGroup(List.of(
                 Weapons.arcaneWand.id().toString(),
                 Weapons.fireWand.id().toString(),
@@ -42,20 +42,35 @@ public class Default {
                 Weapons.frostStaff.id().toString()),
                 1
         ).chance(0.3F));
+        lootConfig.item_groups.put("staves_tier_1_enchanted", new LootConfig.ItemGroup(List.of(
+                Weapons.arcaneStaff.id().toString(),
+                Weapons.fireStaff.id().toString(),
+                Weapons.frostStaff.id().toString()),
+                1
+        ).chance(0.3F).enchant());
         lootConfig.item_groups.put("robes_tier_1", new LootConfig.ItemGroup(joinLists(
                 Armors.wizardRobeSet.idStrings()),
                 1
         ).chance(0.25F));
+        lootConfig.item_groups.put("robes_tier_1_enchanted", new LootConfig.ItemGroup(joinLists(
+                Armors.wizardRobeSet.idStrings()),
+                1
+        ).chance(0.25F).enchant());
         lootConfig.item_groups.put("robes_tier_2", new LootConfig.ItemGroup(joinLists(
                 Armors.arcaneRobeSet.idStrings(),
                 Armors.fireRobeSet.idStrings(),
                 Armors.frostRobeSet.idStrings()),
                 1
         ).chance(0.5F));
+        lootConfig.item_groups.put("robes_tier_2_enchanted", new LootConfig.ItemGroup(joinLists(
+                Armors.arcaneRobeSet.idStrings(),
+                Armors.fireRobeSet.idStrings(),
+                Armors.frostRobeSet.idStrings()),
+                1
+        ).chance(0.5F).enchant());
 
         List.of("minecraft:chests/abandoned_mineshaft",
                         "minecraft:chests/igloo_chest",
-                        "minecraft:chests/ruined_portal",
                         "minecraft:chests/shipwreck_supply",
                         "minecraft:chests/jungle_temple")
                 .forEach(id -> lootConfig.loot_tables.put(id, List.of("wands_tier_0")));
@@ -80,12 +95,12 @@ public class Default {
                         "minecraft:chests/stronghold_library",
                         "minecraft:chests/underwater_ruin_big",
                         "minecraft:chests/woodland_mansion")
-                .forEach(id -> lootConfig.loot_tables.put(id, List.of("staves_tier_1", "robes_tier_1")));
+                .forEach(id -> lootConfig.loot_tables.put(id, List.of("staves_tier_1_enchanted", "robes_tier_1_enchanted")));
 
         List.of("minecraft:chests/end_city_treasure",
                         "minecraft:chests/ancient_city",
                         "minecraft:chests/stronghold_library")
-                .forEach(id -> lootConfig.loot_tables.put(id, List.of("staves_tier_1", "robes_tier_2")));
+                .forEach(id -> lootConfig.loot_tables.put(id, List.of("staves_tier_1_enchanted", "robes_tier_2")));
 
 
         worldGenConfig = new WorldGenConfig();
