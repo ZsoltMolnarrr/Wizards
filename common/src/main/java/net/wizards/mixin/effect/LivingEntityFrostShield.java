@@ -2,6 +2,7 @@ package net.wizards.mixin.effect;
 
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
+import net.minecraft.registry.tag.DamageTypeTags;
 import net.wizards.effect.Effects;
 import net.wizards.effect.FrostShielded;
 import org.spongepowered.asm.mixin.Mixin;
@@ -23,7 +24,7 @@ public abstract class LivingEntityFrostShield implements FrostShielded {
 
     @Inject(method = "blockedByShield", at = @At("HEAD"), cancellable = true)
     private void blockedByShield_HEAD_FrostShield(DamageSource source, CallbackInfoReturnable<Boolean> cir) {
-        if (hasFrostShield && !source.bypassesArmor()) {
+        if (hasFrostShield && !source.isIn(DamageTypeTags.BYPASSES_INVULNERABILITY)) {
             cir.setReturnValue(true);
             cir.cancel();
         }
@@ -45,7 +46,7 @@ public abstract class LivingEntityFrostShield implements FrostShielded {
 
     @Inject(method = "damage", at = @At("HEAD"), cancellable = true)
     private void damage_HEAD_FrostShieldFireImmunity(DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
-        if (hasFrostShield && source.isFire()) {
+        if (hasFrostShield && source.isIn(DamageTypeTags.IS_FIRE)) {
             cir.setReturnValue(false);
             cir.cancel();
         }

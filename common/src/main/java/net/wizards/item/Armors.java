@@ -1,6 +1,7 @@
 package net.wizards.item;
 
 import net.minecraft.entity.EquipmentSlot;
+import net.minecraft.item.ArmorItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.Items;
 import net.minecraft.recipe.Ingredient;
@@ -61,10 +62,10 @@ public class Armors {
                                 .addAll(ItemConfig.SpellAttribute.bonuses(EnumSet.of(MagicSchool.ARCANE, MagicSchool.FIRE, MagicSchool.FROST), 1))
                     ))
             .bundle(material -> new Armor.Set(WizardsMod.ID,
-                    new WizardArmor(material, EquipmentSlot.HEAD, new Item.Settings().group(Group.WIZARDS)),
-                    new WizardArmor(material, EquipmentSlot.CHEST, new Item.Settings().group(Group.WIZARDS)),
-                    new WizardArmor(material, EquipmentSlot.LEGS, new Item.Settings().group(Group.WIZARDS)),
-                    new WizardArmor(material, EquipmentSlot.FEET, new Item.Settings().group(Group.WIZARDS))
+                    new WizardArmor(material, ArmorItem.Type.HELMET, new Item.Settings()),
+                    new WizardArmor(material, ArmorItem.Type.CHESTPLATE, new Item.Settings()),
+                    new WizardArmor(material, ArmorItem.Type.LEGGINGS, new Item.Settings()),
+                    new WizardArmor(material, ArmorItem.Type.BOOTS, new Item.Settings())
             ))
             .put(entries)
             .armorSet();
@@ -107,10 +108,10 @@ public class Armors {
                                     ))
                     ))
                     .bundle(material -> new Armor.Set(WizardsMod.ID,
-                            new WizardArmor(material, EquipmentSlot.HEAD, new Item.Settings().group(Group.WIZARDS)),
-                            new WizardArmor(material, EquipmentSlot.CHEST, new Item.Settings().group(Group.WIZARDS)),
-                            new WizardArmor(material, EquipmentSlot.LEGS, new Item.Settings().group(Group.WIZARDS)),
-                            new WizardArmor(material, EquipmentSlot.FEET, new Item.Settings().group(Group.WIZARDS))
+                            new WizardArmor(material, ArmorItem.Type.HELMET, new Item.Settings()),
+                            new WizardArmor(material, ArmorItem.Type.CHESTPLATE, new Item.Settings()),
+                            new WizardArmor(material, ArmorItem.Type.LEGGINGS, new Item.Settings()),
+                            new WizardArmor(material, ArmorItem.Type.BOOTS, new Item.Settings())
                     ))
                     .put(entries)
                     .armorSet();
@@ -147,10 +148,10 @@ public class Armors {
                                     ))
                     ))
                     .bundle(material -> new Armor.Set(WizardsMod.ID,
-                            new WizardArmor(material, EquipmentSlot.HEAD, new Item.Settings().group(Group.WIZARDS)),
-                            new WizardArmor(material, EquipmentSlot.CHEST, new Item.Settings().group(Group.WIZARDS)),
-                            new WizardArmor(material, EquipmentSlot.LEGS, new Item.Settings().group(Group.WIZARDS)),
-                            new WizardArmor(material, EquipmentSlot.FEET, new Item.Settings().group(Group.WIZARDS))
+                            new WizardArmor(material, ArmorItem.Type.HELMET, new Item.Settings()),
+                            new WizardArmor(material, ArmorItem.Type.CHESTPLATE, new Item.Settings()),
+                            new WizardArmor(material, ArmorItem.Type.LEGGINGS, new Item.Settings()),
+                            new WizardArmor(material, ArmorItem.Type.BOOTS, new Item.Settings())
                     ))
                     .put(entries)
                     .armorSet();
@@ -187,10 +188,10 @@ public class Armors {
                                     ))
                     ))
                     .bundle(material -> new Armor.Set(WizardsMod.ID,
-                            new WizardArmor(material, EquipmentSlot.HEAD, new Item.Settings().group(Group.WIZARDS)),
-                            new WizardArmor(material, EquipmentSlot.CHEST, new Item.Settings().group(Group.WIZARDS)),
-                            new WizardArmor(material, EquipmentSlot.LEGS, new Item.Settings().group(Group.WIZARDS)),
-                            new WizardArmor(material, EquipmentSlot.FEET, new Item.Settings().group(Group.WIZARDS))
+                            new WizardArmor(material, ArmorItem.Type.HELMET, new Item.Settings()),
+                            new WizardArmor(material, ArmorItem.Type.CHESTPLATE, new Item.Settings()),
+                            new WizardArmor(material, ArmorItem.Type.LEGGINGS, new Item.Settings()),
+                            new WizardArmor(material, ArmorItem.Type.BOOTS, new Item.Settings())
                     ))
                     .put(entries)
                     .armorSet();

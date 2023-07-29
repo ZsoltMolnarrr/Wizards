@@ -2,29 +2,36 @@ package net.wizards.item;
 
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
+import net.minecraft.client.render.entity.model.BipedEntityModel;
 import net.minecraft.entity.EquipmentSlot;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.attribute.EntityAttribute;
 import net.minecraft.entity.attribute.EntityAttributeModifier;
 import net.minecraft.item.ArmorItem;
+import net.minecraft.item.ItemStack;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.Identifier;
 import net.spell_engine.api.item.ConfigurableAttributes;
 import net.spell_engine.api.item.armor.Armor;
 import net.wizards.WizardsMod;
-import software.bernie.geckolib3.core.IAnimatable;
-import software.bernie.geckolib3.core.PlayState;
-import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
-import software.bernie.geckolib3.core.manager.AnimationData;
-import software.bernie.geckolib3.core.manager.AnimationFactory;
-import software.bernie.geckolib3.util.GeckoLibUtil;
+import net.wizards.client.armor.WizardArmorRenderer;
+import software.bernie.geckolib.animatable.GeoItem;
+import software.bernie.geckolib.animatable.client.RenderProvider;
+import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
+import software.bernie.geckolib.core.animatable.instance.SingletonAnimatableInstanceCache;
+import software.bernie.geckolib.core.animation.AnimatableManager;
+import software.bernie.geckolib.renderer.GeoArmorRenderer;
 
-public class WizardArmor extends ArmorItem implements IAnimatable, ConfigurableAttributes {
+import java.util.function.Consumer;
+import java.util.function.Supplier;
+
+public class WizardArmor extends ArmorItem implements GeoItem, ConfigurableAttributes {
     public static final Identifier equipSoundId = new Identifier(WizardsMod.ID, "wizard_robes_equip");
-    public static final SoundEvent equipSound = new SoundEvent(equipSoundId);
+    public static final SoundEvent equipSound = SoundEvent.of(equipSoundId);
     public final Armor.CustomMaterial customMaterial;
 
-    public WizardArmor(Armor.CustomMaterial material, EquipmentSlot slot, Settings settings) {
-        super(material, slot, settings);
+    public WizardArmor(Armor.CustomMaterial material, Type type, Settings settings) {
+        super(material, type, settings);
         this.customMaterial = material;
     }
 
@@ -42,20 +49,70 @@ public class WizardArmor extends ArmorItem implements IAnimatable, ConfigurableA
         if (attributes == null) {
             return super.getAttributeModifiers(slot);
         }
-        return slot == this.slot ? this.attributes : super.getAttributeModifiers(slot);
+        return slot == this.type.getEquipmentSlot() ? this.attributes : super.getAttributeModifiers(slot);
     }
 
+    // MARK: GeoItem
+
+    private final AnimatableInstanceCache cache = new SingletonAnimatableInstanceCache(this);
+    private final Supplier<Object> renderProvider = GeoItem.makeRenderer(this);
+
+    @Override
+    public void createRenderer(Consumer<Object> consumer) {
+        consumer.accept(new RenderProvider() {
+            private GeoArmorRenderer<?> renderer;
+            @Override
+            public BipedEntityModel<LivingEntity> getHumanoidArmorModel(LivingEntity livingEntity, ItemStack itemStack, EquipmentSlot equipmentSlot, BipedEntityModel<LivingEntity> original) {
+                if (this.renderer == null) {
+                    this.renderer = new WizardArmorRenderer();
+                }
+                this.renderer.prepForRender(livingEntity, itemStack, equipmentSlot, original);
+                return this.renderer;
+            }
+        });
+    }
+
+    @Override
+    public Supplier<Object> getRenderProvider() {
+        return renderProvider;
+    }
+
+    @Override
+    public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
+
+    }
+
+    @Override
+    public AnimatableInstanceCache getAnimatableInstanceCache() {
+        return cache;
+    }
+
+//    @Override
+//    public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
+//
+//    }
+//
+//    @Override
+//    public AnimatableInstanceCache getAnimatableInstanceCache() {
+//        return null;
+//    }
+//
+//    @Override
+//    public double getTick(Object object) {
+//        return 0;
+//    }
+
     // MARK: IAnimatable
-    private AnimationFactory factory = GeckoLibUtil.createFactory(this);
-    private <P extends IAnimatable> PlayState predicate(AnimationEvent<P> event) {
-        return PlayState.STOP;
-    }
-    @Override
-    public void registerControllers(AnimationData data) {
-        // data.addAnimationController(new AnimationController(this, "controller", 20, this::predicate));
-    }
-    @Override
-    public AnimationFactory getFactory() {
-        return this.factory;
-    }
+//    private AnimationFactory factory = GeckoLibUtil.createFactory(this);
+//    private <P extends IAnimatable> PlayState predicate(AnimationEvent<P> event) {
+//        return PlayState.STOP;
+//    }
+//    @Override
+//    public void registerControllers(AnimationData data) {
+//        // data.addAnimationController(new AnimationController(this, "controller", 20, this::predicate));
+//    }
+//    @Override
+//    public AnimationFactory getFactory() {
+//        return this.factory;
+//    }
 }

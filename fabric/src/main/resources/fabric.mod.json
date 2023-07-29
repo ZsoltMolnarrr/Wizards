@@ -32,9 +32,9 @@
     "wizards.mixins.json"
   ],
   "depends": {
-    "minecraft": ">=1.19.0 <1.19.3",
+    "minecraft": ">=1.20.0",
     "fabricloader": ">=0.14.0",
-    "geckolib3": "*",
+    "geckolib": "*",
     "spell_engine": ">=${spell_engine_version}",
     "spell_power": "*",
     "runes": ">=${runes_version}"

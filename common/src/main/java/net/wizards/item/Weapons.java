@@ -4,8 +4,8 @@ import net.minecraft.item.Item;
 import net.minecraft.item.Items;
 import net.minecraft.item.ToolMaterials;
 import net.minecraft.recipe.Ingredient;
+import net.minecraft.registry.Registries;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
 import net.spell_engine.api.item.ItemConfig;
 import net.spell_engine.api.item.weapon.StaffItem;
 import net.spell_engine.api.item.weapon.Weapon;
@@ -40,7 +40,7 @@ public class Weapons {
     private static Supplier<Ingredient> ingredient(String idString, Item fallback) {
         var id = new Identifier(idString);
         return () -> { 
-            var item = Registry.ITEM.get(id);
+            var item = Registries.ITEM.get(id);
             var ingredient = item != null ? item : fallback;
             return Ingredient.ofItems(ingredient); 
         };
@@ -51,7 +51,7 @@ public class Weapons {
     private static final float wandAttackDamage = 2;
     private static final float wandAttackSpeed = -2.4F;
     private static Weapon.Entry wand(String name, Weapon.CustomMaterial material) {
-        var settings = new Item.Settings().group(Group.WIZARDS);
+        var settings = new Item.Settings();
         var item = new StaffItem(material, settings);
         return entry(name, material, item, new ItemConfig.Weapon(wandAttackDamage, wandAttackSpeed));
     }
@@ -90,7 +90,7 @@ public class Weapons {
     }
 
     private static Weapon.Entry staff(String requiredMod, String name, Weapon.CustomMaterial material) {
-        var settings = new Item.Settings().group(Group.WIZARDS);
+        var settings = new Item.Settings();
         var item = new StaffItem(material, settings);
         return entry(requiredMod, name, material, item, new ItemConfig.Weapon(staffAttackDamage, staffAttackSpeed));
     }

@@ -46,6 +46,6 @@ public class FrozenRenderer implements CustomModelStatusEffect.Renderer, CustomP
     public void spawnParticles(LivingEntity livingEntity, int amplifier) {
         var scaledParticles = new ParticleBatch(particles);
         scaledParticles.count *= (amplifier + 1);
-        ParticleHelper.play(livingEntity.world, livingEntity, scaledParticles);
+        ParticleHelper.play(livingEntity.getWorld(), livingEntity, scaledParticles);
     }
 }

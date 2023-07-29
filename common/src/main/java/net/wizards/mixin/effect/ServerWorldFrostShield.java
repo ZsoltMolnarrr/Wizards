@@ -17,7 +17,7 @@ public class ServerWorldFrostShield {
     private void sendEntityStatus_HEAD_FrostShield(Entity entity, byte status, CallbackInfo ci) {
         if (status == EntityStatuses.BLOCK_WITH_SHIELD && entity instanceof FrostShielded shielded) {
             if (shielded.hasFrostShield()) {
-                SoundHelper.playSoundEvent(entity.world, entity, FrostShieldStatusEffect.sound);
+                SoundHelper.playSoundEvent(entity.getWorld(), entity, FrostShieldStatusEffect.sound);
                 ci.cancel();
             }
         }

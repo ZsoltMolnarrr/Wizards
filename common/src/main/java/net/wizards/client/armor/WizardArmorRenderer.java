@@ -7,7 +7,7 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.Identifier;
 import net.wizards.item.WizardArmor;
 import org.jetbrains.annotations.Nullable;
-import software.bernie.geckolib3.renderers.geo.GeoArmorRenderer;
+import software.bernie.geckolib.renderer.GeoArmorRenderer;
 
 public class WizardArmorRenderer extends GeoArmorRenderer<WizardArmor> {
     public WizardArmorRenderer() {
@@ -17,18 +17,18 @@ public class WizardArmorRenderer extends GeoArmorRenderer<WizardArmor> {
         // make sure to do this.headBone = "bone545";
 
         // The default values are the ones that come with the default armor template in the geckolib blockbench plugin.
-        this.headBone = "armorHead";
-        this.bodyBone = "armorBody";
-        this.rightArmBone = "armorRightArm";
-        this.leftArmBone = "armorLeftArm";
-        this.rightLegBone = "armorRightLeg";
-        this.leftLegBone = "armorLeftLeg";
-        this.rightBootBone = "armorRightBoot";
-        this.leftBootBone = "armorLeftBoot";
+//        this.headBone = "armorHead";
+//        this.bodyBone = "armorBody";
+//        this.rightArmBone = "armorRightArm";
+//        this.leftArmBone = "armorLeftArm";
+//        this.rightLegBone = "armorRightLeg";
+//        this.leftLegBone = "armorLeftLeg";
+//        this.rightBootBone = "armorRightBoot";
+//        this.leftBootBone = "armorLeftBoot";
     }
 
     @Override
-    public RenderLayer getRenderType(WizardArmor animatable, float partialTick, MatrixStack poseStack, @Nullable VertexConsumerProvider bufferSource, @Nullable VertexConsumer buffer, int packedLight, Identifier texture) {
+    public RenderLayer getRenderType(WizardArmor animatable, Identifier texture, @Nullable VertexConsumerProvider bufferSource, float partialTick) {
         return RenderLayer.getEntityTranslucent(texture);
     }
 }

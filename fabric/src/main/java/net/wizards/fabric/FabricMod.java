@@ -1,15 +1,16 @@
 package net.wizards.fabric;
 
 import net.fabricmc.api.ModInitializer;
-import net.fabricmc.fabric.api.client.itemgroup.FabricItemGroupBuilder;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
+import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
 import net.fabricmc.fabric.api.loot.v2.LootTableEvents;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.Identifier;
+import net.minecraft.text.Text;
 import net.spell_engine.api.loot.LootHelper;
 import net.wizards.WizardsMod;
 import net.wizards.item.Armors;
 import net.wizards.item.Group;
+import net.wizards.item.Weapons;
 import net.wizards.item.WizardItems;
 import net.wizards.util.SoundHelper;
 import net.wizards.worldgen.WizardWorldGen;
@@ -24,9 +25,11 @@ public class FabricMod implements ModInitializer {
     }
 
     private void preInit() {
-        Group.WIZARDS = FabricItemGroupBuilder.build(
-                new Identifier(WizardsMod.ID, "general"),
-                () -> new ItemStack(Armors.wizardRobeSet.head));
+        Group.WIZARDS = FabricItemGroup.builder()
+                // .icon(() -> new ItemStack(Armors.wizardRobeSet.head))
+                .icon(() -> new ItemStack(Weapons.arcaneStaff.item()))
+                .displayName(Text.translatable("itemGroup.wizards.general"))
+                .build();
     }
 
     private void subscribeEvents() {
