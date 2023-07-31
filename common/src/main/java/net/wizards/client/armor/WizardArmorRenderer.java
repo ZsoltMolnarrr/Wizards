@@ -27,8 +27,8 @@ public class WizardArmorRenderer extends GeoArmorRenderer<WizardArmor> {
 //        this.leftBootBone = "armorLeftBoot";
     }
 
-    @Override
-    public RenderLayer getRenderType(WizardArmor animatable, Identifier texture, @Nullable VertexConsumerProvider bufferSource, float partialTick) {
-        return RenderLayer.getEntityTranslucent(texture);
-    }
+//    @Override
+//    public RenderLayer getRenderType(WizardArmor animatable, Identifier texture, @Nullable VertexConsumerProvider bufferSource, float partialTick) {
+//        return RenderLayer.getEntityTranslucent(texture);
+//    }
 }
