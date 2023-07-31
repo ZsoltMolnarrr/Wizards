@@ -1,5 +1,6 @@
 package net.wizards.item;
 
+import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
 import net.minecraft.item.Item;
 import net.minecraft.item.Items;
 import net.minecraft.item.ToolMaterials;
@@ -132,6 +133,6 @@ public class Weapons {
                     .attribute(ItemConfig.SpellAttribute.bonus(SpellAttributes.POWER.get(MagicSchool.FROST), 6));
         }
 
-        Weapon.register(configs, entries);
+        Weapon.register(configs, entries, Group.KEY);
     }
 }

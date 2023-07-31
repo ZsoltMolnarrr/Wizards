@@ -86,33 +86,4 @@ public class WizardArmor extends ArmorItem implements GeoItem, ConfigurableAttri
     public AnimatableInstanceCache getAnimatableInstanceCache() {
         return cache;
     }
-
-//    @Override
-//    public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
-//
-//    }
-//
-//    @Override
-//    public AnimatableInstanceCache getAnimatableInstanceCache() {
-//        return null;
-//    }
-//
-//    @Override
-//    public double getTick(Object object) {
-//        return 0;
-//    }
-
-    // MARK: IAnimatable
-//    private AnimationFactory factory = GeckoLibUtil.createFactory(this);
-//    private <P extends IAnimatable> PlayState predicate(AnimationEvent<P> event) {
-//        return PlayState.STOP;
-//    }
-//    @Override
-//    public void registerControllers(AnimationData data) {
-//        // data.addAnimationController(new AnimationController(this, "controller", 20, this::predicate));
-//    }
-//    @Override
-//    public AnimationFactory getFactory() {
-//        return this.factory;
-//    }
 }

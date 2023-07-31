@@ -10,7 +10,6 @@ import net.spell_engine.api.loot.LootHelper;
 import net.wizards.WizardsMod;
 import net.wizards.item.Armors;
 import net.wizards.item.Group;
-import net.wizards.item.Weapons;
 import net.wizards.item.WizardItems;
 import net.wizards.util.SoundHelper;
 import net.wizards.worldgen.WizardWorldGen;
@@ -26,8 +25,7 @@ public class FabricMod implements ModInitializer {
 
     private void preInit() {
         Group.WIZARDS = FabricItemGroup.builder()
-                // .icon(() -> new ItemStack(Armors.wizardRobeSet.head))
-                .icon(() -> new ItemStack(Weapons.arcaneStaff.item()))
+                 .icon(() -> new ItemStack(Armors.wizardRobeSet.head))
                 .displayName(Text.translatable("itemGroup.wizards.general"))
                 .build();
     }
