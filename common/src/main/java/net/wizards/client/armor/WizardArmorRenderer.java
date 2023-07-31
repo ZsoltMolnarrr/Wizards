@@ -1,12 +1,6 @@
 package net.wizards.client.armor;
 
-import net.minecraft.client.render.RenderLayer;
-import net.minecraft.client.render.VertexConsumer;
-import net.minecraft.client.render.VertexConsumerProvider;
-import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.util.Identifier;
 import net.wizards.item.WizardArmor;
-import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib.renderer.GeoArmorRenderer;
 
 public class WizardArmorRenderer extends GeoArmorRenderer<WizardArmor> {
