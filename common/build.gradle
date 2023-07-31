@@ -29,6 +29,9 @@ dependencies {
 //    modImplementation(files("../fabric/run/mods/dev/spell_engine-fabric-${project.spell_engine_version}.jar"))
 //    modImplementation(files("../fabric/run/mods/dev/spell_power-fabric-${project.spell_power_version}.jar"))
 //    modImplementation(files("../fabric/run/mods/dev/runes-fabric-${project.runes_version}.jar"))
+
+    implementation("com.github.LlamaLad7:MixinExtras:${project.mixin_extras_version}")
+    annotationProcessor("com.github.LlamaLad7:MixinExtras:${project.mixin_extras_version}")
 }
 
 architectury {
