@@ -1,3 +1,11 @@
+# 0.9.19
+
+- Fix netherite staff and wand upgrade recipes
+
+# 0.9.18
+
+- Support Minecraft 1.20.1
+
 # 0.9.17
 
 - Remove netherite weapon crafting recipes
