@@ -1,3 +1,7 @@
+# 0.9.20
+
+- Fix warnings recipes with absent materials
+
 # 0.9.19
 
 - Fix netherite staff and wand upgrade recipes
