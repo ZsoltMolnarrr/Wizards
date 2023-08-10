@@ -1,5 +1,10 @@
 {
   "itemGroup.wizards.general": "Wizards",
+
+  "item.wizards.arcane_spell_book": "Таємнийчий том",
+  "item.wizards.fire_spell_book": "Вогняний том",
+  "item.wizards.frost_spell_book": "Морозний том",
+
   "item.wizards.wand_novice": "Паличка новачка",
   "item.wizards.wand_arcane": "Таємнича паличка",
   "item.wizards.wand_fire": "Вогняна паличка",
@@ -73,6 +78,6 @@
   "advancements.rpg_classes.frost_mastery.title": "Крижані вени",
   "advancements.rpg_classes.frost_mastery.description": "Призвіть усі морозні чари",
 
-  "entity.minecraft.villager.wizard_merchant": "Крамар-чарівник"
+  "entity.minecraft.villager.wizard_merchant": "Крамар-чарівник",
   "entity.minecraft.villager.wizards:wizard_merchant": "Крамар-чарівник"
 }
