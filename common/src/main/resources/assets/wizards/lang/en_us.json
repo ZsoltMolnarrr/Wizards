@@ -46,11 +46,11 @@
   "spell.wizards.arcane_beam.description": "Channels a beam of energy, dealing {damage} arcane damage every second. Consumes Arcane Power.",
 
   "spell.wizards.fireball.name": "Fireball",
-  "spell.wizards.fireball.description": "Launches a ball of fire, causing {damage} fire spell damage.",
+  "spell.wizards.fireball.description": "Launches an explosive ball of fire, causing up to {damage} fire spell damage in {impact_range} blocks radius.",
   "spell.wizards.fire_breath.name": "Fire Breath",
   "spell.wizards.fire_breath.description": "Incinerates targets in front, dealing up to {damage} fire spell damage every second.",
   "spell.wizards.fire_meteor.name": "Meteor",
-  "spell.wizards.fire_meteor.description": "Crashes a meteor on the target, causing up to {damage} fire spell damage within {impact_range} blocks.",
+  "spell.wizards.fire_meteor.description": "Crashes a meteors on the target, each causing up to {damage} fire spell damage within {impact_range} blocks.",
 
   "spell.wizards.frostbolt.name": "Frostbolt",
   "spell.wizards.frostbolt.description": "Launches a ball of frost, causing {damage} frost spell damage and slowing the target on impact.",

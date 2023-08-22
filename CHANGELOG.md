@@ -1,3 +1,10 @@
+# 0.9.21
+
+- Rebalance Fireball: dealing area damage on impact
+- Rebalance Fire breath: increase breath angle
+- Rebalance Meteor: Spawn 3 meteors instead of 1
+- Use new json API
+
 # 0.9.20
 
 - Fix warnings recipes with absent materials
