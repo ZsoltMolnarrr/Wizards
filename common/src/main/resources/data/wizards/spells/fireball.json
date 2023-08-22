@@ -56,7 +56,16 @@
               "shape": "CIRCLE",
               "rotation": "LOOK",
               "origin": "CENTER",
-              "count": 3.0,
+              "count": 4.0,
+              "min_speed": 0.0,
+              "max_speed": 0.1
+            },
+            {
+              "particle_id": "smoke",
+              "shape": "CIRCLE",
+              "rotation": "LOOK",
+              "origin": "CENTER",
+              "count": 2.0,
               "min_speed": 0.0,
               "max_speed": 0.1
             }

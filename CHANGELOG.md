@@ -3,6 +3,8 @@
 - Rebalance Fireball: dealing area damage on impact
 - Rebalance Fire breath: increase breath angle
 - Rebalance Meteor: Spawn 3 meteors instead of 1
+- Rebalance Frostbolt: ricochet to 2 additional targets
+- Rebalance Frost Nova: increase damage dealt
 - Use new json API
 
 # 0.9.20
