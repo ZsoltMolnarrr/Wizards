@@ -11,6 +11,7 @@ import net.spell_engine.api.effect.RemoveOnHit;
 import net.spell_engine.api.effect.Synchronized;
 import net.spell_power.api.MagicSchool;
 import net.spell_power.api.SpellPower;
+import net.spell_power.api.attributes.EntityAttributes_SpellPower;
 import net.wizards.WizardsMod;
 
 public class Effects {
@@ -27,13 +28,24 @@ public class Effects {
                     -0.5F,
                     EntityAttributeModifier.Operation.MULTIPLY_TOTAL);
 
+    public static StatusEffect arcaneCharge = new CustomStatusEffect(StatusEffectCategory.BENEFICIAL, 0xff4bdd);
+
     public static void register() {
+        /// Adding attribute modifier here due to relying on config value
+        arcaneCharge.addAttributeModifier(
+                EntityAttributes_SpellPower.POWER.get(MagicSchool.ARCANE),
+                "052f3166-8a80-11ed-a1eb-0242ac120002",
+                WizardsMod.effectsConfig.value.arcane_charge_damage_per_stack,
+                EntityAttributeModifier.Operation.MULTIPLY_TOTAL);
+
         RemoveOnHit.configure(frozen, true);
         Synchronized.configure(frozen, true);
         Synchronized.configure(frostShield, true);
+        Synchronized.configure(arcaneCharge, true);
 
         int rawId = 720;
         Registry.register(Registries.STATUS_EFFECT, rawId++, new Identifier(WizardsMod.ID, "frozen").toString(), frozen);
         Registry.register(Registries.STATUS_EFFECT, rawId++, new Identifier(WizardsMod.ID, "frost_shield").toString(), frostShield);
+        Registry.register(Registries.STATUS_EFFECT, rawId++, new Identifier(WizardsMod.ID, "arcane_charge").toString(), arcaneCharge);
     }
 }

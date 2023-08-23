@@ -102,7 +102,7 @@
   ],
   "cost": {
     "item_id": "runes:arcane_stone",
-    "effect_id": "spell_power:arcane",
+    "effect_id": "wizards:arcane_charge",
     "exhaust" : 0.3,
     "cooldown_duration": 10,
     "cooldown_proportional": true

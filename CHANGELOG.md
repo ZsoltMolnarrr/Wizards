@@ -1,5 +1,6 @@
 # 0.9.21
 
+- Rebalance Arcane Missile: piercing through 2 targets
 - Rebalance Fireball: dealing area damage on impact
 - Rebalance Fire breath: increase breath angle
 - Rebalance Meteor: Spawn 3 meteors instead of 1

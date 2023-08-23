@@ -28,6 +28,9 @@
       "projectile": {
         "velocity": 1.0,
         "homing_angle": 1.5,
+        "perks": {
+          "pierce": 2
+        },
         "client_data": {
           "travel_particles": [
             {

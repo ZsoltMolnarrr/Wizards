@@ -7,6 +7,7 @@ import net.spell_engine.api.item.ItemConfig;
 import net.spell_engine.api.loot.LootConfig;
 import net.tinyconfig.ConfigManager;
 import net.wizards.config.Default;
+import net.wizards.config.EffectsConfig;
 import net.wizards.config.WorldGenConfig;
 import net.wizards.effect.Effects;
 import net.wizards.item.Armors;
@@ -37,10 +38,17 @@ public class WizardsMod {
             .setDirectory(ID)
             .sanitize(true)
             .build();
+    public static ConfigManager<EffectsConfig> effectsConfig = new ConfigManager<EffectsConfig>
+            ("effects", new EffectsConfig())
+            .builder()
+            .setDirectory(ID)
+            .sanitize(true)
+            .build();
 
     public static void init() {
         lootConfig.refresh();
         itemConfig.refresh();
+        effectsConfig.refresh();
         Registry.register(Registries.ITEM_GROUP, Group.KEY, Group.WIZARDS);
         WizardBooks.register();
         Weapons.register(itemConfig.value.weapons);

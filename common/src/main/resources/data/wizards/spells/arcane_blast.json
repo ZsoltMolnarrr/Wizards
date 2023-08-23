@@ -70,7 +70,8 @@
           "apply_mode": "ADD",
           "duration": 10,
           "amplifier": 2,
-          "effect_id": "spell_power:arcane"
+          "effect_id": "wizards:arcane_charge",
+          "show_particles": false
         },
         "apply_to_caster": true
       }
