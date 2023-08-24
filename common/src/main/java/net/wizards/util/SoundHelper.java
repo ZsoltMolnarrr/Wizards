@@ -26,6 +26,7 @@ public class SoundHelper {
             "arcane_beam_impact",
             "arcane_beam_release",
 
+            "fire_scorch_impact",
             "fireball_impact",
             "fire_breath_start",
             "fire_breath_casting",
@@ -34,6 +35,7 @@ public class SoundHelper {
             "fire_meteor_release",
             "fire_meteor_impact",
 
+            "ice_lance_impact",
             "frost_nova_release",
             "frost_nova_damage_impact",
             "frost_nova_effect_impact",

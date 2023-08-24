@@ -64,7 +64,7 @@
         }
       },
       "sound": {
-        "id": "spell_engine:generic_frost_impact"
+        "id": "wizards:ice_lance_impact"
       },
       "particles": [
         {

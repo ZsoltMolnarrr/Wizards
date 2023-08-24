@@ -50,6 +50,11 @@
     ]
   },
 
+  "fire_scorch_impact": {
+    "sounds": [
+      "wizards:fire_scorch_impact"
+    ]
+  },
   "fireball_impact": {
     "sounds": [
       "wizards:fireball_impact"
@@ -87,6 +92,11 @@
     ]
   },
 
+  "ice_lance_impact": {
+    "sounds": [
+      "wizards:ice_lance_impact"
+    ]
+  },
   "frost_nova_release": {
     "sounds": [
       "wizards:frost_nova_release"
