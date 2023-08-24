@@ -57,7 +57,7 @@
           ],
           "model_id": "wizards:projectile/frostbolt_projectile",
           "render": "DEEP",
-          "scale": 0.75
+          "scale": 0.8
         }
       }
     },

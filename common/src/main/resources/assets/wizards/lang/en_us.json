@@ -46,10 +46,10 @@
   "spell.wizards.arcane_blast.description": "Blasts the target, causing {damage} arcane damage. Grants Arcane Charge, stacking up to {effect_amplifier} times.",
   "effect.wizards.arcane_charge": "Arcane Charge",
   "spell.wizards.arcane_beam.name": "Arcane Beam",
-  "spell.wizards.arcane_beam.description": "Channels a beam of energy, dealing {damage} arcane damage every second. Consumes Arcane Charge.",
+  "spell.wizards.arcane_beam.description": "Channels a beam of energy, dealing {damage} arcane damage every second. Consumes all Arcane Charges.",
 
   "spell.wizards.fire_scorch.name": "Scorch",
-  "spell.wizards.fire_scorch.description": "Scorches the target, causing {damage} fire spell damage and sets it fire.",
+  "spell.wizards.fire_scorch.description": "Scorches the target, causing {damage} fire spell damage and setting it on fire.",
   "spell.wizards.fireball.name": "Fireball",
   "spell.wizards.fireball.description": "Launches an explosive ball of fire, causing up to {damage} fire spell damage in {impact_range} blocks radius.",
   "spell.wizards.fire_breath.name": "Fire Breath",
@@ -58,7 +58,7 @@
   "spell.wizards.fire_meteor.description": "Crashes a meteors on the target, each causing up to {damage} fire spell damage within {impact_range} blocks.",
 
   "spell.wizards.ice_lance.name": "Ice Lance",
-  "spell.wizards.ice_lance.description": "Launches a frost shard piercing thru {pierces} target, causing {damage} frost spell damage on impact.",
+  "spell.wizards.ice_lance.description": "Launches a frost shard piercing thru {pierce} target, causing {damage} frost spell damage on impact.",
   "spell.wizards.frostbolt.name": "Frostbolt",
   "spell.wizards.frostbolt.description": "Launches a ball of frost ricocheting to {ricochet} additional nearby targets, causing {damage} frost spell damage and slowing the target on impact.",
   "spell.wizards.frost_nova.name": "Frost Nova",

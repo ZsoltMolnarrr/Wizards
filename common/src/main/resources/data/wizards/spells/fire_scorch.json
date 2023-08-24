@@ -1,11 +1,11 @@
 {
   "school": "FIRE",
-  "range": 64,
+  "range": 32,
   "learn": {
     "tier": 1
   },
   "cast": {
-    "duration": 1.5,
+    "duration": 1.2,
     "animation": "spell_engine:one_handed_projectile_charge",
     "sound": {
       "id": "spell_engine:generic_fire_casting",
@@ -24,57 +24,8 @@
   },
   "release": {
     "target": {
-      "type": "PROJECTILE",
-      "projectile": {
-        "velocity": 1.0,
-        "homing_angle": 1.0,
-
-        "area_impact": {
-          "radius": 2.0,
-          "area": {
-            "distance_dropoff": "SQUARED"
-          },
-          "particles": [
-            {
-              "particle_id": "spell_engine:fire_explosion",
-              "shape": "SPHERE",
-              "origin": "CENTER",
-              "count": 2.0,
-              "min_speed": 0.2,
-              "max_speed": 0.5
-            }
-          ],
-          "sound": {
-            "id": "wizards:fireball_impact"
-          }
-        },
-
-        "client_data": {
-          "travel_particles": [
-            {
-              "particle_id": "spell_engine:flame",
-              "shape": "CIRCLE",
-              "rotation": "LOOK",
-              "origin": "CENTER",
-              "count": 4.0,
-              "min_speed": 0.0,
-              "max_speed": 0.1
-            },
-            {
-              "particle_id": "smoke",
-              "shape": "CIRCLE",
-              "rotation": "LOOK",
-              "origin": "CENTER",
-              "count": 2.0,
-              "min_speed": 0.0,
-              "max_speed": 0.1
-            }
-          ],
-          "model_id": "wizards:projectile/fireball_projectile",
-          "render": "DEEP",
-          "scale": 0.75
-        }
-      }
+      "type": "CURSOR",
+      "cursor": { }
     },
     "animation": "spell_engine:one_handed_projectile_release",
     "sound": {
@@ -86,19 +37,35 @@
       "action": {
         "type": "DAMAGE",
         "damage": {
-          "spell_power_coefficient": 0.8
+          "spell_power_coefficient": 0.6
         }
       },
       "particles": [
         {
-          "particle_id": "lava",
-          "shape": "CIRCLE",
+          "particle_id": "smoke",
+          "shape": "SPHERE",
           "origin": "CENTER",
           "count": 15.0,
-          "min_speed": 0.5,
-          "max_speed": 3.0
+          "min_speed": 0.01,
+          "max_speed": 0.1
+        },
+        {
+          "particle_id": "flame",
+          "shape": "SPHERE",
+          "origin": "CENTER",
+          "count": 10.0,
+          "min_speed": 0.01,
+          "max_speed": 0.1
         }
       ]
+    },
+    {
+      "action": {
+        "type": "FIRE",
+        "fire": {
+          "duration": 2
+        }
+      }
     }
   ],
   "cost": {

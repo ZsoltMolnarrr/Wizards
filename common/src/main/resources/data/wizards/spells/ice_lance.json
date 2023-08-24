@@ -1,11 +1,11 @@
 {
   "school": "FROST",
-  "range": 64,
+  "range": 48,
   "learn": {
     "tier": 1
   },
   "cast": {
-    "duration": 1.2,
+    "duration": 1,
     "animation": "spell_engine:one_handed_projectile_charge",
     "sound": {
       "id": "spell_engine:generic_frost_casting",
@@ -26,25 +26,14 @@
     "target": {
       "type": "PROJECTILE",
       "projectile": {
-        "velocity": 1.0,
-        "homing_angle": 2.0,
+        "velocity": 1.5,
 
         "perks": {
-          "ricochet": 2,
-          "bounce": 2
+          "pierce": 1
         },
 
         "client_data": {
           "travel_particles": [
-            {
-              "particle_id": "spell_engine:snowflake",
-              "shape": "CIRCLE",
-              "rotation": "LOOK",
-              "origin": "CENTER",
-              "count": 4,
-              "min_speed": 0,
-              "max_speed": 0.1
-            },
             {
               "particle_id": "spell_engine:frost_hit",
               "shape": "CIRCLE",
@@ -55,7 +44,7 @@
               "max_speed": 0.2
             }
           ],
-          "model_id": "wizards:projectile/frostbolt_projectile",
+          "model_id": "wizards:projectile/ice_lance_projectile",
           "render": "DEEP",
           "scale": 0.75
         }
@@ -71,32 +60,18 @@
       "action": {
         "type": "DAMAGE",
         "damage": {
-          "spell_power_coefficient": 0.8
+          "spell_power_coefficient": 0.5
         }
       },
       "sound": {
         "id": "spell_engine:generic_frost_impact"
-      }
-    },
-    {
-      "action": {
-        "type": "STATUS_EFFECT",
-        "status_effect": {
-          "effect_id": "slowness",
-          "duration": 5,
-          "amplifier": 0,
-          "apply_limit": {
-            "health_base": 100,
-            "spell_power_multiplier": 2
-          }
-        }
       },
       "particles": [
         {
           "particle_id": "spell_engine:frost_hit",
           "shape": "SPHERE",
           "origin": "CENTER",
-          "count": 50.0,
+          "count": 25.0,
           "min_speed": 0.2,
           "max_speed": 0.7
         }

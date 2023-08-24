@@ -45,7 +45,7 @@
           ],
           "model_id": "wizards:projectile/arcane_missile",
           "render": "DEEP",
-          "scale": 0.5
+          "scale": 0.75
         }
       }
     },
