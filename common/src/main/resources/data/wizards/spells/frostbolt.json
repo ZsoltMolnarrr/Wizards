@@ -82,7 +82,7 @@
       "action": {
         "type": "STATUS_EFFECT",
         "status_effect": {
-          "effect_id": "slowness",
+          "effect_id": "wizards:frost_slowness",
           "duration": 5,
           "amplifier": 0,
           "apply_limit": {
@@ -99,6 +99,14 @@
           "count": 50.0,
           "min_speed": 0.2,
           "max_speed": 0.7
+        },
+        {
+          "particle_id": "spell_engine:snowflake",
+          "shape": "SPHERE",
+          "origin": "CENTER",
+          "count": 25.0,
+          "min_speed": 0.1,
+          "max_speed": 0.4
         }
       ]
     }

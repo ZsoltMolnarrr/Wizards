@@ -28,6 +28,12 @@ public class Effects {
                     -0.5F,
                     EntityAttributeModifier.Operation.MULTIPLY_TOTAL);
 
+    public static StatusEffect frostSlowness = new FrozenStatusEffect(StatusEffectCategory.HARMFUL, 0x99ccff)
+            .addAttributeModifier(EntityAttributes.GENERIC_MOVEMENT_SPEED,
+                    "052f3166-8a43-11ed-a1eb-0242ac120002",
+                    -0.15,
+                    EntityAttributeModifier.Operation.MULTIPLY_TOTAL);
+
     public static StatusEffect arcaneCharge = new CustomStatusEffect(StatusEffectCategory.BENEFICIAL, 0xff4bdd);
 
     public static void register() {
@@ -46,6 +52,7 @@ public class Effects {
         int rawId = 720;
         Registry.register(Registries.STATUS_EFFECT, rawId++, new Identifier(WizardsMod.ID, "frozen").toString(), frozen);
         Registry.register(Registries.STATUS_EFFECT, rawId++, new Identifier(WizardsMod.ID, "frost_shield").toString(), frostShield);
+        Registry.register(Registries.STATUS_EFFECT, rawId++, new Identifier(WizardsMod.ID, "frost_slowness").toString(), frostSlowness);
         Registry.register(Registries.STATUS_EFFECT, rawId++, new Identifier(WizardsMod.ID, "arcane_charge").toString(), arcaneCharge);
     }
 }
