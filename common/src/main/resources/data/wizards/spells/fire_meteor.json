@@ -32,9 +32,9 @@
         "velocity": 0.8,
         "divergence": 20,
 
-        "extra_launch": {
-          "count": 2,
-          "delay": 5
+        "perks": {
+          "extra_launch_count": 2,
+          "extra_launch_delay": 5
         },
 
         "area_impact": {
