@@ -1,4 +1,4 @@
-# 0.9.21
+# 0.9.20
 
 - Rebalance Arcane Missile: piercing through 2 targets
 - Rebalance Fireball: dealing area damage on impact
@@ -7,9 +7,6 @@
 - Rebalance Frostbolt: ricochet to 2 additional targets
 - Rebalance Frost Nova: increase damage dealt
 - Use new json API
-
-# 0.9.20
-
 - Fix warnings recipes with absent materials
 
 # 0.9.19
