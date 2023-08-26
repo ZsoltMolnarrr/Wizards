@@ -1,3 +1,8 @@
+# 0.9.21
+
+- New Arcane Robe texture
+- Optimize Wizard Robe armor model 
+
 # 0.9.20
 
 - Rebalance Arcane Missile: piercing through 2 targets
