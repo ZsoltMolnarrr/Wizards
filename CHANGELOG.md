@@ -1,3 +1,7 @@
+# 0.9.22
+
+- Fix luminance of spell projectiles and effects
+
 # 0.9.21
 
 - New Arcane Robe texture

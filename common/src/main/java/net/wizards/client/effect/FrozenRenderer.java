@@ -11,6 +11,7 @@ import net.spell_engine.api.effect.CustomModelStatusEffect;
 import net.spell_engine.api.effect.CustomParticleStatusEffect;
 import net.spell_engine.api.render.CustomLayers;
 import net.spell_engine.api.render.CustomModels;
+import net.spell_engine.api.render.LightEmission;
 import net.spell_engine.api.spell.ParticleBatch;
 import net.spell_engine.particle.ParticleHelper;
 import net.wizards.WizardsMod;
@@ -18,8 +19,8 @@ import net.wizards.WizardsMod;
 public class FrozenRenderer implements CustomModelStatusEffect.Renderer, CustomParticleStatusEffect.Spawner {
 
     // MARK: Renderer
+    private static final RenderLayer RENDER_LAYER = CustomLayers.spellEffect(LightEmission.RADIATE, false);
 
-    private static final RenderLayer RENDER_LAYER = CustomLayers.projectile(SpriteAtlasTexture.BLOCK_ATLAS_TEXTURE, false);
     public static final Identifier modelId = new Identifier(WizardsMod.ID, "effect/frost_trap");
     @Override
     public void renderEffect(int amplifier, LivingEntity livingEntity, float delta, MatrixStack matrixStack, VertexConsumerProvider vertexConsumers, int light) {

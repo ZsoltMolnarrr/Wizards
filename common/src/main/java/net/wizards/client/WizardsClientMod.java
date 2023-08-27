@@ -7,7 +7,7 @@ import net.spell_engine.api.render.CustomModels;
 import net.wizards.WizardsMod;
 import net.wizards.client.effect.FrostShieldRenderer;
 import net.wizards.client.effect.FrozenRenderer;
-import net.wizards.effect.ArcaneChargeRenderer;
+import net.wizards.client.effect.ArcaneChargeRenderer;
 import net.wizards.effect.Effects;
 
 import java.util.List;

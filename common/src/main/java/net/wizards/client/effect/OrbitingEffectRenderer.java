@@ -1,4 +1,4 @@
-package net.wizards.effect;
+package net.wizards.client.effect;
 
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.RenderLayer;
