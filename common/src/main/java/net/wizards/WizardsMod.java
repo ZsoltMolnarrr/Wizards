@@ -20,13 +20,13 @@ public class WizardsMod {
     public static final String ID = "wizards";
 
     public static ConfigManager<ItemConfig> itemConfig = new ConfigManager<ItemConfig>
-            ("items", Default.itemConfig)
+            ("items_v2", Default.itemConfig)
             .builder()
             .setDirectory(ID)
             .sanitize(true)
             .build();
     public static ConfigManager<LootConfig> lootConfig = new ConfigManager<LootConfig>
-            ("loot", Default.lootConfig)
+            ("loot_v2", Default.lootConfig)
             .builder()
             .setDirectory(ID)
             .sanitize(true)
