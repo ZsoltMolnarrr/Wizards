@@ -16,7 +16,7 @@ import net.spell_engine.api.spell.ParticleBatch;
 import net.spell_engine.particle.ParticleHelper;
 import net.wizards.WizardsMod;
 
-public class FrozenRenderer implements CustomModelStatusEffect.Renderer, CustomParticleStatusEffect.Spawner {
+public class FrozenRenderer implements CustomModelStatusEffect.Renderer {
 
     // MARK: Renderer
     private static final RenderLayer RENDER_LAYER = CustomLayers.spellEffect(LightEmission.RADIATE, false);
@@ -29,24 +29,5 @@ public class FrozenRenderer implements CustomModelStatusEffect.Renderer, CustomP
         CustomModels.render(RENDER_LAYER, MinecraftClient.getInstance().getItemRenderer(), modelId,
                 matrixStack, vertexConsumers, light, livingEntity.getId());
         matrixStack.pop();
-    }
-
-    // MARK: Spawner
-
-    public static final ParticleBatch particles = new ParticleBatch(
-            "spell_engine:frost_hit",
-            ParticleBatch.Shape.SPHERE,
-            ParticleBatch.Origin.CENTER,
-            null,
-            1,
-            0.1F,
-            0.3F,
-            0);
-
-    @Override
-    public void spawnParticles(LivingEntity livingEntity, int amplifier) {
-        var scaledParticles = new ParticleBatch(particles);
-        scaledParticles.count *= (amplifier + 1);
-        ParticleHelper.play(livingEntity.getWorld(), livingEntity, scaledParticles);
     }
 }

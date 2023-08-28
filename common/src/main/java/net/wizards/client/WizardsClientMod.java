@@ -6,6 +6,7 @@ import net.spell_engine.api.effect.CustomParticleStatusEffect;
 import net.spell_engine.api.render.CustomModels;
 import net.wizards.WizardsMod;
 import net.wizards.client.effect.FrostShieldRenderer;
+import net.wizards.client.effect.FrozenParticles;
 import net.wizards.client.effect.FrozenRenderer;
 import net.wizards.client.effect.ArcaneChargeRenderer;
 import net.wizards.effect.Effects;
@@ -25,9 +26,11 @@ public class WizardsClientMod {
                 FrostShieldRenderer.modelId_base,
                 FrostShieldRenderer.modelId_overlay
         ));
-        CustomModelStatusEffect.register(Effects.frozen, new FrozenRenderer());
+
         CustomModelStatusEffect.register(Effects.arcaneCharge, new ArcaneChargeRenderer());
-        CustomParticleStatusEffect.register(Effects.frozen, new FrozenRenderer());
+        CustomParticleStatusEffect.register(Effects.frostSlowness, new FrozenParticles(1));
+        CustomParticleStatusEffect.register(Effects.frozen, new FrozenParticles(2));
+        CustomModelStatusEffect.register(Effects.frozen, new FrozenRenderer());
         CustomModelStatusEffect.register(Effects.frostShield, new FrostShieldRenderer());
     }
 }

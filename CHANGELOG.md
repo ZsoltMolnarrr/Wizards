@@ -1,6 +1,7 @@
 # 0.9.22
 
 - Add new early game weapon: Wizard Staff
+- Frostbolt slowness status effect emits snowflake particles
 - Rebalance Arcane Staff, Fire Staff, Frost Staff durability and enchantability (now matching diamond tier)
 - Fix luminance of spell projectiles and effects
 

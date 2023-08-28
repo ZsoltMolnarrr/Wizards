@@ -45,6 +45,7 @@ public class Effects {
                 EntityAttributeModifier.Operation.MULTIPLY_TOTAL);
 
         RemoveOnHit.configure(frozen, true);
+        Synchronized.configure(frostSlowness, true);
         Synchronized.configure(frozen, true);
         Synchronized.configure(frostShield, true);
         Synchronized.configure(arcaneCharge, true);
