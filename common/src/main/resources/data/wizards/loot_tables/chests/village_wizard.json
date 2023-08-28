@@ -111,6 +111,10 @@
         },
         {
           "type": "minecraft:item",
+          "name": "wizards:staff_wizard"
+        },
+        {
+          "type": "minecraft:item",
           "name": "minecraft:spyglass"
         }
       ]

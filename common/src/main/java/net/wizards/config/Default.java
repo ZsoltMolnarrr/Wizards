@@ -37,12 +37,14 @@ public class Default {
                 1
         ).chance(0.3F));
         lootConfig.item_groups.put("staves_tier_1", new LootConfig.ItemGroup(List.of(
+                Weapons.wizardStaff.id().toString(),
                 Weapons.arcaneStaff.id().toString(),
                 Weapons.fireStaff.id().toString(),
                 Weapons.frostStaff.id().toString()),
                 1
         ).chance(0.3F));
         lootConfig.item_groups.put("staves_tier_1_enchanted", new LootConfig.ItemGroup(List.of(
+                Weapons.wizardStaff.id().toString(),
                 Weapons.arcaneStaff.id().toString(),
                 Weapons.fireStaff.id().toString(),
                 Weapons.frostStaff.id().toString()),
