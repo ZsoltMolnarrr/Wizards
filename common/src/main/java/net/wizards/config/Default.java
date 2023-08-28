@@ -5,6 +5,7 @@ import net.spell_engine.api.loot.LootConfig;
 import net.wizards.item.Armors;
 import net.wizards.item.Weapons;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
@@ -36,38 +37,46 @@ public class Default {
                 Weapons.frostWand.id().toString()),
                 1
         ).chance(0.3F));
-        lootConfig.item_groups.put("staves_tier_1", new LootConfig.ItemGroup(List.of(
-                Weapons.wizardStaff.id().toString(),
+        var staves_tier_1 = "staves_tier_1";
+        lootConfig.item_groups.put(staves_tier_1, new LootConfig.ItemGroup(List.of(
+                Weapons.wizardStaff.id().toString()),
+                1
+        ).chance(0.3F));
+        var staves_tier_2 = "staves_tier_2";
+        lootConfig.item_groups.put(staves_tier_2, new LootConfig.ItemGroup(List.of(
                 Weapons.arcaneStaff.id().toString(),
                 Weapons.fireStaff.id().toString(),
                 Weapons.frostStaff.id().toString()),
                 1
         ).chance(0.3F));
-        lootConfig.item_groups.put("staves_tier_1_enchanted", new LootConfig.ItemGroup(List.of(
-                Weapons.wizardStaff.id().toString(),
-                Weapons.arcaneStaff.id().toString(),
-                Weapons.fireStaff.id().toString(),
-                Weapons.frostStaff.id().toString()),
+        lootConfig.item_groups.put("staves_tier_1_enchanted", new LootConfig.ItemGroup(
+                new ArrayList(lootConfig.item_groups.get(staves_tier_1).ids),
                 1
         ).chance(0.3F).enchant());
-        lootConfig.item_groups.put("robes_tier_1", new LootConfig.ItemGroup(joinLists(
+        lootConfig.item_groups.put("staves_tier_2_enchanted", new LootConfig.ItemGroup(
+                new ArrayList(lootConfig.item_groups.get(staves_tier_2).ids),
+                1
+        ).chance(0.3F));
+
+        var robes_tier_1 = "robes_tier_1";
+        lootConfig.item_groups.put(robes_tier_1, new LootConfig.ItemGroup(joinLists(
                 Armors.wizardRobeSet.idStrings()),
                 1
         ).chance(0.25F));
-        lootConfig.item_groups.put("robes_tier_1_enchanted", new LootConfig.ItemGroup(joinLists(
-                Armors.wizardRobeSet.idStrings()),
+        lootConfig.item_groups.put("robes_tier_1_enchanted", new LootConfig.ItemGroup(
+                new ArrayList(lootConfig.item_groups.get(robes_tier_1).ids),
                 1
         ).chance(0.25F).enchant());
-        lootConfig.item_groups.put("robes_tier_2", new LootConfig.ItemGroup(joinLists(
+
+        var robes_tier_2 = "robes_tier_2";
+        lootConfig.item_groups.put(robes_tier_2, new LootConfig.ItemGroup(joinLists(
                 Armors.arcaneRobeSet.idStrings(),
                 Armors.fireRobeSet.idStrings(),
                 Armors.frostRobeSet.idStrings()),
                 1
         ).chance(0.5F));
-        lootConfig.item_groups.put("robes_tier_2_enchanted", new LootConfig.ItemGroup(joinLists(
-                Armors.arcaneRobeSet.idStrings(),
-                Armors.fireRobeSet.idStrings(),
-                Armors.frostRobeSet.idStrings()),
+        lootConfig.item_groups.put("robes_tier_2_enchanted", new LootConfig.ItemGroup(
+                new ArrayList(lootConfig.item_groups.get(robes_tier_2).ids),
                 1
         ).chance(0.5F).enchant());
 
@@ -83,27 +92,26 @@ public class Default {
                         "minecraft:chests/pillager_outpost",
                         "minecraft:chests/simple_dungeon",
                         "minecraft:chests/stronghold_crossing")
-                .forEach(id -> lootConfig.loot_tables.put(id, List.of("wands_tier_1")));
-
-        List.of("minecraft:chests/bastion_other",
-                        "minecraft:chests/nether_bridge",
-                        "minecraft:chests/underwater_ruin_small")
-                .forEach(id -> lootConfig.loot_tables.put(id, List.of("staves_tier_1")));
+                .forEach(id -> lootConfig.loot_tables.put(id, List.of("wands_tier_1", "staves_tier_1")));
 
         List.of("minecraft:chests/shipwreck_treasure")
                 .forEach(id -> lootConfig.loot_tables.put(id, List.of("robes_tier_1")));
 
-        List.of("minecraft:chests/bastion_treasure",
-                        "minecraft:chests/stronghold_library",
+        List.of("minecraft:chests/stronghold_library",
                         "minecraft:chests/underwater_ruin_big",
                         "minecraft:chests/woodland_mansion")
                 .forEach(id -> lootConfig.loot_tables.put(id, List.of("staves_tier_1_enchanted", "robes_tier_1_enchanted")));
 
+        List.of("minecraft:chests/bastion_other",
+                        "minecraft:chests/nether_bridge",
+                        "minecraft:chests/underwater_ruin_small")
+                .forEach(id -> lootConfig.loot_tables.put(id, List.of("staves_tier_2")));
+
         List.of("minecraft:chests/end_city_treasure",
+                        "minecraft:chests/bastion_treasure",
                         "minecraft:chests/ancient_city",
                         "minecraft:chests/stronghold_library")
-                .forEach(id -> lootConfig.loot_tables.put(id, List.of("staves_tier_1_enchanted", "robes_tier_2")));
-
+                .forEach(id -> lootConfig.loot_tables.put(id, List.of("staves_tier_2_enchanted", "robes_tier_2")));
 
         worldGenConfig = new WorldGenConfig();
         worldGenConfig.entries.addAll(List.of(
