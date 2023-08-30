@@ -1,7 +1,7 @@
 # 0.9.23
 
 - Add quartz to Villager Wizard chest loot table
-- Update Frost Staff textures
+- Update several staff textures
 
 # 0.9.22
 
