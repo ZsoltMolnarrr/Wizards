@@ -1,3 +1,7 @@
+# 0.9.24
+
+- Reduce range of Scorch
+
 # 0.9.23
 
 - Add quartz to Villager Wizard chest loot table
