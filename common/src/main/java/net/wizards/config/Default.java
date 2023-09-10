@@ -56,7 +56,7 @@ public class Default {
         lootConfig.item_groups.put("staves_tier_2_enchanted", new LootConfig.ItemGroup(
                 new ArrayList(lootConfig.item_groups.get(staves_tier_2).ids),
                 1
-        ).chance(0.3F));
+        ).chance(0.3F).enchant());
 
         var robes_tier_1 = "robes_tier_1";
         lootConfig.item_groups.put(robes_tier_1, new LootConfig.ItemGroup(joinLists(
