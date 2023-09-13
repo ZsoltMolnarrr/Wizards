@@ -1,4 +1,4 @@
-# 0.9.24
+# 1.0.0
 
 - Reduce range of Scorch
 - Fix default loot config
