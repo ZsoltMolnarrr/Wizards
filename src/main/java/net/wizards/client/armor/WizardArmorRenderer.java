@@ -1,7 +1,7 @@
 package net.wizards.client.armor;
 
+import mod.azure.azurelibarmor.renderer.GeoArmorRenderer;
 import net.wizards.item.WizardArmor;
-import software.bernie.geckolib.renderer.GeoArmorRenderer;
 
 public class WizardArmorRenderer extends GeoArmorRenderer<WizardArmor> {
     public WizardArmorRenderer() {

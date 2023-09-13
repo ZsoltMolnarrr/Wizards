@@ -1,6 +1,6 @@
 package net.wizards.item;
 
-import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.item.Item;
 import net.minecraft.item.Items;
 import net.minecraft.item.ToolMaterials;
@@ -12,7 +12,6 @@ import net.spell_engine.api.item.weapon.StaffItem;
 import net.spell_engine.api.item.weapon.Weapon;
 import net.spell_power.api.MagicSchool;
 import net.spell_power.api.attributes.SpellAttributes;
-import net.wizards.Platform;
 import net.wizards.WizardsMod;
 
 import java.util.ArrayList;
@@ -124,12 +123,12 @@ public class Weapons {
     // MARK: Register
 
     public static void register(Map<String, ItemConfig.Weapon> configs) {
-        if (Platform.isModLoaded("betternether")) {
+        if (FabricLoader.getInstance().isModLoaded("betternether")) {
             staff("betternether", "staff_ruby_fire",
                     Weapon.CustomMaterial.matching(ToolMaterials.NETHERITE, ingredient("betternether:nether_ruby")))
                     .attribute(ItemConfig.SpellAttribute.bonus(SpellAttributes.POWER.get(MagicSchool.FIRE), 6));
         }
-        if (Platform.isModLoaded("betterend")) {
+        if (FabricLoader.getInstance().isModLoaded("betterend")) {
             staff("betterend", "staff_crystal_arcane",
                     Weapon.CustomMaterial.matching(ToolMaterials.NETHERITE, ingredient("betterend:aeternium_ingot")))
                     .attribute(ItemConfig.SpellAttribute.bonus(SpellAttributes.POWER.get(MagicSchool.ARCANE), 6));

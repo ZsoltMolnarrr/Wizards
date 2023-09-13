@@ -1,55 +1,166 @@
 plugins {
-    id "architectury-plugin" version "3.4.143"
-    id "dev.architectury.loom" version "1.0.304" apply false
+    id 'fabric-loom' version '1.3-SNAPSHOT'
+    id "com.matthewprenger.cursegradle" version "1.4.0"
+    id "com.github.breadmoirai.github-release" version "2.4.1"
+    id "com.modrinth.minotaur" version "2.+"
 }
 
-architectury {
-    minecraft = rootProject.minecraft_version
-}
+version = project.mod_version + "+" + project.minecraft_version
+group = project.maven_group
 
-subprojects {
-    apply plugin: "dev.architectury.loom"
-
-    loom {
-        silentMojangMappingsLicense()
-    }
-
-    dependencies {
-        minecraft "com.mojang:minecraft:${rootProject.minecraft_version}"
-        // The following line declares the mojmap mappings, you may use other mappings as well
-        // mappings loom.officialMojangMappings()
-        // The following line declares the yarn mappings you may select this one as well.
-        mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
+repositories {
+    maven { url 'https://jitpack.io' }
+    maven { url 'https://libs.azuredoom.com:4443/mods' }
+    maven { url 'https://maven.terraformersmc.com/' }
+    maven {
+        name = 'Modrinth'
+        url = 'https://api.modrinth.com/maven'
+        content {
+            includeGroup 'maven.modrinth'
+        }
     }
 }
 
-allprojects {
-    apply plugin: "java"
-    apply plugin: "architectury-plugin"
-    apply plugin: "maven-publish"
+dependencies {
+    // Game
+    minecraft "com.mojang:minecraft:${project.minecraft_version}"
+    mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
 
-    archivesBaseName = rootProject.archives_base_name + "-${project.name}"
-    version = rootProject.mod_version + "+" + rootProject.minecraft_version
-    group = rootProject.maven_group
+    // Fabric
+    modImplementation "net.fabricmc:fabric-loader:${rootProject.fabric_loader_version}"
+    modImplementation "net.fabricmc.fabric-api:fabric-api:${rootProject.fabric_api_version}"
 
-    repositories {
-        // Add repositories to retrieve artifacts from in here.
-        // You should only use this when depending on other mods because
-        // Loom adds the essential maven repositories to download Minecraft and libraries from automatically.
-        // See https://docs.gradle.org/current/userguide/declaring_repositories.html
-        // for more information about repositories.
+    // Dependencies
+    implementation("com.github.ZsoltMolnarrr:TinyConfig:${project.tiny_config_version}")
+    modImplementation("mod.azure.azurelibarmor:azurelibarmor-fabric-${project.azure_mc_version}:${project.azure_lib_version}")
+
+    modImplementation("maven.modrinth:spell-engine:${project.spell_engine_version}-fabric")
+    modImplementation("maven.modrinth:spell-power:${project.spell_power_version}-fabric")
+    modImplementation("maven.modrinth:runes:${project.runes_version}-fabric")
+//    modImplementation(files("../fabric/run/mods/dev/spell_engine-fabric-${project.spell_engine_version}.jar"))
+//    modImplementation(files("../fabric/run/mods/dev/spell_power-fabric-${project.spell_power_version}.jar"))
+//    modImplementation(files("../fabric/run/mods/dev/runes-fabric-${project.runes_version}.jar"))
+
+    implementation("com.github.LlamaLad7:MixinExtras:${project.mixin_extras_version}")
+    annotationProcessor("com.github.LlamaLad7:MixinExtras:${project.mixin_extras_version}")
+}
+
+processResources {
+    inputs.property "version", project.version
+    filteringCharset "UTF-8"
+
+    filesMatching("fabric.mod.json") {
+        expand(project.properties)
     }
+}
 
-    tasks.withType(JavaCompile) {
-        options.encoding = "UTF-8"
-        options.release = 17
+def targetJavaVersion = 17
+tasks.withType(JavaCompile).configureEach {
+    // ensure that the encoding is set to UTF-8, no matter what the system default is
+    // this fixes some edge cases with special characters not displaying correctly
+    // see http://yodaconditions.net/blog/fix-for-java-file-encoding-problems-with-gradle.html
+    // If Javadoc is generated, this must be specified in that task too.
+    it.options.encoding = "UTF-8"
+    if (targetJavaVersion >= 10 || JavaVersion.current().isJava10Compatible()) {
+        it.options.release = targetJavaVersion
     }
+}
 
-    java {
-        withSourcesJar()
+java {
+    def javaVersion = JavaVersion.toVersion(targetJavaVersion)
+    if (JavaVersion.current() < javaVersion) {
+        toolchain.languageVersion = JavaLanguageVersion.of(targetJavaVersion)
+    }
+    archivesBaseName = project.archives_base_name
+    // Loom will automatically attach sourcesJar to a RemapSourcesJar task and to the "build" task
+    // if it is present.
+    // If you remove this line, sources will not be generated.
+    withSourcesJar()
+}
+
+jar {
+    from("LICENSE") {
+        rename { "${it}_${project.archivesBaseName}"}
     }
 }
 
 ext.changelog_last_section = { ->
     return new File("CHANGELOG.md").text.split('\n# ')[0]
+}
+
+if(project.hasProperty('release_type')) {
+    tasks.register("publishMod") {
+        dependsOn(build)
+        finalizedBy(tasks.curseforge)
+        finalizedBy(tasks.modrinth)
+        finalizedBy(tasks.githubRelease)
+    }
+
+    curseforge {
+        apiKey = System.getenv("CURSEFORGE_API_KEY")
+        project {
+            id = '734325'
+            changelog = changelog_last_section()
+            changelogType = 'markdown'
+            releaseType = release_type
+            addGameVersion "${project.minecraft_version}"
+            addGameVersion "Fabric"
+
+            relations {
+                requiredDependency 'fabric-api'
+                requiredDependency 'azurelib-armor'
+                requiredDependency 'spell-engine'
+                requiredDependency 'spell-power'
+                requiredDependency 'rune-crafting'
+            }
+
+            mainArtifact(remapJar)
+            afterEvaluate {
+                uploadTask.dependsOn(remapJar)
+            }
+            options {
+                forgeGradleIntegration = false
+            }
+        }
+    }
+
+    modrinth {
+        token = System.getenv("MODRINTH_API_KEY")
+        projectId = "wizards" // This can be the project ID or the slug. Either will work!
+        versionName = "${version}" // You don't need to set this manually. Will fail if Modrinth has this version already
+        versionNumber = "${version}-fabric" // You don't need to set this manually. Will fail if Modrinth has this version already
+        versionType = release_type // This is the default -- can also be `beta` or `alpha`
+        uploadFile = remapJar // With Loom, this MUST be set to `remapJar` instead of `jar`!
+        gameVersions = ["${project.minecraft_version}"] // Must be an array, even with only one version
+        loaders = ["fabric"] // Must also be an array - no need to specify this if you're using Loom or ForgeGradle
+        dependencies { // A special DSL for creating dependencies
+            // scope.type
+            // The scope can be `required`, `optional`, `incompatible`, or `embedded`
+            // The type can either be `project` or `version`
+            required.project 'fabric-api'
+            required.project 'azurelib-armor'
+            required.project 'spell-engine'
+            required.project 'spell-power'
+            required.project 'runes'
+        }
+    }
+
+    githubRelease {
+        token System.getenv("GH_API_KEY") // This is your personal access token with Repo permissions
+        owner "ZsoltMolnarrr" // default is the last part of your group. Eg group: "com.github.breadmoirai" => owner: "breadmoirai"
+        repo "Wizards" // by default this is set to your project name
+        tagName "${version}" // by default this is set to "v${project.version}"
+        targetCommitish "${project.minecraft_version}" // by default this is set to "main"
+        releaseName "Release" // Release title, by default this is the same as the tagName
+        generateReleaseNotes false // Generate release notes automatically, if true and body is present, body will be pre-pended, if name is not given, one will be generated by the tag
+        // body.set "" // by default this is empty
+        draft false // by default this is true
+        prerelease release_type != "release" // by default this is false
+        // releaseAssets jar.destinationDir.listFiles // this points to which files you want to upload as assets with your release, by default this is empty
+        allowUploadToExisting false // Setting this to true will allow this plugin to upload artifacts to a release if it found an existing one. If overwrite is set to true, this option is ignored.
+        overwrite false // by default false; if set to true, will delete an existing release with the same tag and name
+        // dryRun true // by default false; you can use this to see what actions would be taken without making a release
+        apiEndpoint "https://api.github.com" // should only change for github enterprise users
+        client // This is the okhttp client used for http requests
+    }
 }

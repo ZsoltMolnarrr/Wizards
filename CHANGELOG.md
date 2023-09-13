@@ -2,6 +2,7 @@
 
 - Reduce range of Scorch
 - Fix default loot config
+- Migrate to Azure Armor Lib
 
 # 0.9.23
 

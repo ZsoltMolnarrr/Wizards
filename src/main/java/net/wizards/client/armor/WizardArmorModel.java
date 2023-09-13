@@ -1,9 +1,9 @@
 package net.wizards.client.armor;
 
+import mod.azure.azurelibarmor.model.GeoModel;
 import net.minecraft.util.Identifier;
 import net.wizards.WizardsMod;
 import net.wizards.item.WizardArmor;
-import software.bernie.geckolib.model.GeoModel;
 
 public class WizardArmorModel extends GeoModel<WizardArmor> {
     @Override
