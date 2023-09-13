@@ -1,8 +1,10 @@
 # 1.0.0
 
+Now works with Minecraft Forge, via Connector.
+
+- Migrate to Azure Armor Lib
 - Reduce range of Scorch
 - Fix default loot config
-- Migrate to Azure Armor Lib
 
 # 0.9.23
 
