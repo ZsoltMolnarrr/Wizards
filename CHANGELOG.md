@@ -1,3 +1,7 @@
+# 1.0.2
+
+- Add italian translation, thanks to @Zano1999
+
 # 1.0.1
 
 - Update mod menu settings link
