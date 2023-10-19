@@ -53,13 +53,13 @@ public class Armors {
                     ),
                     ItemConfig.ArmorSet.with(
                         new ItemConfig.ArmorSet.Piece(1)
-                                .addAll(ItemConfig.SpellAttribute.bonuses(EnumSet.of(MagicSchool.ARCANE, MagicSchool.FIRE, MagicSchool.FROST), 1)),
+                                .addAll(ItemConfig.Attribute.bonuses(EnumSet.of(MagicSchool.ARCANE, MagicSchool.FIRE, MagicSchool.FROST), 1)),
                         new ItemConfig.ArmorSet.Piece(3)
-                                .addAll(ItemConfig.SpellAttribute.bonuses(EnumSet.of(MagicSchool.ARCANE, MagicSchool.FIRE, MagicSchool.FROST), 1)),
+                                .addAll(ItemConfig.Attribute.bonuses(EnumSet.of(MagicSchool.ARCANE, MagicSchool.FIRE, MagicSchool.FROST), 1)),
                         new ItemConfig.ArmorSet.Piece(2)
-                                .addAll(ItemConfig.SpellAttribute.bonuses(EnumSet.of(MagicSchool.ARCANE, MagicSchool.FIRE, MagicSchool.FROST), 1)),
+                                .addAll(ItemConfig.Attribute.bonuses(EnumSet.of(MagicSchool.ARCANE, MagicSchool.FIRE, MagicSchool.FROST), 1)),
                         new ItemConfig.ArmorSet.Piece(1)
-                                .addAll(ItemConfig.SpellAttribute.bonuses(EnumSet.of(MagicSchool.ARCANE, MagicSchool.FIRE, MagicSchool.FROST), 1))
+                                .addAll(ItemConfig.Attribute.bonuses(EnumSet.of(MagicSchool.ARCANE, MagicSchool.FIRE, MagicSchool.FROST), 1))
                     ))
             .bundle(material -> new Armor.Set(WizardsMod.ID,
                     new WizardArmor(material, ArmorItem.Type.HELMET, new Item.Settings()),
@@ -88,23 +88,23 @@ public class Armors {
                     ItemConfig.ArmorSet.with(
                             new ItemConfig.ArmorSet.Piece(1)
                                     .addAll(List.of(
-                                            ItemConfig.SpellAttribute.multiply(SpellAttributes.POWER.get(MagicSchool.ARCANE), specializedRobeSpellPower),
-                                            ItemConfig.SpellAttribute.multiply(SpellAttributes.CRITICAL_DAMAGE, specializedRobeCritDamage)
+                                            ItemConfig.Attribute.multiply(SpellAttributes.POWER.get(MagicSchool.ARCANE), specializedRobeSpellPower),
+                                            ItemConfig.Attribute.multiply(SpellAttributes.CRITICAL_DAMAGE, specializedRobeCritDamage)
                                     )),
                             new ItemConfig.ArmorSet.Piece(3)
                                     .addAll(List.of(
-                                            ItemConfig.SpellAttribute.multiply(SpellAttributes.POWER.get(MagicSchool.ARCANE), specializedRobeSpellPower),
-                                            ItemConfig.SpellAttribute.multiply(SpellAttributes.CRITICAL_DAMAGE, specializedRobeCritDamage)
+                                            ItemConfig.Attribute.multiply(SpellAttributes.POWER.get(MagicSchool.ARCANE), specializedRobeSpellPower),
+                                            ItemConfig.Attribute.multiply(SpellAttributes.CRITICAL_DAMAGE, specializedRobeCritDamage)
                                     )),
                             new ItemConfig.ArmorSet.Piece(2)
                                     .addAll(List.of(
-                                            ItemConfig.SpellAttribute.multiply(SpellAttributes.POWER.get(MagicSchool.ARCANE), specializedRobeSpellPower),
-                                            ItemConfig.SpellAttribute.multiply(SpellAttributes.CRITICAL_DAMAGE, specializedRobeCritDamage)
+                                            ItemConfig.Attribute.multiply(SpellAttributes.POWER.get(MagicSchool.ARCANE), specializedRobeSpellPower),
+                                            ItemConfig.Attribute.multiply(SpellAttributes.CRITICAL_DAMAGE, specializedRobeCritDamage)
                                     )),
                             new ItemConfig.ArmorSet.Piece(1)
                                     .addAll(List.of(
-                                            ItemConfig.SpellAttribute.multiply(SpellAttributes.POWER.get(MagicSchool.ARCANE), specializedRobeSpellPower),
-                                            ItemConfig.SpellAttribute.multiply(SpellAttributes.CRITICAL_DAMAGE, specializedRobeCritDamage)
+                                            ItemConfig.Attribute.multiply(SpellAttributes.POWER.get(MagicSchool.ARCANE), specializedRobeSpellPower),
+                                            ItemConfig.Attribute.multiply(SpellAttributes.CRITICAL_DAMAGE, specializedRobeCritDamage)
                                     ))
                     ))
                     .bundle(material -> new Armor.Set(WizardsMod.ID,
@@ -128,23 +128,23 @@ public class Armors {
                     ItemConfig.ArmorSet.with(
                             new ItemConfig.ArmorSet.Piece(1)
                                     .addAll(List.of(
-                                            ItemConfig.SpellAttribute.multiply(SpellAttributes.POWER.get(MagicSchool.FIRE), specializedRobeSpellPower),
-                                            ItemConfig.SpellAttribute.multiply(SpellAttributes.CRITICAL_CHANCE, specializedRobeCritChance)
+                                            ItemConfig.Attribute.multiply(SpellAttributes.POWER.get(MagicSchool.FIRE), specializedRobeSpellPower),
+                                            ItemConfig.Attribute.multiply(SpellAttributes.CRITICAL_CHANCE, specializedRobeCritChance)
                                     )),
                             new ItemConfig.ArmorSet.Piece(3)
                                     .addAll(List.of(
-                                            ItemConfig.SpellAttribute.multiply(SpellAttributes.POWER.get(MagicSchool.FIRE), specializedRobeSpellPower),
-                                            ItemConfig.SpellAttribute.multiply(SpellAttributes.CRITICAL_CHANCE, specializedRobeCritChance)
+                                            ItemConfig.Attribute.multiply(SpellAttributes.POWER.get(MagicSchool.FIRE), specializedRobeSpellPower),
+                                            ItemConfig.Attribute.multiply(SpellAttributes.CRITICAL_CHANCE, specializedRobeCritChance)
                                     )),
                             new ItemConfig.ArmorSet.Piece(2)
                                     .addAll(List.of(
-                                            ItemConfig.SpellAttribute.multiply(SpellAttributes.POWER.get(MagicSchool.FIRE), specializedRobeSpellPower),
-                                            ItemConfig.SpellAttribute.multiply(SpellAttributes.CRITICAL_CHANCE, specializedRobeCritChance)
+                                            ItemConfig.Attribute.multiply(SpellAttributes.POWER.get(MagicSchool.FIRE), specializedRobeSpellPower),
+                                            ItemConfig.Attribute.multiply(SpellAttributes.CRITICAL_CHANCE, specializedRobeCritChance)
                                     )),
                             new ItemConfig.ArmorSet.Piece(1)
                                     .addAll(List.of(
-                                            ItemConfig.SpellAttribute.multiply(SpellAttributes.POWER.get(MagicSchool.FIRE), specializedRobeSpellPower),
-                                            ItemConfig.SpellAttribute.multiply(SpellAttributes.CRITICAL_CHANCE, specializedRobeCritChance)
+                                            ItemConfig.Attribute.multiply(SpellAttributes.POWER.get(MagicSchool.FIRE), specializedRobeSpellPower),
+                                            ItemConfig.Attribute.multiply(SpellAttributes.CRITICAL_CHANCE, specializedRobeCritChance)
                                     ))
                     ))
                     .bundle(material -> new Armor.Set(WizardsMod.ID,
@@ -168,23 +168,23 @@ public class Armors {
                     ItemConfig.ArmorSet.with(
                             new ItemConfig.ArmorSet.Piece(1)
                                     .addAll(List.of(
-                                            ItemConfig.SpellAttribute.multiply(SpellAttributes.POWER.get(MagicSchool.FROST), specializedRobeSpellPower),
-                                            ItemConfig.SpellAttribute.multiply(SpellAttributes.HASTE, specializedRobeHaste)
+                                            ItemConfig.Attribute.multiply(SpellAttributes.POWER.get(MagicSchool.FROST), specializedRobeSpellPower),
+                                            ItemConfig.Attribute.multiply(SpellAttributes.HASTE, specializedRobeHaste)
                                     )),
                             new ItemConfig.ArmorSet.Piece(3)
                                     .addAll(List.of(
-                                            ItemConfig.SpellAttribute.multiply(SpellAttributes.POWER.get(MagicSchool.FROST), specializedRobeSpellPower),
-                                            ItemConfig.SpellAttribute.multiply(SpellAttributes.HASTE, specializedRobeHaste)
+                                            ItemConfig.Attribute.multiply(SpellAttributes.POWER.get(MagicSchool.FROST), specializedRobeSpellPower),
+                                            ItemConfig.Attribute.multiply(SpellAttributes.HASTE, specializedRobeHaste)
                                     )),
                             new ItemConfig.ArmorSet.Piece(2)
                                     .addAll(List.of(
-                                            ItemConfig.SpellAttribute.multiply(SpellAttributes.POWER.get(MagicSchool.FROST), specializedRobeSpellPower),
-                                            ItemConfig.SpellAttribute.multiply(SpellAttributes.HASTE, specializedRobeHaste)
+                                            ItemConfig.Attribute.multiply(SpellAttributes.POWER.get(MagicSchool.FROST), specializedRobeSpellPower),
+                                            ItemConfig.Attribute.multiply(SpellAttributes.HASTE, specializedRobeHaste)
                                     )),
                             new ItemConfig.ArmorSet.Piece(1)
                                     .addAll(List.of(
-                                            ItemConfig.SpellAttribute.multiply(SpellAttributes.POWER.get(MagicSchool.FROST), specializedRobeSpellPower),
-                                            ItemConfig.SpellAttribute.multiply(SpellAttributes.HASTE, specializedRobeHaste)
+                                            ItemConfig.Attribute.multiply(SpellAttributes.POWER.get(MagicSchool.FROST), specializedRobeSpellPower),
+                                            ItemConfig.Attribute.multiply(SpellAttributes.HASTE, specializedRobeHaste)
                                     ))
                     ))
                     .bundle(material -> new Armor.Set(WizardsMod.ID,

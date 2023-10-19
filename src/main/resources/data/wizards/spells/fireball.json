@@ -26,53 +26,34 @@
     "target": {
       "type": "PROJECTILE",
       "projectile": {
-        "velocity": 1.0,
-        "homing_angle": 1.0,
-
-        "area_impact": {
-          "radius": 2.0,
-          "area": {
-            "distance_dropoff": "SQUARED"
-          },
-          "particles": [
-            {
-              "particle_id": "spell_engine:fire_explosion",
-              "shape": "SPHERE",
-              "origin": "CENTER",
-              "count": 2.0,
-              "min_speed": 0.2,
-              "max_speed": 0.5
+        "projectile": {
+          "homing_angle": 1.0,
+          "client_data": {
+            "travel_particles": [
+              {
+                "particle_id": "spell_engine:flame",
+                "shape": "CIRCLE",
+                "rotation": "LOOK",
+                "origin": "CENTER",
+                "count": 4.0,
+                "min_speed": 0.0,
+                "max_speed": 0.1
+              },
+              {
+                "particle_id": "smoke",
+                "shape": "CIRCLE",
+                "rotation": "LOOK",
+                "origin": "CENTER",
+                "count": 2.0,
+                "min_speed": 0.0,
+                "max_speed": 0.1
+              }
+            ],
+            "model": {
+              "model_id": "wizards:projectile/fireball_projectile",
+              "render": "DEEP"
             }
-          ],
-          "sound": {
-            "id": "wizards:fireball_impact"
           }
-        },
-
-        "client_data": {
-          "travel_particles": [
-            {
-              "particle_id": "spell_engine:flame",
-              "shape": "CIRCLE",
-              "rotation": "LOOK",
-              "origin": "CENTER",
-              "count": 4.0,
-              "min_speed": 0.0,
-              "max_speed": 0.1
-            },
-            {
-              "particle_id": "smoke",
-              "shape": "CIRCLE",
-              "rotation": "LOOK",
-              "origin": "CENTER",
-              "count": 2.0,
-              "min_speed": 0.0,
-              "max_speed": 0.1
-            }
-          ],
-          "model_id": "wizards:projectile/fireball_projectile",
-          "render": "DEEP",
-          "scale": 0.75
         }
       }
     },
@@ -98,7 +79,26 @@
           "min_speed": 0.5,
           "max_speed": 3.0
         }
-      ]
+      ],
+      "area_impact": {
+        "radius": 2.0,
+        "area": {
+          "distance_dropoff": "SQUARED"
+        },
+        "particles": [
+          {
+            "particle_id": "spell_engine:fire_explosion",
+            "shape": "SPHERE",
+            "origin": "CENTER",
+            "count": 2.0,
+            "min_speed": 0.2,
+            "max_speed": 0.5
+          }
+        ],
+        "sound": {
+          "id": "wizards:fireball_impact"
+        }
+      }
     }
   ],
   "cost": {
