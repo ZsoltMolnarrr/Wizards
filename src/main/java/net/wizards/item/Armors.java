@@ -196,7 +196,6 @@ public class Armors {
                     .put(entries)
                     .armorSet();
 
-
     public static void register(Map<String, ItemConfig.ArmorSet> configs) {
         Armor.register(configs, entries, Group.KEY);
     }

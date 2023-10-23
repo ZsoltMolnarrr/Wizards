@@ -28,13 +28,15 @@ public class Default {
         lootConfig.item_groups.put("wands_tier_0", new LootConfig.ItemGroup(List.of(
                 Weapons.noviceWand.id().toString()),
                 0.25F,
-                1F,
+                0F,
                 1
         ).chance(0.3F));
         lootConfig.item_groups.put("wands_tier_1", new LootConfig.ItemGroup(List.of(
                 Weapons.arcaneWand.id().toString(),
                 Weapons.fireWand.id().toString(),
                 Weapons.frostWand.id().toString()),
+                0.4F,
+                0F,
                 1
         ).chance(0.3F));
         var staves_tier_1 = "staves_tier_1";
