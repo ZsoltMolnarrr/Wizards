@@ -111,21 +111,21 @@ public class WizardVillagers {
                     40,
                     3,
                     30,
-                    0.2F).create(entity, random)
+                    0F).create(entity, random)
             ));
             factories.add(((entity, random) -> new TradeOffers.SellEnchantedToolFactory(
                     Weapons.fireStaff.item(),
                     40,
                     3,
                     30,
-                    0.2F).create(entity, random)
+                    0F).create(entity, random)
             ));
             factories.add(((entity, random) -> new TradeOffers.SellEnchantedToolFactory(
                     Weapons.frostStaff.item(),
                     40,
                     3,
                     30,
-                    0.2F).create(entity, random)
+                    0F).create(entity, random)
             ));
         });
     }
