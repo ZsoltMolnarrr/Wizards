@@ -4,6 +4,7 @@ import net.minecraft.client.render.RenderLayer;
 import net.minecraft.util.Identifier;
 import net.spell_engine.api.render.CustomLayers;
 import net.spell_engine.api.render.LightEmission;
+import net.spell_engine.api.render.OrbitingEffectRenderer;
 import net.wizards.WizardsMod;
 
 import java.util.List;
