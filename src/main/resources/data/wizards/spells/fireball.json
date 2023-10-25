@@ -79,28 +79,28 @@
           "min_speed": 0.5,
           "max_speed": 3.0
         }
-      ],
-      "area_impact": {
-        "radius": 2.0,
-        "area": {
-          "distance_dropoff": "SQUARED"
-        },
-        "particles": [
-          {
-            "particle_id": "spell_engine:fire_explosion",
-            "shape": "SPHERE",
-            "origin": "CENTER",
-            "count": 2.0,
-            "min_speed": 0.2,
-            "max_speed": 0.5
-          }
-        ],
-        "sound": {
-          "id": "wizards:fireball_impact"
-        }
-      }
+      ]
     }
   ],
+  "area_impact": {
+    "radius": 2.0,
+    "area": {
+      "distance_dropoff": "SQUARED"
+    },
+    "particles": [
+      {
+        "particle_id": "spell_engine:fire_explosion",
+        "shape": "SPHERE",
+        "origin": "CENTER",
+        "count": 2.0,
+        "min_speed": 0.2,
+        "max_speed": 0.5
+      }
+    ],
+    "sound": {
+      "id": "wizards:fireball_impact"
+    }
+  },
   "cost": {
     "item_id": "runes:fire_stone"
   }

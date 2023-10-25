@@ -97,45 +97,45 @@
       ],
       "sound": {
         "id": "wizards:fire_breath_impact"
-      },
-      "area_impact": {
-        "radius": 6,
-        "area": {
-          "distance_dropoff": "SQUARED"
-        },
-        "particles": [
-          {
-            "particle_id": "lava",
-            "shape": "CIRCLE",
-            "origin": "CENTER",
-            "count": 90.0,
-            "min_speed": 1.5,
-            "max_speed": 6.0
-          },
-          {
-            "particle_id": "flame",
-            "shape": "SPHERE",
-            "origin": "CENTER",
-            "count": 100.0,
-            "min_speed": 0.2,
-            "max_speed": 0.4
-          },
-          {
-            "particle_id": "smoke",
-            "shape": "SPHERE",
-            "origin": "CENTER",
-            "count": 90.0,
-            "min_speed": 0.1,
-            "max_speed": 0.3
-          }
-        ],
-        "sound": {
-          "id": "wizards:fire_meteor_impact",
-          "volume": 1.5
-        }
       }
     }
   ],
+  "area_impact": {
+    "radius": 6,
+    "area": {
+      "distance_dropoff": "SQUARED"
+    },
+    "particles": [
+      {
+        "particle_id": "lava",
+        "shape": "CIRCLE",
+        "origin": "CENTER",
+        "count": 90.0,
+        "min_speed": 1.5,
+        "max_speed": 6.0
+      },
+      {
+        "particle_id": "flame",
+        "shape": "SPHERE",
+        "origin": "CENTER",
+        "count": 100.0,
+        "min_speed": 0.2,
+        "max_speed": 0.4
+      },
+      {
+        "particle_id": "smoke",
+        "shape": "SPHERE",
+        "origin": "CENTER",
+        "count": 90.0,
+        "min_speed": 0.1,
+        "max_speed": 0.3
+      }
+    ],
+    "sound": {
+      "id": "wizards:fire_meteor_impact",
+      "volume": 1.5
+    }
+  },
   "cost": {
     "item_id": "runes:fire_stone",
     "exhaust" : 0.3,
