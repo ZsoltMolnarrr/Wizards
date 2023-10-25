@@ -3,7 +3,8 @@
 - Fix some default loot table configurations
 - Tweak villager trade offers
 - Update to latest Spell Engine API
-- Add italian translation, thanks to @Zano1999
+- Add italian translation, thanks to Zano1999
+- Update Simplified Chinese translation, thanks to Sillymoon #26
 
 # 1.0.1
 
