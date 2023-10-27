@@ -1,6 +1,7 @@
 package net.wizards.villager;
 
 import com.google.common.collect.ImmutableSet;
+import net.fabric_extras.structure_pool.api.StructurePoolAPI;
 import net.fabricmc.fabric.api.object.builder.v1.trade.TradeOfferHelper;
 import net.fabricmc.fabric.api.object.builder.v1.world.poi.PointOfInterestHelper;
 import net.minecraft.block.Block;
@@ -74,11 +75,11 @@ public class WizardVillagers {
     }
 
     public static void register() {
-        var wizardPOI = registerPOI(WIZARD_MERCHANT, RuneCraftingBlock.INSTANCE);
-        var wizardMerchantProfession = registerProfession(
+        StructurePoolAPI.injectAll(WizardsMod.villageConfig.value);
+        var poi = registerPOI(WIZARD_MERCHANT, RuneCraftingBlock.INSTANCE);
+        var profession = registerProfession(
                 WIZARD_MERCHANT,
                 RegistryKey.of(Registries.POINT_OF_INTEREST_TYPE.getKey(), new Identifier(WizardsMod.ID, WIZARD_MERCHANT)));
-
         List<Offer> wizardMerchantOffers = List.of(
                 Offer.sell(1, new ItemStack(RuneItems.get(RuneItems.RuneType.ARCANE), 8), 2, 128, 1, 0.01f),
                 Offer.sell(1, new ItemStack(RuneItems.get(RuneItems.RuneType.FIRE), 8), 2, 128, 1, 0.01f),
@@ -97,7 +98,7 @@ public class WizardVillagers {
             );
 
         for(var offer: wizardMerchantOffers) {
-            TradeOfferHelper.registerVillagerOffers(wizardMerchantProfession, offer.level, factories -> {
+            TradeOfferHelper.registerVillagerOffers(profession, offer.level, factories -> {
                 factories.add(((entity, random) -> new TradeOffer(
                         offer.input,
                         offer.output,
@@ -105,7 +106,7 @@ public class WizardVillagers {
                 ));
             });
         }
-        TradeOfferHelper.registerVillagerOffers(wizardMerchantProfession, 5, factories -> {
+        TradeOfferHelper.registerVillagerOffers(profession, 5, factories -> {
             factories.add(((entity, random) -> new TradeOffers.SellEnchantedToolFactory(
                     Weapons.arcaneStaff.item(),
                     40,

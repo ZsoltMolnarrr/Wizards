@@ -10,9 +10,7 @@ import net.spell_engine.api.loot.LootHelper;
 import net.wizards.WizardsMod;
 import net.wizards.item.Armors;
 import net.wizards.item.Group;
-import net.wizards.item.WizardItems;
 import net.wizards.util.SoundHelper;
-import net.wizards.worldgen.WizardWorldGen;
 
 public class FabricMod implements ModInitializer {
     @Override
@@ -20,7 +18,6 @@ public class FabricMod implements ModInitializer {
         preInit();
         WizardsMod.init();
         SoundHelper.registerSounds();
-        subscribeEvents();
     }
 
     private void preInit() {
@@ -29,12 +26,4 @@ public class FabricMod implements ModInitializer {
                 .displayName(Text.translatable("itemGroup.wizards.general"))
                 .build();
     }
-
-    private void subscribeEvents() {
-        ServerLifecycleEvents.SERVER_STARTING.register(WizardWorldGen::init);
-        LootTableEvents.MODIFY.register((resourceManager, lootManager, id, tableBuilder, source) -> {
-            LootHelper.configure(id, tableBuilder, WizardsMod.lootConfig.value, WizardItems.entries);
-        });
-    }
-
 }

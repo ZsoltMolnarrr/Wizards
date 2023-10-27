@@ -1,5 +1,6 @@
 package net.wizards.config;
 
+import net.fabric_extras.structure_pool.api.StructurePoolConfig;
 import net.spell_engine.api.item.ItemConfig;
 import net.spell_engine.api.loot.LootConfig;
 import net.wizards.item.Armors;
@@ -14,7 +15,7 @@ import java.util.stream.Collectors;
 public class Default {
     public final static ItemConfig itemConfig;
     public final static LootConfig lootConfig;
-    public final static WorldGenConfig worldGenConfig;
+    public final static StructurePoolConfig villageConfig;
     static {
         itemConfig = new ItemConfig();
         for (var weapon: Weapons.entries) {
@@ -115,15 +116,23 @@ public class Default {
                         "minecraft:chests/stronghold_library")
                 .forEach(id -> lootConfig.loot_tables.put(id, List.of("staves_tier_2_enchanted", "robes_tier_2")));
 
-        worldGenConfig = new WorldGenConfig();
-        worldGenConfig.entries.addAll(List.of(
-                new WorldGenConfig.Entry("minecraft:village/desert/houses", "wizards:village/desert/wizard_tower", 1),
-                new WorldGenConfig.Entry("minecraft:village/desert/houses", "wizards:village/desert/wizard_tower_2", 4),
-                new WorldGenConfig.Entry("minecraft:village/savanna/houses", "wizards:village/savanna/wizard_tower", 3),
-                new WorldGenConfig.Entry("minecraft:village/plains/houses", "wizards:village/plains/wizard_tower", 4),
-                new WorldGenConfig.Entry("minecraft:village/taiga/houses", "wizards:village/taiga/wizard_tower", 4),
-                new WorldGenConfig.Entry("minecraft:village/snowy/houses", "wizards:village/snowy/wizard_tower", 1),
-                new WorldGenConfig.Entry("minecraft:village/snowy/houses", "wizards:village/snowy/wizard_tower_2", 4)
+        villageConfig = new StructurePoolConfig();
+        var limit = 1;
+        villageConfig.entries.addAll(List.of(
+                new StructurePoolConfig.Entry("minecraft:village/desert/houses", new ArrayList<>(Arrays.asList(
+                        new StructurePoolConfig.Entry.Structure("wizards:village/desert/wizard_tower", 1, limit),
+                        new StructurePoolConfig.Entry.Structure("wizards:village/desert/wizard_tower_2", 3, limit))
+                )),
+                new StructurePoolConfig.Entry("minecraft:village/savanna/houses", "wizards:village/savanna/wizard_tower", 3, limit),
+
+                new StructurePoolConfig.Entry("minecraft:village/plains/houses", "wizards:village/plains/wizard_tower", 3, limit),
+
+                new StructurePoolConfig.Entry("minecraft:village/taiga/houses", "wizards:village/taiga/wizard_tower", 3, limit),
+
+                new StructurePoolConfig.Entry("minecraft:village/snowy/houses", new ArrayList<>(Arrays.asList(
+                        new StructurePoolConfig.Entry.Structure("wizards:village/snowy/wizard_tower", 1, limit),
+                        new StructurePoolConfig.Entry.Structure("wizards:village/snowy/wizard_tower_2", 3, limit))
+                ))
         ));
     }
 

@@ -6,8 +6,7 @@
   "mixins": [
     "effect.LivingEntityFrostShield",
     "effect.LivingEntityFrozen",
-    "effect.ServerWorldFrostShield",
-    "worldgen.StructurePoolAccessor"
+    "effect.ServerWorldFrostShield"
   ],
   "client": [
   ],
