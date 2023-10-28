@@ -1,6 +1,7 @@
 # 1.0.2
 
-- Limit Wizard Tower spawns to 1 per village, thanks to the Structure Pool API
+- Limit Wizard Tower spawns to 1 per village (configurable), thanks to the Structure Pool API
+- Fix minor structural issues with taiga and plains Wizard Towers
 - Fix some default loot table configurations
 - Tweak villager trade offers
 - Update to latest Spell Engine API
