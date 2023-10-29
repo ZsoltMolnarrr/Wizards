@@ -3,6 +3,7 @@
 - Limit Wizard Tower spawns to 1 per village (configurable), thanks to the Structure Pool API
 - Fix minor structural issues with taiga and plains Wizard Towers
 - Fix some default loot table configurations
+- Fix some player skin cases clipping through armor
 - Tweak villager trade offers
 - Update to latest Spell Engine API
 - Add italian translation, thanks to Zano1999
