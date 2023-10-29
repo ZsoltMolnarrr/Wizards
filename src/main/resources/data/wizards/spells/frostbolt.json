@@ -14,7 +14,7 @@
     "particles": [
       {
         "particle_id": "spell_engine:snowflake",
-        "shape": "PILLAR",
+        "shape": "PIPE",
         "origin": "CENTER",
         "count": 0.5,
         "min_speed": 0.1,
