@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "id": "wizards",
   "version": "${version}",
-  "name": "Wizards",
+  "name": "Wizards (RPG Series)",
   "description": "Destroy your enemies with Arcane, Fire and Frost magic.",
   "authors": [
     "Daedelus"

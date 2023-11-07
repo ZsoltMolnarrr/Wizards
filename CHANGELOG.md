@@ -1,3 +1,7 @@
+# 1.0.3
+
+- Update name for Mod Menu
+
 # 1.0.2
 
 - Limit Wizard Tower spawns to 1 per village (configurable), thanks to the Structure Pool API
