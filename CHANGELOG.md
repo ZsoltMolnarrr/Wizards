@@ -1,3 +1,7 @@
+# 1.0.4
+
+- Add `wizards:staves` and `wizards:wands` item tags, containing relevant items
+
 # 1.0.3
 
 - Update name for Mod Menu

@@ -1,0 +1,11 @@
+{
+  "values": [
+    "wizards:wand_novice",
+    "wizards:wand_arcane",
+    "wizards:wand_fire",
+    "wizards:wand_frost",
+    "wizards:wand_netherite_arcane",
+    "wizards:wand_netherite_fire",
+    "wizards:wand_netherite_frost"
+  ]
+}

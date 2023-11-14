@@ -1,0 +1,14 @@
+{
+  "values": [
+    "wizards:staff_wizard",
+    "wizards:staff_arcane",
+    "wizards:staff_fire",
+    "wizards:staff_frost",
+    "wizards:staff_netherite_arcane",
+    "wizards:staff_netherite_fire",
+    "wizards:staff_netherite_frost",
+    "wizards:staff_crystal_arcane",
+    "wizards:staff_ruby_fire",
+    "wizards:staff_smaragdant_frost"
+  ]
+}
