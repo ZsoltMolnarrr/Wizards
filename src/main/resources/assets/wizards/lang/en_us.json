@@ -46,6 +46,7 @@
   "spell.wizards.arcane_blast.name": "Arcane Blast",
   "spell.wizards.arcane_blast.description": "Blasts the target, causing {damage} arcane damage. Grants Arcane Charge, stacking up to {effect_amplifier} times.",
   "effect.wizards.arcane_charge": "Arcane Charge",
+  "effect.wizards.arcane_charge.description": "Increases Arcane spell damage done",
   "spell.wizards.arcane_beam.name": "Arcane Beam",
   "spell.wizards.arcane_beam.description": "Channels a beam of energy, dealing {damage} arcane damage every second. Consumes all Arcane Charges.",
 
@@ -63,12 +64,15 @@
   "spell.wizards.frostbolt.name": "Frostbolt",
   "spell.wizards.frostbolt.description": "Launches a ball of frost ricocheting to {ricochet} additional nearby targets, causing {damage} frost spell damage and slowing the target on impact.",
   "effect.wizards.frost_slowness": "Slowness",
+  "effect.wizards.frost_slowness.description": "Reduces movement speed",
   "spell.wizards.frost_nova.name": "Frost Nova",
   "spell.wizards.frost_nova.description": "Freezes targets around you for {effect_duration} seconds, causing {damage} frost spell damage and blocking their movement. Frozen targets are vulnerable to frost magic.",
   "effect.wizards.frozen": "Frozen",
+  "effect.wizards.frozen.description": "Prevents movement, removed upon taking damage, vulnerable to frost magic",
   "spell.wizards.frost_shield.name": "Frost Shield",
   "spell.wizards.frost_shield.description": "Protects you from attacks, projectiles and fire for {effect_duration} seconds, but also slows down your movement.",
   "effect.wizards.frost_shield": "Frost Shield",
+  "effect.wizards.frost_shield.description": "Blocks incoming attacks while active, but slows down movement",
 
   "advancements.rpg_classes.obtain_wizard_robes.title": "A Wizard Is Never Late",
   "advancements.rpg_classes.obtain_wizard_robes.description": "Acquire a full set of Wizard Robes",

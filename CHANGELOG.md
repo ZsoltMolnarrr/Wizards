@@ -1,6 +1,7 @@
 # 1.0.4
 
 - Add `wizards:staves` and `wizards:wands` item tags, containing relevant items
+- Add effect descriptions
 
 # 1.0.3
 
