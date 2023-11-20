@@ -1,3 +1,7 @@
+# 1.0.5
+
+- Update Chinese translation, thanks to Sillymoon
+
 # 1.0.4
 
 - Add `wizards:staves` and `wizards:wands` item tags, containing relevant items
