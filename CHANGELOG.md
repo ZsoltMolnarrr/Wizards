@@ -1,5 +1,6 @@
 # 1.0.5
 
+- Fix `wizards:staves` tag when BetterX mods are not present 
 - Update Chinese translation, thanks to Sillymoon
 
 # 1.0.4

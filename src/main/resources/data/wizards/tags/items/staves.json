@@ -7,8 +7,17 @@
     "wizards:staff_netherite_arcane",
     "wizards:staff_netherite_fire",
     "wizards:staff_netherite_frost",
-    "wizards:staff_crystal_arcane",
-    "wizards:staff_ruby_fire",
-    "wizards:staff_smaragdant_frost"
+    {
+      "id": "wizards:staff_crystal_arcane",
+      "required": false
+    },
+    {
+      "id": "wizards:staff_ruby_fire",
+      "required": false
+    },
+    {
+      "id": "wizards:staff_smaragdant_frost",
+      "required": false
+    }
   ]
 }
