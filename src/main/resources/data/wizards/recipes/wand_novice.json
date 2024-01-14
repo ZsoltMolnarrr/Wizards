@@ -4,9 +4,14 @@
     "C": {
       "item": "minecraft:coal"
     },
-    "S": {
-      "item": "minecraft:stick"
-    }
+    "S": [
+      {
+        "tag": "c:wood_sticks"
+      },
+      {
+        "item": "minecraft:stick"
+      }
+    ]
   },
   "pattern": [
     " C",

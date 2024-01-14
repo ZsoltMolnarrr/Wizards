@@ -4,9 +4,14 @@
     "Q": {
       "item": "minecraft:quartz"
     },
-    "S": {
-      "item": "minecraft:stick"
-    }
+    "S": [
+      {
+        "tag": "c:wood_sticks"
+      },
+      {
+        "item": "minecraft:stick"
+      }
+    ]
   },
   "pattern": [
     "  Q",

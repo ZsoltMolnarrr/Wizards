@@ -10,9 +10,14 @@
     "G": {
       "item": "minecraft:gold_ingot"
     },
-    "S": {
-      "item": "minecraft:stick"
-    }
+    "S": [
+      {
+        "tag": "c:wood_sticks"
+      },
+      {
+        "item": "minecraft:stick"
+      }
+    ]
   },
   "pattern": [
     " NP",

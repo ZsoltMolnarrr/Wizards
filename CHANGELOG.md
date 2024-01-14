@@ -1,5 +1,6 @@
 # 1.0.5
 
+- Add compatibility for `c:wood_sticks` in recipes #16
 - Fix `wizards:staves` tag when BetterX mods are not present 
 - Update Chinese translation, thanks to Sillymoon
 
