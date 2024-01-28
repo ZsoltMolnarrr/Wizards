@@ -46,6 +46,7 @@
   "spell.wizards.arcane_blast.name": "Esplosione arcana",
   "spell.wizards.arcane_blast.description": "Colpisce il bersaglio, infliggendo {damage} danni arcani. Conferisce potere arcano, accumulandosi fino a {effect_amplifier} volte.",
   "effect.wizards.arcane_charge": "Carica arcana",
+  "effect.wizards.arcane_charge.description": "Aumenta il danno dell'incantesimo arcano",  
   "spell.wizards.arcane_beam.name": "Raggio arcano",
   "spell.wizards.arcane_beam.description": "Incanala un raggio di energia, infliggendo {damage} danni arcani ogni secondo. Consuma Potere Arcano.",
 
@@ -63,12 +64,15 @@
   "spell.wizards.frostbolt.name": "Dardo del gelo",
   "spell.wizards.frostbolt.description": "Lancia una palla di gelo, infliggendo {damage} danni magici da gelo e rallentando il bersaglio all'impatto.",
   "effect.wizards.frost_slowness": "Lentezza",
+  "effect.wizards.frost_slowness.description": "Riduce la velocità di movimento",  
   "spell.wizards.frost_nova.name": "Vento gelido",
   "spell.wizards.frost_nova.description": "Congela i bersagli intorno a te per {effect_duration} secondi, causando {damage} danni magici da gelo e bloccandone il movimento. I bersagli congelati sono vulnerabili alla magia del gelo.",
   "effect.wizards.frozen": "Congelamento",
+  "effect.wizards.frozen.description": "Previene il movimento, viene rimosso quando si subiscono danni, vulnerabile alla magia del gelo",  
   "spell.wizards.frost_shield.name": "Barriera di ghiaccio",
   "spell.wizards.frost_shield.description": "Ti protegge da attacchi, proiettili e fuoco per {effect_duration} secondi, ma rallenta anche i tuoi movimenti.",
   "effect.wizards.frost_shield": "Barriera di ghiaccio",
+  "effect.wizards.frost_shield.description": "Blocca gli attacchi in arrivo mentre è attivo, ma rallenta il movimento",  
 
   "advancements.rpg_classes.obtain_wizard_robes.title": "Un mago non è mai in ritardo",
   "advancements.rpg_classes.obtain_wizard_robes.description": "Ottieni un set completo da mago",
