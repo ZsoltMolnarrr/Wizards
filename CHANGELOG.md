@@ -1,6 +1,8 @@
 # 1.0.6
 
+- Add Russian translation, thanks to @SwayMini
 - Add Spanish translation, thanks to @SirColor
+- Update Italian translation, thanks to @Zano1999
 
 # 1.0.5
 
