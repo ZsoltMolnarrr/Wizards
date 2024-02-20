@@ -1,0 +1,19 @@
+{
+  "replace": false,
+  "values": [
+    "wizards:arcane_robe_chest",
+    "wizards:arcane_robe_feet",
+    "wizards:arcane_robe_head",
+    "wizards:arcane_robe_legs",
+
+    "wizards:fire_robe_chest",
+    "wizards:fire_robe_feet",
+    "wizards:fire_robe_head",
+    "wizards:fire_robe_legs",
+
+    "wizards:frost_robe_chest",
+    "wizards:frost_robe_feet",
+    "wizards:frost_robe_head",
+    "wizards:frost_robe_legs"
+  ]
+}

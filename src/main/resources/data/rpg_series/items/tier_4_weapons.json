@@ -1,0 +1,17 @@
+{
+  "replace": false,
+  "values": [
+    {
+      "id": "wizards:staff_ruby_fire",
+      "required": false
+    },
+    {
+      "id": "wizards:staff_crystal_arcane",
+      "required": false
+    },
+    {
+      "id": "wizards:staff_smaragdant_frost",
+      "required": false
+    }
+  ]
+}

@@ -1,8 +1,9 @@
 # 1.0.6
 
+- Add equipment tier item tags in `rpg_series` scope
 - Add Russian translation, thanks to @SwayMini
 - Add Spanish translation, thanks to @SirColor
-- Update Italian translation, thanks to @Zano1999
+- Update Italian translation, thanks to @Zano1999 
 
 # 1.0.5
 
