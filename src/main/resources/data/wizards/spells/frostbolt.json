@@ -1,5 +1,6 @@
 {
   "school": "FROST",
+  "group": "primary",
   "range": 64,
   "learn": {
     "tier": 1

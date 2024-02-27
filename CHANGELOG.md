@@ -1,5 +1,7 @@
 # 1.0.6
 
+- Staves and Wands now all come with tier 0 spell, all of them are now able to cast from spell books
+- Retexture for Crystal Arcane Staff
 - Add equipment tier item tags in `rpg_series` scope
 - Add Russian translation, thanks to @SwayMini
 - Add Spanish translation, thanks to @SirColor

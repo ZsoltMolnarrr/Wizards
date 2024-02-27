@@ -1,8 +1,9 @@
 {
   "school": "FIRE",
+  "group": "primary",
   "range": 16,
   "learn": {
-    "tier": 1
+    "tier": 0
   },
   "cast": {
     "duration": 1.2,

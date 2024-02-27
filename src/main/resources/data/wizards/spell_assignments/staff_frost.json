@@ -1,3 +1,4 @@
 {
-  "is_proxy": true
+  "is_proxy": true,
+  "spell_ids": [ "wizards:ice_lance" ]
 }
