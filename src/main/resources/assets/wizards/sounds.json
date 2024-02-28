@@ -92,9 +92,9 @@
     ]
   },
 
-  "ice_lance_impact": {
+  "frost_shard_impact": {
     "sounds": [
-      "wizards:ice_lance_impact"
+      "wizards:frost_shard_impact"
     ]
   },
   "frost_nova_release": {

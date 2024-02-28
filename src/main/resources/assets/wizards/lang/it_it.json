@@ -59,8 +59,8 @@
   "spell.wizards.fire_meteor.name": "Meteora",
   "spell.wizards.fire_meteor.description": "Fa schiantare una meteora sul bersaglio, causando fino a {damage} danni magici da fuoco entro {impact_range} blocchi.",
 
-  "spell.wizards.ice_lance.name": "Lancia di ghiaccio",
-  "spell.wizards.ice_lance.description": "Lancia una scheggia di ghiaccio che attraversa {pierce} bersagli, causando {damage} danni da gelo.", 
+  "spell.wizards.frost_shard.name": "Lancia di ghiaccio",
+  "spell.wizards.frost_shard.description": "Lancia una scheggia di ghiaccio che attraversa {pierce} bersagli, causando {damage} danni da gelo.",
   "spell.wizards.frostbolt.name": "Dardo del gelo",
   "spell.wizards.frostbolt.description": "Lancia una palla di gelo, infliggendo {damage} danni magici da gelo e rallentando il bersaglio all'impatto.",
   "effect.wizards.frost_slowness": "Lentezza",

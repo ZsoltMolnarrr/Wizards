@@ -59,8 +59,8 @@
   "spell.wizards.fire_meteor.name": "陨石流星",
   "spell.wizards.fire_meteor.description": "向目标坠落数颗陨石，在{impact_range}格范围内造成{damage}点火焰法术伤害。",
 
-  "spell.wizards.ice_lance.name": "坚冰之枪",
-  "spell.wizards.ice_lance.description": "发射冰刺并贯穿{pierce}个目标，同时造成{damage}点寒冰法术伤害。",
+  "spell.wizards.frost_shard.name": "坚冰之枪",
+  "spell.wizards.frost_shard.description": "发射冰刺并贯穿{pierce}个目标，同时造成{damage}点寒冰法术伤害。",
   "spell.wizards.frostbolt.name": "寒冰飞球",
   "spell.wizards.frostbolt.description": "发射冰球并溅射周围{ricochet}个目标，造成{damage}点寒冰法术伤害，同时使目标减速。",
   "effect.wizards.frost_slowness": "缓速",

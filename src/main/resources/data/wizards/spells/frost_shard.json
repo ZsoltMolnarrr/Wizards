@@ -47,7 +47,7 @@
               }
             ],
             "model": {
-              "model_id": "wizards:projectile/ice_lance_projectile",
+              "model_id": "wizards:projectile/frost_shard_projectile",
               "scale": 0.75
             }
           }
@@ -68,7 +68,7 @@
         }
       },
       "sound": {
-        "id": "wizards:ice_lance_impact"
+        "id": "wizards:frost_shard_impact"
       },
       "particles": [
         {

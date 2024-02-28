@@ -60,8 +60,8 @@
   "spell.wizards.fire_meteor.name": "Meteoro",
   "spell.wizards.fire_meteor.description": "Hace caer meteoritos sobre el objetivo, cada uno causando hasta {damage} de daño con hechizos de fuego en un radio de {impact_range} bloques."
 
-  "spell.wizards.ice_lance.name": "Lanza de Hielo",
-  "spell.wizards.ice_lance.description": "Lanza una astilla de hielo atravesando a {pierce} objetivo, causando {damage} de daño de escarcha al impactar.",
+  "spell.wizards.frost_shard.name": "Lanza de Hielo",
+  "spell.wizards.frost_shard.description": "Lanza una astilla de hielo atravesando a {pierce} objetivo, causando {damage} de daño de escarcha al impactar.",
   "spell.wizards.frostbolt.name": "Rayo de Escarcha",
   "spell.wizards.frostbolt.description": "Lanza una bola de escarcha rebotando hacia {ricochet} objetivos adicionales cercanos, causando {damage} de daño de escarcha y ralentizando al objetivo al impactar.",
   "effect.wizards.frost_slowness": "Ralentización",

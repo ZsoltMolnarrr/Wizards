@@ -59,8 +59,8 @@
   "spell.wizards.fire_meteor.name": "Метеор",
   "spell.wizards.fire_meteor.description": "Обрушивает на цель метеориты, каждый из которых наносит до {damage} урона магией огня в радиусе {impact_range} блоков.",
 
-  "spell.wizards.ice_lance.name": "Ледяное копье",
-  "spell.wizards.ice_lance.description": "Выпускает ледяной осколок, пронзающий {pierce} целей, нанося {damage} урона магией мороза при ударе.",
+  "spell.wizards.frost_shard.name": "Ледяное копье",
+  "spell.wizards.frost_shard.description": "Выпускает ледяной осколок, пронзающий {pierce} целей, нанося {damage} урона магией мороза при ударе.",
   "spell.wizards.frostbolt.name": "Морозная стрела",
   "spell.wizards.frostbolt.description": "Выпускает морозный шар, который отскакивает по {ricochet} соседним целям, нанося {damage} урона магией мороза и замедляя цель при попадании.",
   "effect.wizards.frost_slowness": "Медлительность",
