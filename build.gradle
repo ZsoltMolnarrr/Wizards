@@ -19,6 +19,10 @@ repositories {
             includeGroup 'maven.modrinth'
         }
     }
+    maven {
+        name = "Ladysnake Libs"
+        url = 'https://maven.ladysnake.org/releases'
+    }
 }
 
 dependencies {
@@ -34,12 +38,13 @@ dependencies {
     include(implementation("com.github.ZsoltMolnarrr:TinyConfig:${project.tiny_config_version}"))
     include(implementation(annotationProcessor("io.github.llamalad7:mixinextras-fabric:${project.mixin_extras_version}")))
     include(modImplementation("maven.modrinth:structure-pool-api:${project.structure_pool_api_version}"))
+    modImplementation("dev.emi:trinkets:${project.trinkets_version}")
 
     modImplementation("mod.azure.azurelibarmor:azurelibarmor-fabric-${project.azure_mc_version}:${project.azure_lib_version}")
-    modImplementation("maven.modrinth:spell-engine:${project.spell_engine_version}-fabric")
+//    modImplementation("maven.modrinth:spell-engine:${project.spell_engine_version}-fabric")
     modImplementation("maven.modrinth:spell-power:${project.spell_power_version}-fabric")
     modImplementation("maven.modrinth:runes:${project.runes_version}-fabric")
-//    modImplementation(files("run/mods/dev/spell_engine-${project.spell_engine_version}.jar"))
+    modImplementation(files("run/mods/dev/spell_engine-${project.spell_engine_version}.jar"))
 //    modImplementation(files("run/mods/dev/spell_power-fabric-${project.spell_power_version}.jar"))
 //    modImplementation(files("run/mods/dev/runes-fabric-${project.runes_version}.jar"))
 }

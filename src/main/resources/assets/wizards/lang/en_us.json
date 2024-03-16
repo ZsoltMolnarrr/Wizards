@@ -49,6 +49,8 @@
   "effect.wizards.arcane_charge.description": "Increases Arcane spell damage done",
   "spell.wizards.arcane_beam.name": "Arcane Beam",
   "spell.wizards.arcane_beam.description": "Channels a beam of energy, dealing {damage} arcane damage every second. Consumes all Arcane Charges.",
+  "spell.wizards.arcane_blink.name": "Blink",
+  "spell.wizards.arcane_blink.description": "Teleports you forwards for {teleport_distance} blocks.",
 
   "spell.wizards.fire_scorch.name": "Scorch",
   "spell.wizards.fire_scorch.description": "Scorches the target, causing {damage} fire spell damage and setting it on fire.",

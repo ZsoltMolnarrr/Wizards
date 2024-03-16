@@ -1,5 +1,16 @@
-# 1.0.6
+# 1.1.0
 
+Arcane Wizard changes:
+- Add new spell: Blink
+  - Teleport the caster forwards by 15 blocks
+
+Fire Wizard changes:
+- 
+
+Frost Wizard changes:
+- 
+
+Other changes:
 - Staves and Wands now all come with tier 0 spell, all of them are now able to cast from spell books
 - Retexture for Crystal Arcane Staff
 - Add equipment tier item tags in `rpg_series` scope
