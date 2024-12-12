@@ -1,3 +1,8 @@
+# 2.1.1
+
+- Udpdate Russian translation, thanks to @Heimdallr
+- Add Brazilian translation, thanks to @demorogabrtz
+
 # 2.1.0
 
 - Add new armor set: Netherite Arcane Robes
