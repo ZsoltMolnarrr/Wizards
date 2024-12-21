@@ -47,6 +47,7 @@ public class Weapons {
         }
     }
 
+    private static final String AETHER = "aether";
     private static final String BETTER_END = "betterend";
     private static final String BETTER_NETHER = "betternether";
 
@@ -138,6 +139,15 @@ public class Weapons {
                     Weapon.CustomMaterial.matching(ToolMaterials.NETHERITE, repair))
                     .attribute(ItemConfig.Attribute.bonus(SpellSchools.FROST.id, 7));
         }
+        if (WizardsMod.tweaksConfig.value.ignore_items_required_mods || FabricLoader.getInstance().isModLoaded(AETHER)) {
+            var repair = ingredient("aether:ambrosium_shard", FabricLoader.getInstance().isModLoaded(AETHER), Items.NETHERITE_INGOT);
+            staff("aether_wizard_staff",
+                    Weapon.CustomMaterial.matching(ToolMaterials.NETHERITE, repair))
+                    .attribute(ItemConfig.Attribute.bonus(SpellSchools.ARCANE.id, 7))
+                    .attribute(ItemConfig.Attribute.bonus(SpellSchools.FIRE.id, 7))
+                    .attribute(ItemConfig.Attribute.bonus(SpellSchools.FROST.id, 7));
+        }
+
 
         Weapon.register(configs, entries, Group.KEY);
     }

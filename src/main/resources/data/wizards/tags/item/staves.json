@@ -18,6 +18,10 @@
     {
       "id": "wizards:staff_smaragdant_frost",
       "required": false
+    },
+    {
+      "id": "wizards:aether_wizard_staff",
+      "required": false
     }
   ]
 }

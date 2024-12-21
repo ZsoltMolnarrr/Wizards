@@ -1,3 +1,8 @@
+# 2.2.0
+
+- Add new weapons, obtainable only as loot from Aether dungeons
+  - Valkyrie Magister Staff
+
 # 2.1.1
 
 - Udpdate Russian translation, thanks to @Heimdallr
