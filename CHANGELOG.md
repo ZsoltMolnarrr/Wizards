@@ -1,3 +1,7 @@
+# 2.2.1
+
+- Adjust burning duration of Fireball and Scorch spells
+
 # 2.2.0
 
 - Add new weapons, obtainable only as loot from Aether dungeons
