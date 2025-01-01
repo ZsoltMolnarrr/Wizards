@@ -30,6 +30,7 @@
         "projectile": {
           "homing_angle": 1.0,
           "client_data": {
+            "light_level": 10,
             "travel_particles": [
               {
                 "particle_id": "spell_engine:arcane_spell",

@@ -47,7 +47,7 @@
             ]
           },
           "client_data": {
-            "light_level": 12,
+            "light_level": 15,
             "particles": [
               {
                 "particle_id": "spell_engine:flame_ground",
@@ -128,7 +128,7 @@
             "apply_yaw": true
           },
           "client_data": {
-            "light_level": 12,
+            "light_level": 15,
             "particles": [
               {
                 "particle_id": "spell_engine:flame_ground",
@@ -209,7 +209,7 @@
             ]
           },
           "client_data": {
-            "light_level": 12,
+            "light_level": 15,
             "particles": [
               {
                 "particle_id": "spell_engine:flame_ground",
@@ -290,7 +290,7 @@
             ]
           },
           "client_data": {
-            "light_level": 12,
+            "light_level": 15,
             "particles": [
               {
                 "particle_id": "spell_engine:flame_ground",
@@ -371,7 +371,7 @@
             ]
           },
           "client_data": {
-            "light_level": 12,
+            "light_level": 15,
             "particles": [
               {
                 "particle_id": "spell_engine:flame_ground",

@@ -35,6 +35,7 @@
         },
         "projectile": {
           "client_data": {
+            "light_level": 12,
             "travel_particles": [
               {
                 "particle_id": "spell_engine:flame",

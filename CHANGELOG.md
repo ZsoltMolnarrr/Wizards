@@ -1,6 +1,7 @@
 # 2.2.1
 
 - Adjust burning duration of Fireball and Scorch spells
+- Adjust light output of spell projectiles
 
 # 2.2.0
 
