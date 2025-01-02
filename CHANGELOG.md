@@ -1,3 +1,7 @@
+# 2.2.2
+
+- Add support to Lithostitched village structure injection
+
 # 2.2.1
 
 - Adjust burning duration of Fireball and Scorch spells
