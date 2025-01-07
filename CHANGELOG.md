@@ -1,3 +1,7 @@
+# 2.2.4
+
+- Update village wizard chest loot table
+
 # 2.2.3
 
 - Add spell scroll names
