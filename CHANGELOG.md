@@ -1,3 +1,7 @@
+# 2.2.5
+
+- Increase status effect apply limit for Frost spells 
+
 # 2.2.4
 
 - Update village wizard chest loot table

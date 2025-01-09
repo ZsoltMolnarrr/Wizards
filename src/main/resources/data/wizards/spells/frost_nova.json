@@ -83,7 +83,7 @@
           "apply_mode": "ADD",
           "apply_limit": {
             "health_base": 50,
-            "spell_power_multiplier": 2
+            "spell_power_multiplier": 4
           },
           "show_particles": false
         }

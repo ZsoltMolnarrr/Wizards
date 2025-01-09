@@ -91,7 +91,7 @@
           "amplifier": 0,
           "apply_limit": {
             "health_base": 100,
-            "spell_power_multiplier": 2
+            "spell_power_multiplier": 4
           },
           "show_particles": false
         }
