@@ -12,7 +12,7 @@
 			"modid": "wizards"
 		}
 	],
-	"template_pool": "minecraft:village/savanna/houses",
+	"template_pools": [ "minecraft:village/savanna/houses" ],
 	"elements": [
 		{
 			"weight": 5,

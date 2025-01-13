@@ -12,7 +12,7 @@
 			"modid": "wizards"
 		}
 	],
-	"template_pool": "minecraft:village/plains/houses",
+	"template_pools": [ "minecraft:village/plains/houses" ],
 	"elements": [
 		{
 			"weight": 5,
