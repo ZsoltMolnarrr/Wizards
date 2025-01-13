@@ -1,10 +1,7 @@
-# 2.2.6
-
-- Support Lithostitched v1.4
-
 # 2.2.5
 
-- Increase status effect apply limit for Frost spells 
+- Support Lithostitched v1.4
+- Increase status effect apply limit for Frost spells
 
 # 2.2.4
 
