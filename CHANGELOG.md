@@ -1,6 +1,8 @@
 # 1.4.0
 
 - Added Netherite Tier Armors, by ElocinDev (@nvb-uy)
+- Wizard Set now gives +20% of each element instead of +1, by ElocinDev (@nvb-uy)
+- Backported default attribute values for wands and staves, by ElocinDev (@nvb-uy)
 
 # 1.3.0
 
