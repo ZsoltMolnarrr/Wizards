@@ -98,18 +98,36 @@ public class Armors {
         return new Armor.Entry(material, null, defaults);
     }
 
+	public static float wizardRobeSpellPower = 0.20F;
+
     public static final Armor.Set wizardRobeSet =
             create(
                     material_wizard,
                     ItemConfig.ArmorSet.with(
                         new ItemConfig.ArmorSet.Piece(1)
-                                .addAll(ItemConfig.Attribute.bonuses(List.of(SpellSchools.ARCANE.id, SpellSchools.FIRE.id, SpellSchools.FROST.id), 1)),
+								.addAll(List.of(
+									ItemConfig.Attribute.multiply(SpellSchools.ARCANE.id, wizardRobeSpellPower),
+									ItemConfig.Attribute.multiply(SpellSchools.FIRE.id, wizardRobeSpellPower),
+									ItemConfig.Attribute.multiply(SpellSchools.FROST.id, wizardRobeSpellPower)
+								)),
                         new ItemConfig.ArmorSet.Piece(3)
-                                .addAll(ItemConfig.Attribute.bonuses(List.of(SpellSchools.ARCANE.id, SpellSchools.FIRE.id, SpellSchools.FROST.id), 1)),
+								.addAll(List.of(
+									ItemConfig.Attribute.multiply(SpellSchools.ARCANE.id, wizardRobeSpellPower),
+									ItemConfig.Attribute.multiply(SpellSchools.FIRE.id, wizardRobeSpellPower),
+									ItemConfig.Attribute.multiply(SpellSchools.FROST.id, wizardRobeSpellPower)
+								)),
                         new ItemConfig.ArmorSet.Piece(2)
-                                .addAll(ItemConfig.Attribute.bonuses(List.of(SpellSchools.ARCANE.id, SpellSchools.FIRE.id, SpellSchools.FROST.id), 1)),
+								.addAll(List.of(
+									ItemConfig.Attribute.multiply(SpellSchools.ARCANE.id, wizardRobeSpellPower),
+									ItemConfig.Attribute.multiply(SpellSchools.FIRE.id, wizardRobeSpellPower),
+									ItemConfig.Attribute.multiply(SpellSchools.FROST.id, wizardRobeSpellPower)
+								)),
                         new ItemConfig.ArmorSet.Piece(1)
-                                .addAll(ItemConfig.Attribute.bonuses(List.of(SpellSchools.ARCANE.id, SpellSchools.FIRE.id, SpellSchools.FROST.id), 1))
+								.addAll(List.of(
+									ItemConfig.Attribute.multiply(SpellSchools.ARCANE.id, wizardRobeSpellPower),
+									ItemConfig.Attribute.multiply(SpellSchools.FIRE.id, wizardRobeSpellPower),
+									ItemConfig.Attribute.multiply(SpellSchools.FROST.id, wizardRobeSpellPower)
+								))
                     ))
             .bundle(material -> new Armor.Set(WizardsMod.ID,
                     new WizardArmor(material, ArmorItem.Type.HELMET, new Item.Settings()),
@@ -227,9 +245,7 @@ public class Armors {
                             new WizardArmor(material, ArmorItem.Type.BOOTS, new Item.Settings())
                     ))
                     .put(entries)
-                    .armorSet();
-
-	// netherite version of the armors, same armor points but 30% of the attribute instead of 25%.	
+                    .armorSet();	
 
 	public static final Armor.Set netherite_arcaneRobeSet =
 	create(
