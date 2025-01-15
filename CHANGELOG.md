@@ -1,3 +1,7 @@
+# 1.4.0
+
+- Added Netherite Tier Armors, by ElocinDev (@nvb-uy)
+
 # 1.3.0
 
 - Increased velocity for tier 1 projectile spells
