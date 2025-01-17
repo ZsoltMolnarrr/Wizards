@@ -2,7 +2,7 @@ package net.wizards.client.effect;
 
 import net.minecraft.entity.LivingEntity;
 import net.spell_engine.api.effect.CustomParticleStatusEffect;
-import net.spell_engine.api.spell.ParticleBatch;
+import net.spell_engine.api.spell.fx.ParticleBatch;
 import net.spell_engine.particle.ParticleHelper;
 
 public class FrozenParticles implements CustomParticleStatusEffect.Spawner {
