@@ -7,7 +7,7 @@
     "item": "wizards:frost_robe_head"
   },
   "result": {
-    "id": "wizards:netherite_frost_robe_head"
+    "item": "wizards:netherite_frost_robe_head"
   },
   "template": {
     "item": "minecraft:netherite_upgrade_smithing_template"

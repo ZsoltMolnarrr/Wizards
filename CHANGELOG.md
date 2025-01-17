@@ -1,3 +1,7 @@
+# 1.4.1
+
+- Fix Netherite Tier Armors not being craftable
+
 # 1.4.0
 
 - Added Netherite Tier Armors, by ElocinDev (@nvb-uy)
