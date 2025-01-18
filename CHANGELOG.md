@@ -1,3 +1,11 @@
+# 2.3.0
+
+- Support Spell Engine 1.4
+- Frost Nova freeze no longer works on any bosses
+- Frost spells deal +30% damage against `#minecraft:freeze_hurts_extra_types` 
+- Frost spells deal -30% damage against `#minecraft:freeze_immune_entity_types`
+- Fire spells get +30% critical strike chance against `#minecraft:freeze_immune_entity_types`
+
 # 2.2.5
 
 - Support Lithostitched v1.4
