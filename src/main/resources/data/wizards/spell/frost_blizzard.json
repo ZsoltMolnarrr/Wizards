@@ -71,6 +71,20 @@
   },
   "impact": [
     {
+      "target_conditions": [
+        {
+          "entity_type": "#minecraft:freeze_hurts_extra_types",
+          "modifier": {
+            "power_multiplier": 0.3
+          }
+        },
+        {
+          "entity_type": "#minecraft:freeze_immune_entity_types",
+          "modifier": {
+            "power_multiplier": -0.3
+          }
+        }
+      ],
       "action": {
         "type": "DAMAGE",
         "damage": {
@@ -83,6 +97,12 @@
       }
     },
     {
+      "target_conditions": [
+        {
+          "entity_type": "#c:bosses",
+          "allow_action": false
+        }
+      ],
       "action": {
         "type": "STATUS_EFFECT",
         "status_effect": {

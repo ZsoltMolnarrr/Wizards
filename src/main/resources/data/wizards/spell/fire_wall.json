@@ -423,6 +423,14 @@
   },
   "impact": [
     {
+      "target_conditions": [
+        {
+          "entity_type": "#minecraft:freeze_immune_entity_types",
+          "modifier": {
+            "critical_chance_bonus": 0.3
+          }
+        }
+      ],
       "action": {
         "type": "DAMAGE",
         "damage": {

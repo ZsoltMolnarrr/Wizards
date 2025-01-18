@@ -75,6 +75,12 @@
       }
     },
     {
+      "target_conditions": [
+        {
+          "entity_type": "#c:bosses",
+          "allow_action": false
+        }
+      ],
       "action": {
         "type": "STATUS_EFFECT",
         "status_effect": {
