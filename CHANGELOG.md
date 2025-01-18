@@ -1,6 +1,7 @@
 # 2.3.0
 
 - Support Spell Engine 1.4
+- Support AzureLib Armor 3.X
 - Frost Nova freeze no longer works on any bosses
 - Frost spells deal +30% damage against `#minecraft:freeze_hurts_extra_types` 
 - Frost spells deal -30% damage against `#minecraft:freeze_immune_entity_types`
