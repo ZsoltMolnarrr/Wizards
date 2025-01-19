@@ -47,7 +47,7 @@
           "sound": { "id": "wizards:arcane_missile_release" }
         },
         "projectile": {
-          "homing_angle": 6,
+          "homing_angle": 8,
           "homing_after_absolute_distance": 8,
           "homing_after_relative_distance": 0.3,
           "perks": {
@@ -81,7 +81,7 @@
         "type": "DAMAGE",
         "damage": {
           "knockback": 0.5,
-          "spell_power_coefficient": 0.25
+          "spell_power_coefficient": 0.8
         }
       },
       "particles": [

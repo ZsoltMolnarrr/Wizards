@@ -1,7 +1,11 @@
+# 2.3.2
+
+- Fix Arcane Missiles damage
+
 # 2.3.1
 
 - Arcane Blast spells is now tier 1 spell
-- Rework Arcane Missile spell (now tier 2 spell), continuously fires missiles for 4 seconds 
+- Rework Arcane Missile spell (now tier 2 spell), continuously fires missiles for 4 seconds
 
 # 2.3.0
 
