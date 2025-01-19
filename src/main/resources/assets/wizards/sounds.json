@@ -17,6 +17,11 @@
       "wizards:arcane_missile_impact"
     ]
   },
+  "arcane_shoot_small": {
+    "sounds": [
+      "wizards:arcane_shoot_small"
+    ]
+  },
 
   "arcane_blast_release": {
     "sounds": [

@@ -1,14 +1,13 @@
 {
   "school": "ARCANE",
-  "group": "primary",
-  "rank": 2,
   "range": 64,
   "learn": {
-    "tier": 1
+    "tier": 2
   },
   "cast": {
-    "duration": 1.5,
-    "animation": "spell_engine:one_handed_projectile_charge",
+    "duration": 4,
+    "channel_ticks": 6,
+    "animation": "spell_engine:two_handed_channeling",
     "sound": {
       "id": "spell_engine:generic_arcane_casting",
       "randomness": 0
@@ -28,14 +27,29 @@
     "target": {
       "type": "PROJECTILE",
       "projectile": {
+        "direction_offsets_require_target": true,
+        "direction_offsets": [
+          {
+            "yaw": 15,
+            "pitch": 0
+          },
+          {
+            "yaw": 0,
+            "pitch": -15
+          },
+          {
+            "yaw": -15,
+            "pitch": 0
+          }
+        ],
         "launch_properties": {
           "velocity": 1.5,
-          "extra_launch_count": 1,
-          "extra_launch_delay": 4,
           "sound": { "id": "wizards:arcane_missile_release" }
         },
         "projectile": {
-          "homing_angle": 2,
+          "homing_angle": 6,
+          "homing_after_absolute_distance": 8,
+          "homing_after_relative_distance": 0.3,
           "perks": {
             "pierce": 2
           },
@@ -59,16 +73,15 @@
           }
         }
       }
-    },
-    "animation": "spell_engine:one_handed_projectile_release"
+    }
   },
   "impact": [
     {
       "action": {
         "type": "DAMAGE",
         "damage": {
-          "knockback": 0.6,
-          "spell_power_coefficient": 0.5
+          "knockback": 0.5,
+          "spell_power_coefficient": 0.25
         }
       },
       "particles": [
@@ -87,6 +100,7 @@
     }
   ],
   "cost": {
-    "item_id": "runes:arcane_stone"
+    "item_id": "runes:arcane_stone",
+    "cooldown_duration": 2
   }
 }

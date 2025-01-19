@@ -1,12 +1,14 @@
 {
   "school": "ARCANE",
+  "group": "primary",
+  "rank": 2,
   "range": 16,
   "learn": {
-    "tier": 2
+    "tier": 1
   },
   "cast": {
     "duration": 1.5,
-    "animation": "spell_engine:two_handed_channeling",
+    "animation": "spell_engine:one_handed_projectile_charge",
     "sound": {
       "id": "spell_engine:generic_arcane_casting",
       "randomness": 0

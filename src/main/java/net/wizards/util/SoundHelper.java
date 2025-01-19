@@ -20,6 +20,7 @@ public class SoundHelper {
     public static List<String> soundKeys = List.of(
             "arcane_missile_release",
             "arcane_missile_impact",
+            "arcane_shoot_small",
             "arcane_blast_release",
             "arcane_blast_impact",
             "arcane_beam_start",
