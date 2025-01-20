@@ -1,3 +1,7 @@
+# 2.3.4
+
+- Improve Frostbolt particles
+
 # 2.3.3
 
 - Improve Arcane Beam particles
