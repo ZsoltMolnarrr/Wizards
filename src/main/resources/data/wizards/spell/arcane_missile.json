@@ -43,11 +43,12 @@
           }
         ],
         "launch_properties": {
-          "velocity": 1.5,
+          "velocity": 1.25,
           "sound": { "id": "wizards:arcane_missile_release" }
         },
         "projectile": {
-          "homing_angle": 8,
+          "homing_angle": 6,
+          "homing_angles": [60, 30, 15],
           "homing_after_absolute_distance": 8,
           "homing_after_relative_distance": 0.3,
           "perks": {
@@ -101,6 +102,7 @@
   ],
   "cost": {
     "item_id": "runes:arcane_stone",
-    "cooldown_duration": 2
+    "cooldown_duration": 2,
+    "cooldown_proportional": true
   }
 }

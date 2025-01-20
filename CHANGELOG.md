@@ -1,3 +1,8 @@
+# 2.3.3
+
+- Improve Arcane Beam particles
+- Improve Arcane Missile projectile path
+
 # 2.3.2
 
 - Fix Arcane Missiles damage
