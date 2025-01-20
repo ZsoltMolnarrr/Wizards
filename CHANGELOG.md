@@ -1,6 +1,7 @@
 # 2.3.4
 
 - Improve Frostbolt particles
+- Add category for all crafting recipes
 
 # 2.3.3
 
