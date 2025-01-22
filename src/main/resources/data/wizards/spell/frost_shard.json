@@ -97,6 +97,8 @@
     }
   ],
   "cost": {
-    "item_id": "runes:frost_stone"
+    "item": {
+      "id": "runes:frost_stone"
+    }
   }
 }

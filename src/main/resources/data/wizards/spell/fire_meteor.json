@@ -146,8 +146,12 @@
     }
   },
   "cost": {
-    "item_id": "runes:fire_stone",
+    "item": {
+      "id": "runes:fire_stone"
+    },
     "exhaust" : 0.3,
-    "cooldown_duration": 10
+    "cooldown": {
+      "duration": 10
+    }
   }
 }

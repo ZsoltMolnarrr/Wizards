@@ -117,10 +117,14 @@
     }
   ],
   "cost": {
-    "item_id": "runes:arcane_stone",
-    "effect_id": "wizards:arcane_charge",
     "exhaust" : 0.3,
-    "cooldown_duration": 10,
-    "cooldown_proportional": true
+    "effect_id": "wizards:arcane_charge",
+    "item": {
+      "id": "runes:arcane_stone"
+    },
+    "cooldown": {
+      "duration": 10,
+      "proportional": true
+    }
   }
 }

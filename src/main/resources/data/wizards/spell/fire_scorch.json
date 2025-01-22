@@ -81,6 +81,8 @@
     }
   ],
   "cost": {
-    "item_id": "runes:fire_stone"
+    "item": {
+      "id": "runes:fire_stone"
+    }
   }
 }

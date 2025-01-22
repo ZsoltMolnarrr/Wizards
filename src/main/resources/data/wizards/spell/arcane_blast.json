@@ -80,6 +80,8 @@
     }
   ],
   "cost": {
-    "item_id": "runes:arcane_stone"
+    "item": {
+      "id": "runes:arcane_stone"
+    }
   }
 }
