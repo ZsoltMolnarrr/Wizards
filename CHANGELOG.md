@@ -1,3 +1,8 @@
+# 2.3.5
+
+- Add 1 bounce to Arcane Missiles
+- Rework cost structure
+
 # 2.3.4
 
 - Improve Frostbolt particles

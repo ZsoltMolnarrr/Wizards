@@ -47,12 +47,13 @@
           "sound": { "id": "wizards:arcane_missile_release" }
         },
         "projectile": {
-          "homing_angle": 6,
+          "homing_angle": 4,
           "homing_angles": [60, 30, 15],
           "homing_after_absolute_distance": 8,
           "homing_after_relative_distance": 0.3,
           "perks": {
-            "pierce": 2
+            "pierce": 2,
+            "bounce": 1
           },
           "client_data": {
             "light_level": 12,
