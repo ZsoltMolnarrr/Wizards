@@ -24,13 +24,15 @@
     ]
   },
   "release": {
-    "target": {
-      "type": "CURSOR",
-      "cursor": { }
-    },
     "animation": "spell_engine:one_handed_projectile_release",
     "sound": {
       "id": "spell_engine:generic_fire_release"
+    }
+  },
+  "target": {
+    "type": "CURSOR",
+    "cursor": {
+      "sticky": true
     }
   },
   "impact": [

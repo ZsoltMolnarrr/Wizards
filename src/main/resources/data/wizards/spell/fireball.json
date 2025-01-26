@@ -24,46 +24,50 @@
     ]
   },
   "release": {
-    "target": {
-      "type": "PROJECTILE",
+    "animation": "spell_engine:one_handed_projectile_release"
+  },
+  "target": {
+    "type": "CURSOR",
+    "cursor": { }
+  },
+  "delivery": {
+    "type": "PROJECTILE",
+    "projectile": {
+      "launch_properties": {
+        "velocity": 1,
+        "sound": { "id": "spell_engine:generic_fire_release" }
+      },
       "projectile": {
-        "launch_properties": {
-          "velocity": 1,
-          "sound": { "id": "spell_engine:generic_fire_release" }
-        },
-        "projectile": {
-          "homing_angle": 1.0,
-          "client_data": {
-            "light_level": 12,
-            "travel_particles": [
-              {
-                "particle_id": "spell_engine:flame",
-                "shape": "CIRCLE",
-                "rotation": "LOOK",
-                "origin": "CENTER",
-                "count": 3.0,
-                "min_speed": 0.0,
-                "max_speed": 0.1
-              },
-              {
-                "particle_id": "smoke",
-                "shape": "CIRCLE",
-                "rotation": "LOOK",
-                "origin": "CENTER",
-                "count": 1.0,
-                "min_speed": 0.0,
-                "max_speed": 0.1
-              }
-            ],
-            "model": {
-              "model_id": "wizards:projectile/fireball",
-              "scale": 0.5
+        "homing_angle": 1.0,
+        "client_data": {
+          "light_level": 12,
+          "travel_particles": [
+            {
+              "particle_id": "spell_engine:flame",
+              "shape": "CIRCLE",
+              "rotation": "LOOK",
+              "origin": "CENTER",
+              "count": 3.0,
+              "min_speed": 0.0,
+              "max_speed": 0.1
+            },
+            {
+              "particle_id": "smoke",
+              "shape": "CIRCLE",
+              "rotation": "LOOK",
+              "origin": "CENTER",
+              "count": 1.0,
+              "min_speed": 0.0,
+              "max_speed": 0.1
             }
+          ],
+          "model": {
+            "model_id": "wizards:projectile/fireball",
+            "scale": 0.5
           }
         }
       }
-    },
-    "animation": "spell_engine:one_handed_projectile_release"
+    }
   },
   "impact": [
     {

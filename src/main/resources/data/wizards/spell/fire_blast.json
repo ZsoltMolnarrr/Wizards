@@ -24,55 +24,59 @@
     ]
   },
   "release": {
-    "target": {
-      "type": "PROJECTILE",
+    "animation": "spell_engine:one_handed_projectile_release"
+  },
+  "target": {
+    "type": "CURSOR",
+    "cursor": { }
+  },
+  "delivery": {
+    "type": "PROJECTILE",
+    "projectile": {
+      "launch_properties": {
+        "velocity": 1.25,
+        "sound": { "id": "spell_engine:generic_fire_release" }
+      },
       "projectile": {
-        "launch_properties": {
-          "velocity": 1.25,
-          "sound": { "id": "spell_engine:generic_fire_release" }
-        },
-        "projectile": {
-          "homing_angle": 1.0,
-          "client_data": {
-            "light_level": 12,
-            "travel_particles": [
-              {
-                "particle_id": "spell_engine:flame_spark",
-                "shape": "CIRCLE",
-                "rotation": "LOOK",
-                "origin": "CENTER",
-                "count": 4.0,
-                "min_speed": 0.0,
-                "max_speed": 0.1
-              },
-              {
-                "particle_id": "spell_engine:flame_medium_b",
-                "shape": "CIRCLE",
-                "rotation": "LOOK",
-                "origin": "CENTER",
-                "count": 3.0,
-                "min_speed": 0.0,
-                "max_speed": 0.1
-              },
-              {
-                "particle_id": "smoke",
-                "shape": "CIRCLE",
-                "rotation": "LOOK",
-                "origin": "CENTER",
-                "count": 2.0,
-                "min_speed": 0.0,
-                "max_speed": 0.1
-              }
-            ],
-            "model": {
-              "model_id": "wizards:projectile/fire_blast",
-              "scale": 0.9
+        "homing_angle": 1.0,
+        "client_data": {
+          "light_level": 12,
+          "travel_particles": [
+            {
+              "particle_id": "spell_engine:flame_spark",
+              "shape": "CIRCLE",
+              "rotation": "LOOK",
+              "origin": "CENTER",
+              "count": 4.0,
+              "min_speed": 0.0,
+              "max_speed": 0.1
+            },
+            {
+              "particle_id": "spell_engine:flame_medium_b",
+              "shape": "CIRCLE",
+              "rotation": "LOOK",
+              "origin": "CENTER",
+              "count": 3.0,
+              "min_speed": 0.0,
+              "max_speed": 0.1
+            },
+            {
+              "particle_id": "smoke",
+              "shape": "CIRCLE",
+              "rotation": "LOOK",
+              "origin": "CENTER",
+              "count": 2.0,
+              "min_speed": 0.0,
+              "max_speed": 0.1
             }
+          ],
+          "model": {
+            "model_id": "wizards:projectile/fire_blast",
+            "scale": 0.9
           }
         }
       }
-    },
-    "animation": "spell_engine:one_handed_projectile_release"
+    }
   },
   "impact": [
     {

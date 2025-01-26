@@ -49,15 +49,15 @@
     "channel_ticks": 4
   },
   "release": {
-    "target": {
-      "type": "AREA",
-      "area": {
-        "distance_dropoff": "SQUARED",
-        "angle_degrees": 40
-      }
-    },
     "sound": {
       "id": "wizards:fire_breath_release"
+    }
+  },
+  "target": {
+    "type": "AREA",
+    "area": {
+      "distance_dropoff": "SQUARED",
+      "angle_degrees": 40
     }
   },
   "impact": [
