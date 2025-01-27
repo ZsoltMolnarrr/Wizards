@@ -34,7 +34,7 @@
       "sticky": true
     }
   },
-  "delivery": {
+  "deliver": {
     "type": "METEOR",
     "meteor": {
       "launch_height": 10,

@@ -24,35 +24,39 @@
     ]
   },
   "release": {
-    "target": {
-      "type": "PROJECTILE",
-      "projectile": {
-        "projectile": {
-          "homing_angle": 1.0,
-          "client_data": {
-            "light_level": 10,
-            "travel_particles": [
-              {
-                "particle_id": "spell_engine:arcane_spell",
-                "shape": "CIRCLE",
-                "rotation": "LOOK",
-                "origin": "CENTER",
-                "count": 1.0,
-                "min_speed": 0.05,
-                "max_speed": 0.1
-              }
-            ],
-            "model": {
-              "model_id": "wizards:projectile/arcane_bolt",
-              "scale": 0.5
-            }
-          }
-        }
-      }
-    },
     "animation": "spell_engine:one_handed_projectile_release",
     "sound": {
       "id": "wizards:arcane_missile_release"
+    }
+  },
+  "target": {
+    "type": "CURSOR",
+    "cursor": { }
+  },
+  "deliver": {
+    "type": "PROJECTILE",
+    "projectile": {
+      "projectile": {
+        "homing_angle": 1.0,
+        "client_data": {
+          "light_level": 10,
+          "travel_particles": [
+            {
+              "particle_id": "spell_engine:arcane_spell",
+              "shape": "CIRCLE",
+              "rotation": "LOOK",
+              "origin": "CENTER",
+              "count": 1.0,
+              "min_speed": 0.05,
+              "max_speed": 0.1
+            }
+          ],
+          "model": {
+            "model_id": "wizards:projectile/arcane_bolt",
+            "scale": 0.5
+          }
+        }
+      }
     }
   },
   "impact": [

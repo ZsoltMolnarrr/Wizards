@@ -30,7 +30,7 @@
     "type": "CURSOR",
     "cursor": { }
   },
-  "delivery": {
+  "deliver": {
     "type": "PROJECTILE",
     "projectile": {
       "launch_properties": {

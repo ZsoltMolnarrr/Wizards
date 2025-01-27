@@ -8,9 +8,6 @@
     "duration": 0
   },
   "release": {
-    "target": {
-      "type": "SELF"
-    },
     "animation": "spell_engine:one_handed_area_release",
     "sound": {
       "id": "minecraft:entity.enderman.teleport"

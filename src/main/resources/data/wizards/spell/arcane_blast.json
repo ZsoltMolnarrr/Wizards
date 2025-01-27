@@ -24,11 +24,13 @@
       }
     ]
   },
+  "target": {
+    "type": "CURSOR",
+    "cursor": {
+      "sticky": true
+    }
+  },
   "release": {
-    "target": {
-      "type": "CURSOR",
-      "cursor": { }
-    },
     "animation": "spell_engine:one_handed_projectile_release",
     "sound": {
       "id": "wizards:arcane_missile_release"
