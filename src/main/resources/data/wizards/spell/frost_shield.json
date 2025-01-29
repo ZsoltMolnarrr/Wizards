@@ -4,13 +4,12 @@
   "learn": {
     "tier": 3
   },
-  "cast": {
-    "duration": 0
+  "active": {
+    "cast": {
+      "duration": 0
+    }
   },
   "release": {
-    "target": {
-      "type": "SELF"
-    },
     "animation": "spell_engine:one_handed_area_release",
     "sound": {
       "id": "wizards:frost_shield_release"

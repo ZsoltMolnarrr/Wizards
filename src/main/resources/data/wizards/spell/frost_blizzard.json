@@ -4,67 +4,75 @@
   "learn": {
     "tier": 4
   },
-  "cast": {
-    "duration": 8,
-    "animation": "spell_engine:one_handed_sky_charge",
-    "sound": {
-      "id": "wizards:frost_blizzard_casting",
-      "randomness": 0
-    },
-    "particles": [
-      {
-        "particle_id": "spell_engine:snowflake",
-        "shape": "PIPE",
-        "origin": "CENTER",
-        "count": 0.5,
-        "min_speed": 0.1,
-        "max_speed": 0.2
-      }
-    ],
-    "channel_ticks": 12
+  "active": {
+    "cast": {
+      "duration": 8,
+      "animation": "spell_engine:one_handed_sky_charge",
+      "sound": {
+        "id": "wizards:frost_blizzard_casting",
+        "randomness": 0
+      },
+      "particles": [
+        {
+          "particle_id": "spell_engine:snowflake",
+          "shape": "PIPE",
+          "origin": "CENTER",
+          "count": 0.5,
+          "min_speed": 0.1,
+          "max_speed": 0.2
+        }
+      ],
+      "channel_ticks": 12
+    }
   },
-  "release": {
-    "target": {
-      "type": "METEOR",
-      "meteor": {
-        "launch_height": 10,
-        "launch_radius": 3,
-        "launch_properties": {
-          "velocity": 1,
-          "extra_launch_count": 3,
-          "extra_launch_delay": 4
-        },
-        "projectile": {
-          "divergence": 8,
-          "client_data": {
-            "travel_particles": [
-              {
-                "particle_id": "spell_engine:snowflake",
-                "shape": "CIRCLE",
-                "rotation": "LOOK",
-                "origin": "CENTER",
-                "count": 3,
-                "min_speed": 0,
-                "max_speed": 0.1
-              },
-              {
-                "particle_id": "spell_engine:frost_hit",
-                "shape": "CIRCLE",
-                "rotation": "LOOK",
-                "origin": "CENTER",
-                "count": 1,
-                "min_speed": 0.1,
-                "max_speed": 0.2
-              }
-            ],
-            "model": {
-              "model_id": "wizards:projectile/frost_shard",
-              "scale": 0.8
+  "target": {
+    "type": "CURSOR",
+    "cursor": {
+      "sticky": true
+    }
+  },
+  "deliver": {
+    "type": "METEOR",
+    "meteor": {
+      "launch_height": 10,
+      "launch_radius": 3,
+      "launch_properties": {
+        "velocity": 1,
+        "extra_launch_count": 3,
+        "extra_launch_delay": 4
+      },
+      "projectile": {
+        "divergence": 8,
+        "client_data": {
+          "travel_particles": [
+            {
+              "particle_id": "spell_engine:snowflake",
+              "shape": "CIRCLE",
+              "rotation": "LOOK",
+              "origin": "CENTER",
+              "count": 3,
+              "min_speed": 0,
+              "max_speed": 0.1
+            },
+            {
+              "particle_id": "spell_engine:frost_hit",
+              "shape": "CIRCLE",
+              "rotation": "LOOK",
+              "origin": "CENTER",
+              "count": 1,
+              "min_speed": 0.1,
+              "max_speed": 0.2
             }
+          ],
+          "model": {
+            "model_id": "wizards:projectile/frost_shard",
+            "scale": 0.8
           }
         }
       }
-    },
+    }
+  },
+  "release": {
     "sound": {
       "id": "wizards:fire_breath_release"
     }

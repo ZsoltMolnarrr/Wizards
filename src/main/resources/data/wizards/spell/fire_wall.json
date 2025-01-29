@@ -4,9 +4,11 @@
   "learn": {
     "tier": 4
   },
-  "cast": {
-    "duration": 0,
-    "particles": []
+  "active": {
+    "cast": {
+      "duration": 0,
+      "particles": []
+    }
   },
   "release": {
     "animation": "spell_engine:one_handed_area_release_ground_left_to_right"

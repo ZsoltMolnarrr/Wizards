@@ -4,49 +4,51 @@
   "learn": {
     "tier": 2
   },
-  "cast": {
-    "duration": 5,
-    "animation": "spell_engine:two_handed_channeling",
-    "sound": {
-      "id": "wizards:fire_breath_casting",
-      "randomness": 0
-    },
-    "start_sound": {
-      "id": "wizards:fire_breath_start"
-    },
-    "particles": [
-      {
-        "particle_id": "spell_engine:flame",
-        "angle": 30,
-        "shape": "CONE",
-        "rotation": "LOOK",
-        "origin": "LAUNCH_POINT",
-        "count": 8.0,
-        "min_speed": 1,
-        "max_speed": 1
+  "active": {
+    "cast": {
+      "duration": 5,
+      "animation": "spell_engine:two_handed_channeling",
+      "sound": {
+        "id": "wizards:fire_breath_casting",
+        "randomness": 0
       },
-      {
-        "particle_id": "spell_engine:flame_medium_a",
-        "angle": 30,
-        "shape": "CONE",
-        "rotation": "LOOK",
-        "origin": "LAUNCH_POINT",
-        "count": 4.0,
-        "min_speed": 1,
-        "max_speed": 1
+      "start_sound": {
+        "id": "wizards:fire_breath_start"
       },
-      {
-        "particle_id": "spell_engine:flame_medium_b",
-        "angle": 30,
-        "shape": "CONE",
-        "rotation": "LOOK",
-        "origin": "LAUNCH_POINT",
-        "count": 4.0,
-        "min_speed": 1,
-        "max_speed": 1
-      }
-    ],
-    "channel_ticks": 4
+      "particles": [
+        {
+          "particle_id": "spell_engine:flame",
+          "angle": 30,
+          "shape": "CONE",
+          "rotation": "LOOK",
+          "origin": "LAUNCH_POINT",
+          "count": 8.0,
+          "min_speed": 1,
+          "max_speed": 1
+        },
+        {
+          "particle_id": "spell_engine:flame_medium_a",
+          "angle": 30,
+          "shape": "CONE",
+          "rotation": "LOOK",
+          "origin": "LAUNCH_POINT",
+          "count": 4.0,
+          "min_speed": 1,
+          "max_speed": 1
+        },
+        {
+          "particle_id": "spell_engine:flame_medium_b",
+          "angle": 30,
+          "shape": "CONE",
+          "rotation": "LOOK",
+          "origin": "LAUNCH_POINT",
+          "count": 4.0,
+          "min_speed": 1,
+          "max_speed": 1
+        }
+      ],
+      "channel_ticks": 4
+    }
   },
   "release": {
     "sound": {
