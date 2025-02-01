@@ -32,8 +32,8 @@
     }
   },
   "target": {
-    "type": "CURSOR",
-    "cursor": { }
+    "type": "AIM",
+    "aim": { }
   },
   "deliver": {
     "type": "PROJECTILE",

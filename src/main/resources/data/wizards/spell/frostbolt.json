@@ -30,8 +30,8 @@
     "animation": "spell_engine:one_handed_projectile_release"
   },
   "target": {
-    "type": "CURSOR",
-    "cursor": { }
+    "type": "AIM",
+    "aim": { }
   },
   "deliver": {
     "type": "PROJECTILE",

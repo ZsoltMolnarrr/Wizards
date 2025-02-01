@@ -31,8 +31,8 @@
     }
   },
   "target": {
-    "type": "CURSOR",
-    "cursor": {
+    "type": "AIM",
+    "aim": {
       "sticky": true
     }
   },
