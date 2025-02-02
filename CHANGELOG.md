@@ -1,3 +1,8 @@
+# 2.4.0
+
+- Support Spell Engine 1.5.0
+- Frost Nova now prevents jumping
+
 # 2.3.5
 
 - Add 1 bounce to Arcane Missiles

@@ -45,6 +45,10 @@ public class Effects {
                     Identifier.of(WizardsMod.ID, "effect.frozen"),
                     -1F,
                     EntityAttributeModifier.Operation.ADD_MULTIPLIED_TOTAL)
+            .addAttributeModifier(EntityAttributes.GENERIC_JUMP_STRENGTH,
+                    Identifier.of(WizardsMod.ID, "effect.frozen"),
+                    -1F,
+                    EntityAttributeModifier.Operation.ADD_MULTIPLIED_TOTAL)
     );
 
     public static Entry frostShield = new Entry("frost_shield",
