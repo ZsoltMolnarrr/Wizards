@@ -2,9 +2,7 @@
   "school": "FROST",
   "group": "primary",
   "range": 48,
-  "learn": {
-    "tier": 0
-  },
+  "tier": 0,
   "active": {
     "cast": {
       "duration": 1,
@@ -48,7 +46,7 @@
         "client_data": {
           "travel_particles": [
             {
-              "particle_id": "spell_engine:frost_hit",
+              "particle_id": "spell_engine:magic_frost_impact_burst",
               "shape": "CIRCLE",
               "rotation": "LOOK",
               "origin": "CENTER",
@@ -65,7 +63,7 @@
       }
     }
   },
-  "impact": [
+  "impacts": [
     {
       "target_conditions": [
         {
@@ -92,7 +90,7 @@
       },
       "particles": [
         {
-          "particle_id": "spell_engine:frost_hit",
+          "particle_id": "spell_engine:magic_frost_impact_burst",
           "shape": "SPHERE",
           "origin": "CENTER",
           "count": 25.0,

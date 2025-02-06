@@ -1,12 +1,12 @@
 {
   "school": "ARCANE",
   "group": "primary",
-  "rank": 2,
   "range": 16,
-  "learn": {
-    "tier": 1
-  },
+  "tier": 1,
+  "sub_tier": 2,
+  "learn": { },
   "active": {
+    "scroll": { },
     "cast": {
       "duration": 1.5,
       "animation": "spell_engine:one_handed_projectile_charge",
@@ -16,7 +16,7 @@
       },
       "particles": [
         {
-          "particle_id": "spell_engine:arcane_spell",
+          "particle_id": "spell_engine:magic_arcane_spell_ascend",
           "shape": "PIPE",
           "origin": "FEET",
           "count": 1.0,
@@ -38,7 +38,7 @@
       "id": "wizards:arcane_missile_release"
     }
   },
-  "impact": [
+  "impacts": [
     {
       "action": {
         "type": "DAMAGE",
@@ -49,7 +49,7 @@
       },
       "particles": [
         {
-          "particle_id": "spell_engine:arcane_hit",
+          "particle_id": "spell_engine:magic_arcane_impact_burst",
           "shape": "SPHERE",
           "origin": "CENTER",
           "count": 30,

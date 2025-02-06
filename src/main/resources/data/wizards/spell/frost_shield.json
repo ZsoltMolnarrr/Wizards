@@ -1,10 +1,10 @@
 {
   "school": "FROST",
   "range": 0,
-  "learn": {
-    "tier": 3
-  },
+  "tier": 3,
+  "learn": { },
   "active": {
+    "scroll": { },
     "cast": {
       "duration": 0
     }
@@ -33,7 +33,7 @@
       }
     ]
   },
-  "impact": [
+  "impacts": [
     {
       "action": {
         "type": "STATUS_EFFECT",

@@ -2,10 +2,10 @@
   "school": "FIRE",
   "group": "primary",
   "range": 64,
-  "learn": {
-    "tier": 0
-  },
+  "tier": 0,
+  "learn": { },
   "active": {
+    "scroll": { },
     "cast": {
       "duration": 1.5,
       "animation": "spell_engine:one_handed_projectile_charge",
@@ -71,7 +71,7 @@
       }
     }
   },
-  "impact": [
+  "impacts": [
     {
       "target_conditions": [
         {

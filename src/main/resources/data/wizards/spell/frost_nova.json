@@ -1,10 +1,10 @@
 {
   "range": 6.0,
   "school": "FROST",
-  "learn": {
-    "tier": 2
-  },
+  "tier": 2,
+  "learn": { },
   "active": {
+    "scroll": { },
     "cast": {
       "duration": 0.5,
       "animation": "spell_engine:one_handed_area_charge",
@@ -54,7 +54,7 @@
       }
     ]
   },
-  "impact": [
+  "impacts": [
     {
       "action": {
         "type": "DAMAGE",
@@ -64,7 +64,7 @@
       },
       "particles": [
         {
-          "particle_id": "spell_engine:frost_hit",
+          "particle_id": "spell_engine:magic_frost_impact_burst",
           "shape": "SPHERE",
           "origin": "CENTER",
           "count": 30.0,

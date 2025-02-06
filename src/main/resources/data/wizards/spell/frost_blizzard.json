@@ -1,10 +1,10 @@
 {
   "school": "FROST",
   "range": 32.0,
-  "learn": {
-    "tier": 4
-  },
+  "tier": 4,
+  "learn": { },
   "active": {
+    "scroll": { },
     "cast": {
       "duration": 8,
       "animation": "spell_engine:one_handed_sky_charge",
@@ -55,7 +55,7 @@
               "max_speed": 0.1
             },
             {
-              "particle_id": "spell_engine:frost_hit",
+              "particle_id": "spell_engine:magic_frost_impact_burst",
               "shape": "CIRCLE",
               "rotation": "LOOK",
               "origin": "CENTER",
@@ -77,7 +77,7 @@
       "id": "wizards:fire_breath_release"
     }
   },
-  "impact": [
+  "impacts": [
     {
       "target_conditions": [
         {
@@ -126,7 +126,7 @@
       },
       "particles": [
         {
-          "particle_id": "spell_engine:frost_hit",
+          "particle_id": "spell_engine:magic_frost_impact_burst",
           "shape": "SPHERE",
           "origin": "CENTER",
           "count": 15.0,
@@ -159,7 +159,7 @@
         "max_speed": 0.3
       },
       {
-        "particle_id": "spell_engine:frost_hit",
+        "particle_id": "spell_engine:magic_frost_impact_burst",
         "shape": "SPHERE",
         "origin": "CENTER",
         "count": 15.0,

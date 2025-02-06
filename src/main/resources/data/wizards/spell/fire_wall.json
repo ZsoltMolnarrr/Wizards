@@ -1,10 +1,10 @@
 {
   "school": "FIRE",
   "range": 0,
-  "learn": {
-    "tier": 4
-  },
+  "tier": 4,
+  "learn": { },
   "active": {
+    "scroll": { },
     "cast": {
       "duration": 0,
       "particles": []
@@ -423,7 +423,7 @@
       }
     ]
   },
-  "impact": [
+  "impacts": [
     {
       "target_conditions": [
         {

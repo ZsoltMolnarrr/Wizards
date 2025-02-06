@@ -1,10 +1,10 @@
 {
   "school": "FIRE",
   "range": 10.0,
-  "learn": {
-    "tier": 2
-  },
+  "tier": 2,
+  "learn": { },
   "active": {
+    "scroll": { },
     "cast": {
       "duration": 5,
       "animation": "spell_engine:two_handed_channeling",
@@ -62,7 +62,7 @@
       "angle_degrees": 40
     }
   },
-  "impact": [
+  "impacts": [
     {
       "target_conditions": [
         {

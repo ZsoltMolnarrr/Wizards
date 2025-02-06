@@ -1,10 +1,10 @@
 {
   "school": "ARCANE",
   "range": 32,
-  "learn": {
-    "tier": 3
-  },
+  "tier": 3,
+  "learn": { },
   "active": {
+    "scroll": { },
     "cast": {
       "duration": 5,
       "animation": "spell_engine:two_handed_channeling",
@@ -17,7 +17,7 @@
       },
       "particles": [
         {
-          "particle_id": "spell_engine:arcane_spell",
+          "particle_id": "spell_engine:magic_arcane_spell_ascend",
           "shape": "PIPE",
           "rotation": "LOOK",
           "origin": "LAUNCH_POINT",
@@ -51,7 +51,7 @@
       "flow": 1.5,
       "block_hit_particles": [
         {
-          "particle_id": "spell_engine:arcane_spell",
+          "particle_id": "spell_engine:magic_arcane_spell_ascend",
           "shape": "CIRCLE",
           "rotation": "LOOK",
           "origin": "CENTER",
@@ -69,7 +69,7 @@
           "max_speed": 0.2
         },
         {
-          "particle_id": "spell_engine:arcane_hit",
+          "particle_id": "spell_engine:magic_arcane_impact_burst",
           "shape": "SPHERE",
           "origin": "CENTER",
           "count": 3,
@@ -79,7 +79,7 @@
       ]
     }
   },
-  "impact": [
+  "impacts": [
     {
       "action": {
         "type": "DAMAGE",
@@ -89,7 +89,7 @@
       },
       "particles": [
         {
-          "particle_id": "spell_engine:arcane_hit",
+          "particle_id": "spell_engine:magic_arcane_impact_burst",
           "shape": "SPHERE",
           "origin": "CENTER",
           "count": 4,
@@ -97,7 +97,7 @@
           "max_speed": 0.7
         },
         {
-          "particle_id": "spell_engine:arcane_spell",
+          "particle_id": "spell_engine:magic_arcane_spell_ascend",
           "shape": "SPHERE",
           "origin": "CENTER",
           "count": 2,

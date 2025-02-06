@@ -2,9 +2,8 @@
   "school": "FIRE",
   "group": "primary",
   "range": 16,
-  "learn": {
-    "tier": 0
-  },
+  "tier": 0,
+  "sub_tier": 0,
   "active": {
     "cast": {
       "duration": 1.2,
@@ -37,7 +36,7 @@
       "sticky": true
     }
   },
-  "impact": [
+  "impacts": [
     {
       "target_conditions": [
         {

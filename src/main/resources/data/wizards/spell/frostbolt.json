@@ -1,12 +1,12 @@
 {
   "school": "FROST",
   "group": "primary",
-  "rank": 2,
+  "tier": 1,
+  "sub_tier": 2,
   "range": 64,
-  "learn": {
-    "tier": 1
-  },
+  "learn": { },
   "active": {
+    "scroll": { },
     "cast": {
       "duration": 1.1,
       "animation": "spell_engine:one_handed_projectile_charge",
@@ -59,7 +59,7 @@
               "max_speed": 0.1
             },
             {
-              "particle_id": "spell_engine:frost_hit",
+              "particle_id": "spell_engine:magic_frost_impact_burst",
               "shape": "CIRCLE",
               "rotation": "LOOK",
               "origin": "CENTER",
@@ -76,7 +76,7 @@
       }
     }
   },
-  "impact": [
+  "impacts": [
     {
       "target_conditions": [
         {
@@ -100,7 +100,7 @@
       },
       "particles": [
         {
-          "particle_id": "spell_engine:frost_hit",
+          "particle_id": "spell_engine:magic_frost_impact_burst",
           "shape": "SPHERE",
           "origin": "CENTER",
           "count": 50.0,
