@@ -23,6 +23,7 @@ import net.wizards.item.Armors;
 import net.wizards.item.Weapons;
 import net.wizards.item.WizardArmor;
 import net.wizards.util.SoundHelper;
+import net.wizards.util.WizardsSounds;
 
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -47,7 +48,7 @@ public class WizardVillagers {
                 },
                 ImmutableSet.of(),
                 ImmutableSet.of(),
-                SoundHelper.wizard_robes_equip.sound())
+                WizardsSounds.WIZARD_ROBES_EQUIP.soundEvent())
         );
     }
 

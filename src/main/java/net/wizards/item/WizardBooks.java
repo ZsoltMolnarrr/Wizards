@@ -1,7 +1,7 @@
 package net.wizards.item;
 
 import net.minecraft.util.Identifier;
-import net.spell_engine.api.item.trinket.SpellBooks;
+import net.spell_engine.api.item.SpellBooks;
 import net.wizards.WizardsMod;
 
 import java.util.List;

@@ -7,7 +7,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.text.Text;
-import net.spell_engine.api.item.ItemConfig;
+import net.spell_engine.api.config.ConfigFile;
 import net.tinyconfig.ConfigManager;
 import net.wizards.config.Default;
 import net.wizards.config.TweaksConfig;
@@ -16,14 +16,14 @@ import net.wizards.item.Armors;
 import net.wizards.item.Group;
 import net.wizards.item.Weapons;
 import net.wizards.item.WizardBooks;
-import net.wizards.util.SoundHelper;
+import net.wizards.util.WizardsSounds;
 import net.wizards.villager.WizardVillagers;
 
 public class WizardsMod implements ModInitializer {
     public static final String ID = "wizards";
 
-    public static ConfigManager<ItemConfig> itemConfig = new ConfigManager<>
-            ("items_v6", Default.itemConfig)
+    public static ConfigManager<ConfigFile.Equipment> equipmentConfig = new ConfigManager<>
+            ("equipment", Default.itemConfig)
             .builder()
             .setDirectory(ID)
             .sanitize(true)
@@ -43,19 +43,19 @@ public class WizardsMod implements ModInitializer {
 
     @Override
     public void onInitialize() {
-        itemConfig.refresh();
+        equipmentConfig.refresh();
         tweaksConfig.refresh();
         villageConfig.refresh();
-        SoundHelper.registerSounds();
+        WizardsSounds.register();
         Group.WIZARDS = FabricItemGroup.builder()
                 .icon(() -> new ItemStack(Armors.wizardRobeSet.head))
                 .displayName(Text.translatable("itemGroup.wizards.general"))
                 .build();
         Registry.register(Registries.ITEM_GROUP, Group.KEY, Group.WIZARDS);
         WizardBooks.register();
-        Weapons.register(itemConfig.value.weapons);
-        Armors.register(itemConfig.value.armor_sets);
-        itemConfig.save();
+        Weapons.register(equipmentConfig.value.weapons);
+        Armors.register(equipmentConfig.value.armor_sets);
+        equipmentConfig.save();
         Effects.register();
         WizardVillagers.register();
     }
