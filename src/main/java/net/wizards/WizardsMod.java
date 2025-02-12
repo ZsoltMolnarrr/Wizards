@@ -11,7 +11,7 @@ import net.spell_engine.api.config.ConfigFile;
 import net.tinyconfig.ConfigManager;
 import net.wizards.config.Default;
 import net.wizards.config.TweaksConfig;
-import net.wizards.effect.Effects;
+import net.wizards.effect.WizardsEffects;
 import net.wizards.item.Armors;
 import net.wizards.item.Group;
 import net.wizards.item.Weapons;
@@ -24,6 +24,12 @@ public class WizardsMod implements ModInitializer {
 
     public static ConfigManager<ConfigFile.Equipment> equipmentConfig = new ConfigManager<>
             ("equipment", Default.itemConfig)
+            .builder()
+            .setDirectory(ID)
+            .sanitize(true)
+            .build();
+    public static ConfigManager<ConfigFile.Effects> effectsConfig = new ConfigManager<>
+            ("effects", new ConfigFile.Effects())
             .builder()
             .setDirectory(ID)
             .sanitize(true)
@@ -44,6 +50,7 @@ public class WizardsMod implements ModInitializer {
     @Override
     public void onInitialize() {
         equipmentConfig.refresh();
+        effectsConfig.refresh();
         tweaksConfig.refresh();
         villageConfig.refresh();
         WizardsSounds.register();
@@ -56,7 +63,8 @@ public class WizardsMod implements ModInitializer {
         Weapons.register(equipmentConfig.value.weapons);
         Armors.register(equipmentConfig.value.armor_sets);
         equipmentConfig.save();
-        Effects.register();
+        WizardsEffects.register(effectsConfig.value);
+        effectsConfig.save();
         WizardVillagers.register();
     }
 }

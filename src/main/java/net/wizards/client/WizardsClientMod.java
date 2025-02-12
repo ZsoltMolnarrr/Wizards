@@ -14,7 +14,7 @@ import net.wizards.client.effect.FrostShieldRenderer;
 import net.wizards.client.effect.FrozenParticles;
 import net.wizards.client.effect.FrozenRenderer;
 import net.wizards.client.effect.ArcaneChargeRenderer;
-import net.wizards.effect.Effects;
+import net.wizards.effect.WizardsEffects;
 import net.wizards.item.Armors;
 
 import java.util.List;
@@ -37,11 +37,11 @@ public class WizardsClientMod implements ClientModInitializer {
                 FrostShieldRenderer.modelId_overlay
         ));
 
-        CustomModelStatusEffect.register(Effects.arcaneCharge.effect, new ArcaneChargeRenderer());
-        CustomParticleStatusEffect.register(Effects.frostSlowness.effect, new FrozenParticles(1));
-        CustomParticleStatusEffect.register(Effects.frozen.effect, new FrozenParticles(2));
-        CustomModelStatusEffect.register(Effects.frozen.effect, new FrozenRenderer());
-        CustomModelStatusEffect.register(Effects.frostShield.effect, new FrostShieldRenderer());
+        CustomModelStatusEffect.register(WizardsEffects.arcaneCharge.effect, new ArcaneChargeRenderer());
+        CustomParticleStatusEffect.register(WizardsEffects.frostSlowness.effect, new FrozenParticles(1));
+        CustomParticleStatusEffect.register(WizardsEffects.frozen.effect, new FrozenParticles(2));
+        CustomModelStatusEffect.register(WizardsEffects.frozen.effect, new FrozenRenderer());
+        CustomModelStatusEffect.register(WizardsEffects.frostShield.effect, new FrostShieldRenderer());
         registerArmorRenderer(Armors.wizardRobeSet, WizardArmorRenderer::wizard);
         registerArmorRenderer(Armors.arcaneRobeSet, WizardArmorRenderer::arcane);
         registerArmorRenderer(Armors.fireRobeSet, WizardArmorRenderer::fire);

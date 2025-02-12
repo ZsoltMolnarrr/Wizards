@@ -3,7 +3,7 @@ package net.wizards.mixin.effect;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.registry.tag.DamageTypeTags;
-import net.wizards.effect.Effects;
+import net.wizards.effect.WizardsEffects;
 import net.wizards.effect.FrostShielded;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -55,7 +55,7 @@ public abstract class LivingEntityFrostShield implements FrostShielded {
     @Inject(method = "baseTick", at = @At("TAIL"))
     private void baseTick_TAIL_FrostShield(CallbackInfo ci) {
         var entity = (LivingEntity) ((Object)this);
-        hasFrostShield = entity.hasStatusEffect(Effects.frostShield.registryEntry);
+        hasFrostShield = entity.hasStatusEffect(WizardsEffects.frostShield.entry);
         if (hasFrostShield && entity.isOnFire()) {
             entity.extinguish();
         }
