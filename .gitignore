@@ -120,3 +120,4 @@ forge/run/
 !gradle-wrapper.jar
 
 *.blend1
+src/main/generated/.cache
