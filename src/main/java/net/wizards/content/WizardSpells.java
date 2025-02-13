@@ -42,7 +42,7 @@ public class WizardSpells {
                         SpellEngineParticles.MagicParticleFamily.Motion.ASCEND
                 ).id().toString(),
                 ParticleBatch.Shape.WIDE_PIPE, ParticleBatch.Origin.FEET,
-                null, 1, 0.05F, 0.1F, 0.0F, 0F);
+                1, 0.05F, 0.1F);
     }
 
     private static Spell.Impact damage(float coefficient, float knockback) {

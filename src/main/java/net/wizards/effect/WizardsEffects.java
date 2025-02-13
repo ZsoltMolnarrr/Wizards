@@ -7,6 +7,7 @@ import net.minecraft.util.Identifier;
 import net.spell_engine.api.config.AttributeModifier;
 import net.spell_engine.api.config.ConfigFile;
 import net.spell_engine.api.config.EffectConfig;
+import net.spell_engine.api.effect.CustomStatusEffect;
 import net.spell_engine.api.effect.Effects;
 import net.spell_engine.api.effect.RemoveOnHit;
 import net.spell_engine.api.effect.Synchronized;
