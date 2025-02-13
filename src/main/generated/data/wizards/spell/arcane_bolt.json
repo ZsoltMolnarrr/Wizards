@@ -3,37 +3,21 @@
   "range": 48.0,
   "group": "primary",
   "tier": 0,
-  "sub_tier": 1,
-  "type": "ACTIVE",
   "active": {
     "cast": {
-      "haste_affected": true,
       "duration": 1.0,
-      "channel_ticks": 0,
       "animation": "spell_engine:one_handed_projectile_charge",
-      "animation_pitch": true,
-      "animates_ranged_weapon": false,
-      "movement_speed": 0.2,
       "sound": {
         "id": "spell_engine:generic_arcane_casting",
-        "volume": 1.0,
-        "pitch": 1.0,
         "randomness": 0.0
       },
       "particles": [
         {
           "particle_id": "spell_engine:magic_arcane_spell_ascend",
           "origin": "FEET",
-          "roll": 0.0,
-          "roll_offset": 0.0,
           "shape": "WIDE_PIPE",
-          "count": 1.0,
           "min_speed": 0.05,
-          "max_speed": 0.1,
-          "angle": 0.0,
-          "extent": 0.0,
-          "pre_spawn_travel": 0.0,
-          "invert": false
+          "max_speed": 0.1
         }
       ]
     }
@@ -41,75 +25,31 @@
   "release": {
     "animation": "spell_engine:one_handed_projectile_release",
     "sound": {
-      "id": "wizards:arcane_missile_release",
-      "volume": 1.0,
-      "pitch": 1.0,
-      "randomness": 0.1
+      "id": "wizards:arcane_missile_release"
     }
   },
   "target": {
     "type": "AIM",
-    "cap": 0,
-    "aim": {
-      "required": false,
-      "sticky": false,
-      "use_caster_as_fallback": false
-    }
+    "aim": {}
   },
   "deliver": {
     "type": "PROJECTILE",
     "projectile": {
-      "inherit_shooter_velocity": false,
-      "direction_offsets_require_target": false,
-      "direct_towards_target": false,
-      "launch_properties": {
-        "velocity": 1.0,
-        "extra_launch_count": 0,
-        "extra_launch_delay": 2
-      },
       "projectile": {
-        "divergence": 0.0,
-        "homing_angle": 1.0,
-        "homing_after_absolute_distance": 0.0,
-        "homing_after_relative_distance": 0.0,
-        "travel_sound_interval": 20,
-        "perks": {
-          "ricochet": 0,
-          "ricochet_range": 5.0,
-          "bounce": 0,
-          "bounce_ricochet_sync": true,
-          "pierce": 0,
-          "chain_reaction_size": 0,
-          "chain_reaction_triggers": 1,
-          "chain_reaction_increment": -1
-        },
         "client_data": {
           "light_level": 10,
           "travel_particles": [
             {
               "particle_id": "spell_engine:magic_arcane_spell_ascend",
-              "origin": "CENTER",
-              "rotation": "LOOK",
-              "roll": 0.0,
-              "roll_offset": 0.0,
               "shape": "CIRCLE",
-              "count": 1.0,
+              "rotation": "LOOK",
               "min_speed": 0.05,
-              "max_speed": 0.1,
-              "angle": 0.0,
-              "extent": 0.0,
-              "pre_spawn_travel": 0.0,
-              "invert": false
+              "max_speed": 0.1
             }
           ],
           "model": {
-            "use_held_item": false,
             "model_id": "wizards:projectile/arcane_bolt",
-            "light_emission": "GLOW",
-            "scale": 0.5,
-            "rotate_degrees_per_tick": 2.0,
-            "rotate_degrees_offset": 0.0,
-            "orientation": "TOWARDS_MOTION"
+            "scale": 0.5
           }
         }
       }
@@ -117,14 +57,9 @@
   },
   "impacts": [
     {
-      "target_modifiers": [],
       "action": {
         "type": "DAMAGE",
-        "apply_to_caster": false,
-        "min_power": 1.0,
-        "max_power": 999999.0,
         "damage": {
-          "bypass_iframes": true,
           "spell_power_coefficient": 0.7,
           "knockback": 0.6
         }
@@ -132,40 +67,20 @@
       "particles": [
         {
           "particle_id": "spell_engine:magic_arcane_impact_burst",
-          "origin": "CENTER",
-          "roll": 0.0,
-          "roll_offset": 0.0,
           "shape": "SPHERE",
           "count": 20.0,
           "min_speed": 0.2,
-          "max_speed": 0.7,
-          "angle": 0.0,
-          "extent": 0.0,
-          "pre_spawn_travel": 0.0,
-          "invert": false
+          "max_speed": 0.7
         }
       ],
       "sound": {
-        "id": "wizards:arcane_missile_impact",
-        "volume": 1.0,
-        "pitch": 1.0,
-        "randomness": 0.1
+        "id": "wizards:arcane_missile_impact"
       }
     }
   ],
   "cost": {
-    "exhaust": 0.1,
-    "durability": 1,
-    "cooldown": {
-      "duration": 0.0,
-      "proportional": false,
-      "haste_affected": true,
-      "hosting_item": true
-    },
     "item": {
-      "id": "runes:arcane_stone",
-      "amount": 1,
-      "consume": true
+      "id": "runes:arcane_stone"
     }
   }
 }
