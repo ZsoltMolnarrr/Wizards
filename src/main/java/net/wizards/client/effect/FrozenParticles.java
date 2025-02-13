@@ -4,6 +4,7 @@ import net.minecraft.entity.LivingEntity;
 import net.spell_engine.api.effect.CustomParticleStatusEffect;
 import net.spell_engine.api.spell.fx.ParticleBatch;
 import net.spell_engine.fx.ParticleHelper;
+import net.spell_engine.fx.SpellEngineParticles;
 
 public class FrozenParticles implements CustomParticleStatusEffect.Spawner {
 
@@ -11,7 +12,11 @@ public class FrozenParticles implements CustomParticleStatusEffect.Spawner {
 
     public FrozenParticles(int particleCount) {
         this.particles = new ParticleBatch(
-                "spell_engine:frost_hit",
+                SpellEngineParticles.getMagicParticleVariant(
+                        SpellEngineParticles.FROST,
+                        SpellEngineParticles.MagicParticleFamily.Shape.IMPACT,
+                        SpellEngineParticles.MagicParticleFamily.Motion.BURST
+                ).id().toString(),
                 ParticleBatch.Shape.SPHERE,
                 ParticleBatch.Origin.CENTER,
                 null,

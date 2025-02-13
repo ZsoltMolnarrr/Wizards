@@ -27,7 +27,7 @@
         },
         {
           "particle_id": "firework",
-          "shape": "PIPE",
+          "shape": "WIDE_PIPE",
           "rotation": "LOOK",
           "origin": "LAUNCH_POINT",
           "count": 0.5,

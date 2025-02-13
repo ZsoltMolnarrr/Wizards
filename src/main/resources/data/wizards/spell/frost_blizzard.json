@@ -15,7 +15,7 @@
       "particles": [
         {
           "particle_id": "spell_engine:snowflake",
-          "shape": "PIPE",
+          "shape": "WIDE_PIPE",
           "origin": "CENTER",
           "count": 0.5,
           "min_speed": 0.1,
@@ -79,15 +79,23 @@
   },
   "impacts": [
     {
-      "target_conditions": [
+      "target_modifiers": [
         {
-          "entity_type": "#minecraft:freeze_hurts_extra_types",
+          "conditions": [
+            {
+              "entity_type": "#minecraft:freeze_hurts_extra_types"
+            }
+          ],
           "modifier": {
             "power_multiplier": 0.3
           }
         },
         {
-          "entity_type": "#minecraft:freeze_immune_entity_types",
+          "conditions": [
+            {
+              "entity_type": "#minecraft:freeze_immune_entity_types"
+            }
+          ],
           "modifier": {
             "power_multiplier": -0.3
           }
@@ -105,12 +113,6 @@
       }
     },
     {
-      "target_conditions": [
-        {
-          "entity_type": "#c:bosses",
-          "allow_action": false
-        }
-      ],
       "action": {
         "type": "STATUS_EFFECT",
         "status_effect": {
