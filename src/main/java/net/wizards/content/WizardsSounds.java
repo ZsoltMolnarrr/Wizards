@@ -1,4 +1,4 @@
-package net.wizards.util;
+package net.wizards.content;
 
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;

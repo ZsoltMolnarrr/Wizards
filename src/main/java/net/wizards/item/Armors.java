@@ -15,7 +15,7 @@ import net.spell_engine.api.item.armor.Armor;
 import net.spell_power.api.SpellPowerMechanics;
 import net.spell_power.api.SpellSchools;
 import net.wizards.WizardsMod;
-import net.wizards.util.WizardsSounds;
+import net.wizards.content.WizardsSounds;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -5,7 +5,7 @@ import net.minecraft.entity.EntityStatuses;
 import net.minecraft.server.world.ServerWorld;
 import net.wizards.effect.FrostShielded;
 import net.wizards.util.SoundHelper;
-import net.wizards.util.WizardsSounds;
+import net.wizards.content.WizardsSounds;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;

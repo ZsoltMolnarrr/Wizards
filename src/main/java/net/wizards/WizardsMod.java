@@ -16,7 +16,7 @@ import net.wizards.item.Armors;
 import net.wizards.item.Group;
 import net.wizards.item.Weapons;
 import net.wizards.item.WizardBooks;
-import net.wizards.util.WizardsSounds;
+import net.wizards.content.WizardsSounds;
 import net.wizards.villager.WizardVillagers;
 
 public class WizardsMod implements ModInitializer {

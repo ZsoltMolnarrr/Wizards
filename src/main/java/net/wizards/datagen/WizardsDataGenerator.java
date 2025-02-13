@@ -5,8 +5,10 @@ import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.minecraft.registry.RegistryWrapper;
 import net.spell_engine.api.data_gen.SimpleSoundGenerator;
+import net.spell_engine.api.data_gen.SpellGenerator;
 import net.wizards.WizardsMod;
-import net.wizards.util.WizardsSounds;
+import net.wizards.content.WizardSpells;
+import net.wizards.content.WizardsSounds;
 
 import java.util.concurrent.CompletableFuture;
 
@@ -15,6 +17,20 @@ public class WizardsDataGenerator implements DataGeneratorEntrypoint {
     public void onInitializeDataGenerator(FabricDataGenerator fabricDataGenerator) {
         FabricDataGenerator.Pack pack = fabricDataGenerator.createPack();
         pack.addProvider(SoundGen::new);
+        pack.addProvider(SpellGen::new);
+    }
+
+    public static class SpellGen extends SpellGenerator {
+        public SpellGen(FabricDataOutput dataOutput, CompletableFuture<RegistryWrapper.WrapperLookup> registryLookup) {
+            super(dataOutput, registryLookup);
+        }
+
+        @Override
+        public void generateSpells(Builder builder) {
+            for (var entry: WizardSpells.entries) {
+                builder.add(entry.id(), entry.spell());
+            }
+        }
     }
 
     public static class SoundGen extends SimpleSoundGenerator {
