@@ -49,9 +49,9 @@ dependencies {
     include(modImplementation("maven.modrinth:structure-pool-api:${project.structure_pool_api_version}"))
     modImplementation("maven.modrinth:runes:${project.runes_version}")
 
-//    modImplementation("maven.modrinth:spell-engine:${project.spell_engine_version}")
+    modImplementation("maven.modrinth:spell-engine:${project.spell_engine_version}")
     modImplementation("maven.modrinth:spell-power:${project.spell_power_version}")
-    modImplementation(files("run/mods/dev/spell_engine-${project.spell_engine_version}.jar"))
+//    modImplementation(files("run/mods/dev/spell_engine-${project.spell_engine_version}.jar"))
 //    modImplementation(files("run/mods/dev/spell_power-${project.spell_power_version}.jar"))
     modImplementation("dev.emi:trinkets:${project.trinkets_version}")
     modImplementation("dev.kosmx.player-anim:player-animation-lib-fabric:${project.player_anim_version}")
