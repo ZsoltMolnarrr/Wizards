@@ -123,5 +123,12 @@
     "sounds": [
       "wizards:frost_shield_release"
     ]
+  },
+  "wizard_robes_equip": {
+    "sounds": [
+      "wizards:wizard_robes_equip_1",
+      "wizards:wizard_robes_equip_2",
+      "wizards:wizard_robes_equip_3"
+    ]
   }
 }
