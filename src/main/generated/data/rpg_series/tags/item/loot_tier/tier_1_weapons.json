@@ -1,0 +1,8 @@
+{
+  "values": [
+    {
+      "id": "wizards:staff_wizard",
+      "required": false
+    }
+  ]
+}

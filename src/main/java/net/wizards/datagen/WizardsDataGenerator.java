@@ -6,9 +6,12 @@ import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.minecraft.registry.RegistryWrapper;
 import net.spell_engine.api.datagen.SimpleSoundGeneratorV2;
 import net.spell_engine.api.datagen.SpellGenerator;
+import net.spell_engine.rpg_series.datagen.RPGSeriesDataGen;
 import net.wizards.WizardsMod;
 import net.wizards.content.WizardSpells;
 import net.wizards.content.WizardsSounds;
+import net.wizards.item.Armors;
+import net.wizards.item.Weapons;
 
 import java.util.concurrent.CompletableFuture;
 
@@ -18,6 +21,19 @@ public class WizardsDataGenerator implements DataGeneratorEntrypoint {
         FabricDataGenerator.Pack pack = fabricDataGenerator.createPack();
         pack.addProvider(SoundGen::new);
         pack.addProvider(SpellGen::new);
+        pack.addProvider(ItemTagGenerator::new);
+    }
+
+    public static class ItemTagGenerator extends RPGSeriesDataGen.ItemTagGenerator {
+        public ItemTagGenerator(FabricDataOutput output, CompletableFuture<RegistryWrapper.WrapperLookup> registriesFuture) {
+            super(output, registriesFuture);
+        }
+
+        @Override
+        protected void configure(RegistryWrapper.WrapperLookup wrapperLookup) {
+            generateWeaponTags(Weapons.entries);
+            generateArmorTags(Armors.entries);
+        }
     }
 
     public static class SpellGen extends SpellGenerator {

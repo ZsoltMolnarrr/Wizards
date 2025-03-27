@@ -52,6 +52,17 @@
         "min_speed": 0.5,
         "max_speed": 0.9
       }
+    ],
+    "particles_scaled_with_ranged": [
+      {
+        "particle_id": "spell_engine:area_effect_293",
+        "origin": "GROUND",
+        "shape": "SPHERE",
+        "count": 1.0,
+        "max_speed": 0.0,
+        "scale": 0.8,
+        "color_rgba": 2582052863
+      }
     ]
   },
   "impacts": [

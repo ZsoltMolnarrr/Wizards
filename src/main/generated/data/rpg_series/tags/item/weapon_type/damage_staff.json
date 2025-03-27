@@ -1,0 +1,76 @@
+{
+  "values": [
+    {
+      "id": "wizards:wand_novice",
+      "required": false
+    },
+    {
+      "id": "wizards:wand_arcane",
+      "required": false
+    },
+    {
+      "id": "wizards:wand_fire",
+      "required": false
+    },
+    {
+      "id": "wizards:wand_frost",
+      "required": false
+    },
+    {
+      "id": "wizards:wand_netherite_arcane",
+      "required": false
+    },
+    {
+      "id": "wizards:wand_netherite_fire",
+      "required": false
+    },
+    {
+      "id": "wizards:wand_netherite_frost",
+      "required": false
+    },
+    {
+      "id": "wizards:staff_wizard",
+      "required": false
+    },
+    {
+      "id": "wizards:staff_arcane",
+      "required": false
+    },
+    {
+      "id": "wizards:staff_fire",
+      "required": false
+    },
+    {
+      "id": "wizards:staff_frost",
+      "required": false
+    },
+    {
+      "id": "wizards:staff_netherite_arcane",
+      "required": false
+    },
+    {
+      "id": "wizards:staff_netherite_fire",
+      "required": false
+    },
+    {
+      "id": "wizards:staff_netherite_frost",
+      "required": false
+    },
+    {
+      "id": "wizards:staff_ruby_fire",
+      "required": false
+    },
+    {
+      "id": "wizards:staff_crystal_arcane",
+      "required": false
+    },
+    {
+      "id": "wizards:staff_smaragdant_frost",
+      "required": false
+    },
+    {
+      "id": "wizards:aether_wizard_staff",
+      "required": false
+    }
+  ]
+}

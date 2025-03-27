@@ -3,6 +3,7 @@ package net.wizards;
 import net.fabric_extras.structure_pool.api.StructurePoolConfig;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.item.ItemStack;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
@@ -51,8 +52,12 @@ public class WizardsMod implements ModInitializer {
     public void onInitialize() {
         equipmentConfig.refresh();
         effectsConfig.refresh();
-        tweaksConfig.refresh();
         villageConfig.refresh();
+        tweaksConfig.refresh();
+        if (FabricLoader.getInstance().isDevelopmentEnvironment()) {
+            tweaksConfig.value.ignore_items_required_mods = true;
+        }
+
         WizardsSounds.register();
         Group.WIZARDS = FabricItemGroup.builder()
                 .icon(() -> new ItemStack(Armors.wizardRobeSet.head))
