@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_staff_fire": {
+      "conditions": {
+        "items": [
+          {
+            "items": "wizards:staff_fire"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "minecraft:blaze_powder_from_blasting_staff_fire"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_staff_fire"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "minecraft:blaze_powder_from_blasting_staff_fire"
+    ]
+  }
+}

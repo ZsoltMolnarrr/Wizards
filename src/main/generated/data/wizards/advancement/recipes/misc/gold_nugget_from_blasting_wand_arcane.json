@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "minecraft:gold_nugget_from_blasting_wand_arcane"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    },
+    "has_wand_arcane": {
+      "conditions": {
+        "items": [
+          {
+            "items": "wizards:wand_arcane"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_wand_arcane"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "minecraft:gold_nugget_from_blasting_wand_arcane"
+    ]
+  }
+}

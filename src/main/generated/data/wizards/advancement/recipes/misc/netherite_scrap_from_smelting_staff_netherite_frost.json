@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_staff_netherite_frost": {
+      "conditions": {
+        "items": [
+          {
+            "items": "wizards:staff_netherite_frost"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "minecraft:netherite_scrap_from_smelting_staff_netherite_frost"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_staff_netherite_frost"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "minecraft:netherite_scrap_from_smelting_staff_netherite_frost"
+    ]
+  }
+}

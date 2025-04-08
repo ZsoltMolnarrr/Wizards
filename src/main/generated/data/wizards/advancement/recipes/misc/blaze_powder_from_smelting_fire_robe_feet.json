@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_fire_robe_feet": {
+      "conditions": {
+        "items": [
+          {
+            "items": "wizards:fire_robe_feet"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "minecraft:blaze_powder_from_smelting_fire_robe_feet"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_fire_robe_feet"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "minecraft:blaze_powder_from_smelting_fire_robe_feet"
+    ]
+  }
+}

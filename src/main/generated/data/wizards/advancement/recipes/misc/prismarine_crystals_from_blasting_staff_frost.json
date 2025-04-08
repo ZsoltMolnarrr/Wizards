@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_staff_frost": {
+      "conditions": {
+        "items": [
+          {
+            "items": "wizards:staff_frost"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "minecraft:prismarine_crystals_from_blasting_staff_frost"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_staff_frost"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "minecraft:prismarine_crystals_from_blasting_staff_frost"
+    ]
+  }
+}

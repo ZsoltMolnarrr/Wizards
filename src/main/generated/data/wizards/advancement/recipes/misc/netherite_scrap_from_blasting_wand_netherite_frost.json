@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "minecraft:netherite_scrap_from_blasting_wand_netherite_frost"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    },
+    "has_wand_netherite_frost": {
+      "conditions": {
+        "items": [
+          {
+            "items": "wizards:wand_netherite_frost"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_wand_netherite_frost"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "minecraft:netherite_scrap_from_blasting_wand_netherite_frost"
+    ]
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_staff_arcane": {
+      "conditions": {
+        "items": [
+          {
+            "items": "wizards:staff_arcane"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "minecraft:amethyst_shard_from_smelting_staff_arcane"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_staff_arcane"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "minecraft:amethyst_shard_from_smelting_staff_arcane"
+    ]
+  }
+}

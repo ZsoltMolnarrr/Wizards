@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:smelting",
+  "category": "misc",
+  "cookingtime": 300,
+  "experience": 0.1,
+  "group": "disassemble",
+  "ingredient": {
+    "item": "wizards:netherite_frost_robe_chest"
+  },
+  "result": {
+    "id": "minecraft:netherite_scrap"
+  }
+}

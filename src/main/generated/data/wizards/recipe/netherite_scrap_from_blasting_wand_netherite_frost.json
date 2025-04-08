@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:blasting",
+  "category": "misc",
+  "cookingtime": 150,
+  "experience": 0.1,
+  "group": "disassemble",
+  "ingredient": {
+    "item": "wizards:wand_netherite_frost"
+  },
+  "result": {
+    "id": "minecraft:netherite_scrap"
+  }
+}
