@@ -1,3 +1,8 @@
+# 2.4.3
+
+- Add Wizard trade advancement
+- Add smelting recipes for disassembling archer weapons and armor pieces
+
 # 2.4.2
 
 - Update to Spell Engine 1.6

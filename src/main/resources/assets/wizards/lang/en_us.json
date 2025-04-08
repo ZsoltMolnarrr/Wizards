@@ -130,6 +130,9 @@
   "advancements.rpg_series.obtain_frost_rune.title": "Path of Frost",
   "advancements.rpg_series.obtain_frost_rune.description": "Obtain a Frost Rune",
 
+  "advancements.rpg_series.trade_with_wizard.title": "Magic Sale",
+  "advancements.rpg_series.trade_with_wizard.description": "Trade with a Wizard Merchant villager",
+
   "entity.minecraft.villager.wizard_merchant": "Wizard Merchant",
   "entity.minecraft.villager.wizards:wizard_merchant": "Wizard Merchant"
 }
