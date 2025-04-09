@@ -1,6 +1,8 @@
 # 2.4.5
 
+- Fix trade advancement
 - Wands now use different classification tag
+- Add spell casting advancements
 
 # 2.4.4
 

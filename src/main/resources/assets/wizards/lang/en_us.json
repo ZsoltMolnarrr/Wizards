@@ -130,6 +130,21 @@
   "advancements.rpg_series.obtain_frost_rune.title": "Path of Frost",
   "advancements.rpg_series.obtain_frost_rune.description": "Obtain a Frost Rune",
 
+  "advancements.rpg_series.spell_cast_arcane_wand.title": "Arcane Practice",
+  "advancements.rpg_series.spell_cast_arcane_wand.description": "Cast a spell with an Arcane Wand",
+  "advancements.rpg_series.spell_cast_fire_wand.title": "Fiery Practice",
+  "advancements.rpg_series.spell_cast_fire_wand.description": "Cast a spell with a Fire Wand",
+  "advancements.rpg_series.spell_cast_frost_wand.title": "Frosty Practice",
+  "advancements.rpg_series.spell_cast_frost_wand.description": "Cast a spell with a Frost Wand",
+
+  "advancements.rpg_series.spell_cast_arcane_book.title": "Arcane Empowerment",
+  "advancements.rpg_series.spell_cast_arcane_book.description": "Cast a spell from the Arcane Tome",
+  "advancements.rpg_series.spell_cast_fire_book.title": "Fire Empowerment",
+  "advancements.rpg_series.spell_cast_fire_book.description": "Cast a spell from the Fire Tome",
+  "advancements.rpg_series.spell_cast_frost_book.title": "Frost Empowerment",
+  "advancements.rpg_series.spell_cast_frost_book.description": "Cast a spell from the Frost Tome",
+
+
   "advancements.rpg_series.trade_with_wizard.title": "Magic Sale",
   "advancements.rpg_series.trade_with_wizard.description": "Trade with a Wizard Merchant villager",
 

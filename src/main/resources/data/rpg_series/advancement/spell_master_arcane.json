@@ -1,7 +1,7 @@
 {
   "display": {
     "icon": {
-      "id": "wizards:staff_arcane"
+      "id": "wizards:staff_netherite_arcane"
     },
     "title": {
       "translate": "advancements.rpg_series.spell_master_arcane.title"

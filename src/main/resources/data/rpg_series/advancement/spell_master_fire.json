@@ -1,7 +1,7 @@
 {
   "display": {
     "icon": {
-      "id": "wizards:staff_fire"
+      "id": "wizards:staff_netherite_fire"
     },
     "title": {
       "translate": "advancements.rpg_series.spell_master_fire.title"

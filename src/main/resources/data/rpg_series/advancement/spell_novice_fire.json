@@ -1,7 +1,7 @@
 {
   "display": {
     "icon": {
-      "id": "wizards:wand_fire"
+      "id": "wizards:staff_fire"
     },
     "title": {
       "translate": "advancements.rpg_series.spell_novice_fire.title"
