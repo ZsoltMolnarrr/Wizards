@@ -1,3 +1,7 @@
+# 2.4.4
+
+- Fix some disassembly smelting recipes
+
 # 2.4.3
 
 - Add Wizard trade advancement

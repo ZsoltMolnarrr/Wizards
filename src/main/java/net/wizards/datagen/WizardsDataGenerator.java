@@ -95,7 +95,7 @@ public class WizardsDataGenerator implements DataGeneratorEntrypoint {
                     List.of(Weapons.arcaneWand.item(), Weapons.fireWand.item()),
                     Items.GOLD_NUGGET);
             disassemble(exporter,
-                    List.of(Weapons.frostWand.item(), Weapons.fireWand.item()),
+                    List.of(Weapons.frostWand.item()),
                     Items.IRON_NUGGET);
 
             disassemble(exporter,
