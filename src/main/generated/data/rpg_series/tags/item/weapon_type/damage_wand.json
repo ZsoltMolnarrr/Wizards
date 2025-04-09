@@ -1,0 +1,32 @@
+{
+  "values": [
+    {
+      "id": "wizards:wand_novice",
+      "required": false
+    },
+    {
+      "id": "wizards:wand_arcane",
+      "required": false
+    },
+    {
+      "id": "wizards:wand_fire",
+      "required": false
+    },
+    {
+      "id": "wizards:wand_frost",
+      "required": false
+    },
+    {
+      "id": "wizards:wand_netherite_arcane",
+      "required": false
+    },
+    {
+      "id": "wizards:wand_netherite_fire",
+      "required": false
+    },
+    {
+      "id": "wizards:wand_netherite_frost",
+      "required": false
+    }
+  ]
+}

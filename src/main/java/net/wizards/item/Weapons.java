@@ -22,12 +22,8 @@ import java.util.function.Supplier;
 public class Weapons {
     public static final ArrayList<Weapon.Entry> entries = new ArrayList<>();
 
-    private static Weapon.Entry entry(String name, Weapon.CustomMaterial material, Weapon.Factory factory, WeaponConfig defaults) {
-        return entry(null, name, material, factory, defaults);
-    }
-
-    private static Weapon.Entry entry(String requiredMod, String name, Weapon.CustomMaterial material, Weapon.Factory factory, WeaponConfig defaults) {
-        var entry = new Weapon.Entry(WizardsMod.ID, name, material, factory, defaults, Equipment.WeaponType.DAMAGE_STAFF);
+    private static Weapon.Entry entry(String name, Weapon.CustomMaterial material, Weapon.Factory factory, WeaponConfig defaults, Equipment.WeaponType category) {
+        var entry = new Weapon.Entry(WizardsMod.ID, name, material, factory, defaults, category);
         if (entry.isRequiredModInstalled()) {
             entries.add(entry);
         }
@@ -58,7 +54,7 @@ public class Weapons {
     private static final float wandAttackDamage = 2;
     private static final float wandAttackSpeed = -2.4F;
     private static Weapon.Entry wand(String name, Weapon.CustomMaterial material) {
-        return entry(name, material, StaffItem::new, new WeaponConfig(wandAttackDamage, wandAttackSpeed));
+        return entry(name, material, StaffItem::new, new WeaponConfig(wandAttackDamage, wandAttackSpeed), Equipment.WeaponType.DAMAGE_WAND);
     }
 
     public static final Weapon.Entry noviceWand = wand("wand_novice",
@@ -98,11 +94,7 @@ public class Weapons {
     private static final float staffAttackSpeed = -3F;
 
     private static Weapon.Entry staff(String name, Weapon.CustomMaterial material) {
-        return staff(null, name, material);
-    }
-
-    private static Weapon.Entry staff(String requiredMod, String name, Weapon.CustomMaterial material) {
-        return entry(requiredMod, name, material, StaffItem::new, new WeaponConfig(staffAttackDamage, staffAttackSpeed));
+        return entry(name, material, StaffItem::new, new WeaponConfig(staffAttackDamage, staffAttackSpeed), Equipment.WeaponType.DAMAGE_STAFF);
     }
 
     public static final Weapon.Entry wizardStaff = staff("staff_wizard",

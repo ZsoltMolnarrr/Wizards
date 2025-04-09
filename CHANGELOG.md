@@ -1,3 +1,7 @@
+# 2.4.5
+
+- Wands now use different classification tag
+
 # 2.4.4
 
 - Fix some disassembly smelting recipes
