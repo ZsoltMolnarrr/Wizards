@@ -102,27 +102,27 @@ public class WizardVillagers {
 
         LinkedHashMap<Integer, List<TradeOffers.Factory>> trades = new LinkedHashMap<>();
         trades.put(1, List.of(
-                new TradeOffers.SellItemFactory(RuneItems.get(RuneItems.RuneType.ARCANE), 2, 8, 128, 1, 0.01f),
-                new TradeOffers.SellItemFactory(RuneItems.get(RuneItems.RuneType.FIRE), 2, 8, 128, 1, 0.01f),
-                new TradeOffers.SellItemFactory(RuneItems.get(RuneItems.RuneType.FROST), 2, 8, 128, 1, 0.01f)
+                new TradeOffers.SellItemFactory(RuneItems.get(RuneItems.RuneType.ARCANE), 2, 8, 128, 3, 0.1f),
+                new TradeOffers.SellItemFactory(RuneItems.get(RuneItems.RuneType.FIRE), 2, 8, 128, 3, 0.1f),
+                new TradeOffers.SellItemFactory(RuneItems.get(RuneItems.RuneType.FROST), 2, 8, 128, 3, 0.1f)
         ));
         trades.put(2, List.of(
-                new TradeOffers.SellItemFactory(Weapons.wizardStaff.item(), 4, 1, 12, 8),
-                new TradeOffers.SellItemFactory(Weapons.noviceWand.item(), 4, 1, 12, 8),
-                new TradeOffers.SellItemFactory(Weapons.arcaneWand.item(), 18, 1, 12, 8),
-                new TradeOffers.SellItemFactory(Weapons.fireWand.item(), 18, 1, 12, 8),
-                new TradeOffers.SellItemFactory(Weapons.frostWand.item(), 18, 1, 12, 8),
+                new TradeOffers.SellItemFactory(Weapons.wizardStaff.item(), 4, 1, 12, 18),
+                new TradeOffers.SellItemFactory(Weapons.noviceWand.item(), 4, 1, 12, 18),
+                new TradeOffers.SellItemFactory(Weapons.arcaneWand.item(), 18, 1, 12, 18),
+                new TradeOffers.SellItemFactory(Weapons.fireWand.item(), 18, 1, 12, 18),
+                new TradeOffers.SellItemFactory(Weapons.frostWand.item(), 18, 1, 12, 18),
 
-                new TradeOffers.BuyItemFactory(Items.WHITE_WOOL, 5, 12, 5, 8),
-                new TradeOffers.BuyItemFactory(Items.LAPIS_LAZULI, 6, 3, 5, 12)
+                new TradeOffers.BuyItemFactory(Items.WHITE_WOOL, 5, 12, 5, 18),
+                new TradeOffers.BuyItemFactory(Items.LAPIS_LAZULI, 6, 3, 5, 22)
         ));
         trades.put(3, List.of(
-                new TradeOffers.SellItemFactory(Armors.wizardRobeSet.head, 15, 1, 12, 13, 0.1F),
-                new TradeOffers.SellItemFactory(Armors.wizardRobeSet.feet, 15, 1, 12, 13, 0.1F)
+                new TradeOffers.SellItemFactory(Armors.wizardRobeSet.head, 15, 1, 12, 16, 0.1F),
+                new TradeOffers.SellItemFactory(Armors.wizardRobeSet.feet, 15, 1, 12, 16, 0.1F)
         ));
         trades.put(4, List.of(
-                new TradeOffers.SellItemFactory(Armors.wizardRobeSet.chest, 20, 1, 12, 15, 0.1F),
-                new TradeOffers.SellItemFactory(Armors.wizardRobeSet.legs, 20, 1, 12, 15, 0.1F)
+                new TradeOffers.SellItemFactory(Armors.wizardRobeSet.chest, 20, 1, 12, 16, 0.1F),
+                new TradeOffers.SellItemFactory(Armors.wizardRobeSet.legs, 20, 1, 12, 16, 0.1F)
         ));
 
         for (var entry: trades.entrySet()) {

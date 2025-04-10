@@ -1,3 +1,7 @@
+# 2.4.6
+
+- Rebalance villager trades
+
 # 2.4.5
 
 - Fix trade advancement
