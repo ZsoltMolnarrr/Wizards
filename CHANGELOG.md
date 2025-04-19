@@ -1,3 +1,7 @@
+# 2.4.7
+
+- Add spell scroll textures 
+
 # 2.4.6
 
 - Rebalance villager trades

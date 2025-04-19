@@ -113,8 +113,8 @@ public class WizardVillagers {
                 new TradeOffers.SellItemFactory(Weapons.fireWand.item(), 18, 1, 12, 18),
                 new TradeOffers.SellItemFactory(Weapons.frostWand.item(), 18, 1, 12, 18),
 
-                new TradeOffers.BuyItemFactory(Items.WHITE_WOOL, 5, 12, 5, 18),
-                new TradeOffers.BuyItemFactory(Items.LAPIS_LAZULI, 6, 3, 5, 22)
+                new TradeOffers.BuyItemFactory(Items.WHITE_WOOL, 10, 12, 5, 6),
+                new TradeOffers.BuyItemFactory(Items.LAPIS_LAZULI, 6, 3, 5, 12)
         ));
         trades.put(3, List.of(
                 new TradeOffers.SellItemFactory(Armors.wizardRobeSet.head, 15, 1, 12, 16, 0.1F),
