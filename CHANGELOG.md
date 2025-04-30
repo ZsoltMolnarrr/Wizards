@@ -1,3 +1,7 @@
+# 2.4.9
+
+- Update enchant compatibility tags
+
 # 2.4.8
 
 - AzureLib Armor version requirement (fabric.mod.json)
