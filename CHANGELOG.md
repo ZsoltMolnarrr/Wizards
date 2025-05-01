@@ -1,6 +1,7 @@
 # 2.4.9
 
 - Update enchant compatibility tags
+- Update translations
 
 # 2.4.8
 
