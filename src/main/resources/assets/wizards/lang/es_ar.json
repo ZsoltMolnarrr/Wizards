@@ -1,5 +1,5 @@
 {
-  "itemGroup.wizards.general": "Magos",
+  "itemGroup.wizards.general": "Wizards",
 
   "item.wizards.arcane_spell_book": "Tomo Arcano",
   "item.wizards.fire_spell_book": "Tomo de Fuego",
@@ -96,7 +96,7 @@
   "effect.wizards.frost_shield": "Escudo de Escarcha",
   "effect.wizards.frost_shield.description": "Bloquea ataques entrantes mientras está activo, pero reduce la velocidad de movimiento",
   "spell.wizards.frost_blizzard.name": "Ventisca",
-  "spell.wizards.frost_blizzard.description": "Lanza una lluvia de fragmentos de escarcha sobre el objetivo y enemigos cercanos, causando hasta {damage} de daño y ralentizándolos en un radio de {impact_range} bloques."
+  "spell.wizards.frost_blizzard.description": "Lanza una lluvia de fragmentos de escarcha sobre el objetivo y enemigos cercanos, causando hasta {damage} de daño y ralentizándolos en un radio de {impact_range} bloques.",
 
   "advancements.rpg_series.path_choose_arcane.title": "Camino Arcano",
   "advancements.rpg_series.path_choose_arcane.description": "Crear un Tomo Arcano",
