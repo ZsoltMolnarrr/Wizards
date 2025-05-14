@@ -41,7 +41,7 @@
       },
       "projectile": {
         "perks": {
-          "pierce": 1
+          "bounce": 2
         },
         "client_data": {
           "travel_particles": [

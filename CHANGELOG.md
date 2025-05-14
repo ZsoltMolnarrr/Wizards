@@ -1,3 +1,7 @@
+# 2.4.10
+
+- Frost Shard now bounces instead of piercing
+
 # 2.4.9
 
 - Update enchant compatibility tags
