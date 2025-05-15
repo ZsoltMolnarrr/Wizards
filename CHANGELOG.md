@@ -1,3 +1,7 @@
+# 2.4.12
+
+- Fix Arcane Blast description
+
 # 2.4.11
 
 - Update to latest Spell Engine
