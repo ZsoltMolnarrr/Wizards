@@ -75,7 +75,8 @@
         "status_effect": {
           "apply_mode": "ADD",
           "duration": 10,
-          "amplifier": 2,
+          "amplifier": 1,
+          "amplifier_cap": 2,
           "effect_id": "wizards:arcane_charge",
           "show_particles": false
         },

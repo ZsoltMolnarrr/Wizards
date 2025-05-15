@@ -116,8 +116,10 @@
           "effect_id": "wizards:frozen",
           "duration": 6,
           "apply_mode": "ADD",
+          "amplifier": 1,
+          "amplifier_cap": 9,
           "apply_limit": {
-            "health_base": 50,
+            "health_base": 60,
             "spell_power_multiplier": 4
           },
           "show_particles": false
