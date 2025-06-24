@@ -92,7 +92,7 @@ public class WizardsEffects {
     ));
 
     public static void register(ConfigFile.Effects config) {
-        RemoveOnHit.configure(frozen.effect, true);
+        RemoveOnHit.configure(frozen.effect, RemoveOnHit.Mode.DIRECT_HIT);
         Synchronized.configure(frostSlowness.effect, true);
         Synchronized.configure(frozen.effect, true);
         Synchronized.configure(frostShield.effect, true);

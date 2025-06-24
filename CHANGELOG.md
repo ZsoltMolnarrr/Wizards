@@ -1,3 +1,7 @@
+# 2.5.0
+
+- Frozen status effect now only removed upon direct hit
+
 # 2.4.12
 
 - Fix Arcane Blast description
