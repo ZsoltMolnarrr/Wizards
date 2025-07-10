@@ -34,12 +34,12 @@ public class WizardsEffects {
                     List.of(
                             new AttributeModifier(
                                     EntityAttributes.GENERIC_MOVEMENT_SPEED.getIdAsString(),
-                                    -1F,
+                                    -10,
                                     EntityAttributeModifier.Operation.ADD_MULTIPLIED_BASE
                             ),
                             new AttributeModifier(
                                     EntityAttributes.GENERIC_JUMP_STRENGTH.getIdAsString(),
-                                    -1F,
+                                    -10,
                                     EntityAttributeModifier.Operation.ADD_MULTIPLIED_BASE
                             )
                     )
