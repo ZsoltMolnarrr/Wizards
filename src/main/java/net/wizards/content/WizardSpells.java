@@ -1,6 +1,7 @@
 package net.wizards.content;
 
 import net.minecraft.util.Identifier;
+import net.spell_engine.api.datagen.SpellBuilder;
 import net.spell_engine.api.spell.Spell;
 import net.spell_engine.api.spell.fx.ParticleBatch;
 import net.spell_engine.api.spell.fx.Sound;
@@ -182,4 +183,90 @@ public class WizardSpells {
 //                                SpellEngineParticles.MagicParticleFamily.Shape
 //        }
 //    }
+
+    public static Entry fire_wall = add(fire_wall());
+    private static Entry fire_wall() {
+        var id = Identifier.of(WizardsMod.ID, "fire_wall");
+        var name = "Wall of Flames";
+        var description = "Creates a wall of fire, lasting {cloud_duration} seconds, dealing up to {damage} fire spell damage continuously to enemies passing thru.";
+
+        var spell = SpellBuilder.createSpellActive();
+        spell.range = 0;
+        spell.tier = 4;
+        spell.school = SpellSchools.FIRE;
+
+        spell.learn = new Spell.Learn();
+
+        SpellBuilder.Casting.instant(spell);
+        SpellBuilder.Release.visuals(spell,
+                "spell_engine:one_handed_area_release_ground_left_to_right",
+                null, null);
+
+        spell.deliver.type = Spell.Delivery.Type.CLOUD;
+
+        var cloud = new Spell.Delivery.Cloud();
+        cloud.volume.radius = 0.9F;
+        cloud.volume.area.vertical_range_multiplier = 4F;
+        cloud.volume.sound = new Sound(WizardsSounds.FIRE_SCORCH_IMPACT.id());
+        cloud.impact_tick_interval = 8;
+        cloud.time_to_live_seconds = 8;
+        cloud.delay_ticks = 0;
+
+        cloud.placement = SpellBuilder.Deliver.placementByLook(4.4f, -64, 0);
+        cloud.additional_placements = List.of(
+                SpellBuilder.Deliver.placementByLook(2.8f, -45, 4),
+                SpellBuilder.Deliver.placementByLook(2f, 0, 4),
+                SpellBuilder.Deliver.placementByLook(2.8f, 45, 4),
+                SpellBuilder.Deliver.placementByLook(4.4f, 64, 4)
+        );
+
+        cloud.spawn = new Spell.Delivery.Cloud.Spawn();
+        cloud.spawn.sound = new Sound(WizardsSounds.FIRE_WALL_IGNITE.id());
+        cloud.spawn.particles = new ParticleBatch[] {
+                new ParticleBatch(
+                        SpellEngineParticles.flame.id().toString(),
+                        ParticleBatch.Shape.PILLAR, ParticleBatch.Origin.FEET,
+                        15, 0.1F, 0.5F)
+        };
+        cloud.client_data = new Spell.Delivery.Cloud.ClientData();
+        cloud.client_data.light_level = 15;
+        cloud.client_data.particles = new ParticleBatch[] {
+                new ParticleBatch(SpellEngineParticles.flame_ground.id().toString(),
+                        ParticleBatch.Shape.PILLAR, ParticleBatch.Origin.FEET,
+                        2, 0, 0),
+                new ParticleBatch(SpellEngineParticles.flame_medium_a.id().toString(),
+                        ParticleBatch.Shape.PILLAR, ParticleBatch.Origin.FEET,
+                        3, 0.02F, 0.3F),
+                new ParticleBatch(SpellEngineParticles.flame_medium_b.id().toString(),
+                        ParticleBatch.Shape.PILLAR, ParticleBatch.Origin.FEET,
+                        3, 0.01F, 0.35F),
+                new ParticleBatch(SpellEngineParticles.flame_spark.id().toString(),
+                        ParticleBatch.Shape.PILLAR, ParticleBatch.Origin.FEET,
+                        4, 0.05F, 0.3F),
+                new ParticleBatch("campfire_cosy_smoke",
+                        ParticleBatch.Shape.PILLAR, ParticleBatch.Origin.FEET,
+                        0.1F, 0.05F, 0.1F),
+        };
+
+        spell.deliver.clouds = List.of(cloud);
+
+        var damage = SpellBuilder.Impacts.damage(0.8F, 0.4F);
+        damage.particles = new ParticleBatch[] {
+                new ParticleBatch("smoke",
+                        ParticleBatch.Shape.SPHERE, ParticleBatch.Origin.CENTER,
+                        15, 0.01F, 0.1F),
+                new ParticleBatch("flame",
+                        ParticleBatch.Shape.SPHERE, ParticleBatch.Origin.CENTER,
+                        10, 0.01F, 0.1F)
+        };
+        damage.sound = new Sound(WizardsSounds.FIRE_SCORCH_IMPACT.id());
+        var fire = SpellBuilder.Impacts.fire(2);
+        spell.impacts = List.of(damage, fire);
+
+        SpellBuilder.Cost.cooldown(spell, 24);
+        SpellBuilder.Cost.item(spell, "runes:fire_stone", 1);
+        SpellBuilder.Cost.exhaust(spell, 0.4F);
+
+        return new Entry(id, spell, name, description, null);
+    }
 }
