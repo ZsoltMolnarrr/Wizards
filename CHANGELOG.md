@@ -1,6 +1,7 @@
 # 2.5.0
 
 - Frozen status effect now only removed upon direct hit
+- Frozen status effect may not be overcome by speed boost
 
 # 2.4.12
 
