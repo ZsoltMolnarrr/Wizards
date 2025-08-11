@@ -1,0 +1,15 @@
+{
+  "target_pool": "repurposed_structures:villages/mountains/houses",
+  "fallback": "minecraft:empty",
+  "elements": [
+    {
+      "weight": 6,
+      "element": {
+        "location": "wizards:villages/mountains/wizard_tower",
+        "processors": "repurposed_structures:villages/mountains/mossify",
+        "projection": "rigid",
+        "element_type": "minecraft:single_pool_element"
+      }
+    }
+  ]
+}
