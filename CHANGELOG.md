@@ -1,3 +1,7 @@
+# 2.5.1 
+
+- Built in compatibility with Repurposed Structures #2, thanks TelepathicGrunt
+
 # 2.5.0
 
 - Frozen status effect now only removed upon direct hit
