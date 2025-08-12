@@ -1,0 +1,15 @@
+{
+  "target_pool": "repurposed_structures:villages/ocean/houses",
+  "fallback": "minecraft:empty",
+  "elements": [
+    {
+      "weight": 6,
+      "element": {
+        "location": "wizards:villages/ocean/wizard_tower",
+        "processors": "repurposed_structures:villages/ocean/randomize",
+        "projection": "rigid",
+        "element_type": "minecraft:single_pool_element"
+      }
+    }
+  ]
+}

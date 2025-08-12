@@ -1,0 +1,15 @@
+{
+  "target_pool": "repurposed_structures:villages/bamboo/houses",
+  "fallback": "minecraft:empty",
+  "elements": [
+    {
+      "weight": 6,
+      "element": {
+        "location": "wizards:villages/bamboo/wizard_tower",
+        "processors": "repurposed_structures:villages/bamboo/mossify",
+        "projection": "rigid",
+        "element_type": "minecraft:single_pool_element"
+      }
+    }
+  ]
+}
