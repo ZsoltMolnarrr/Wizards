@@ -1,3 +1,7 @@
+# 2.5.2
+
+- Fix infested snowy wizard tower #79
+
 # 2.5.1 
 
 - Built in compatibility with Repurposed Structures #2, thanks TelepathicGrunt
