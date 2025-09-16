@@ -2,36 +2,51 @@
   "schemaVersion": 1,
   "id": "wizards",
   "version": "${version}",
-  "name": "Wizards",
-  "description": "This is an example description! Tell everyone what your mod is about!",
+  "name": "Wizards (RPG Series)",
+  "description": "Destroy your enemies with Arcane, Fire and Frost magic.",
   "authors": [
-    "Me!"
+    "Daedelus"
+  ],
+  "contributors": [
+    "Crispytwig (Artwork)"
   ],
   "contact": {
-    "homepage": "https://fabricmc.net/",
-    "sources": "https://github.com/FabricMC/fabric-example-mod"
+    "repo": "https://github.com/ZsoltMolnarrr/Wizards",
+    "issues": "https://github.com/ZsoltMolnarrr/Wizards/issues"
   },
-  "license": "CC0-1.0",
-  "icon": "assets/wizards/icon.png",
+  "license": "All Rights Reserved",
+  "icon": "icon.png",
   "environment": "*",
   "entrypoints": {
-    "main": [
-      "net.wizards.fabric.ExampleModFabric"
-    ],
     "client": [
-      "net.wizards.fabric.client.ExampleModFabricClient"
+      "net.wizards.fabric.client.FabricClientMod"
+    ],
+    "main": [
+      "net.wizards.fabric.FabricMod"
+    ],
+    "modmenu": [
+      "net.spell_engine.fabric.client.compat.ModMenuCompatibility"
+    ],
+    "fabric-datagen": [
+      "net.wizards.datagen.WizardsDataGenerator"
     ]
   },
   "mixins": [
     "wizards.mixins.json"
   ],
   "depends": {
-    "fabricloader": ">=0.17.2",
-    "minecraft": "~1.21.1",
-    "java": ">=21",
-    "fabric-api": "*"
+    "minecraft": ">=${minecraft_compat_version}",
+    "fabricloader": ">=${fabric_loader_version}",
+    "azurelibarmor": ">=${project.azure_lib_version}",
+    "spell_engine": ">=${spell_engine_version}",
+    "runes": ">=${runes_version}",
+    "structure_pool_api": "*"
   },
-  "suggests": {
-    "another-mod": "*"
+  "custom": {
+    "modmenu": {
+      "links": {
+        "modmenu.discord": "https://discord.gg/KN9b3pjFTM"
+      }
+    }
   }
 }

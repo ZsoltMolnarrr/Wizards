@@ -2,7 +2,6 @@ package net.wizards.client;
 
 import mod.azure.azurelibarmor.rewrite.render.armor.AzArmorRenderer;
 import mod.azure.azurelibarmor.rewrite.render.armor.AzArmorRendererRegistry;
-import net.fabricmc.api.ClientModInitializer;
 import net.minecraft.util.Identifier;
 import net.spell_engine.api.effect.CustomModelStatusEffect;
 import net.spell_engine.api.effect.CustomParticleStatusEffect;
@@ -20,9 +19,8 @@ import net.wizards.item.Armors;
 import java.util.List;
 import java.util.function.Supplier;
 
-public class WizardsClientMod implements ClientModInitializer {
-    @Override
-    public void onInitializeClient() {
+public class WizardsClientMod {
+    public static void init() {
         CustomModels.registerModelIds(List.of(
                 Identifier.of(WizardsMod.ID, "projectile/arcane_bolt"),
                 Identifier.of(WizardsMod.ID, "projectile/arcane_missile"),

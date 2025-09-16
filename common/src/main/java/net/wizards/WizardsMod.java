@@ -9,7 +9,7 @@ import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.text.Text;
 import net.spell_engine.api.config.ConfigFile;
-import net.tinyconfig.ConfigManager;
+import net.tiny_config.ConfigManager;
 import net.wizards.config.Default;
 import net.wizards.config.TweaksConfig;
 import net.wizards.effect.WizardsEffects;
@@ -20,7 +20,7 @@ import net.wizards.item.WizardBooks;
 import net.wizards.content.WizardsSounds;
 import net.wizards.villager.WizardVillagers;
 
-public class WizardsMod implements ModInitializer {
+public class WizardsMod {
     public static final String ID = "wizards";
 
     public static ConfigManager<ConfigFile.Equipment> equipmentConfig = new ConfigManager<>
@@ -48,8 +48,7 @@ public class WizardsMod implements ModInitializer {
             .sanitize(true)
             .build();
 
-    @Override
-    public void onInitialize() {
+    public static void init() {
         equipmentConfig.refresh();
         effectsConfig.refresh();
         villageConfig.refresh();
