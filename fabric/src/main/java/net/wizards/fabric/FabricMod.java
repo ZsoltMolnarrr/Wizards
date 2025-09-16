@@ -11,6 +11,7 @@ public final class FabricMod implements ModInitializer {
         WizardsMod.registerSounds();
         WizardsMod.registerItems();
         WizardsMod.registerEffects();
+        WizardsMod.registerPOI();
         WizardsMod.registerVillagers();
     }
 }

@@ -25,6 +25,9 @@ public final class NeoForgeMod {
         event.register(RegistryKeys.STATUS_EFFECT, reg -> {
             WizardsMod.registerEffects();
         });
+        event.register(RegistryKeys.POINT_OF_INTEREST_TYPE, reg -> {
+            WizardsMod.registerPOI();
+        });
         event.register(RegistryKeys.VILLAGER_PROFESSION, reg -> {
             WizardsMod.registerVillagers();
         });

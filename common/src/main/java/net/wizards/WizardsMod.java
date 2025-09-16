@@ -79,6 +79,10 @@ public class WizardsMod {
         effectsConfig.save();
     }
 
+    public static void registerPOI() {
+        WizardVillagers.registerPOI();
+    }
+
     public static void registerVillagers() {
         WizardVillagers.register();
     }

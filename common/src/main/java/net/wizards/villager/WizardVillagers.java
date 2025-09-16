@@ -26,10 +26,14 @@ import java.util.List;
 
 public class WizardVillagers {
     public static final String WIZARD_MERCHANT = "wizard_merchant";
+    public static final Identifier POI_ID = Identifier.of(WizardsMod.ID, WIZARD_MERCHANT);
+    public static final PointOfInterestType poi = new PointOfInterestType(
+            ImmutableSet.copyOf(RuneCraftingBlock.INSTANCE.getStateManager().getStates()), 1, 10
+    );
 
-    public static PointOfInterestType registerPOI(String name, Block block) {
-        return PointOfInterestHelper.register(Identifier.of(WizardsMod.ID, name),
-                1, 10, ImmutableSet.copyOf(block.getStateManager().getStates()));
+    public static void registerPOI() {
+        System.out.println("XXX Registering POI for wizard merchant");
+        Registry.register(Registries.POINT_OF_INTEREST_TYPE, POI_ID, poi);
     }
 
     public static VillagerProfession registerProfession(String name, RegistryKey<PointOfInterestType> workStation) {
@@ -79,7 +83,6 @@ public class WizardVillagers {
             // Only inject the village if the Lithostitched is not present
             StructurePoolAPI.injectAll(WizardsMod.villageConfig.value);
         }
-        var poi = registerPOI(WIZARD_MERCHANT, RuneCraftingBlock.INSTANCE);
         var profession = registerProfession(
                 WIZARD_MERCHANT,
                 RegistryKey.of(Registries.POINT_OF_INTEREST_TYPE.getKey(), Identifier.of(WizardsMod.ID, WIZARD_MERCHANT)));
