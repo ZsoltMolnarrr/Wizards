@@ -56,8 +56,13 @@ public class WizardsMod {
         if (FabricLoader.getInstance().isDevelopmentEnvironment()) {
             tweaksConfig.value.ignore_items_required_mods = true;
         }
+    }
 
+    public static void registerSounds() {
         WizardsSounds.register();
+    }
+
+    public static void registerItems() {
         Group.WIZARDS = FabricItemGroup.builder()
                 .icon(() -> new ItemStack(Armors.wizardRobeSet.head))
                 .displayName(Text.translatable("itemGroup.wizards.general"))
@@ -67,8 +72,14 @@ public class WizardsMod {
         Weapons.register(equipmentConfig.value.weapons);
         Armors.register(equipmentConfig.value.armor_sets);
         equipmentConfig.save();
+    }
+
+    public static void registerEffects() {
         WizardsEffects.register(effectsConfig.value);
         effectsConfig.save();
+    }
+
+    public static void registerVillagers() {
         WizardVillagers.register();
     }
 }
