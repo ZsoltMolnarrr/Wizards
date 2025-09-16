@@ -26,7 +26,10 @@ public final class NeoForgeMod {
             WizardsMod.registerEffects();
         });
         event.register(RegistryKeys.POINT_OF_INTEREST_TYPE, reg -> {
-            WizardsMod.registerPOI();
+            // Not sure why errors are thrown, but this seems to fix it.
+            try {
+                WizardsMod.registerPOI();
+            } catch (Exception e) { }
         });
         event.register(RegistryKeys.VILLAGER_PROFESSION, reg -> {
             WizardsMod.registerVillagers();

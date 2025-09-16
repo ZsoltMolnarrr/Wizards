@@ -20,6 +20,7 @@ import net.wizards.WizardsMod;
 import net.wizards.item.Armors;
 import net.wizards.item.Weapons;
 import net.wizards.content.WizardsSounds;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -27,13 +28,10 @@ import java.util.List;
 public class WizardVillagers {
     public static final String WIZARD_MERCHANT = "wizard_merchant";
     public static final Identifier POI_ID = Identifier.of(WizardsMod.ID, WIZARD_MERCHANT);
-    public static final PointOfInterestType poi = new PointOfInterestType(
-            ImmutableSet.copyOf(RuneCraftingBlock.INSTANCE.getStateManager().getStates()), 1, 10
-    );
 
     public static void registerPOI() {
-        System.out.println("XXX Registering POI for wizard merchant");
-        Registry.register(Registries.POINT_OF_INTEREST_TYPE, POI_ID, poi);
+        var blockStates = ImmutableSet.copyOf(RuneCraftingBlock.INSTANCE.getStateManager().getStates());
+        PointOfInterestHelper.register(POI_ID, 1, 10, blockStates);
     }
 
     public static VillagerProfession registerProfession(String name, RegistryKey<PointOfInterestType> workStation) {
@@ -85,7 +83,7 @@ public class WizardVillagers {
         }
         var profession = registerProfession(
                 WIZARD_MERCHANT,
-                RegistryKey.of(Registries.POINT_OF_INTEREST_TYPE.getKey(), Identifier.of(WizardsMod.ID, WIZARD_MERCHANT)));
+                RegistryKey.of(Registries.POINT_OF_INTEREST_TYPE.getKey(), POI_ID));
 //        List<Offer> wizardMerchantOffers = List.of(
 //                Offer.sell(1, new ItemStack(RuneItems.get(RuneItems.RuneType.ARCANE), 8), 2, 128, 1, 0.01f),
 //                Offer.sell(1, new ItemStack(RuneItems.get(RuneItems.RuneType.FIRE), 8), 2, 128, 1, 0.01f),

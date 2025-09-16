@@ -1,7 +1,6 @@
 package net.wizards;
 
 import net.fabric_extras.structure_pool.api.StructurePoolConfig;
-import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.item.ItemStack;
