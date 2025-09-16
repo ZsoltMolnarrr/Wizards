@@ -121,3 +121,4 @@ forge/run/
 
 *.blend1
 src/main/generated/.cache
+common/src/main/generated/.cache
