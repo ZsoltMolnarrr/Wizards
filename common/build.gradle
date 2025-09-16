@@ -49,7 +49,7 @@ dependencies {
 //    modImplementation("maven.modrinth:structure-pool-api:${project.structure_pool_api_version}-${platform}")
     modImplementation("net.foundation:structure_pool_api-${platform}:${project.structure_pool_api_version}")
 //    modImplementation("maven.modrinth:runes:${project.structure_pool_api_version}-${platform}")
-    modImplementation("net.rpg_series:runes-${platform}:${project.structure_pool_api_version}")
+    modImplementation("net.rpg_series:runes-${platform}:${project.runes_version}")
 
 //    modImplementation("maven.modrinth:spell-power:${project.spell_power_version}-${platform}")
     modImplementation("net.spell_power:spell_power-${platform}:${project.spell_power_version}")

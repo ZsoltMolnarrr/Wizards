@@ -1,17 +1,17 @@
 modLoader = "javafml"
 loaderVersion = "[4,)"
-#issueTrackerURL = ""
-license = "Insert License Here"
+issueTrackerURL = "https://github.com/ZsoltMolnarrr/Wizards/issues"
+license = "All Rights Reserved"
 
 [[mods]]
 modId = "wizards"
 version = "${version}"
-displayName = "Wizards"
-authors = "Me!"
+displayName = "Wizards (RPG Series)"
+authors = "Daedelus"
 description = '''
-This is an example description! Tell everyone what your mod is about!
+Destroy your enemies with Arcane, Fire and Frost magic.
 '''
-#logoFile = ""
+logoFile = "icon.png"
 
 [[dependencies.wizards]]
 modId = "neoforge"
@@ -23,8 +23,36 @@ side = "BOTH"
 [[dependencies.wizards]]
 modId = "minecraft"
 type = "required"
-versionRange = "[1.21.1,)"
+versionRange = "[${minecraft_compat_version},)"
 ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.wizards]]
+modId = "azurelibarmor"
+type = "required"
+versionRange = "[${azure_lib_version},)"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.wizards]]
+modId = "spell_engine"
+type = "required"
+versionRange = "[${spell_engine_version},)"
+ordering = "AFTER"
+side = "BOTH"
+
+[[dependencies.wizards]]
+modId = "runes"
+type = "required"
+versionRange = "[${runes_version},)"
+ordering = "AFTER"
+side = "BOTH"
+
+[[dependencies.wizards]]
+modId = "structure_pool_api"
+type = "required"
+versionRange = "*"
+ordering = "AFTER"
 side = "BOTH"
 
 [[mixins]]

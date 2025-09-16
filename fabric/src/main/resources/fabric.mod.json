@@ -28,7 +28,7 @@
       "net.spell_engine.fabric.client.compat.ModMenuCompatibility"
     ],
     "fabric-datagen": [
-      "net.wizards.datagen.WizardsDataGenerator"
+      "net.wizards.fabric.datagen.WizardsDataGenerator"
     ]
   },
   "mixins": [
