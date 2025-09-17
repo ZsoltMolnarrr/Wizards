@@ -38,21 +38,21 @@ side = "BOTH"
 modId = "spell_engine"
 type = "required"
 versionRange = "[${spell_engine_version},)"
-ordering = "AFTER"
+ordering = "BEFORE"
 side = "BOTH"
 
 [[dependencies.wizards]]
 modId = "runes"
 type = "required"
 versionRange = "[${runes_version},)"
-ordering = "AFTER"
+ordering = "NONE"
 side = "BOTH"
 
 [[dependencies.wizards]]
 modId = "structure_pool_api"
 type = "required"
 versionRange = "*"
-ordering = "AFTER"
+ordering = "NONE"
 side = "BOTH"
 
 [[mixins]]
