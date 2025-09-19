@@ -38,7 +38,7 @@
   "item.wizards.frost_robe_head": "Sombrero de Escarcha",
   "item.wizards.frost_robe_chest": "Túnica Superior de Escarcha",
   "item.wizards.frost_robe_legs": "Túnica Inferior de Escarcha",
-  "item.wizards.frost_robe_feet": "Botas de Escarcha"
+  "item.wizards.frost_robe_feet": "Botas de Escarcha",
   
   "spell.wizards.arcane_bolt.name": "Proyectil Arcano",
   "spell.wizards.arcane_bolt.description": "Dispara un rayo de energía, causando {damage} de daño arcano.",
@@ -49,7 +49,7 @@
   "effect.wizards.arcane_charge": "Carga Arcana",
   "effect.wizards.arcane_charge.description": "Aumenta el daño causado por hechizos arcanos",
   "spell.wizards.arcane_beam.name": "Rayo Arcano",
-  "spell.wizards.arcane_beam.description": "Canaliza un rayo de energía, infligiendo {damage} de daño arcano cada segundo. Consume todas las Cargas Arcanas."
+  "spell.wizards.arcane_beam.description": "Canaliza un rayo de energía, infligiendo {damage} de daño arcano cada segundo. Consume todas las Cargas Arcanas.",
 
   "spell.wizards.fire_scorch.name": "Quemadura",
   "spell.wizards.fire_scorch.description": "Quema al objetivo, causando {damage} de daño de fuego y prendiéndolo fuego.",
@@ -58,7 +58,7 @@
   "spell.wizards.fire_breath.name": "Aliento de Fuego",
   "spell.wizards.fire_breath.description": "Incinera a los objetivos en frente, infligiendo hasta {damage} de daño con hechizos de fuego cada segundo.",
   "spell.wizards.fire_meteor.name": "Meteoro",
-  "spell.wizards.fire_meteor.description": "Hace caer meteoritos sobre el objetivo, cada uno causando hasta {damage} de daño con hechizos de fuego en un radio de {impact_range} bloques."
+  "spell.wizards.fire_meteor.description": "Hace caer meteoritos sobre el objetivo, cada uno causando hasta {damage} de daño con hechizos de fuego en un radio de {impact_range} bloques.",
 
   "spell.wizards.frost_shard.name": "Lanza de Hielo",
   "spell.wizards.frost_shard.description": "Lanza una astilla de hielo atravesando a {pierce} objetivo, causando {damage} de daño de escarcha al impactar.",
@@ -73,7 +73,7 @@
   "spell.wizards.frost_shield.name": "Escudo de Escarcha",
   "spell.wizards.frost_shield.description": "Te protege de ataques, proyectiles y fuego durante {effect_duration} segundos, pero también reduce tu velocidad de movimiento.",
   "effect.wizards.frost_shield": "Escudo de Escarcha",
-  "effect.wizards.frost_shield.description": "Bloquea los ataques entrantes mientras está activo, pero reduce la velocidad de movimiento"
+  "effect.wizards.frost_shield.description": "Bloquea los ataques entrantes mientras está activo, pero reduce la velocidad de movimiento",
 
   "advancements.rpg_series.obtain_wizard_robes.title": "Un Mago Nunca Llega Tarde",
   "advancements.rpg_series.obtain_wizard_robes.description": "Adquiere un conjunto completo de Túnicas de Mago",
@@ -90,7 +90,7 @@
   "advancements.rpg_series.spell_master_fire.title": "Piromaniaco",
   "advancements.rpg_series.spell_master_fire.description": "Obtén todos los Hechizos de Mago de Fuego",
   "advancements.rpg_series.spell_master_frost.title": "Venas Heladas",
-  "advancements.rpg_series.spell_master_frost.description": "Obtén todos los Hechizos de Mago de Escarcha"
+  "advancements.rpg_series.spell_master_frost.description": "Obtén todos los Hechizos de Mago de Escarcha",
 
   "entity.minecraft.villager.wizard_merchant": "Comerciante de Magos",
   "entity.minecraft.villager.wizards.wizard_merchant": "Comerciante de Magos",
