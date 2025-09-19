@@ -149,5 +149,6 @@
   "advancements.rpg_series.trade_with_wizard.description": "Intercambiar con un Villager Comerciante Mago",
 
   "entity.minecraft.villager.wizard_merchant": "Comerciante Mago",
+  "entity.minecraft.villager.wizards.wizard_merchant": "Comerciante Mago",
   "entity.minecraft.villager.wizards:wizard_merchant": "Comerciante Mago"
 }

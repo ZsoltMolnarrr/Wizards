@@ -127,5 +127,6 @@
 "advancements.rpg_series.obtain_frost_rune.description": "Заполучите руну мороза.",
 
 "entity.minecraft.villager.wizard_merchant": "Чародей-купец",
+"entity.minecraft.villager.wizards.wizard_merchant": "Чародей-купец",
 "entity.minecraft.villager.wizards:wizard_merchant": "Чародей-купец"
 }

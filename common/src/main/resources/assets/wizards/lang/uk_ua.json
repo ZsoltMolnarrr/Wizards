@@ -79,5 +79,6 @@
   "advancements.rpg_series.spell_master_frost.description": "Призвіть усі морозні чари",
 
   "entity.minecraft.villager.wizard_merchant": "Крамар-чарівник",
+  "entity.minecraft.villager.wizards.wizard_merchant": "Крамар-чарівник",
   "entity.minecraft.villager.wizards:wizard_merchant": "Крамар-чарівник"
 }

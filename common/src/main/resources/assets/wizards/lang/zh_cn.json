@@ -161,5 +161,6 @@
   "advancements.rpg_series.obtain_frost_rune.description": "获得一个寒冰符文",
 
   "entity.minecraft.villager.wizard_merchant": "魔法师商人",
+  "entity.minecraft.villager.wizards.wizard_merchant": "魔法师商人",
   "entity.minecraft.villager.wizards:wizard_merchant": "魔法师商人"
 }

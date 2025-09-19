@@ -127,5 +127,6 @@
   "advancements.rpg_series.obtain_frost_rune.description": "Obtenha uma Runa de Gelo",
 
   "entity.minecraft.villager.wizard_merchant": "Mercador de magos",
+  "entity.minecraft.villager.wizards.wizard_merchant": "Mercador de magos",
   "entity.minecraft.villager.wizards:wizard_merchant": "Mercador de magos"
 }

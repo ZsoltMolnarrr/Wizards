@@ -113,5 +113,6 @@
   "advancements.rpg_series.obtain_frost_rune.description": "서리의 룬을 얻으세요",
 
   "entity.minecraft.villager.wizard_merchant": "마법사 상인",
+  "entity.minecraft.villager.wizards.wizard_merchant": "마법사 상인",
   "entity.minecraft.villager.wizards:wizard_merchant": "마법사 상인"
 }

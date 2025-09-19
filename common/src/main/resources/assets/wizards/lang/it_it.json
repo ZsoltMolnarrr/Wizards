@@ -113,5 +113,6 @@
   "advancements.rpg_series.obtain_frost_rune.description": "Ottieni una runa del gelo",
 
   "entity.minecraft.villager.wizard_merchant": "Mago",
+  "entity.minecraft.villager.wizards.wizard_merchant": "Mago",
   "entity.minecraft.villager.wizards:wizard_merchant": "Mago"
 }

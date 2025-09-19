@@ -98,5 +98,6 @@
   "advancements.rpg_series.spell_master_frost.description": "Obtenir tous les Sorts de Sorcier de Givre",
 
   "entity.minecraft.villager.wizard_merchant": "Marchand de Sorcier",
+  "entity.minecraft.villager.wizards.wizard_merchant": "Marchand de Sorcier",
   "entity.minecraft.villager.wizards:wizard_merchant": "Marchand de Sorcier"
 }

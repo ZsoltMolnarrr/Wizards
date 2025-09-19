@@ -93,5 +93,6 @@
   "advancements.rpg_series.spell_master_frost.description": "Obtén todos los Hechizos de Mago de Escarcha"
 
   "entity.minecraft.villager.wizard_merchant": "Comerciante de Magos",
+  "entity.minecraft.villager.wizards.wizard_merchant": "Comerciante de Magos",
   "entity.minecraft.villager.wizards:wizard_merchant": "Comerciante de Magos"
 }
