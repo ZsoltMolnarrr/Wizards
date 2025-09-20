@@ -87,14 +87,14 @@ dependencies {
     forgeRuntimeLibrary("io.wispforest.endec:jankson:0.1.3.1")
     forgeRuntimeLibrary("io.wispforest.endec:netty:0.1.2")
 
-//    modImplementation("maven.modrinth:structure-pool-api:${project.structure_pool_api_version}-${platform}")
-    modImplementation("net.foundation:structure_pool_api-${platform}:${project.structure_pool_api_version}")
-//    modImplementation("maven.modrinth:runes:${project.structure_pool_api_version}-${platform}")
-    modImplementation("net.rpg_series:runes-${platform}:${project.runes_version}")
-//    modImplementation("maven.modrinth:spell-power:${project.spell_power_version}-${platform}")
-    modImplementation("net.spell_power:spell_power-${platform}:${project.spell_power_version}")
-//    modImplementation("maven.modrinth:ranged-weapon-api:${project.ranged_weapon_api_version}-${platform}")
-    modImplementation("net.spell_engine:spell_engine-${platform}:${project.spell_engine_version}")
+    modImplementation("maven.modrinth:structure-pool-api:${project.structure_pool_api_version}-${platform}")
+//    modImplementation("net.foundation:structure_pool_api-${platform}:${project.structure_pool_api_version}")
+    modImplementation("maven.modrinth:runes:${project.structure_pool_api_version}-${platform}")
+//    modImplementation("net.rpg_series:runes-${platform}:${project.runes_version}")
+    modImplementation("maven.modrinth:spell-power:${project.spell_power_version}-${platform}")
+//    modImplementation("net.spell_power:spell_power-${platform}:${project.spell_power_version}")
+    modImplementation("maven.modrinth:spell_engine:${project.spell_engine_version}-${platform}")
+//    modImplementation("net.spell_engine:spell_engine-${platform}:${project.spell_engine_version}")
 }
 
 processResources {
