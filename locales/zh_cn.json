@@ -78,7 +78,7 @@
   "spell.wizards.fire_breath.description": "焚烧前方目标，每秒造成{damage}点火焰法术伤害。",
   "spell.wizards.fire_meteor.name": "陨石术",
   "spell.wizards.fire_meteor.description": "向目标坠落数颗陨石，在{impact_range}格范围内造成{damage}点火焰法术伤害。",
-  "spell.wizards.fire_wall.name": "火墙",
+  "spell.wizards.fire_wall.name": "火墙术",
   "spell.wizards.fire_wall.description": "创造持续{cloud_duration}秒的火焰墙壁，对经过的敌人造成{damage}点火焰伤害。",
   
   "spell.wizards.frost_shard.name": "冰枪术",
