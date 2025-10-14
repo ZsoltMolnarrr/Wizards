@@ -1,3 +1,8 @@
+# 2.6.1
+
+- Add spellbook descriptions
+- Remove spell specific target modifiers
+
 # 2.6.0
 
 - Migrate to Architectury

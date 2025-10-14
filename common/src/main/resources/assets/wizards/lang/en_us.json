@@ -7,6 +7,9 @@
   "item.wizards.arcane.spell_scroll": "Arcane Spell Scroll",
   "item.wizards.fire.spell_scroll": "Fire Spell Scroll",
   "item.wizards.frost.spell_scroll": "Frost Spell Scroll",
+  "item.wizards.arcane_spell_book.spell_binding.description": "Spell Book of Arcane Wizards, using pure energy to focus powerful attacks on single targets\n- Strengths: Focused magical damage against individual enemies\n- Weaknesses: Very low defense\n- Equipment: Lightly armored\n",
+  "item.wizards.fire_spell_book.spell_binding.description": "Spell Book of Fire Wizards, using fiery magic to defeat enemies both near and far\n- Strengths: Magical damage dealt at large areas\n- Weaknesses: Low defense and mobility\n- Equipment: Lightly armored",
+  "item.wizards.frost_spell_book.spell_binding.description": "Spell Book of Frost Wizards, using cold magic to slow enemies and control the battlefield\n- Strengths: Magical damage that slows and freezes enemies\n- Weaknesses: Low defense and mobility\n- Equipment: Lightly armored",
 
   "item.wizards.wand_novice": "Novice Wand",
   "item.wizards.wand_arcane": "Arcane Wand",

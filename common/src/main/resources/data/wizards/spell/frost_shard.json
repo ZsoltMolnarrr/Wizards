@@ -65,28 +65,6 @@
   },
   "impacts": [
     {
-      "target_modifiers": [
-        {
-          "conditions": [
-            {
-              "entity_type": "#minecraft:freeze_hurts_extra_types"
-            }
-          ],
-          "modifier": {
-            "power_multiplier": 0.3
-          }
-        },
-        {
-          "conditions": [
-            {
-              "entity_type": "#minecraft:freeze_immune_entity_types"
-            }
-          ],
-          "modifier": {
-            "power_multiplier": -0.3
-          }
-        }
-      ],
       "action": {
         "type": "DAMAGE",
         "damage": {
