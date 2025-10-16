@@ -1,0 +1,60 @@
+{
+  "school": "spell_power:arcane",
+  "range": 0.0,
+  "tier": 4,
+  "learn": {},
+  "active": {
+    "scroll": {}
+  },
+  "release": {
+    "animation": "spell_engine:one_handed_area_release",
+    "sound": {
+      "id": "minecraft:entity.enderman.teleport"
+    }
+  },
+  "impacts": [
+    {
+      "action": {
+        "type": "TELEPORT",
+        "teleport": {
+          "mode": "FORWARD",
+          "forward": {
+            "distance": 15.0
+          },
+          "depart_particles": [
+            {
+              "particle_id": "minecraft:portal",
+              "origin": "CENTER",
+              "shape": "SPHERE",
+              "count": 40.0,
+              "min_speed": 0.1,
+              "max_speed": 0.3,
+              "pre_spawn_travel": 1.0
+            }
+          ]
+        }
+      },
+      "particles": [
+        {
+          "particle_id": "minecraft:portal",
+          "origin": "CENTER",
+          "shape": "SPHERE",
+          "count": 40.0,
+          "min_speed": 0.1,
+          "max_speed": 0.3,
+          "pre_spawn_travel": 4.0,
+          "invert": true
+        }
+      ]
+    }
+  ],
+  "cost": {
+    "exhaust": 0.4,
+    "cooldown": {
+      "duration": 12.0
+    },
+    "item": {
+      "id": "runes:arcane_stone"
+    }
+  }
+}
