@@ -1,24 +1,24 @@
 {
-  "school": "FROST",
+  "school": "spell_power:frost",
+  "range": 64.0,
   "group": "primary",
   "tier": 1,
   "sub_tier": 2,
-  "range": 64,
-  "learn": { },
+  "learn": {},
   "active": {
-    "scroll": { },
+    "scroll": {},
     "cast": {
       "duration": 1.1,
       "animation": "spell_engine:one_handed_projectile_charge",
       "sound": {
         "id": "spell_engine:generic_frost_casting",
-        "randomness": 0
+        "randomness": 0.0
       },
       "particles": [
         {
           "particle_id": "spell_engine:snowflake",
-          "shape": "WIDE_PIPE",
           "origin": "CENTER",
+          "shape": "WIDE_PIPE",
           "count": 0.5,
           "min_speed": 0.1,
           "max_speed": 0.2
@@ -31,14 +31,16 @@
   },
   "target": {
     "type": "AIM",
-    "aim": { }
+    "aim": {}
   },
   "deliver": {
     "type": "PROJECTILE",
     "projectile": {
       "launch_properties": {
         "velocity": 1.2,
-        "sound": { "id": "spell_engine:generic_frost_release" }
+        "sound": {
+          "id": "spell_engine:generic_frost_release"
+        }
       },
       "projectile": {
         "homing_angle": 2.0,
@@ -51,21 +53,21 @@
           "travel_particles": [
             {
               "particle_id": "spell_engine:snowflake",
+              "origin": "CENTER",
               "shape": "CIRCLE",
               "rotation": "LOOK",
-              "origin": "CENTER",
-              "count": 4,
-              "min_speed": 0,
+              "count": 4.0,
               "max_speed": 0.1
             },
             {
-              "particle_id": "spell_engine:magic_frost_impact_burst",
+              "particle_id": "spell_engine:magic_frost_burst",
+              "origin": "CENTER",
               "shape": "CIRCLE",
               "rotation": "LOOK",
-              "origin": "CENTER",
-              "count": 1,
+              "count": 1.0,
               "min_speed": 0.1,
-              "max_speed": 0.2
+              "max_speed": 0.2,
+              "color_rgba": 3439329279
             }
           ],
           "model": {
@@ -86,12 +88,13 @@
       },
       "particles": [
         {
-          "particle_id": "spell_engine:magic_frost_impact_burst",
-          "shape": "SPHERE",
+          "particle_id": "spell_engine:magic_frost_burst",
           "origin": "CENTER",
+          "shape": "SPHERE",
           "count": 50.0,
           "min_speed": 0.2,
-          "max_speed": 0.7
+          "max_speed": 0.7,
+          "color_rgba": 3439329279
         }
       ],
       "sound": {
@@ -103,20 +106,20 @@
         "type": "STATUS_EFFECT",
         "status_effect": {
           "effect_id": "wizards:frost_slowness",
-          "duration": 5,
-          "amplifier": 0,
+          "duration": 5.0,
+          "amplifier_cap": 1,
+          "apply_mode": "ADD",
           "apply_limit": {
-            "health_base": 100,
-            "spell_power_multiplier": 4
-          },
-          "show_particles": false
+            "health_base": 100.0,
+            "spell_power_multiplier": 4.0
+          }
         }
       },
       "particles": [
         {
           "particle_id": "spell_engine:snowflake",
-          "shape": "SPHERE",
           "origin": "CENTER",
+          "shape": "SPHERE",
           "count": 25.0,
           "min_speed": 0.1,
           "max_speed": 0.4

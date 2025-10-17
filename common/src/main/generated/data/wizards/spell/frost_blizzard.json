@@ -1,28 +1,33 @@
 {
-  "school": "FROST",
+  "school": "spell_power:frost",
   "range": 32.0,
   "tier": 4,
-  "learn": { },
+  "learn": {},
   "active": {
-    "scroll": { },
+    "scroll": {},
     "cast": {
-      "duration": 8,
+      "duration": 8.0,
+      "channel_ticks": 12,
       "animation": "spell_engine:one_handed_sky_charge",
       "sound": {
         "id": "wizards:frost_blizzard_casting",
-        "randomness": 0
+        "randomness": 0.0
       },
       "particles": [
         {
           "particle_id": "spell_engine:snowflake",
-          "shape": "WIDE_PIPE",
           "origin": "CENTER",
+          "shape": "WIDE_PIPE",
           "count": 0.5,
           "min_speed": 0.1,
           "max_speed": 0.2
         }
-      ],
-      "channel_ticks": 12
+      ]
+    }
+  },
+  "release": {
+    "sound": {
+      "id": "wizards:fire_breath_release"
     }
   },
   "target": {
@@ -34,34 +39,32 @@
   "deliver": {
     "type": "METEOR",
     "meteor": {
-      "launch_height": 10,
-      "launch_radius": 3,
+      "launch_radius": 3.0,
       "launch_properties": {
-        "velocity": 1,
         "extra_launch_count": 3,
         "extra_launch_delay": 4
       },
       "projectile": {
-        "divergence": 8,
+        "divergence": 8.0,
         "client_data": {
           "travel_particles": [
             {
               "particle_id": "spell_engine:snowflake",
+              "origin": "CENTER",
               "shape": "CIRCLE",
               "rotation": "LOOK",
-              "origin": "CENTER",
-              "count": 3,
-              "min_speed": 0,
+              "count": 3.0,
               "max_speed": 0.1
             },
             {
-              "particle_id": "spell_engine:magic_frost_impact_burst",
+              "particle_id": "spell_engine:magic_frost_burst",
+              "origin": "CENTER",
               "shape": "CIRCLE",
               "rotation": "LOOK",
-              "origin": "CENTER",
-              "count": 1,
+              "count": 1.0,
               "min_speed": 0.1,
-              "max_speed": 0.2
+              "max_speed": 0.2,
+              "color_rgba": 3439329279
             }
           ],
           "model": {
@@ -70,11 +73,6 @@
           }
         }
       }
-    }
-  },
-  "release": {
-    "sound": {
-      "id": "wizards:fire_breath_release"
     }
   },
   "impacts": [
@@ -95,28 +93,29 @@
         "type": "STATUS_EFFECT",
         "status_effect": {
           "effect_id": "wizards:frost_slowness",
-          "duration": 3,
-          "amplifier": 0,
+          "duration": 3.0,
+          "amplifier_cap": 1,
+          "apply_mode": "ADD",
           "apply_limit": {
-            "health_base": 80,
-            "spell_power_multiplier": 4
-          },
-          "show_particles": false
+            "health_base": 80.0,
+            "spell_power_multiplier": 4.0
+          }
         }
       },
       "particles": [
         {
-          "particle_id": "spell_engine:magic_frost_impact_burst",
-          "shape": "SPHERE",
+          "particle_id": "spell_engine:magic_frost_burst",
           "origin": "CENTER",
+          "shape": "SPHERE",
           "count": 15.0,
           "min_speed": 0.2,
-          "max_speed": 0.7
+          "max_speed": 0.7,
+          "color_rgba": 3439329279
         },
         {
           "particle_id": "spell_engine:snowflake",
-          "shape": "SPHERE",
           "origin": "CENTER",
+          "shape": "SPHERE",
           "count": 5.0,
           "min_speed": 0.1,
           "max_speed": 0.4
@@ -125,31 +124,32 @@
     }
   ],
   "area_impact": {
-    "radius": 3,
+    "radius": 3.0,
     "area": {
       "distance_dropoff": "SQUARED"
     },
     "particles": [
       {
-        "particle_id": "snowflake",
-        "shape": "SPHERE",
+        "particle_id": "spell_engine:snowflake",
         "origin": "CENTER",
+        "shape": "SPHERE",
         "count": 20.0,
         "min_speed": 0.1,
         "max_speed": 0.3
       },
       {
-        "particle_id": "spell_engine:magic_frost_impact_burst",
-        "shape": "SPHERE",
+        "particle_id": "spell_engine:magic_frost_burst",
         "origin": "CENTER",
+        "shape": "SPHERE",
         "count": 15.0,
         "min_speed": 0.2,
-        "max_speed": 0.4
+        "max_speed": 0.4,
+        "color_rgba": 3439329279
       },
       {
         "particle_id": "spell_engine:frost_shard",
-        "shape": "SPHERE",
         "origin": "CENTER",
+        "shape": "SPHERE",
         "count": 15.0,
         "min_speed": 0.2,
         "max_speed": 0.4
@@ -162,12 +162,12 @@
   },
   "cost": {
     "exhaust": 0.4,
+    "cooldown": {
+      "duration": 16.0,
+      "proportional": true
+    },
     "item": {
       "id": "runes:frost_stone"
-    },
-    "cooldown": {
-      "duration": 16,
-      "proportional": true
     }
   }
 }

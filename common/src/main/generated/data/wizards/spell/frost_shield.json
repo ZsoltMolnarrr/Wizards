@@ -1,37 +1,34 @@
 {
-  "school": "FROST",
-  "range": 0,
+  "school": "spell_power:frost",
+  "range": 0.0,
   "tier": 3,
-  "learn": { },
+  "learn": {},
   "active": {
-    "scroll": { },
-    "cast": {
-      "duration": 0
-    }
+    "scroll": {}
   },
   "release": {
     "animation": "spell_engine:one_handed_area_release",
-    "sound": {
-      "id": "wizards:frost_shield_release"
-    },
     "particles": [
       {
         "particle_id": "spell_engine:snowflake",
-        "shape": "PILLAR",
         "origin": "FEET",
+        "shape": "PILLAR",
         "count": 90.0,
         "min_speed": 0.1,
         "max_speed": 0.35
       },
       {
         "particle_id": "spell_engine:frost_shard",
-        "shape": "WIDE_PIPE",
         "origin": "FEET",
+        "shape": "WIDE_PIPE",
         "count": 50.0,
         "min_speed": 0.1,
         "max_speed": 0.3
       }
-    ]
+    ],
+    "sound": {
+      "id": "wizards:frost_shield_release"
+    }
   },
   "impacts": [
     {
@@ -39,20 +36,18 @@
         "type": "STATUS_EFFECT",
         "status_effect": {
           "effect_id": "wizards:frost_shield",
-          "duration": 8,
-          "apply_mode": "SET",
-          "show_particles": false
+          "duration": 8.0
         }
       }
     }
   ],
   "cost": {
     "exhaust": 0.3,
+    "cooldown": {
+      "duration": 30.0
+    },
     "item": {
       "id": "runes:frost_stone"
-    },
-    "cooldown": {
-      "duration": 30
     }
   }
 }
