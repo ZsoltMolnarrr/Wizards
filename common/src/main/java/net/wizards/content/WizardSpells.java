@@ -51,16 +51,6 @@ public class WizardSpells {
                 .color(ARCANE_COLOR.toRGBA());
     }
 
-    private static Spell.Impact damage(float coefficient, float knockback) {
-        var impact = new Spell.Impact();
-        impact.action = new Spell.Impact.Action();
-        impact.action.type = Spell.Impact.Action.Type.DAMAGE;
-        impact.action.damage = new Spell.Impact.Action.Damage();
-        impact.action.damage.spell_power_coefficient = coefficient;
-        impact.action.damage.knockback = knockback;
-        return impact;
-    }
-
     private static void configureArcaneRuneCost(Spell spell) {
         if (spell.cost == null) {
             spell.cost = new Spell.Cost();
@@ -174,7 +164,7 @@ public class WizardSpells {
         projectile.client_data.model.scale = 0.5F;
         spell.deliver.projectile.projectile = projectile;
 
-        var damage = damage(0.7F, 0.6F);
+        var damage = SpellBuilder.Impacts.damage(0.7F, 0.6F);
         damage.particles = new ParticleBatch[] {
                 new ParticleBatch(
                         SpellEngineParticles.MagicParticles.get(
@@ -493,7 +483,7 @@ public class WizardSpells {
         spell.target.aim.required = true;
         spell.target.aim.sticky = true;
 
-        var damage = SpellBuilder.Impacts.damage(0.6F, 0);
+        var damage = SpellBuilder.Impacts.damage(0.6F, 0.6F);
         damage.particles = fireImpactParticles();
         damage.sound = new Sound(WizardsSounds.FIRE_SCORCH_IMPACT.id());
 
@@ -623,7 +613,7 @@ public class WizardSpells {
         projectile.client_data.model.scale = 0.9F;
         spell.deliver.projectile.projectile = projectile;
 
-        var damage = SpellBuilder.Impacts.damage(1F, 0);
+        var damage = SpellBuilder.Impacts.damage(1F, 1.1F);
         damage.particles = new ParticleBatch[] {
                 new ParticleBatch("lava",
                         ParticleBatch.Shape.CIRCLE, ParticleBatch.Origin.CENTER,
@@ -690,7 +680,7 @@ public class WizardSpells {
         spell.target.area.distance_dropoff = Spell.Target.Area.DropoffCurve.SQUARED;
         spell.target.area.angle_degrees = 40;
 
-        var damage = SpellBuilder.Impacts.damage(0.9F, 0);
+        var damage = SpellBuilder.Impacts.damage(0.9F, 0.9F);
         damage.particles = new ParticleBatch[] {
                 new ParticleBatch("lava",
                         ParticleBatch.Shape.CIRCLE, ParticleBatch.Origin.CENTER,
@@ -1061,7 +1051,7 @@ public class WizardSpells {
                         .color(0x99E6FFFFL)
         };
 
-        var damage = SpellBuilder.Impacts.damage(0.5F, 0);
+        var damage = SpellBuilder.Impacts.damage(0.5F, 0.8F);
         damage.particles = new ParticleBatch[] {
                 new ParticleBatch(
                         SpellEngineParticles.MagicParticles.get(
