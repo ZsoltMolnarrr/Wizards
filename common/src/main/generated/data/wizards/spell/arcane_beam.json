@@ -86,9 +86,7 @@
     {
       "action": {
         "type": "DAMAGE",
-        "damage": {
-          "knockback": 0.0
-        }
+        "damage": {}
       },
       "particles": [
         {

@@ -1,0 +1,102 @@
+{
+  "school": "spell_power:fire",
+  "range": 10.0,
+  "tier": 2,
+  "learn": {},
+  "active": {
+    "scroll": {},
+    "cast": {
+      "duration": 5.0,
+      "channel_ticks": 4,
+      "animation": "spell_engine:two_handed_channeling",
+      "start_sound": {
+        "id": "wizards:fire_breath_start"
+      },
+      "sound": {
+        "id": "wizards:fire_breath_casting",
+        "randomness": 0.0
+      },
+      "particles": [
+        {
+          "particle_id": "spell_engine:flame",
+          "origin": "LAUNCH_POINT",
+          "shape": "CONE",
+          "rotation": "LOOK",
+          "count": 8.0,
+          "min_speed": 1.0,
+          "angle": 30.0
+        },
+        {
+          "particle_id": "spell_engine:flame_medium_a",
+          "origin": "LAUNCH_POINT",
+          "shape": "CONE",
+          "rotation": "LOOK",
+          "count": 4.0,
+          "min_speed": 1.0,
+          "angle": 30.0
+        },
+        {
+          "particle_id": "spell_engine:flame_medium_b",
+          "origin": "LAUNCH_POINT",
+          "shape": "CONE",
+          "rotation": "LOOK",
+          "count": 4.0,
+          "min_speed": 1.0,
+          "angle": 30.0
+        }
+      ]
+    }
+  },
+  "release": {
+    "sound": {
+      "id": "wizards:fire_breath_release"
+    }
+  },
+  "target": {
+    "type": "AREA",
+    "area": {
+      "distance_dropoff": "SQUARED",
+      "angle_degrees": 40.0
+    }
+  },
+  "impacts": [
+    {
+      "action": {
+        "type": "DAMAGE",
+        "damage": {
+          "spell_power_coefficient": 0.9,
+          "knockback": 0.0
+        }
+      },
+      "particles": [
+        {
+          "particle_id": "lava",
+          "origin": "CENTER",
+          "shape": "CIRCLE",
+          "count": 3.0,
+          "min_speed": 0.5,
+          "max_speed": 3.0
+        }
+      ],
+      "sound": {
+        "id": "wizards:fire_breath_impact"
+      }
+    },
+    {
+      "action": {
+        "type": "FIRE",
+        "fire": {}
+      }
+    }
+  ],
+  "cost": {
+    "exhaust": 0.2,
+    "cooldown": {
+      "duration": 10.0,
+      "proportional": true
+    },
+    "item": {
+      "id": "runes:fire_stone"
+    }
+  }
+}

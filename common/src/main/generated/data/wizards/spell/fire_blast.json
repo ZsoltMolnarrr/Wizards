@@ -1,0 +1,133 @@
+{
+  "school": "spell_power:fire",
+  "range": 64.0,
+  "group": "primary",
+  "tier": 1,
+  "learn": {},
+  "active": {
+    "scroll": {},
+    "cast": {
+      "duration": 1.5,
+      "animation": "spell_engine:one_handed_projectile_charge",
+      "sound": {
+        "id": "spell_engine:generic_fire_casting",
+        "randomness": 0.0
+      },
+      "particles": [
+        {
+          "particle_id": "spell_engine:flame",
+          "origin": "FEET",
+          "shape": "WIDE_PIPE",
+          "count": 1.0,
+          "min_speed": 0.05,
+          "max_speed": 0.1
+        }
+      ]
+    }
+  },
+  "release": {
+    "animation": "spell_engine:one_handed_projectile_release"
+  },
+  "target": {
+    "type": "AIM",
+    "aim": {}
+  },
+  "deliver": {
+    "type": "PROJECTILE",
+    "projectile": {
+      "launch_properties": {
+        "velocity": 1.25,
+        "sound": {
+          "id": "spell_engine:generic_fire_release"
+        }
+      },
+      "projectile": {
+        "client_data": {
+          "light_level": 12,
+          "travel_particles": [
+            {
+              "particle_id": "spell_engine:flame_spark",
+              "origin": "CENTER",
+              "shape": "CIRCLE",
+              "rotation": "LOOK",
+              "count": 4.0,
+              "max_speed": 0.1
+            },
+            {
+              "particle_id": "spell_engine:flame_medium_b",
+              "origin": "CENTER",
+              "shape": "CIRCLE",
+              "rotation": "LOOK",
+              "count": 3.0,
+              "max_speed": 0.1
+            },
+            {
+              "particle_id": "smoke",
+              "origin": "CENTER",
+              "shape": "CIRCLE",
+              "rotation": "LOOK",
+              "count": 2.0,
+              "max_speed": 0.1
+            }
+          ],
+          "model": {
+            "model_id": "wizards:projectile/fire_blast",
+            "scale": 0.9
+          }
+        }
+      }
+    }
+  },
+  "impacts": [
+    {
+      "action": {
+        "type": "DAMAGE",
+        "damage": {
+          "knockback": 0.0
+        }
+      },
+      "particles": [
+        {
+          "particle_id": "lava",
+          "origin": "CENTER",
+          "shape": "CIRCLE",
+          "count": 15.0,
+          "min_speed": 0.5,
+          "max_speed": 3.0
+        },
+        {
+          "particle_id": "spell_engine:flame_medium_b",
+          "origin": "CENTER",
+          "shape": "CIRCLE",
+          "count": 10.0,
+          "min_speed": 0.1,
+          "max_speed": 0.2
+        }
+      ]
+    }
+  ],
+  "area_impact": {
+    "radius": 2.5,
+    "area": {
+      "distance_dropoff": "SQUARED"
+    },
+    "particles": [
+      {
+        "particle_id": "spell_engine:fire_explosion",
+        "origin": "CENTER",
+        "shape": "SPHERE",
+        "count": 2.0,
+        "min_speed": 0.2,
+        "max_speed": 0.5
+      }
+    ],
+    "sound": {
+      "id": "wizards:fireball_impact"
+    }
+  },
+  "cost": {
+    "item": {
+      "id": "runes:fire_stone"
+    }
+  }
+}
