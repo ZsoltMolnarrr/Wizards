@@ -3,6 +3,7 @@
 - Add vanilla recipe book support (fully datagen recipes) 
 - Add spellbook descriptions
 - Remove spell specific target modifiers
+- Update translations
 
 # 2.6.0
 
