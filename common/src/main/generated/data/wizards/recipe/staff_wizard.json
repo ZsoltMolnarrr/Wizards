@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "Q": {
+      "item": "minecraft:quartz"
+    },
+    "S": {
+      "item": "minecraft:stick"
+    }
+  },
+  "pattern": [
+    "  Q",
+    " S ",
+    "S  "
+  ],
+  "result": {
+    "count": 1,
+    "id": "wizards:staff_wizard"
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "L": {
+      "item": "minecraft:lapis_lazuli"
+    },
+    "W": {
+      "tag": "minecraft:wool"
+    }
+  },
+  "pattern": [
+    "  W",
+    " W ",
+    "WLW"
+  ],
+  "result": {
+    "count": 1,
+    "id": "wizards:wizard_robe_head"
+  }
+}

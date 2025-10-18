@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "L": {
+      "item": "minecraft:blaze_powder"
+    },
+    "W": {
+      "tag": "minecraft:wool"
+    }
+  },
+  "pattern": [
+    "L L",
+    "WLW",
+    "WWW"
+  ],
+  "result": {
+    "count": 1,
+    "id": "wizards:fire_robe_chest"
+  }
+}
