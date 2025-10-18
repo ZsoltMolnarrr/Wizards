@@ -18,8 +18,8 @@ import net.spell_engine.rpg_series.tags.RPGSeriesItemTags;
 import net.wizards.WizardsMod;
 import net.wizards.content.WizardSpells;
 import net.wizards.content.WizardsSounds;
-import net.wizards.item.Armors;
-import net.wizards.item.Weapons;
+import net.wizards.item.WizardArmors;
+import net.wizards.item.WizardWeapons;
 
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
@@ -42,8 +42,8 @@ public class WizardsDataGenerator implements DataGeneratorEntrypoint {
 
         @Override
         protected void configure(RegistryWrapper.WrapperLookup wrapperLookup) {
-            generateWeaponTags(Weapons.entries);
-            generateArmorTags(Armors.entries, RPGSeriesItemTags.ArmorMetaType.MAGIC);
+            generateWeaponTags(WizardWeapons.entries);
+            generateArmorTags(WizardArmors.entries, RPGSeriesItemTags.ArmorMetaType.MAGIC);
         }
     }
 
@@ -85,33 +85,33 @@ public class WizardsDataGenerator implements DataGeneratorEntrypoint {
 
         @Override
         public void generate(RecipeExporter exporter) {
-            disassembleArmor(exporter, Armors.wizardRobeSet, Items.LAPIS_LAZULI);
-            disassembleArmor(exporter, Armors.arcaneRobeSet, Items.ENDER_PEARL);
-            disassembleArmor(exporter, Armors.fireRobeSet, Items.BLAZE_POWDER);
-            disassembleArmor(exporter, Armors.frostRobeSet, Items.PRISMARINE_SHARD);
-            disassembleArmor(exporter, Armors.netherite_arcane, Items.NETHERITE_SCRAP);
-            disassembleArmor(exporter, Armors.netherite_fire, Items.NETHERITE_SCRAP);
-            disassembleArmor(exporter, Armors.netherite_frost, Items.NETHERITE_SCRAP);
+            disassembleArmor(exporter, WizardArmors.wizardRobeSet, Items.LAPIS_LAZULI);
+            disassembleArmor(exporter, WizardArmors.arcaneRobeSet, Items.ENDER_PEARL);
+            disassembleArmor(exporter, WizardArmors.fireRobeSet, Items.BLAZE_POWDER);
+            disassembleArmor(exporter, WizardArmors.frostRobeSet, Items.PRISMARINE_SHARD);
+            disassembleArmor(exporter, WizardArmors.netherite_arcane, Items.NETHERITE_SCRAP);
+            disassembleArmor(exporter, WizardArmors.netherite_fire, Items.NETHERITE_SCRAP);
+            disassembleArmor(exporter, WizardArmors.netherite_frost, Items.NETHERITE_SCRAP);
 
             disassemble(exporter,
-                    List.of(Weapons.arcaneWand.item(), Weapons.fireWand.item()),
+                    List.of(WizardWeapons.arcaneWand.item(), WizardWeapons.fireWand.item()),
                     Items.GOLD_NUGGET);
             disassemble(exporter,
-                    List.of(Weapons.frostWand.item()),
+                    List.of(WizardWeapons.frostWand.item()),
                     Items.IRON_NUGGET);
 
             disassemble(exporter,
-                    List.of(Weapons.arcaneStaff.item()),
+                    List.of(WizardWeapons.arcaneStaff.item()),
                     Items.AMETHYST_SHARD);
             disassemble(exporter,
-                    List.of(Weapons.fireStaff.item()),
+                    List.of(WizardWeapons.fireStaff.item()),
                     Items.BLAZE_POWDER);
             disassemble(exporter,
-                    List.of(Weapons.frostStaff.item()),
+                    List.of(WizardWeapons.frostStaff.item()),
                     Items.PRISMARINE_CRYSTALS);
 
             disassemble(exporter,
-                    Weapons.entries.stream()
+                    WizardWeapons.entries.stream()
                             .filter(entry -> entry.id().getPath().contains("netherite"))
                             .map(entry -> (ItemConvertible) entry.item()).toList(),
                     Items.NETHERITE_SCRAP);

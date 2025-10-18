@@ -12,9 +12,9 @@ import net.tiny_config.ConfigManager;
 import net.wizards.config.Default;
 import net.wizards.config.TweaksConfig;
 import net.wizards.effect.WizardsEffects;
-import net.wizards.item.Armors;
+import net.wizards.item.WizardArmors;
 import net.wizards.item.Group;
-import net.wizards.item.Weapons;
+import net.wizards.item.WizardWeapons;
 import net.wizards.item.WizardBooks;
 import net.wizards.content.WizardsSounds;
 import net.wizards.villager.WizardVillagers;
@@ -63,13 +63,13 @@ public class WizardsMod {
 
     public static void registerItems() {
         Group.WIZARDS = FabricItemGroup.builder()
-                .icon(() -> new ItemStack(Armors.wizardRobeSet.head))
+                .icon(() -> new ItemStack(WizardArmors.wizardRobeSet.head))
                 .displayName(Text.translatable("itemGroup.wizards.general"))
                 .build();
         Registry.register(Registries.ITEM_GROUP, Group.KEY, Group.WIZARDS);
         WizardBooks.register();
-        Weapons.register(equipmentConfig.value.weapons);
-        Armors.register(equipmentConfig.value.armor_sets);
+        WizardWeapons.register(equipmentConfig.value.weapons);
+        WizardArmors.register(equipmentConfig.value.armor_sets);
         equipmentConfig.save();
     }
 

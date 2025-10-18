@@ -14,7 +14,7 @@ import net.wizards.client.effect.FrozenParticles;
 import net.wizards.client.effect.FrozenRenderer;
 import net.wizards.client.effect.ArcaneChargeRenderer;
 import net.wizards.effect.WizardsEffects;
-import net.wizards.item.Armors;
+import net.wizards.item.WizardArmors;
 
 import java.util.List;
 import java.util.function.Supplier;
@@ -40,13 +40,13 @@ public class WizardsClientMod {
         CustomParticleStatusEffect.register(WizardsEffects.frozen.effect, new FrozenParticles(2));
         CustomModelStatusEffect.register(WizardsEffects.frozen.effect, new FrozenRenderer());
         CustomModelStatusEffect.register(WizardsEffects.frostShield.effect, new FrostShieldRenderer());
-        registerArmorRenderer(Armors.wizardRobeSet, WizardArmorRenderer::wizard);
-        registerArmorRenderer(Armors.arcaneRobeSet, WizardArmorRenderer::arcane);
-        registerArmorRenderer(Armors.fireRobeSet, WizardArmorRenderer::fire);
-        registerArmorRenderer(Armors.frostRobeSet, WizardArmorRenderer::frost);
-        registerArmorRenderer(Armors.netherite_arcane, WizardArmorRenderer::netheriteArcane);
-        registerArmorRenderer(Armors.netherite_fire, WizardArmorRenderer::netheriteFire);
-        registerArmorRenderer(Armors.netherite_frost, WizardArmorRenderer::netheriteFrost);
+        registerArmorRenderer(WizardArmors.wizardRobeSet, WizardArmorRenderer::wizard);
+        registerArmorRenderer(WizardArmors.arcaneRobeSet, WizardArmorRenderer::arcane);
+        registerArmorRenderer(WizardArmors.fireRobeSet, WizardArmorRenderer::fire);
+        registerArmorRenderer(WizardArmors.frostRobeSet, WizardArmorRenderer::frost);
+        registerArmorRenderer(WizardArmors.netherite_arcane, WizardArmorRenderer::netheriteArcane);
+        registerArmorRenderer(WizardArmors.netherite_fire, WizardArmorRenderer::netheriteFire);
+        registerArmorRenderer(WizardArmors.netherite_frost, WizardArmorRenderer::netheriteFrost);
     }
 
     private static void registerArmorRenderer(Armor.Set set, Supplier<AzArmorRenderer> armorRendererSupplier) {

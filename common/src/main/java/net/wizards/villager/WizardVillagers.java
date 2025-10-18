@@ -5,7 +5,6 @@ import net.fabric_extras.structure_pool.api.StructurePoolAPI;
 import net.fabricmc.fabric.api.object.builder.v1.trade.TradeOfferHelper;
 import net.fabricmc.fabric.api.object.builder.v1.world.poi.PointOfInterestHelper;
 import net.fabricmc.loader.api.FabricLoader;
-import net.minecraft.block.Block;
 import net.minecraft.item.Items;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
@@ -17,10 +16,9 @@ import net.minecraft.world.poi.PointOfInterestType;
 import net.runes.api.RuneItems;
 import net.runes.crafting.RuneCraftingBlock;
 import net.wizards.WizardsMod;
-import net.wizards.item.Armors;
-import net.wizards.item.Weapons;
+import net.wizards.item.WizardArmors;
+import net.wizards.item.WizardWeapons;
 import net.wizards.content.WizardsSounds;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -108,22 +106,22 @@ public class WizardVillagers {
                 new TradeOffers.SellItemFactory(RuneItems.get(RuneItems.RuneType.FROST), 2, 8, 128, 3, 0.1f)
         ));
         trades.put(2, List.of(
-                new TradeOffers.SellItemFactory(Weapons.wizardStaff.item(), 4, 1, 12, 18),
-                new TradeOffers.SellItemFactory(Weapons.noviceWand.item(), 4, 1, 12, 18),
-                new TradeOffers.SellItemFactory(Weapons.arcaneWand.item(), 18, 1, 12, 18),
-                new TradeOffers.SellItemFactory(Weapons.fireWand.item(), 18, 1, 12, 18),
-                new TradeOffers.SellItemFactory(Weapons.frostWand.item(), 18, 1, 12, 18),
+                new TradeOffers.SellItemFactory(WizardWeapons.wizardStaff.item(), 4, 1, 12, 18),
+                new TradeOffers.SellItemFactory(WizardWeapons.noviceWand.item(), 4, 1, 12, 18),
+                new TradeOffers.SellItemFactory(WizardWeapons.arcaneWand.item(), 18, 1, 12, 18),
+                new TradeOffers.SellItemFactory(WizardWeapons.fireWand.item(), 18, 1, 12, 18),
+                new TradeOffers.SellItemFactory(WizardWeapons.frostWand.item(), 18, 1, 12, 18),
 
                 new TradeOffers.BuyItemFactory(Items.WHITE_WOOL, 10, 12, 5, 6),
                 new TradeOffers.BuyItemFactory(Items.LAPIS_LAZULI, 6, 3, 5, 12)
         ));
         trades.put(3, List.of(
-                new TradeOffers.SellItemFactory(Armors.wizardRobeSet.head, 15, 1, 12, 16, 0.1F),
-                new TradeOffers.SellItemFactory(Armors.wizardRobeSet.feet, 15, 1, 12, 16, 0.1F)
+                new TradeOffers.SellItemFactory(WizardArmors.wizardRobeSet.head, 15, 1, 12, 16, 0.1F),
+                new TradeOffers.SellItemFactory(WizardArmors.wizardRobeSet.feet, 15, 1, 12, 16, 0.1F)
         ));
         trades.put(4, List.of(
-                new TradeOffers.SellItemFactory(Armors.wizardRobeSet.chest, 20, 1, 12, 16, 0.1F),
-                new TradeOffers.SellItemFactory(Armors.wizardRobeSet.legs, 20, 1, 12, 16, 0.1F)
+                new TradeOffers.SellItemFactory(WizardArmors.wizardRobeSet.chest, 20, 1, 12, 16, 0.1F),
+                new TradeOffers.SellItemFactory(WizardArmors.wizardRobeSet.legs, 20, 1, 12, 16, 0.1F)
         ));
 
         for (var entry: trades.entrySet()) {
@@ -134,21 +132,21 @@ public class WizardVillagers {
 
         TradeOfferHelper.registerVillagerOffers(profession, 5, factories -> {
             factories.add(((entity, random) -> new TradeOffers.SellEnchantedToolFactory(
-                    Weapons.arcaneStaff.item(),
+                    WizardWeapons.arcaneStaff.item(),
                     40,
                     3,
                     30,
                     0F).create(entity, random)
             ));
             factories.add(((entity, random) -> new TradeOffers.SellEnchantedToolFactory(
-                    Weapons.fireStaff.item(),
+                    WizardWeapons.fireStaff.item(),
                     40,
                     3,
                     30,
                     0F).create(entity, random)
             ));
             factories.add(((entity, random) -> new TradeOffers.SellEnchantedToolFactory(
-                    Weapons.frostStaff.item(),
+                    WizardWeapons.frostStaff.item(),
                     40,
                     3,
                     30,

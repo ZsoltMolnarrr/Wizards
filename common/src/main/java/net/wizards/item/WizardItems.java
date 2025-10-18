@@ -9,10 +9,10 @@ public class WizardItems {
     public static final HashMap<String, Item> entries;
     static {
         entries = new HashMap<>();
-        for(var weaponEntry: Weapons.entries) {
+        for(var weaponEntry: WizardWeapons.entries) {
             entries.put(weaponEntry.id().toString(), weaponEntry.item());
         }
-        for(var entry: Armors.entries) {
+        for(var entry: WizardArmors.entries) {
             var set = entry.armorSet();
             for (var piece: set.pieces()) {
                 var armorItem = (ArmorItem) piece;

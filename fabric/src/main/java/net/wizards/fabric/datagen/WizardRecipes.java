@@ -7,11 +7,11 @@ import net.minecraft.data.server.recipe.ShapedRecipeJsonBuilder;
 import net.minecraft.item.Item;
 import net.minecraft.item.Items;
 import net.minecraft.recipe.book.RecipeCategory;
-import net.minecraft.registry.Registries;
 import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.registry.tag.ItemTags;
-import net.minecraft.util.Identifier;
-import net.wizards.WizardsMod;
+import net.spell_engine.api.item.armor.Armor;
+import net.wizards.item.WizardArmors;
+import net.wizards.item.WizardWeapons;
 
 import java.util.concurrent.CompletableFuture;
 
@@ -40,7 +40,7 @@ public class WizardRecipes extends FabricRecipeProvider {
 
     private void generateWandRecipes(RecipeExporter exporter) {
         // Novice Wand - coal + stick
-        ShapedRecipeJsonBuilder.create(RecipeCategory.COMBAT, item("wand_novice"))
+        ShapedRecipeJsonBuilder.create(RecipeCategory.COMBAT, WizardWeapons.noviceWand.item())
                 .pattern(" C")
                 .pattern("S ")
                 .input('C', Items.COAL)
@@ -49,7 +49,7 @@ public class WizardRecipes extends FabricRecipeProvider {
                 .offerTo(exporter);
 
         // Arcane Wand - amethyst shard + gold ingot
-        ShapedRecipeJsonBuilder.create(RecipeCategory.COMBAT, item("wand_arcane"))
+        ShapedRecipeJsonBuilder.create(RecipeCategory.COMBAT, WizardWeapons.arcaneWand.item())
                 .pattern(" A")
                 .pattern("G ")
                 .input('A', Items.AMETHYST_SHARD)
@@ -58,7 +58,7 @@ public class WizardRecipes extends FabricRecipeProvider {
                 .offerTo(exporter);
 
         // Fire Wand - gunpowder + gold ingot
-        ShapedRecipeJsonBuilder.create(RecipeCategory.COMBAT, item("wand_fire"))
+        ShapedRecipeJsonBuilder.create(RecipeCategory.COMBAT, WizardWeapons.fireWand.item())
                 .pattern(" A")
                 .pattern("G ")
                 .input('A', Items.GUNPOWDER)
@@ -67,7 +67,7 @@ public class WizardRecipes extends FabricRecipeProvider {
                 .offerTo(exporter);
 
         // Frost Wand - snowball + iron ingot
-        ShapedRecipeJsonBuilder.create(RecipeCategory.COMBAT, item("wand_frost"))
+        ShapedRecipeJsonBuilder.create(RecipeCategory.COMBAT, WizardWeapons.frostWand.item())
                 .pattern(" S")
                 .pattern("I ")
                 .input('S', Items.SNOWBALL)
@@ -82,7 +82,7 @@ public class WizardRecipes extends FabricRecipeProvider {
 
     private void generateStaffRecipes(RecipeExporter exporter) {
         // Wizard Staff - quartz + stick
-        ShapedRecipeJsonBuilder.create(RecipeCategory.COMBAT, item("staff_wizard"))
+        ShapedRecipeJsonBuilder.create(RecipeCategory.COMBAT, WizardWeapons.wizardStaff.item())
                 .pattern("  Q")
                 .pattern(" S ")
                 .pattern("S  ")
@@ -92,7 +92,7 @@ public class WizardRecipes extends FabricRecipeProvider {
                 .offerTo(exporter);
 
         // Arcane Staff - amethyst shard + ender pearl + gold ingot + stick
-        ShapedRecipeJsonBuilder.create(RecipeCategory.COMBAT, item("staff_arcane"))
+        ShapedRecipeJsonBuilder.create(RecipeCategory.COMBAT, WizardWeapons.arcaneStaff.item())
                 .pattern(" AP")
                 .pattern(" SA")
                 .pattern("G  ")
@@ -104,7 +104,7 @@ public class WizardRecipes extends FabricRecipeProvider {
                 .offerTo(exporter);
 
         // Fire Staff - blaze powder + nether brick + gold ingot + stick
-        ShapedRecipeJsonBuilder.create(RecipeCategory.COMBAT, item("staff_fire"))
+        ShapedRecipeJsonBuilder.create(RecipeCategory.COMBAT, WizardWeapons.fireStaff.item())
                 .pattern(" NP")
                 .pattern(" SN")
                 .pattern("G  ")
@@ -116,7 +116,7 @@ public class WizardRecipes extends FabricRecipeProvider {
                 .offerTo(exporter);
 
         // Frost Staff - prismarine crystals + snowball + iron ingot + stick
-        ShapedRecipeJsonBuilder.create(RecipeCategory.COMBAT, item("staff_frost"))
+        ShapedRecipeJsonBuilder.create(RecipeCategory.COMBAT, WizardWeapons.frostStaff.item())
                 .pattern(" BP")
                 .pattern(" SB")
                 .pattern("I  ")
@@ -137,24 +137,24 @@ public class WizardRecipes extends FabricRecipeProvider {
 
     private void generateArmorRecipes(RecipeExporter exporter) {
         // Wizard Robes - wool + lapis lazuli
-        generateArmorSet(exporter, "wizard_robe", Items.LAPIS_LAZULI);
+        generateArmorSet(exporter, WizardArmors.wizardRobeSet, Items.LAPIS_LAZULI);
 
         // Arcane Robes - wool + ender pearl
-        generateArmorSet(exporter, "arcane_robe", Items.ENDER_PEARL);
+        generateArmorSet(exporter, WizardArmors.arcaneRobeSet, Items.ENDER_PEARL);
 
         // Fire Robes - wool + blaze powder
-        generateArmorSet(exporter, "fire_robe", Items.BLAZE_POWDER);
+        generateArmorSet(exporter, WizardArmors.fireRobeSet, Items.BLAZE_POWDER);
 
         // Frost Robes - wool + prismarine shard
-        generateArmorSet(exporter, "frost_robe", Items.PRISMARINE_SHARD);
+        generateArmorSet(exporter, WizardArmors.frostRobeSet, Items.PRISMARINE_SHARD);
     }
 
     /**
      * Generate all 4 armor pieces for a set using the standard robe patterns
      */
-    private void generateArmorSet(RecipeExporter exporter, String armorName, Item specialIngredient) {
+    private void generateArmorSet(RecipeExporter exporter, Armor.Set set, Item specialIngredient) {
         // Helmet/Head - pattern: "  W" / " W " / "WLW"
-        ShapedRecipeJsonBuilder.create(RecipeCategory.COMBAT, item(armorName + "_head"))
+        ShapedRecipeJsonBuilder.create(RecipeCategory.COMBAT, set.head)
                 .pattern("  W")
                 .pattern(" W ")
                 .pattern("WLW")
@@ -164,7 +164,7 @@ public class WizardRecipes extends FabricRecipeProvider {
                 .offerTo(exporter);
 
         // Chestplate - pattern: "L L" / "WLW" / "WWW"
-        ShapedRecipeJsonBuilder.create(RecipeCategory.COMBAT, item(armorName + "_chest"))
+        ShapedRecipeJsonBuilder.create(RecipeCategory.COMBAT, set.chest)
                 .pattern("L L")
                 .pattern("WLW")
                 .pattern("WWW")
@@ -174,7 +174,7 @@ public class WizardRecipes extends FabricRecipeProvider {
                 .offerTo(exporter);
 
         // Leggings - pattern: "LLL" / "W W" / "W W"
-        ShapedRecipeJsonBuilder.create(RecipeCategory.COMBAT, item(armorName + "_legs"))
+        ShapedRecipeJsonBuilder.create(RecipeCategory.COMBAT, set.legs)
                 .pattern("LLL")
                 .pattern("W W")
                 .pattern("W W")
@@ -184,7 +184,7 @@ public class WizardRecipes extends FabricRecipeProvider {
                 .offerTo(exporter);
 
         // Boots - pattern: "L L" / "W W"
-        ShapedRecipeJsonBuilder.create(RecipeCategory.COMBAT, item(armorName + "_feet"))
+        ShapedRecipeJsonBuilder.create(RecipeCategory.COMBAT, set.feet)
                 .pattern("L L")
                 .pattern("W W")
                 .input('L', specialIngredient)
@@ -199,44 +199,38 @@ public class WizardRecipes extends FabricRecipeProvider {
 
     private void generateNetheriteUpgrades(RecipeExporter exporter) {
         // Wand upgrades
-        offerNetheriteUpgradeRecipe(exporter, item("wand_arcane"), RecipeCategory.COMBAT, item("wand_netherite_arcane"));
-        offerNetheriteUpgradeRecipe(exporter, item("wand_fire"), RecipeCategory.COMBAT, item("wand_netherite_fire"));
-        offerNetheriteUpgradeRecipe(exporter, item("wand_frost"), RecipeCategory.COMBAT, item("wand_netherite_frost"));
+        offerNetheriteUpgradeRecipe(exporter, WizardWeapons.arcaneWand.item(), RecipeCategory.COMBAT, WizardWeapons.netheriteArcaneWand.item());
+        offerNetheriteUpgradeRecipe(exporter, WizardWeapons.fireWand.item(), RecipeCategory.COMBAT, WizardWeapons.netheriteFireWand.item());
+        offerNetheriteUpgradeRecipe(exporter, WizardWeapons.frostWand.item(), RecipeCategory.COMBAT, WizardWeapons.netheriteFrostWand.item());
 
         // Staff upgrades
-        offerNetheriteUpgradeRecipe(exporter, item("staff_arcane"), RecipeCategory.COMBAT, item("staff_netherite_arcane"));
-        offerNetheriteUpgradeRecipe(exporter, item("staff_fire"), RecipeCategory.COMBAT, item("staff_netherite_fire"));
-        offerNetheriteUpgradeRecipe(exporter, item("staff_frost"), RecipeCategory.COMBAT, item("staff_netherite_frost"));
+        offerNetheriteUpgradeRecipe(exporter, WizardWeapons.arcaneStaff.item(), RecipeCategory.COMBAT, WizardWeapons.netheriteArcaneStaff.item());
+        offerNetheriteUpgradeRecipe(exporter, WizardWeapons.fireStaff.item(), RecipeCategory.COMBAT, WizardWeapons.netheriteFireStaff.item());
+        offerNetheriteUpgradeRecipe(exporter, WizardWeapons.frostStaff.item(), RecipeCategory.COMBAT, WizardWeapons.netheriteFrostStaff.item());
 
         // Armor upgrades - Arcane set
-        offerNetheriteUpgradeRecipe(exporter, item("arcane_robe_head"), RecipeCategory.COMBAT, item("netherite_arcane_robe_head"));
-        offerNetheriteUpgradeRecipe(exporter, item("arcane_robe_chest"), RecipeCategory.COMBAT, item("netherite_arcane_robe_chest"));
-        offerNetheriteUpgradeRecipe(exporter, item("arcane_robe_legs"), RecipeCategory.COMBAT, item("netherite_arcane_robe_legs"));
-        offerNetheriteUpgradeRecipe(exporter, item("arcane_robe_feet"), RecipeCategory.COMBAT, item("netherite_arcane_robe_feet"));
+        offerNetheriteUpgradeRecipe(exporter, WizardArmors.arcaneRobeSet.head, RecipeCategory.COMBAT, WizardArmors.netherite_arcane.head);
+        offerNetheriteUpgradeRecipe(exporter, WizardArmors.arcaneRobeSet.chest, RecipeCategory.COMBAT, WizardArmors.netherite_arcane.chest);
+        offerNetheriteUpgradeRecipe(exporter, WizardArmors.arcaneRobeSet.legs, RecipeCategory.COMBAT, WizardArmors.netherite_arcane.legs);
+        offerNetheriteUpgradeRecipe(exporter, WizardArmors.arcaneRobeSet.feet, RecipeCategory.COMBAT, WizardArmors.netherite_arcane.feet);
 
         // Armor upgrades - Fire set
-        offerNetheriteUpgradeRecipe(exporter, item("fire_robe_head"), RecipeCategory.COMBAT, item("netherite_fire_robe_head"));
-        offerNetheriteUpgradeRecipe(exporter, item("fire_robe_chest"), RecipeCategory.COMBAT, item("netherite_fire_robe_chest"));
-        offerNetheriteUpgradeRecipe(exporter, item("fire_robe_legs"), RecipeCategory.COMBAT, item("netherite_fire_robe_legs"));
-        offerNetheriteUpgradeRecipe(exporter, item("fire_robe_feet"), RecipeCategory.COMBAT, item("netherite_fire_robe_feet"));
+        offerNetheriteUpgradeRecipe(exporter, WizardArmors.fireRobeSet.head, RecipeCategory.COMBAT, WizardArmors.netherite_fire.head);
+        offerNetheriteUpgradeRecipe(exporter, WizardArmors.fireRobeSet.chest, RecipeCategory.COMBAT, WizardArmors.netherite_fire.chest);
+        offerNetheriteUpgradeRecipe(exporter, WizardArmors.fireRobeSet.legs, RecipeCategory.COMBAT, WizardArmors.netherite_fire.legs);
+        offerNetheriteUpgradeRecipe(exporter, WizardArmors.fireRobeSet.feet, RecipeCategory.COMBAT, WizardArmors.netherite_fire.feet);
 
         // Armor upgrades - Frost set
-        offerNetheriteUpgradeRecipe(exporter, item("frost_robe_head"), RecipeCategory.COMBAT, item("netherite_frost_robe_head"));
-        offerNetheriteUpgradeRecipe(exporter, item("frost_robe_chest"), RecipeCategory.COMBAT, item("netherite_frost_robe_chest"));
-        offerNetheriteUpgradeRecipe(exporter, item("frost_robe_legs"), RecipeCategory.COMBAT, item("netherite_frost_robe_legs"));
-        offerNetheriteUpgradeRecipe(exporter, item("frost_robe_feet"), RecipeCategory.COMBAT, item("netherite_frost_robe_feet"));
+        offerNetheriteUpgradeRecipe(exporter, WizardArmors.frostRobeSet.head, RecipeCategory.COMBAT, WizardArmors.netherite_frost.head);
+        offerNetheriteUpgradeRecipe(exporter, WizardArmors.frostRobeSet.chest, RecipeCategory.COMBAT, WizardArmors.netherite_frost.chest);
+        offerNetheriteUpgradeRecipe(exporter, WizardArmors.frostRobeSet.legs, RecipeCategory.COMBAT, WizardArmors.netherite_frost.legs);
+        offerNetheriteUpgradeRecipe(exporter, WizardArmors.frostRobeSet.feet, RecipeCategory.COMBAT, WizardArmors.netherite_frost.feet);
     }
 
     // ========================================
     // HELPER METHODS
     // ========================================
 
-    /**
-     * Get a wizard mod item by name
-     */
-    private Item item(String name) {
-        return Registries.ITEM.get(Identifier.of(WizardsMod.ID, name));
-    }
 
     @Override
     public String getName() {

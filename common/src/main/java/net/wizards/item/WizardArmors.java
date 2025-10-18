@@ -23,7 +23,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Supplier;
 
-public class Armors {
+public class WizardArmors {
     private static final Supplier<Ingredient> WOOL_INGREDIENTS = () -> { return Ingredient.ofItems(
             Items.WHITE_WOOL,
             Items.ORANGE_WOOL,
