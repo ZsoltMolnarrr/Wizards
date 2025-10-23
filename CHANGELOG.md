@@ -1,3 +1,7 @@
+# 2.6.2
+
+- Add basic armor trim support for all wizard robes
+
 # 2.6.1
 
 - Add vanilla recipe book support (fully datagen recipes) 
