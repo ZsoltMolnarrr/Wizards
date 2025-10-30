@@ -1,3 +1,7 @@
+# 2.6.3
+
+- Update AzureLib
+
 # 2.6.2
 
 - Add basic armor trim support for all wizard robes

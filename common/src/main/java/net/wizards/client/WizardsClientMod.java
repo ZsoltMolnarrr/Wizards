@@ -1,7 +1,7 @@
 package net.wizards.client;
 
-import mod.azure.azurelibarmor.rewrite.render.armor.AzArmorRenderer;
-import mod.azure.azurelibarmor.rewrite.render.armor.AzArmorRendererRegistry;
+import mod.azure.azurelibarmor.common.render.armor.AzArmorRenderer;
+import mod.azure.azurelibarmor.common.render.armor.AzArmorRendererRegistry;
 import net.minecraft.util.Identifier;
 import net.spell_engine.api.effect.CustomModelStatusEffect;
 import net.spell_engine.api.effect.CustomParticleStatusEffect;

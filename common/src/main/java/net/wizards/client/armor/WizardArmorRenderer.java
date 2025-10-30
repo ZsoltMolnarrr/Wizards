@@ -1,8 +1,8 @@
 package net.wizards.client.armor;
 
-import mod.azure.azurelibarmor.rewrite.render.armor.AzArmorRenderer;
-import mod.azure.azurelibarmor.rewrite.render.armor.AzArmorRendererConfig;
-import mod.azure.azurelibarmor.rewrite.render.layer.AzArmorTrimLayer;
+import mod.azure.azurelibarmor.common.render.armor.AzArmorRenderer;
+import mod.azure.azurelibarmor.common.render.armor.AzArmorRendererConfig;
+import mod.azure.azurelibarmor.common.render.layer.AzArmorTrimLayer;
 import net.minecraft.util.Identifier;
 import net.wizards.WizardsMod;
 
