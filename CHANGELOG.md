@@ -1,3 +1,7 @@
+# 2.6.4
+
+- Rebalance some of the armor attributes
+
 # 2.6.3
 
 - Update AzureLib
