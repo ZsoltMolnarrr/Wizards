@@ -1,3 +1,7 @@
+# 2.6.5
+
+- Rebalance all weapon attributes
+
 # 2.6.4
 
 - Rebalance some of the armor attributes

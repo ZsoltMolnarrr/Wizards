@@ -23,7 +23,7 @@ public class WizardsMod {
     public static final String ID = "wizards";
 
     public static ConfigManager<ConfigFile.Equipment> equipmentConfig = new ConfigManager<>
-            ("equipment", Default.itemConfig)
+            ("equipment_v2", Default.itemConfig)
             .builder()
             .setDirectory(ID)
             .sanitize(true)
