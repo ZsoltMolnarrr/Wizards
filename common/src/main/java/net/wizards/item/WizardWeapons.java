@@ -12,15 +12,23 @@ import net.spell_engine.api.config.WeaponConfig;
 import net.spell_engine.api.item.Equipment;
 import net.spell_engine.api.item.weapon.StaffItem;
 import net.spell_engine.api.item.weapon.Weapon;
+import net.spell_engine.api.spell.container.SpellContainers;
+import net.spell_engine.rpg_series.item.Weapons;
 import net.spell_power.api.SpellSchools;
 import net.wizards.WizardsMod;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.function.Supplier;
 
 public class WizardWeapons {
+    private static final String NAMESPACE = WizardsMod.ID;
     public static final ArrayList<Weapon.Entry> entries = new ArrayList<>();
+    private static Weapon.Entry add(Weapon.Entry entry) {
+        entries.add(entry);
+        return entry;
+    }
 
     private static Weapon.Entry entry(String name, Weapon.CustomMaterial material, Weapon.Factory factory, WeaponConfig defaults, Equipment.WeaponType category) {
         var entry = new Weapon.Entry(WizardsMod.ID, name, material, factory, defaults, category);
@@ -68,10 +76,12 @@ public class WizardWeapons {
         return entry(name, material, StaffItem::new, new WeaponConfig(wandAttackDamage, wandAttackSpeed), Equipment.WeaponType.DAMAGE_WAND);
     }
 
-    public static final Weapon.Entry noviceWand = wand("wand_novice",
-            Weapon.CustomMaterial.matching(ToolMaterials.WOOD, () -> Ingredient.ofItems(Items.STICK)))
-            .attribute(AttributeModifier.bonus(SpellSchools.FIRE.id, T0_WAND_POWER))
-            .loot(Equipment.LootProperties.of(0));
+    public static final Weapon.Entry noviceWand = add(Weapons.damageWand(
+                    NAMESPACE, "wand_novice",
+                    Equipment.Tier.TIER_0, () -> Ingredient.ofItems(Items.STICK),
+                    List.of(SpellSchools.FIRE.id))
+            .spellContainer(SpellContainers.forMagicWeapon().withSpell("wizards:scorch"))
+    );
     public static final Weapon.Entry arcaneWand = wand("wand_arcane",
             Weapon.CustomMaterial.matching(ToolMaterials.IRON, () -> Ingredient.ofItems(Items.GOLD_INGOT)))
             .attribute(AttributeModifier.bonus(SpellSchools.ARCANE.id, T2_WAND_POWER))
@@ -108,12 +118,19 @@ public class WizardWeapons {
         return entry(name, material, StaffItem::new, new WeaponConfig(staffAttackDamage, staffAttackSpeed), Equipment.WeaponType.DAMAGE_STAFF);
     }
 
-    public static final Weapon.Entry wizardStaff = staff("staff_wizard",
-            Weapon.CustomMaterial.matching(ToolMaterials.IRON, () -> Ingredient.ofItems(Items.STICK)))
-            .attribute(AttributeModifier.bonus(SpellSchools.ARCANE.id, T1_STAFF_POWER))
-            .attribute(AttributeModifier.bonus(SpellSchools.FIRE.id, T1_STAFF_POWER))
-            .attribute(AttributeModifier.bonus(SpellSchools.FROST.id, T1_STAFF_POWER))
-            .loot(Equipment.LootProperties.of(1));
+    public static final Weapon.Entry wizardStaff = add(Weapons.damageWand(
+                    NAMESPACE, "staff_wizard",
+                    Equipment.Tier.TIER_1, () -> Ingredient.ofItems(Items.STICK),
+                    List.of(SpellSchools.ARCANE.id, SpellSchools.FIRE.id, SpellSchools.FROST.id))
+            .spellContainer(SpellContainers.forMagicWeapon())
+            .withSpellChoices("wizards:weapons/wizard_staff")
+    );
+//    public static final Weapon.Entry wizardStaff = staff("staff_wizard",
+//            Weapon.CustomMaterial.matching(ToolMaterials.IRON, () -> Ingredient.ofItems(Items.STICK)))
+//            .attribute(AttributeModifier.bonus(SpellSchools.ARCANE.id, T1_STAFF_POWER))
+//            .attribute(AttributeModifier.bonus(SpellSchools.FIRE.id, T1_STAFF_POWER))
+//            .attribute(AttributeModifier.bonus(SpellSchools.FROST.id, T1_STAFF_POWER))
+//            .loot(Equipment.LootProperties.of(1));
     public static final Weapon.Entry arcaneStaff = staff("staff_arcane",
             Weapon.CustomMaterial.matching(ToolMaterials.DIAMOND, () -> Ingredient.ofItems(Items.GOLD_INGOT)))
             .attribute(AttributeModifier.bonus(SpellSchools.ARCANE.id, T2_STAFF_POWER))

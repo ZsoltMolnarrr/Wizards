@@ -4,7 +4,6 @@
   "tier": 4,
   "learn": {},
   "active": {
-    "scroll": {},
     "cast": {
       "duration": 8.0,
       "channel_ticks": 12,

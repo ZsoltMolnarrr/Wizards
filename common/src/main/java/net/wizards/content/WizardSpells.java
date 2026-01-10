@@ -18,7 +18,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class WizardSpells {
+    public enum Book { ARCANE, FIRE, FROST }
     public record Entry(Identifier id, Spell spell, String title, String description,
+                        @Nullable Book book,
                         @Nullable SpellTooltip.DescriptionMutator mutator) { }
     public static final List<Entry> entries = new ArrayList<>();
     private static Entry add(Entry entry) {
@@ -178,9 +180,11 @@ public class WizardSpells {
         damage.sound = new Sound(WizardsSounds.ARCANE_MISSILE_IMPACT.id());
         spell.impacts = List.of(damage);
 
+        SpellBuilder.Cost.cooldownGroup(spell, "weapon");
+
         configureArcaneRuneCost(spell);
 
-        return new Entry(id, spell, "", "", null);
+        return new Entry(id, spell, "", "", null, null);
     }
 
     public static Entry arcane_blast = add(arcane_blast());
@@ -194,7 +198,6 @@ public class WizardSpells {
         spell.range = 16;
 
         spell.learn = new Spell.Learn();
-        spell.active.scroll = new Spell.Active.Scroll();
 
         spell.active.cast.duration = 1.5F;
         spell.active.cast.animation = "spell_engine:one_handed_projectile_charge";
@@ -232,9 +235,11 @@ public class WizardSpells {
 
         spell.impacts = List.of(damage, arcaneCharge);
 
+        SpellBuilder.Cost.cooldownGroup(spell, "weapon");
+
         configureArcaneRuneCost(spell);
 
-        return new Entry(id, spell, "", "", null);
+        return new Entry(id, spell, "", "", null,null);
     }
 
     public static Entry arcane_missile = add(arcane_missile());
@@ -246,7 +251,6 @@ public class WizardSpells {
         spell.range = 64;
 
         spell.learn = new Spell.Learn();
-        spell.active.scroll = new Spell.Active.Scroll();
 
         SpellBuilder.Casting.channel(spell, 4, 6);
         spell.active.cast.animation = "spell_engine:two_handed_channeling";
@@ -312,7 +316,7 @@ public class WizardSpells {
         SpellBuilder.Cost.cooldown(spell, 2);
         spell.cost.cooldown.proportional = true;
 
-        return new Entry(id, spell, "", "", null);
+        return new Entry(id, spell, "", "", Book.ARCANE, null);
     }
 
     public static Entry arcane_beam = add(arcane_beam());
@@ -324,7 +328,6 @@ public class WizardSpells {
         spell.range = 32;
 
         spell.learn = new Spell.Learn();
-        spell.active.scroll = new Spell.Active.Scroll();
 
         SpellBuilder.Casting.channel(spell, 5, 4);
         spell.active.cast.animation = "spell_engine:two_handed_channeling";
@@ -408,7 +411,7 @@ public class WizardSpells {
         SpellBuilder.Cost.cooldown(spell, 10);
         spell.cost.cooldown.proportional = true;
 
-        return new Entry(id, spell, "", "", null);
+        return new Entry(id, spell, "", "", Book.ARCANE, null);
     }
 
     public static Entry arcane_blink = add(arcane_blink());
@@ -420,7 +423,6 @@ public class WizardSpells {
         spell.range = 0;
 
         spell.learn = new Spell.Learn();
-        spell.active.scroll = new Spell.Active.Scroll();
 
         SpellBuilder.Casting.instant(spell);
 
@@ -456,7 +458,7 @@ public class WizardSpells {
         configureArcaneRuneCost(spell);
         SpellBuilder.Cost.cooldown(spell, 12);
 
-        return new Entry(id, spell, "", "", null);
+        return new Entry(id, spell, "", "", Book.ARCANE, null);
     }
 
     public static Entry fire_scorch = add(fire_scorch());
@@ -490,9 +492,11 @@ public class WizardSpells {
         var fire = SpellBuilder.Impacts.fire(3);
         spell.impacts = List.of(damage, fire);
 
+        SpellBuilder.Cost.cooldownGroup(spell, "weapon");
+
         configureFireRuneCost(spell);
 
-        return new Entry(id, spell, "", "", null);
+        return new Entry(id, spell, "", "", null, null);
     }
 
     public static Entry fireball = add(fireball());
@@ -505,7 +509,6 @@ public class WizardSpells {
         spell.range = 64;
 
         spell.learn = new Spell.Learn();
-        spell.active.scroll = new Spell.Active.Scroll();
 
         spell.active.cast.duration = 1.5F;
         spell.active.cast.animation = "spell_engine:one_handed_projectile_charge";
@@ -557,9 +560,11 @@ public class WizardSpells {
         var fire = SpellBuilder.Impacts.fire(4);
         spell.impacts = List.of(damage, fire);
 
+        SpellBuilder.Cost.cooldownGroup(spell, "weapon");
+
         configureFireRuneCost(spell);
 
-        return new Entry(id, spell, "", "", null);
+        return new Entry(id, spell, "", "", null, null);
     }
 
     public static Entry fire_blast = add(fire_blast());
@@ -572,7 +577,6 @@ public class WizardSpells {
         spell.range = 64;
 
         spell.learn = new Spell.Learn();
-        spell.active.scroll = new Spell.Active.Scroll();
 
         spell.active.cast.duration = 1.5F;
         spell.active.cast.animation = "spell_engine:one_handed_projectile_charge";
@@ -639,7 +643,9 @@ public class WizardSpells {
 
         configureFireRuneCost(spell);
 
-        return new Entry(id, spell, "", "", null);
+        SpellBuilder.Cost.cooldownGroup(spell, "weapon");
+
+        return new Entry(id, spell, "", "", null, null);
     }
 
     public static Entry fire_breath = add(fire_breath());
@@ -651,7 +657,6 @@ public class WizardSpells {
         spell.range = 10;
 
         spell.learn = new Spell.Learn();
-        spell.active.scroll = new Spell.Active.Scroll();
 
         SpellBuilder.Casting.channel(spell, 5, 4);
         spell.active.cast.animation = "spell_engine:two_handed_channeling";
@@ -696,7 +701,7 @@ public class WizardSpells {
         SpellBuilder.Cost.cooldown(spell, 10);
         spell.cost.cooldown.proportional = true;
 
-        return new Entry(id, spell, "", "", null);
+        return new Entry(id, spell, "", "", Book.FIRE, null);
     }
 
     public static Entry fire_meteor = add(fire_meteor());
@@ -708,7 +713,6 @@ public class WizardSpells {
         spell.range = 32;
 
         spell.learn = new Spell.Learn();
-        spell.active.scroll = new Spell.Active.Scroll();
 
         spell.active.cast.duration = 1F;
         spell.active.cast.animation = "spell_engine:one_handed_projectile_charge";
@@ -782,7 +786,7 @@ public class WizardSpells {
         configureFireRuneCost(spell);
         SpellBuilder.Cost.cooldown(spell, 10);
 
-        return new Entry(id, spell, "", "", null);
+        return new Entry(id, spell, "", "", Book.FIRE, null);
     }
 
     public static Entry fire_wall = add(fire_wall());
@@ -867,7 +871,7 @@ public class WizardSpells {
         SpellBuilder.Cost.item(spell, "runes:fire_stone", 1);
         SpellBuilder.Cost.exhaust(spell, 0.4F);
 
-        return new Entry(id, spell, name, description, null);
+        return new Entry(id, spell, name, description, Book.FIRE, null);
     }
 
     public static Entry frost_shard = add(frost_shard());
@@ -927,9 +931,11 @@ public class WizardSpells {
         damage.sound = new Sound(WizardsSounds.FROST_SHARD_IMPACT.id());
         spell.impacts = List.of(damage);
 
+        SpellBuilder.Cost.cooldownGroup(spell, "weapon");
+
         configureFrostRuneCost(spell);
 
-        return new Entry(id, spell, "", "", null);
+        return new Entry(id, spell, "", "", null, null);
     }
 
     public static Entry frostbolt = add(frostbolt());
@@ -943,7 +949,6 @@ public class WizardSpells {
         spell.range = 64;
 
         spell.learn = new Spell.Learn();
-        spell.active.scroll = new Spell.Active.Scroll();
 
         spell.active.cast.duration = 1.1F;
         spell.active.cast.animation = "spell_engine:one_handed_projectile_charge";
@@ -1006,7 +1011,9 @@ public class WizardSpells {
 
         configureFrostRuneCost(spell);
 
-        return new Entry(id, spell, "", "", null);
+        SpellBuilder.Cost.cooldownGroup(spell, "weapon");
+
+        return new Entry(id, spell, "", "", null, null);
     }
 
     public static Entry frost_nova = add(frost_nova());
@@ -1018,7 +1025,6 @@ public class WizardSpells {
         spell.range = 6;
 
         spell.learn = new Spell.Learn();
-        spell.active.scroll = new Spell.Active.Scroll();
 
         spell.active.cast.duration = 0.5F;
         spell.active.cast.animation = "spell_engine:one_handed_area_charge";
@@ -1078,7 +1084,7 @@ public class WizardSpells {
         configureFrostRuneCost(spell);
         SpellBuilder.Cost.cooldown(spell, 10);
 
-        return new Entry(id, spell, "", "", null);
+        return new Entry(id, spell, "", "", Book.FROST, null);
     }
 
     public static Entry frost_shield = add(frost_shield());
@@ -1090,7 +1096,6 @@ public class WizardSpells {
         spell.range = 0;
 
         spell.learn = new Spell.Learn();
-        spell.active.scroll = new Spell.Active.Scroll();
 
         SpellBuilder.Casting.instant(spell);
 
@@ -1116,7 +1121,7 @@ public class WizardSpells {
         configureFrostRuneCost(spell);
         SpellBuilder.Cost.cooldown(spell, 30);
 
-        return new Entry(id, spell, "", "", null);
+        return new Entry(id, spell, "", "", Book.FROST, null);
     }
 
     public static Entry frost_blizzard = add(frost_blizzard());
@@ -1128,7 +1133,6 @@ public class WizardSpells {
         spell.range = 32;
 
         spell.learn = new Spell.Learn();
-        spell.active.scroll = new Spell.Active.Scroll();
 
         SpellBuilder.Casting.channel(spell, 8, 12);
         spell.active.cast.animation = "spell_engine:one_handed_sky_charge";
@@ -1223,6 +1227,6 @@ public class WizardSpells {
         SpellBuilder.Cost.cooldown(spell, 16);
         spell.cost.cooldown.proportional = true;
 
-        return new Entry(id, spell, "", "", null);
+        return new Entry(id, spell, "", "", Book.FROST, null);
     }
 }

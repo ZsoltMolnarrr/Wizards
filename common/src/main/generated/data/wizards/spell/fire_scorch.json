@@ -79,6 +79,9 @@
     }
   ],
   "cost": {
+    "cooldown": {
+      "group": "weapon"
+    },
     "item": {
       "id": "runes:fire_stone"
     }

@@ -3,6 +3,10 @@
     {
       "id": "wizards:wand_novice",
       "required": false
+    },
+    {
+      "id": "wizards:staff_wizard",
+      "required": false
     }
   ]
 }

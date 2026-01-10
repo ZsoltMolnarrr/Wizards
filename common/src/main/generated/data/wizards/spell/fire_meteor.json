@@ -4,7 +4,6 @@
   "tier": 3,
   "learn": {},
   "active": {
-    "scroll": {},
     "cast": {
       "duration": 1.0,
       "animation": "spell_engine:one_handed_projectile_charge",

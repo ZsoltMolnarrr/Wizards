@@ -86,6 +86,9 @@
     }
   ],
   "cost": {
+    "cooldown": {
+      "group": "weapon"
+    },
     "item": {
       "id": "runes:arcane_stone"
     }

@@ -4,9 +4,9 @@
   "item.wizards.arcane_spell_book": "Tome d’Arcanes",
   "item.wizards.fire_spell_book": "Tome de Feu",
   "item.wizards.frost_spell_book": "Tome de Givre",
-  "item.wizards.arcane.spell_scroll": "Parchemin d’Arcanes",
-  "item.wizards.fire.spell_scroll": "Parchemin de Feu",
-  "item.wizards.frost.spell_scroll": "Parchemin de Givre",
+  "item.wizards.arcane_spell_scroll": "Parchemin d’Arcanes",
+  "item.wizards.fire_spell_scroll": "Parchemin de Feu",
+  "item.wizards.frost_spell_scroll": "Parchemin de Givre",
 
   "item.wizards.arcane_spell_book.spell_binding.description": "Tome des Sorciers Arcanistes, utilisant l'énergie pure pour concentrer de puissantes attaques sur une seule cible\n- Atouts : Dégâts magiques concentrés sur des cibles individuelles\n- Faiblesses : Défense très faible\n- Équipement : Armure légère",
   "item.wizards.fire_spell_book.spell_binding.description": "Tome des Sorciers du Feu, utilisant la magie ardente pour vaincre les ennemis proches comme lointains\n- Atouts : Dégâts magiques de zone\n- Faiblesses : Faible défense et mobilité\n- Équipement : Armure légère",

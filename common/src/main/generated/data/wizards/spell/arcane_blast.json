@@ -6,7 +6,6 @@
   "sub_tier": 2,
   "learn": {},
   "active": {
-    "scroll": {},
     "cast": {
       "duration": 1.5,
       "animation": "spell_engine:one_handed_projectile_charge",
@@ -85,6 +84,9 @@
     }
   ],
   "cost": {
+    "cooldown": {
+      "group": "weapon"
+    },
     "item": {
       "id": "runes:arcane_stone"
     }
