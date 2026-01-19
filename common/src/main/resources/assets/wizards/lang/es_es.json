@@ -1,9 +1,9 @@
 {
   "itemGroup.wizards.general": "Wizards",
 
-  "item.wizards.arcane_spell_book": "Tomo Arcano",
-  "item.wizards.fire_spell_book": "Tomo de Fuego",
-  "item.wizards.frost_spell_book": "Tomo de Escarcha",
+  "item.wizards.spell_book/arcane": "Tomo Arcano",
+  "item.wizards.spell_book/fire": "Tomo de Fuego",
+  "item.wizards.spell_book/frost": "Tomo de Escarcha",
 
   "item.wizards.wand_novice": "Varita de Novato",
   "item.wizards.wand_arcane": "Varita Arcana",

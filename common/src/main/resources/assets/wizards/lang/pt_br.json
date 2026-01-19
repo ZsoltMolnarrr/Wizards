@@ -1,9 +1,9 @@
 {
   "itemGroup.wizards.general": "Magos",
 
-  "item.wizards.arcane_spell_book": "Tomo arcano",
-  "item.wizards.fire_spell_book": "Tomo de fogo",
-  "item.wizards.frost_spell_book": "Tomo de gelo",
+  "item.wizards.spell_book/arcane": "Tomo arcano",
+  "item.wizards.spell_book/fire": "Tomo de fogo",
+  "item.wizards.spell_book/frost": "Tomo de gelo",
 
   "item.wizards.wand_novice": "Varinha de novato",
   "item.wizards.wand_arcane": "Varinha arcana",

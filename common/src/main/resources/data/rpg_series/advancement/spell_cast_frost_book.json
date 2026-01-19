@@ -1,7 +1,10 @@
 {
   "display": {
     "icon": {
-      "id": "wizards:frost_spell_book"
+      "id": "spell_engine:spell_book",
+      "components": {
+        "spell_engine:item_model": "wizards:item/spell_book/frost"
+      }
     },
     "title": {
       "translate": "advancements.rpg_series.spell_cast_frost_book.title"
@@ -19,7 +22,7 @@
     "cast": {
       "trigger": "spell_engine:spell_cast",
       "conditions": {
-        "spell": "#wizards:frost"
+        "spell": "#wizards:spell_book/frost"
       }
     }
   },

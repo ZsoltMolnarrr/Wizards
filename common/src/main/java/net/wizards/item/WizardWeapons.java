@@ -123,7 +123,7 @@ public class WizardWeapons {
                     Equipment.Tier.TIER_1, () -> Ingredient.ofItems(Items.STICK),
                     List.of(SpellSchools.ARCANE.id, SpellSchools.FIRE.id, SpellSchools.FROST.id))
             .spellContainer(SpellContainers.forMagicWeapon())
-            .withSpellChoices("wizards:weapons/wizard_staff")
+            .withSpellChoices("wizards:weapon/wizard_staff")
     );
 //    public static final Weapon.Entry wizardStaff = staff("staff_wizard",
 //            Weapon.CustomMaterial.matching(ToolMaterials.IRON, () -> Ingredient.ofItems(Items.STICK)))
