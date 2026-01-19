@@ -3,6 +3,7 @@ package net.wizards.content;
 import net.minecraft.util.Identifier;
 import net.spell_engine.api.datagen.SpellBuilder;
 import net.spell_engine.api.spell.Spell;
+import net.spell_engine.api.spell.fx.Animation;
 import net.spell_engine.api.spell.fx.ParticleBatch;
 import net.spell_engine.api.spell.fx.Sound;
 import net.spell_engine.client.gui.SpellTooltip;
@@ -134,12 +135,12 @@ public class WizardSpells {
         spell.tier = 0;
         spell.range = BASIC_PROJECTILE_RANGE;
         spell.active.cast.duration = 1;
-        spell.active.cast.animation = "spell_engine:one_handed_projectile_charge";
+        spell.active.cast.animation = Animation.of("spell_engine:one_handed_projectile_charge");
         spell.active.cast.sound = new Sound(SpellEngineSounds.GENERIC_ARCANE_CASTING.id(), 0);
         spell.active.cast.particles = new ParticleBatch[] { arcaneCastingParticles() };
 
         spell.release = new Spell.Release();
-        spell.release.animation = "spell_engine:one_handed_projectile_release";
+        spell.release.animation = Animation.of("spell_engine:one_handed_projectile_release");
         spell.release.sound = new Sound(WizardsSounds.ARCANE_MISSILE_RELEASE.id());
 
         spell.target.type = Spell.Target.Type.AIM;
@@ -200,12 +201,12 @@ public class WizardSpells {
         spell.learn = new Spell.Learn();
 
         spell.active.cast.duration = 1.5F;
-        spell.active.cast.animation = "spell_engine:one_handed_projectile_charge";
+        spell.active.cast.animation = Animation.of("spell_engine:one_handed_projectile_charge");
         spell.active.cast.sound = new Sound(SpellEngineSounds.GENERIC_ARCANE_CASTING.id(), 0);
         spell.active.cast.particles = new ParticleBatch[] { arcaneCastingParticles() };
 
         spell.release = new Spell.Release();
-        spell.release.animation = "spell_engine:one_handed_projectile_release";
+        spell.release.animation = Animation.of("spell_engine:one_handed_projectile_release");
         spell.release.sound = new Sound(WizardsSounds.ARCANE_MISSILE_RELEASE.id());
 
         spell.target.type = Spell.Target.Type.AIM;
@@ -253,7 +254,7 @@ public class WizardSpells {
         spell.learn = new Spell.Learn();
 
         SpellBuilder.Casting.channel(spell, 4, 6);
-        spell.active.cast.animation = "spell_engine:two_handed_channeling";
+        spell.active.cast.animation = Animation.of("spell_engine:two_handed_channeling");
         spell.active.cast.sound = new Sound(SpellEngineSounds.GENERIC_ARCANE_CASTING.id(), 0);
         spell.active.cast.particles = new ParticleBatch[] { arcaneCastingParticles() };
 
@@ -330,7 +331,7 @@ public class WizardSpells {
         spell.learn = new Spell.Learn();
 
         SpellBuilder.Casting.channel(spell, 5, 4);
-        spell.active.cast.animation = "spell_engine:two_handed_channeling";
+        spell.active.cast.animation = Animation.of("spell_engine:two_handed_channeling");
         spell.active.cast.sound = new Sound(WizardsSounds.ARCANE_BEAM_CASTING.id(), 0);
         spell.active.cast.start_sound = new Sound(WizardsSounds.ARCANE_BEAM_START.id());
         spell.active.cast.particles = new ParticleBatch[] {
@@ -427,7 +428,7 @@ public class WizardSpells {
         SpellBuilder.Casting.instant(spell);
 
         spell.release = new Spell.Release();
-        spell.release.animation = "spell_engine:one_handed_area_release";
+        spell.release.animation = Animation.of("spell_engine:one_handed_area_release");
         spell.release.sound = new Sound(Identifier.of("minecraft", "entity.enderman.teleport"));
 
         var teleport = new Spell.Impact();
@@ -472,12 +473,12 @@ public class WizardSpells {
         spell.range = 16;
 
         spell.active.cast.duration = 1.2F;
-        spell.active.cast.animation = "spell_engine:one_handed_projectile_charge";
+        spell.active.cast.animation = Animation.of("spell_engine:one_handed_projectile_charge");
         spell.active.cast.sound = new Sound(SpellEngineSounds.GENERIC_FIRE_CASTING.id(), 0);
         spell.active.cast.particles = new ParticleBatch[] { fireCastingParticles() };
 
         spell.release = new Spell.Release();
-        spell.release.animation = "spell_engine:one_handed_projectile_release";
+        spell.release.animation = Animation.of("spell_engine:one_handed_projectile_release");
         spell.release.sound = new Sound(SpellEngineSounds.GENERIC_FIRE_RELEASE.id());
 
         spell.target.type = Spell.Target.Type.AIM;
@@ -511,12 +512,12 @@ public class WizardSpells {
         spell.learn = new Spell.Learn();
 
         spell.active.cast.duration = 1.5F;
-        spell.active.cast.animation = "spell_engine:one_handed_projectile_charge";
+        spell.active.cast.animation = Animation.of("spell_engine:one_handed_projectile_charge");
         spell.active.cast.sound = new Sound(SpellEngineSounds.GENERIC_FIRE_CASTING.id(), 0);
         spell.active.cast.particles = new ParticleBatch[] { fireCastingParticles() };
 
         spell.release = new Spell.Release();
-        spell.release.animation = "spell_engine:one_handed_projectile_release";
+        spell.release.animation = Animation.of("spell_engine:one_handed_projectile_release");
 
         spell.target.type = Spell.Target.Type.AIM;
         spell.target.aim = new Spell.Target.Aim();
@@ -579,12 +580,12 @@ public class WizardSpells {
         spell.learn = new Spell.Learn();
 
         spell.active.cast.duration = 1.5F;
-        spell.active.cast.animation = "spell_engine:one_handed_projectile_charge";
+        spell.active.cast.animation = Animation.of("spell_engine:one_handed_projectile_charge");
         spell.active.cast.sound = new Sound(SpellEngineSounds.GENERIC_FIRE_CASTING.id(), 0);
         spell.active.cast.particles = new ParticleBatch[] { fireCastingParticles() };
 
         spell.release = new Spell.Release();
-        spell.release.animation = "spell_engine:one_handed_projectile_release";
+        spell.release.animation = Animation.of("spell_engine:one_handed_projectile_release");
 
         spell.target.type = Spell.Target.Type.AIM;
         spell.target.aim = new Spell.Target.Aim();
@@ -659,7 +660,7 @@ public class WizardSpells {
         spell.learn = new Spell.Learn();
 
         SpellBuilder.Casting.channel(spell, 5, 4);
-        spell.active.cast.animation = "spell_engine:two_handed_channeling";
+        spell.active.cast.animation = Animation.of("spell_engine:two_handed_channeling");
         spell.active.cast.sound = new Sound(WizardsSounds.FIRE_BREATH_CASTING.id(), 0);
         spell.active.cast.start_sound = new Sound(WizardsSounds.FIRE_BREATH_START.id());
         spell.active.cast.particles = new ParticleBatch[] {
@@ -715,12 +716,12 @@ public class WizardSpells {
         spell.learn = new Spell.Learn();
 
         spell.active.cast.duration = 1F;
-        spell.active.cast.animation = "spell_engine:one_handed_projectile_charge";
+        spell.active.cast.animation = Animation.of("spell_engine:one_handed_projectile_charge");
         spell.active.cast.sound = new Sound(SpellEngineSounds.GENERIC_FIRE_CASTING.id(), 0);
         spell.active.cast.particles = new ParticleBatch[] { fireCastingParticles() };
 
         spell.release = new Spell.Release();
-        spell.release.animation = "spell_engine:one_handed_area_release";
+        spell.release.animation = Animation.of("spell_engine:one_handed_area_release");
         spell.release.sound = new Sound(WizardsSounds.FIRE_METEOR_RELEASE.id());
 
         spell.target.type = Spell.Target.Type.AIM;
@@ -884,12 +885,12 @@ public class WizardSpells {
         spell.range = 48;
 
         spell.active.cast.duration = 1F;
-        spell.active.cast.animation = "spell_engine:one_handed_projectile_charge";
+        spell.active.cast.animation = Animation.of("spell_engine:one_handed_projectile_charge");
         spell.active.cast.sound = new Sound(SpellEngineSounds.GENERIC_FROST_CASTING.id(), 0);
         spell.active.cast.particles = new ParticleBatch[] { frostCastingParticles() };
 
         spell.release = new Spell.Release();
-        spell.release.animation = "spell_engine:one_handed_projectile_release";
+        spell.release.animation = Animation.of("spell_engine:one_handed_projectile_release");
         spell.release.sound = new Sound(SpellEngineSounds.GENERIC_FROST_RELEASE.id());
 
         spell.target.type = Spell.Target.Type.AIM;
@@ -951,12 +952,12 @@ public class WizardSpells {
         spell.learn = new Spell.Learn();
 
         spell.active.cast.duration = 1.1F;
-        spell.active.cast.animation = "spell_engine:one_handed_projectile_charge";
+        spell.active.cast.animation = Animation.of("spell_engine:one_handed_projectile_charge");
         spell.active.cast.sound = new Sound(SpellEngineSounds.GENERIC_FROST_CASTING.id(), 0);
         spell.active.cast.particles = new ParticleBatch[] { frostCastingParticles() };
 
         spell.release = new Spell.Release();
-        spell.release.animation = "spell_engine:one_handed_projectile_release";
+        spell.release.animation = Animation.of("spell_engine:one_handed_projectile_release");
 
         spell.target.type = Spell.Target.Type.AIM;
         spell.target.aim = new Spell.Target.Aim();
@@ -1027,7 +1028,7 @@ public class WizardSpells {
         spell.learn = new Spell.Learn();
 
         spell.active.cast.duration = 0.5F;
-        spell.active.cast.animation = "spell_engine:one_handed_area_charge";
+        spell.active.cast.animation = Animation.of("spell_engine:one_handed_area_charge");
         spell.active.cast.sound = new Sound(SpellEngineSounds.GENERIC_FROST_CASTING.id(), 0);
         spell.active.cast.particles = new ParticleBatch[] { frostCastingParticles() };
 
@@ -1036,7 +1037,7 @@ public class WizardSpells {
         spell.target.area.vertical_range_multiplier = 0.5F;
 
         spell.release = new Spell.Release();
-        spell.release.animation = "spell_engine:one_handed_area_release";
+        spell.release.animation = Animation.of("spell_engine:one_handed_area_release");
         spell.release.sound = new Sound(WizardsSounds.FROST_NOVA_RELEASE.id());
         spell.release.particles = new ParticleBatch[] {
                 new ParticleBatch(
@@ -1100,7 +1101,7 @@ public class WizardSpells {
         SpellBuilder.Casting.instant(spell);
 
         spell.release = new Spell.Release();
-        spell.release.animation = "spell_engine:one_handed_area_release";
+        spell.release.animation =  Animation.of("spell_engine:one_handed_area_release");
         spell.release.sound = new Sound(WizardsSounds.FROST_SHIELD_RELEASE.id());
         spell.release.particles = new ParticleBatch[] {
                 new ParticleBatch(
@@ -1135,7 +1136,7 @@ public class WizardSpells {
         spell.learn = new Spell.Learn();
 
         SpellBuilder.Casting.channel(spell, 8, 12);
-        spell.active.cast.animation = "spell_engine:one_handed_sky_charge";
+        spell.active.cast.animation = Animation.of("spell_engine:one_handed_sky_charge");
         spell.active.cast.sound = new Sound(WizardsSounds.FROST_BLIZZARD_CASTING.id(), 0);
         spell.active.cast.particles = new ParticleBatch[] { frostCastingParticles() };
 

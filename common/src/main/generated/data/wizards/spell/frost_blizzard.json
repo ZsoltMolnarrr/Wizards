@@ -7,7 +7,9 @@
     "cast": {
       "duration": 8.0,
       "channel_ticks": 12,
-      "animation": "spell_engine:one_handed_sky_charge",
+      "animation": {
+        "id": "spell_engine:one_handed_sky_charge"
+      },
       "sound": {
         "id": "wizards:frost_blizzard_casting",
         "randomness": 0.0

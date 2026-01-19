@@ -6,7 +6,9 @@
   "active": {
     "cast": {
       "duration": 1.0,
-      "animation": "spell_engine:one_handed_projectile_charge",
+      "animation": {
+        "id": "spell_engine:one_handed_projectile_charge"
+      },
       "sound": {
         "id": "spell_engine:generic_arcane_casting",
         "randomness": 0.0
@@ -25,7 +27,9 @@
     }
   },
   "release": {
-    "animation": "spell_engine:one_handed_projectile_release",
+    "animation": {
+      "id": "spell_engine:one_handed_projectile_release"
+    },
     "sound": {
       "id": "wizards:arcane_missile_release"
     }

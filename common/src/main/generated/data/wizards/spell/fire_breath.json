@@ -7,7 +7,9 @@
     "cast": {
       "duration": 5.0,
       "channel_ticks": 4,
-      "animation": "spell_engine:two_handed_channeling",
+      "animation": {
+        "id": "spell_engine:two_handed_channeling"
+      },
       "start_sound": {
         "id": "wizards:fire_breath_start"
       },

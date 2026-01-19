@@ -5,7 +5,9 @@
   "learn": {},
   "active": {},
   "release": {
-    "animation": "spell_engine:one_handed_area_release",
+    "animation": {
+      "id": "spell_engine:one_handed_area_release"
+    },
     "sound": {
       "id": "minecraft:entity.enderman.teleport"
     }
