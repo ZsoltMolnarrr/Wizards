@@ -1,0 +1,8 @@
+{
+  "values": [
+    {
+      "id": "wizards:frostbolt",
+      "required": false
+    }
+  ]
+}

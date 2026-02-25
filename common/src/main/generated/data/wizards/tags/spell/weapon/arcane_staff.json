@@ -1,0 +1,8 @@
+{
+  "values": [
+    {
+      "id": "wizards:arcane_blast",
+      "required": false
+    }
+  ]
+}

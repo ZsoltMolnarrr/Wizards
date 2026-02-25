@@ -19,10 +19,28 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class WizardSpells {
+    public enum WeaponGroup { WIZARD_STAFF, ARCANE_STAFF, FIRE_STAFF, FROST_STAFF }
     public enum Book { ARCANE, FIRE, FROST }
     public record Entry(Identifier id, Spell spell, String title, String description,
-                        @Nullable Book book,
-                        @Nullable SpellTooltip.DescriptionMutator mutator) { }
+                        @Nullable SpellTooltip.DescriptionMutator mutator,
+                        @Nullable List<WeaponGroup> weaponGroups,
+                        @Nullable Book book) {
+        public Entry(Identifier id, Spell spell, String title, String description) {
+            this(id, spell, title, description, null, List.of(), null);
+        }
+        public Entry mutator(SpellTooltip.DescriptionMutator mutator) {
+            return new Entry(id, spell, title, description, mutator, weaponGroups, book);
+        }
+        public Entry weaponGroup(WeaponGroup weaponGroup) {
+            var newGroups = new ArrayList<>(weaponGroups != null ? weaponGroups : List.of());
+            newGroups.add(weaponGroup);
+            return new Entry(id, spell, title, description, mutator, newGroups, book);
+        }
+        public Entry book(Book book) {
+            return new Entry(id, spell, title, description, mutator, weaponGroups, book);
+        }
+    }
+
     public static final List<Entry> entries = new ArrayList<>();
     private static Entry add(Entry entry) {
         entries.add(entry);
@@ -185,7 +203,7 @@ public class WizardSpells {
 
         configureArcaneRuneCost(spell);
 
-        return new Entry(id, spell, "", "", null, null);
+        return new Entry(id, spell, "", "");
     }
 
     public static Entry arcane_blast = add(arcane_blast());
@@ -240,7 +258,7 @@ public class WizardSpells {
 
         configureArcaneRuneCost(spell);
 
-        return new Entry(id, spell, "", "", null,null);
+        return new Entry(id, spell, "", "").weaponGroup(WeaponGroup.ARCANE_STAFF).weaponGroup(WeaponGroup.WIZARD_STAFF);
     }
 
     public static Entry arcane_missile = add(arcane_missile());
@@ -317,7 +335,7 @@ public class WizardSpells {
         SpellBuilder.Cost.cooldown(spell, 2);
         spell.cost.cooldown.proportional = true;
 
-        return new Entry(id, spell, "", "", Book.ARCANE, null);
+        return new Entry(id, spell, "", "").book(Book.ARCANE);
     }
 
     public static Entry arcane_beam = add(arcane_beam());
@@ -412,7 +430,7 @@ public class WizardSpells {
         SpellBuilder.Cost.cooldown(spell, 10);
         spell.cost.cooldown.proportional = true;
 
-        return new Entry(id, spell, "", "", Book.ARCANE, null);
+        return new Entry(id, spell, "", "").book(Book.ARCANE);
     }
 
     public static Entry arcane_blink = add(arcane_blink());
@@ -459,7 +477,7 @@ public class WizardSpells {
         configureArcaneRuneCost(spell);
         SpellBuilder.Cost.cooldown(spell, 12);
 
-        return new Entry(id, spell, "", "", Book.ARCANE, null);
+        return new Entry(id, spell, "", "").book(Book.ARCANE);
     }
 
     public static Entry fire_scorch = add(fire_scorch());
@@ -497,7 +515,7 @@ public class WizardSpells {
 
         configureFireRuneCost(spell);
 
-        return new Entry(id, spell, "", "", null, null);
+        return new Entry(id, spell, "", "");
     }
 
     public static Entry fireball = add(fireball());
@@ -565,7 +583,7 @@ public class WizardSpells {
 
         configureFireRuneCost(spell);
 
-        return new Entry(id, spell, "", "", null, null);
+        return new Entry(id, spell, "", "");
     }
 
     public static Entry fire_blast = add(fire_blast());
@@ -646,7 +664,7 @@ public class WizardSpells {
 
         SpellBuilder.Cost.cooldownGroup(spell, "weapon");
 
-        return new Entry(id, spell, "", "", null, null);
+        return new Entry(id, spell, "", "").weaponGroup(WeaponGroup.FIRE_STAFF).weaponGroup(WeaponGroup.WIZARD_STAFF);
     }
 
     public static Entry fire_breath = add(fire_breath());
@@ -702,7 +720,7 @@ public class WizardSpells {
         SpellBuilder.Cost.cooldown(spell, 10);
         spell.cost.cooldown.proportional = true;
 
-        return new Entry(id, spell, "", "", Book.FIRE, null);
+        return new Entry(id, spell, "", "").book(Book.FIRE);
     }
 
     public static Entry fire_meteor = add(fire_meteor());
@@ -787,7 +805,7 @@ public class WizardSpells {
         configureFireRuneCost(spell);
         SpellBuilder.Cost.cooldown(spell, 10);
 
-        return new Entry(id, spell, "", "", Book.FIRE, null);
+        return new Entry(id, spell, "", "").book(Book.FIRE);
     }
 
     public static Entry fire_wall = add(fire_wall());
@@ -872,7 +890,7 @@ public class WizardSpells {
         SpellBuilder.Cost.item(spell, "runes:fire_stone", 1);
         SpellBuilder.Cost.exhaust(spell, 0.4F);
 
-        return new Entry(id, spell, name, description, Book.FIRE, null);
+        return new Entry(id, spell, name, description).book(Book.FIRE);
     }
 
     public static Entry frost_shard = add(frost_shard());
@@ -936,7 +954,7 @@ public class WizardSpells {
 
         configureFrostRuneCost(spell);
 
-        return new Entry(id, spell, "", "", null, null);
+        return new Entry(id, spell, "", "");
     }
 
     public static Entry frostbolt = add(frostbolt());
@@ -1014,7 +1032,7 @@ public class WizardSpells {
 
         SpellBuilder.Cost.cooldownGroup(spell, "weapon");
 
-        return new Entry(id, spell, "", "", null, null);
+        return new Entry(id, spell, "", "").weaponGroup(WeaponGroup.FROST_STAFF).weaponGroup(WeaponGroup.WIZARD_STAFF);
     }
 
     public static Entry frost_nova = add(frost_nova());
@@ -1085,7 +1103,7 @@ public class WizardSpells {
         configureFrostRuneCost(spell);
         SpellBuilder.Cost.cooldown(spell, 10);
 
-        return new Entry(id, spell, "", "", Book.FROST, null);
+        return new Entry(id, spell, "", "").book(Book.FROST);
     }
 
     public static Entry frost_shield = add(frost_shield());
@@ -1122,7 +1140,7 @@ public class WizardSpells {
         configureFrostRuneCost(spell);
         SpellBuilder.Cost.cooldown(spell, 30);
 
-        return new Entry(id, spell, "", "", Book.FROST, null);
+        return new Entry(id, spell, "", "").book(Book.FROST);
     }
 
     public static Entry frost_blizzard = add(frost_blizzard());
@@ -1228,6 +1246,6 @@ public class WizardSpells {
         SpellBuilder.Cost.cooldown(spell, 16);
         spell.cost.cooldown.proportional = true;
 
-        return new Entry(id, spell, "", "", Book.FROST, null);
+        return new Entry(id, spell, "", "").book(Book.FROST);
     }
 }
