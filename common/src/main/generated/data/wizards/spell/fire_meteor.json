@@ -79,7 +79,7 @@
             }
           ],
           "model": {
-            "model_id": "wizards:projectile/fire_meteor"
+            "model_id": "wizards:spell_projectile/fire_meteor"
           }
         }
       }

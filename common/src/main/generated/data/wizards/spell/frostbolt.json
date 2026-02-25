@@ -74,7 +74,7 @@
             }
           ],
           "model": {
-            "model_id": "wizards:projectile/frostbolt",
+            "model_id": "wizards:spell_projectile/frostbolt",
             "scale": 0.5
           }
         }

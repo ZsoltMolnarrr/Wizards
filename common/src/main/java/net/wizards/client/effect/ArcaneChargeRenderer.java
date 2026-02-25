@@ -10,7 +10,7 @@ import net.wizards.WizardsMod;
 import java.util.List;
 
 public class ArcaneChargeRenderer extends OrbitingEffectRenderer {
-    public static final Identifier modelId = Identifier.of(WizardsMod.ID, "effect/arcane_charge");
+    public static final Identifier modelId = Identifier.of(WizardsMod.ID, "spell_effect/arcane_charge");
     private static final RenderLayer GLOWING_RENDER_LAYER =
             CustomLayers.spellEffect(LightEmission.GLOW, true);
 

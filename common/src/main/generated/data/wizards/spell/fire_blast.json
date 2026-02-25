@@ -74,7 +74,7 @@
             }
           ],
           "model": {
-            "model_id": "wizards:projectile/fire_blast",
+            "model_id": "wizards:spell_projectile/fire_blast",
             "scale": 0.9
           }
         }

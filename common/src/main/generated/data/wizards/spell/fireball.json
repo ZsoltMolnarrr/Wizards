@@ -65,7 +65,7 @@
             }
           ],
           "model": {
-            "model_id": "wizards:projectile/fireball",
+            "model_id": "wizards:spell_projectile/fireball",
             "scale": 0.5
           }
         }

@@ -181,7 +181,7 @@ public class WizardSpells {
                         .color(ARCANE_COLOR.toRGBA())
         };
         projectile.client_data.model = new Spell.ProjectileModel();
-        projectile.client_data.model.model_id = "wizards:projectile/arcane_bolt";
+        projectile.client_data.model.model_id = "wizards:spell_projectile/arcane_bolt";
         projectile.client_data.model.scale = 0.5F;
         spell.deliver.projectile.projectile = projectile;
 
@@ -313,7 +313,7 @@ public class WizardSpells {
                         .color(ARCANE_COLOR.toRGBA())
         };
         projectile.client_data.model = new Spell.ProjectileModel();
-        projectile.client_data.model.model_id = "wizards:projectile/arcane_missile";
+        projectile.client_data.model.model_id = "wizards:spell_projectile/arcane_missile";
         projectile.client_data.model.scale = 0.6F;
         spell.deliver.projectile.projectile = projectile;
 
@@ -560,7 +560,7 @@ public class WizardSpells {
                         ParticleBatch.Rotation.LOOK, 1, 0, 0.1F, 0)
         };
         projectile.client_data.model = new Spell.ProjectileModel();
-        projectile.client_data.model.model_id = "wizards:projectile/fireball";
+        projectile.client_data.model.model_id = "wizards:spell_projectile/fireball";
         projectile.client_data.model.scale = 0.5F;
         spell.deliver.projectile.projectile = projectile;
 
@@ -632,7 +632,7 @@ public class WizardSpells {
                         ParticleBatch.Rotation.LOOK, 2, 0, 0.1F, 0)
         };
         projectile.client_data.model = new Spell.ProjectileModel();
-        projectile.client_data.model.model_id = "wizards:projectile/fire_blast";
+        projectile.client_data.model.model_id = "wizards:spell_projectile/fire_blast";
         projectile.client_data.model.scale = 0.9F;
         spell.deliver.projectile.projectile = projectile;
 
@@ -772,7 +772,7 @@ public class WizardSpells {
                         ParticleBatch.Rotation.LOOK, 6, 0, 0.05F, 0)
         };
         projectile.client_data.model = new Spell.ProjectileModel();
-        projectile.client_data.model.model_id = "wizards:projectile/fire_meteor";
+        projectile.client_data.model.model_id = "wizards:spell_projectile/fire_meteor";
         spell.deliver.meteor.projectile = projectile;
 
         var damage = SpellBuilder.Impacts.damage(1F, 2F);
@@ -932,7 +932,7 @@ public class WizardSpells {
                         .color(FROST_COLOR.toRGBA())
         };
         projectile.client_data.model = new Spell.ProjectileModel();
-        projectile.client_data.model.model_id = "wizards:projectile/frost_shard";
+        projectile.client_data.model.model_id = "wizards:spell_projectile/frost_shard";
         projectile.client_data.model.scale = 0.75F;
         spell.deliver.projectile.projectile = projectile;
 
@@ -1006,7 +1006,7 @@ public class WizardSpells {
                         .color(FROST_COLOR.toRGBA())
         };
         projectile.client_data.model = new Spell.ProjectileModel();
-        projectile.client_data.model.model_id = "wizards:projectile/frostbolt";
+        projectile.client_data.model.model_id = "wizards:spell_projectile/frostbolt";
         projectile.client_data.model.scale = 0.5F;
         spell.deliver.projectile.projectile = projectile;
 
@@ -1187,7 +1187,7 @@ public class WizardSpells {
                         .color(FROST_COLOR.toRGBA())
         };
         projectile.client_data.model = new Spell.ProjectileModel();
-        projectile.client_data.model.model_id = "wizards:projectile/frost_shard";
+        projectile.client_data.model.model_id = "wizards:spell_projectile/frost_shard";
         projectile.client_data.model.scale = 0.8F;
         spell.deliver.meteor.projectile = projectile;
 

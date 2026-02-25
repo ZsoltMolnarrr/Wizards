@@ -50,15 +50,15 @@ public class WizardWeapons {
     // MARK: Wands
 
     public static final Weapon.Entry noviceWand = add(Weapons.damageWand(
-                    NAMESPACE, "wand_novice",
+            NAMESPACE, "wand_novice",
                     Equipment.Tier.TIER_0, () -> Ingredient.ofItems(Items.STICK),
                     List.of(SpellSchools.FIRE.id))
             .spellContainer(SpellContainers.forMagicWeapon().withSpellId(WizardSpells.fire_scorch.id()))
     );
     public static final Weapon.Entry arcaneWand = add(Weapons.damageWand(
             NAMESPACE, "wand_arcane",
-            Equipment.Tier.TIER_2, () -> Ingredient.ofItems(Items.GOLD_INGOT),
-            List.of(SpellSchools.ARCANE.id))
+                    Equipment.Tier.TIER_2, () -> Ingredient.ofItems(Items.GOLD_INGOT),
+                    List.of(SpellSchools.ARCANE.id))
             .spellContainer(SpellContainers.forMagicWeapon().withSpellId(WizardSpells.arcane_bolt.id()))
     );
     public static final Weapon.Entry fireWand = add(Weapons.damageWand(

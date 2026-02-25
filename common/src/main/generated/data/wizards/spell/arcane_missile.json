@@ -82,7 +82,7 @@
             }
           ],
           "model": {
-            "model_id": "wizards:projectile/arcane_missile",
+            "model_id": "wizards:spell_projectile/arcane_missile",
             "scale": 0.6
           }
         }

@@ -69,7 +69,7 @@
             }
           ],
           "model": {
-            "model_id": "wizards:projectile/frost_shard",
+            "model_id": "wizards:spell_projectile/frost_shard",
             "scale": 0.8
           }
         }

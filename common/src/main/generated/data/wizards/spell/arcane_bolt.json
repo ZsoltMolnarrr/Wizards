@@ -58,7 +58,7 @@
             }
           ],
           "model": {
-            "model_id": "wizards:projectile/arcane_bolt",
+            "model_id": "wizards:spell_projectile/arcane_bolt",
             "scale": 0.5
           }
         }
