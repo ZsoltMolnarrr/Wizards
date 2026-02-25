@@ -3,6 +3,7 @@
   "range": 48.0,
   "group": "primary",
   "tier": 0,
+  "learn": {},
   "active": {
     "cast": {
       "duration": 1.0,

@@ -129,7 +129,7 @@ public class WizardSpells {
     public static Entry arcane_bolt = add(arcane_bolt());
     private static Entry arcane_bolt() {
         var id = Identifier.of(WizardsMod.ID, "arcane_bolt");
-        var spell = activeSpellBase();
+        var spell = SpellBuilder.createWeaponSpell();
         spell.school = SpellSchools.ARCANE;
         spell.group = PRIMARY_GROUP;
         spell.tier = 0;
@@ -191,7 +191,7 @@ public class WizardSpells {
     public static Entry arcane_blast = add(arcane_blast());
     private static Entry arcane_blast() {
         var id = Identifier.of(WizardsMod.ID, "arcane_blast");
-        var spell = SpellBuilder.createSpellActive();
+        var spell = SpellBuilder.createWeaponSpell();
         spell.school = SpellSchools.ARCANE;
         spell.group = PRIMARY_GROUP;
         spell.tier = 1;
@@ -465,7 +465,7 @@ public class WizardSpells {
     public static Entry fire_scorch = add(fire_scorch());
     private static Entry fire_scorch() {
         var id = Identifier.of(WizardsMod.ID, "fire_scorch");
-        var spell = SpellBuilder.createSpellActive();
+        var spell = SpellBuilder.createWeaponSpell();
         spell.school = SpellSchools.FIRE;
         spell.group = PRIMARY_GROUP;
         spell.tier = 0;
@@ -503,7 +503,7 @@ public class WizardSpells {
     public static Entry fireball = add(fireball());
     private static Entry fireball() {
         var id = Identifier.of(WizardsMod.ID, "fireball");
-        var spell = SpellBuilder.createSpellActive();
+        var spell = SpellBuilder.createWeaponSpell();
         spell.school = SpellSchools.FIRE;
         spell.group = PRIMARY_GROUP;
         spell.tier = 0;
@@ -571,7 +571,7 @@ public class WizardSpells {
     public static Entry fire_blast = add(fire_blast());
     private static Entry fire_blast() {
         var id = Identifier.of(WizardsMod.ID, "fire_blast");
-        var spell = SpellBuilder.createSpellActive();
+        var spell = SpellBuilder.createWeaponSpell();
         spell.school = SpellSchools.FIRE;
         spell.group = PRIMARY_GROUP;
         spell.tier = 1;
@@ -878,7 +878,7 @@ public class WizardSpells {
     public static Entry frost_shard = add(frost_shard());
     private static Entry frost_shard() {
         var id = Identifier.of(WizardsMod.ID, "frost_shard");
-        var spell = SpellBuilder.createSpellActive();
+        var spell = SpellBuilder.createWeaponSpell();
         spell.school = SpellSchools.FROST;
         spell.group = PRIMARY_GROUP;
         spell.tier = 0;
@@ -942,7 +942,7 @@ public class WizardSpells {
     public static Entry frostbolt = add(frostbolt());
     private static Entry frostbolt() {
         var id = Identifier.of(WizardsMod.ID, "frostbolt");
-        var spell = SpellBuilder.createSpellActive();
+        var spell = SpellBuilder.createWeaponSpell();
         spell.school = SpellSchools.FROST;
         spell.group = PRIMARY_GROUP;
         spell.tier = 1;
