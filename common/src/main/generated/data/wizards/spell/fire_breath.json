@@ -6,7 +6,7 @@
   "active": {
     "cast": {
       "duration": 5.0,
-      "channel_ticks": 4,
+      "channel_ticks": 25,
       "animation": {
         "id": "spell_engine:two_handed_channeling"
       },
