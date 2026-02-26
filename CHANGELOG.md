@@ -1,3 +1,7 @@
+# 2.7.0
+
+- Update to Spell Engine 1.9.0
+
 # 2.6.5
 
 - Rebalance all weapon attributes
