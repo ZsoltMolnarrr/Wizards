@@ -1,0 +1,16 @@
+{
+  "values": [
+    {
+      "id": "wizards:arcane_blast",
+      "required": false
+    },
+    {
+      "id": "wizards:fire_blast",
+      "required": false
+    },
+    {
+      "id": "wizards:frostbolt",
+      "required": false
+    }
+  ]
+}

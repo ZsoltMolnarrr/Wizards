@@ -4,11 +4,12 @@
   "tier": 2,
   "learn": {},
   "active": {
-    "scroll": {},
     "cast": {
       "duration": 4.0,
-      "channel_ticks": 6,
-      "animation": "spell_engine:two_handed_channeling",
+      "channel_ticks": 12,
+      "animation": {
+        "id": "spell_engine:two_handed_channeling"
+      },
       "sound": {
         "id": "spell_engine:generic_arcane_casting",
         "randomness": 0.0
@@ -81,7 +82,7 @@
             }
           ],
           "model": {
-            "model_id": "wizards:projectile/arcane_missile",
+            "model_id": "wizards:spell_projectile/arcane_missile",
             "scale": 0.6
           }
         }

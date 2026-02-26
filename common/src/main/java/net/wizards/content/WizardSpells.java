@@ -3,6 +3,7 @@ package net.wizards.content;
 import net.minecraft.util.Identifier;
 import net.spell_engine.api.datagen.SpellBuilder;
 import net.spell_engine.api.spell.Spell;
+import net.spell_engine.api.spell.fx.PlayerAnimation;
 import net.spell_engine.api.spell.fx.ParticleBatch;
 import net.spell_engine.api.spell.fx.Sound;
 import net.spell_engine.client.gui.SpellTooltip;
@@ -18,8 +19,28 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class WizardSpells {
+    public enum WeaponGroup { WIZARD_STAFF, ARCANE_STAFF, FIRE_STAFF, FROST_STAFF }
+    public enum Book { ARCANE, FIRE, FROST }
     public record Entry(Identifier id, Spell spell, String title, String description,
-                        @Nullable SpellTooltip.DescriptionMutator mutator) { }
+                        @Nullable SpellTooltip.DescriptionMutator mutator,
+                        @Nullable List<WeaponGroup> weaponGroups,
+                        @Nullable Book book) {
+        public Entry(Identifier id, Spell spell, String title, String description) {
+            this(id, spell, title, description, null, List.of(), null);
+        }
+        public Entry mutator(SpellTooltip.DescriptionMutator mutator) {
+            return new Entry(id, spell, title, description, mutator, weaponGroups, book);
+        }
+        public Entry weaponGroup(WeaponGroup weaponGroup) {
+            var newGroups = new ArrayList<>(weaponGroups != null ? weaponGroups : List.of());
+            newGroups.add(weaponGroup);
+            return new Entry(id, spell, title, description, mutator, newGroups, book);
+        }
+        public Entry book(Book book) {
+            return new Entry(id, spell, title, description, mutator, weaponGroups, book);
+        }
+    }
+
     public static final List<Entry> entries = new ArrayList<>();
     private static Entry add(Entry entry) {
         entries.add(entry);
@@ -126,18 +147,18 @@ public class WizardSpells {
     public static Entry arcane_bolt = add(arcane_bolt());
     private static Entry arcane_bolt() {
         var id = Identifier.of(WizardsMod.ID, "arcane_bolt");
-        var spell = activeSpellBase();
+        var spell = SpellBuilder.createWeaponSpell();
         spell.school = SpellSchools.ARCANE;
         spell.group = PRIMARY_GROUP;
         spell.tier = 0;
         spell.range = BASIC_PROJECTILE_RANGE;
         spell.active.cast.duration = 1;
-        spell.active.cast.animation = "spell_engine:one_handed_projectile_charge";
+        spell.active.cast.animation = PlayerAnimation.of("spell_engine:one_handed_projectile_charge");
         spell.active.cast.sound = new Sound(SpellEngineSounds.GENERIC_ARCANE_CASTING.id(), 0);
         spell.active.cast.particles = new ParticleBatch[] { arcaneCastingParticles() };
 
         spell.release = new Spell.Release();
-        spell.release.animation = "spell_engine:one_handed_projectile_release";
+        spell.release.animation = PlayerAnimation.of("spell_engine:one_handed_projectile_release");
         spell.release.sound = new Sound(WizardsSounds.ARCANE_MISSILE_RELEASE.id());
 
         spell.target.type = Spell.Target.Type.AIM;
@@ -160,7 +181,7 @@ public class WizardSpells {
                         .color(ARCANE_COLOR.toRGBA())
         };
         projectile.client_data.model = new Spell.ProjectileModel();
-        projectile.client_data.model.model_id = "wizards:projectile/arcane_bolt";
+        projectile.client_data.model.model_id = "wizards:spell_projectile/arcane_bolt";
         projectile.client_data.model.scale = 0.5F;
         spell.deliver.projectile.projectile = projectile;
 
@@ -178,15 +199,17 @@ public class WizardSpells {
         damage.sound = new Sound(WizardsSounds.ARCANE_MISSILE_IMPACT.id());
         spell.impacts = List.of(damage);
 
+        SpellBuilder.Cost.cooldownGroup(spell, "weapon");
+
         configureArcaneRuneCost(spell);
 
-        return new Entry(id, spell, "", "", null);
+        return new Entry(id, spell, "", "");
     }
 
     public static Entry arcane_blast = add(arcane_blast());
     private static Entry arcane_blast() {
         var id = Identifier.of(WizardsMod.ID, "arcane_blast");
-        var spell = SpellBuilder.createSpellActive();
+        var spell = SpellBuilder.createWeaponSpell();
         spell.school = SpellSchools.ARCANE;
         spell.group = PRIMARY_GROUP;
         spell.tier = 1;
@@ -194,15 +217,14 @@ public class WizardSpells {
         spell.range = 16;
 
         spell.learn = new Spell.Learn();
-        spell.active.scroll = new Spell.Active.Scroll();
 
         spell.active.cast.duration = 1.5F;
-        spell.active.cast.animation = "spell_engine:one_handed_projectile_charge";
+        spell.active.cast.animation = PlayerAnimation.of("spell_engine:one_handed_projectile_charge");
         spell.active.cast.sound = new Sound(SpellEngineSounds.GENERIC_ARCANE_CASTING.id(), 0);
         spell.active.cast.particles = new ParticleBatch[] { arcaneCastingParticles() };
 
         spell.release = new Spell.Release();
-        spell.release.animation = "spell_engine:one_handed_projectile_release";
+        spell.release.animation = PlayerAnimation.of("spell_engine:one_handed_projectile_release");
         spell.release.sound = new Sound(WizardsSounds.ARCANE_MISSILE_RELEASE.id());
 
         spell.target.type = Spell.Target.Type.AIM;
@@ -232,9 +254,11 @@ public class WizardSpells {
 
         spell.impacts = List.of(damage, arcaneCharge);
 
+        SpellBuilder.Cost.cooldownGroup(spell, "weapon");
+
         configureArcaneRuneCost(spell);
 
-        return new Entry(id, spell, "", "", null);
+        return new Entry(id, spell, "", "").weaponGroup(WeaponGroup.ARCANE_STAFF).weaponGroup(WeaponGroup.WIZARD_STAFF);
     }
 
     public static Entry arcane_missile = add(arcane_missile());
@@ -246,10 +270,9 @@ public class WizardSpells {
         spell.range = 64;
 
         spell.learn = new Spell.Learn();
-        spell.active.scroll = new Spell.Active.Scroll();
 
-        SpellBuilder.Casting.channel(spell, 4, 6);
-        spell.active.cast.animation = "spell_engine:two_handed_channeling";
+        SpellBuilder.Casting.channel(spell, 4, 12);
+        spell.active.cast.animation = PlayerAnimation.of("spell_engine:two_handed_channeling");
         spell.active.cast.sound = new Sound(SpellEngineSounds.GENERIC_ARCANE_CASTING.id(), 0);
         spell.active.cast.particles = new ParticleBatch[] { arcaneCastingParticles() };
 
@@ -290,7 +313,7 @@ public class WizardSpells {
                         .color(ARCANE_COLOR.toRGBA())
         };
         projectile.client_data.model = new Spell.ProjectileModel();
-        projectile.client_data.model.model_id = "wizards:projectile/arcane_missile";
+        projectile.client_data.model.model_id = "wizards:spell_projectile/arcane_missile";
         projectile.client_data.model.scale = 0.6F;
         spell.deliver.projectile.projectile = projectile;
 
@@ -312,7 +335,7 @@ public class WizardSpells {
         SpellBuilder.Cost.cooldown(spell, 2);
         spell.cost.cooldown.proportional = true;
 
-        return new Entry(id, spell, "", "", null);
+        return new Entry(id, spell, "", "").book(Book.ARCANE);
     }
 
     public static Entry arcane_beam = add(arcane_beam());
@@ -324,10 +347,9 @@ public class WizardSpells {
         spell.range = 32;
 
         spell.learn = new Spell.Learn();
-        spell.active.scroll = new Spell.Active.Scroll();
 
-        SpellBuilder.Casting.channel(spell, 5, 4);
-        spell.active.cast.animation = "spell_engine:two_handed_channeling";
+        SpellBuilder.Casting.channel(spell, 5, 25);
+        spell.active.cast.animation = PlayerAnimation.of("spell_engine:two_handed_channeling");
         spell.active.cast.sound = new Sound(WizardsSounds.ARCANE_BEAM_CASTING.id(), 0);
         spell.active.cast.start_sound = new Sound(WizardsSounds.ARCANE_BEAM_START.id());
         spell.active.cast.particles = new ParticleBatch[] {
@@ -408,7 +430,7 @@ public class WizardSpells {
         SpellBuilder.Cost.cooldown(spell, 10);
         spell.cost.cooldown.proportional = true;
 
-        return new Entry(id, spell, "", "", null);
+        return new Entry(id, spell, "", "").book(Book.ARCANE);
     }
 
     public static Entry arcane_blink = add(arcane_blink());
@@ -420,12 +442,11 @@ public class WizardSpells {
         spell.range = 0;
 
         spell.learn = new Spell.Learn();
-        spell.active.scroll = new Spell.Active.Scroll();
 
         SpellBuilder.Casting.instant(spell);
 
         spell.release = new Spell.Release();
-        spell.release.animation = "spell_engine:one_handed_area_release";
+        spell.release.animation = PlayerAnimation.of("spell_engine:one_handed_area_release");
         spell.release.sound = new Sound(Identifier.of("minecraft", "entity.enderman.teleport"));
 
         var teleport = new Spell.Impact();
@@ -456,13 +477,13 @@ public class WizardSpells {
         configureArcaneRuneCost(spell);
         SpellBuilder.Cost.cooldown(spell, 12);
 
-        return new Entry(id, spell, "", "", null);
+        return new Entry(id, spell, "", "").book(Book.ARCANE);
     }
 
     public static Entry fire_scorch = add(fire_scorch());
     private static Entry fire_scorch() {
         var id = Identifier.of(WizardsMod.ID, "fire_scorch");
-        var spell = SpellBuilder.createSpellActive();
+        var spell = SpellBuilder.createWeaponSpell();
         spell.school = SpellSchools.FIRE;
         spell.group = PRIMARY_GROUP;
         spell.tier = 0;
@@ -470,12 +491,12 @@ public class WizardSpells {
         spell.range = 16;
 
         spell.active.cast.duration = 1.2F;
-        spell.active.cast.animation = "spell_engine:one_handed_projectile_charge";
+        spell.active.cast.animation = PlayerAnimation.of("spell_engine:one_handed_projectile_charge");
         spell.active.cast.sound = new Sound(SpellEngineSounds.GENERIC_FIRE_CASTING.id(), 0);
         spell.active.cast.particles = new ParticleBatch[] { fireCastingParticles() };
 
         spell.release = new Spell.Release();
-        spell.release.animation = "spell_engine:one_handed_projectile_release";
+        spell.release.animation = PlayerAnimation.of("spell_engine:one_handed_projectile_release");
         spell.release.sound = new Sound(SpellEngineSounds.GENERIC_FIRE_RELEASE.id());
 
         spell.target.type = Spell.Target.Type.AIM;
@@ -490,30 +511,31 @@ public class WizardSpells {
         var fire = SpellBuilder.Impacts.fire(3);
         spell.impacts = List.of(damage, fire);
 
+        SpellBuilder.Cost.cooldownGroup(spell, "weapon");
+
         configureFireRuneCost(spell);
 
-        return new Entry(id, spell, "", "", null);
+        return new Entry(id, spell, "", "");
     }
 
     public static Entry fireball = add(fireball());
     private static Entry fireball() {
         var id = Identifier.of(WizardsMod.ID, "fireball");
-        var spell = SpellBuilder.createSpellActive();
+        var spell = SpellBuilder.createWeaponSpell();
         spell.school = SpellSchools.FIRE;
         spell.group = PRIMARY_GROUP;
         spell.tier = 0;
         spell.range = 64;
 
         spell.learn = new Spell.Learn();
-        spell.active.scroll = new Spell.Active.Scroll();
 
         spell.active.cast.duration = 1.5F;
-        spell.active.cast.animation = "spell_engine:one_handed_projectile_charge";
+        spell.active.cast.animation = PlayerAnimation.of("spell_engine:one_handed_projectile_charge");
         spell.active.cast.sound = new Sound(SpellEngineSounds.GENERIC_FIRE_CASTING.id(), 0);
         spell.active.cast.particles = new ParticleBatch[] { fireCastingParticles() };
 
         spell.release = new Spell.Release();
-        spell.release.animation = "spell_engine:one_handed_projectile_release";
+        spell.release.animation = PlayerAnimation.of("spell_engine:one_handed_projectile_release");
 
         spell.target.type = Spell.Target.Type.AIM;
         spell.target.aim = new Spell.Target.Aim();
@@ -538,7 +560,7 @@ public class WizardSpells {
                         ParticleBatch.Rotation.LOOK, 1, 0, 0.1F, 0)
         };
         projectile.client_data.model = new Spell.ProjectileModel();
-        projectile.client_data.model.model_id = "wizards:projectile/fireball";
+        projectile.client_data.model.model_id = "wizards:spell_projectile/fireball";
         projectile.client_data.model.scale = 0.5F;
         spell.deliver.projectile.projectile = projectile;
 
@@ -557,30 +579,31 @@ public class WizardSpells {
         var fire = SpellBuilder.Impacts.fire(4);
         spell.impacts = List.of(damage, fire);
 
+        SpellBuilder.Cost.cooldownGroup(spell, "weapon");
+
         configureFireRuneCost(spell);
 
-        return new Entry(id, spell, "", "", null);
+        return new Entry(id, spell, "", "");
     }
 
     public static Entry fire_blast = add(fire_blast());
     private static Entry fire_blast() {
         var id = Identifier.of(WizardsMod.ID, "fire_blast");
-        var spell = SpellBuilder.createSpellActive();
+        var spell = SpellBuilder.createWeaponSpell();
         spell.school = SpellSchools.FIRE;
         spell.group = PRIMARY_GROUP;
         spell.tier = 1;
         spell.range = 64;
 
         spell.learn = new Spell.Learn();
-        spell.active.scroll = new Spell.Active.Scroll();
 
         spell.active.cast.duration = 1.5F;
-        spell.active.cast.animation = "spell_engine:one_handed_projectile_charge";
+        spell.active.cast.animation = PlayerAnimation.of("spell_engine:one_handed_projectile_charge");
         spell.active.cast.sound = new Sound(SpellEngineSounds.GENERIC_FIRE_CASTING.id(), 0);
         spell.active.cast.particles = new ParticleBatch[] { fireCastingParticles() };
 
         spell.release = new Spell.Release();
-        spell.release.animation = "spell_engine:one_handed_projectile_release";
+        spell.release.animation = PlayerAnimation.of("spell_engine:one_handed_projectile_release");
 
         spell.target.type = Spell.Target.Type.AIM;
         spell.target.aim = new Spell.Target.Aim();
@@ -609,7 +632,7 @@ public class WizardSpells {
                         ParticleBatch.Rotation.LOOK, 2, 0, 0.1F, 0)
         };
         projectile.client_data.model = new Spell.ProjectileModel();
-        projectile.client_data.model.model_id = "wizards:projectile/fire_blast";
+        projectile.client_data.model.model_id = "wizards:spell_projectile/fire_blast";
         projectile.client_data.model.scale = 0.9F;
         spell.deliver.projectile.projectile = projectile;
 
@@ -639,7 +662,9 @@ public class WizardSpells {
 
         configureFireRuneCost(spell);
 
-        return new Entry(id, spell, "", "", null);
+        SpellBuilder.Cost.cooldownGroup(spell, "weapon");
+
+        return new Entry(id, spell, "", "").weaponGroup(WeaponGroup.FIRE_STAFF).weaponGroup(WeaponGroup.WIZARD_STAFF);
     }
 
     public static Entry fire_breath = add(fire_breath());
@@ -651,10 +676,9 @@ public class WizardSpells {
         spell.range = 10;
 
         spell.learn = new Spell.Learn();
-        spell.active.scroll = new Spell.Active.Scroll();
 
-        SpellBuilder.Casting.channel(spell, 5, 4);
-        spell.active.cast.animation = "spell_engine:two_handed_channeling";
+        SpellBuilder.Casting.channel(spell, 5, 25);
+        spell.active.cast.animation = PlayerAnimation.of("spell_engine:two_handed_channeling");
         spell.active.cast.sound = new Sound(WizardsSounds.FIRE_BREATH_CASTING.id(), 0);
         spell.active.cast.start_sound = new Sound(WizardsSounds.FIRE_BREATH_START.id());
         spell.active.cast.particles = new ParticleBatch[] {
@@ -696,7 +720,7 @@ public class WizardSpells {
         SpellBuilder.Cost.cooldown(spell, 10);
         spell.cost.cooldown.proportional = true;
 
-        return new Entry(id, spell, "", "", null);
+        return new Entry(id, spell, "", "").book(Book.FIRE);
     }
 
     public static Entry fire_meteor = add(fire_meteor());
@@ -708,15 +732,14 @@ public class WizardSpells {
         spell.range = 32;
 
         spell.learn = new Spell.Learn();
-        spell.active.scroll = new Spell.Active.Scroll();
 
         spell.active.cast.duration = 1F;
-        spell.active.cast.animation = "spell_engine:one_handed_projectile_charge";
+        spell.active.cast.animation = PlayerAnimation.of("spell_engine:one_handed_projectile_charge");
         spell.active.cast.sound = new Sound(SpellEngineSounds.GENERIC_FIRE_CASTING.id(), 0);
         spell.active.cast.particles = new ParticleBatch[] { fireCastingParticles() };
 
         spell.release = new Spell.Release();
-        spell.release.animation = "spell_engine:one_handed_area_release";
+        spell.release.animation = PlayerAnimation.of("spell_engine:one_handed_area_release");
         spell.release.sound = new Sound(WizardsSounds.FIRE_METEOR_RELEASE.id());
 
         spell.target.type = Spell.Target.Type.AIM;
@@ -749,7 +772,7 @@ public class WizardSpells {
                         ParticleBatch.Rotation.LOOK, 6, 0, 0.05F, 0)
         };
         projectile.client_data.model = new Spell.ProjectileModel();
-        projectile.client_data.model.model_id = "wizards:projectile/fire_meteor";
+        projectile.client_data.model.model_id = "wizards:spell_projectile/fire_meteor";
         spell.deliver.meteor.projectile = projectile;
 
         var damage = SpellBuilder.Impacts.damage(1F, 2F);
@@ -782,7 +805,7 @@ public class WizardSpells {
         configureFireRuneCost(spell);
         SpellBuilder.Cost.cooldown(spell, 10);
 
-        return new Entry(id, spell, "", "", null);
+        return new Entry(id, spell, "", "").book(Book.FIRE);
     }
 
     public static Entry fire_wall = add(fire_wall());
@@ -867,25 +890,25 @@ public class WizardSpells {
         SpellBuilder.Cost.item(spell, "runes:fire_stone", 1);
         SpellBuilder.Cost.exhaust(spell, 0.4F);
 
-        return new Entry(id, spell, name, description, null);
+        return new Entry(id, spell, name, description).book(Book.FIRE);
     }
 
     public static Entry frost_shard = add(frost_shard());
     private static Entry frost_shard() {
         var id = Identifier.of(WizardsMod.ID, "frost_shard");
-        var spell = SpellBuilder.createSpellActive();
+        var spell = SpellBuilder.createWeaponSpell();
         spell.school = SpellSchools.FROST;
         spell.group = PRIMARY_GROUP;
         spell.tier = 0;
         spell.range = 48;
 
         spell.active.cast.duration = 1F;
-        spell.active.cast.animation = "spell_engine:one_handed_projectile_charge";
+        spell.active.cast.animation = PlayerAnimation.of("spell_engine:one_handed_projectile_charge");
         spell.active.cast.sound = new Sound(SpellEngineSounds.GENERIC_FROST_CASTING.id(), 0);
         spell.active.cast.particles = new ParticleBatch[] { frostCastingParticles() };
 
         spell.release = new Spell.Release();
-        spell.release.animation = "spell_engine:one_handed_projectile_release";
+        spell.release.animation = PlayerAnimation.of("spell_engine:one_handed_projectile_release");
         spell.release.sound = new Sound(SpellEngineSounds.GENERIC_FROST_RELEASE.id());
 
         spell.target.type = Spell.Target.Type.AIM;
@@ -909,7 +932,7 @@ public class WizardSpells {
                         .color(FROST_COLOR.toRGBA())
         };
         projectile.client_data.model = new Spell.ProjectileModel();
-        projectile.client_data.model.model_id = "wizards:projectile/frost_shard";
+        projectile.client_data.model.model_id = "wizards:spell_projectile/frost_shard";
         projectile.client_data.model.scale = 0.75F;
         spell.deliver.projectile.projectile = projectile;
 
@@ -927,15 +950,17 @@ public class WizardSpells {
         damage.sound = new Sound(WizardsSounds.FROST_SHARD_IMPACT.id());
         spell.impacts = List.of(damage);
 
+        SpellBuilder.Cost.cooldownGroup(spell, "weapon");
+
         configureFrostRuneCost(spell);
 
-        return new Entry(id, spell, "", "", null);
+        return new Entry(id, spell, "", "");
     }
 
     public static Entry frostbolt = add(frostbolt());
     private static Entry frostbolt() {
         var id = Identifier.of(WizardsMod.ID, "frostbolt");
-        var spell = SpellBuilder.createSpellActive();
+        var spell = SpellBuilder.createWeaponSpell();
         spell.school = SpellSchools.FROST;
         spell.group = PRIMARY_GROUP;
         spell.tier = 1;
@@ -943,15 +968,14 @@ public class WizardSpells {
         spell.range = 64;
 
         spell.learn = new Spell.Learn();
-        spell.active.scroll = new Spell.Active.Scroll();
 
         spell.active.cast.duration = 1.1F;
-        spell.active.cast.animation = "spell_engine:one_handed_projectile_charge";
+        spell.active.cast.animation = PlayerAnimation.of("spell_engine:one_handed_projectile_charge");
         spell.active.cast.sound = new Sound(SpellEngineSounds.GENERIC_FROST_CASTING.id(), 0);
         spell.active.cast.particles = new ParticleBatch[] { frostCastingParticles() };
 
         spell.release = new Spell.Release();
-        spell.release.animation = "spell_engine:one_handed_projectile_release";
+        spell.release.animation = PlayerAnimation.of("spell_engine:one_handed_projectile_release");
 
         spell.target.type = Spell.Target.Type.AIM;
         spell.target.aim = new Spell.Target.Aim();
@@ -982,7 +1006,7 @@ public class WizardSpells {
                         .color(FROST_COLOR.toRGBA())
         };
         projectile.client_data.model = new Spell.ProjectileModel();
-        projectile.client_data.model.model_id = "wizards:projectile/frostbolt";
+        projectile.client_data.model.model_id = "wizards:spell_projectile/frostbolt";
         projectile.client_data.model.scale = 0.5F;
         spell.deliver.projectile.projectile = projectile;
 
@@ -1006,7 +1030,9 @@ public class WizardSpells {
 
         configureFrostRuneCost(spell);
 
-        return new Entry(id, spell, "", "", null);
+        SpellBuilder.Cost.cooldownGroup(spell, "weapon");
+
+        return new Entry(id, spell, "", "").weaponGroup(WeaponGroup.FROST_STAFF).weaponGroup(WeaponGroup.WIZARD_STAFF);
     }
 
     public static Entry frost_nova = add(frost_nova());
@@ -1018,10 +1044,9 @@ public class WizardSpells {
         spell.range = 6;
 
         spell.learn = new Spell.Learn();
-        spell.active.scroll = new Spell.Active.Scroll();
 
         spell.active.cast.duration = 0.5F;
-        spell.active.cast.animation = "spell_engine:one_handed_area_charge";
+        spell.active.cast.animation = PlayerAnimation.of("spell_engine:one_handed_area_charge");
         spell.active.cast.sound = new Sound(SpellEngineSounds.GENERIC_FROST_CASTING.id(), 0);
         spell.active.cast.particles = new ParticleBatch[] { frostCastingParticles() };
 
@@ -1030,7 +1055,7 @@ public class WizardSpells {
         spell.target.area.vertical_range_multiplier = 0.5F;
 
         spell.release = new Spell.Release();
-        spell.release.animation = "spell_engine:one_handed_area_release";
+        spell.release.animation = PlayerAnimation.of("spell_engine:one_handed_area_release");
         spell.release.sound = new Sound(WizardsSounds.FROST_NOVA_RELEASE.id());
         spell.release.particles = new ParticleBatch[] {
                 new ParticleBatch(
@@ -1078,7 +1103,7 @@ public class WizardSpells {
         configureFrostRuneCost(spell);
         SpellBuilder.Cost.cooldown(spell, 10);
 
-        return new Entry(id, spell, "", "", null);
+        return new Entry(id, spell, "", "").book(Book.FROST);
     }
 
     public static Entry frost_shield = add(frost_shield());
@@ -1090,12 +1115,11 @@ public class WizardSpells {
         spell.range = 0;
 
         spell.learn = new Spell.Learn();
-        spell.active.scroll = new Spell.Active.Scroll();
 
         SpellBuilder.Casting.instant(spell);
 
         spell.release = new Spell.Release();
-        spell.release.animation = "spell_engine:one_handed_area_release";
+        spell.release.animation =  PlayerAnimation.of("spell_engine:one_handed_area_release");
         spell.release.sound = new Sound(WizardsSounds.FROST_SHIELD_RELEASE.id());
         spell.release.particles = new ParticleBatch[] {
                 new ParticleBatch(
@@ -1116,7 +1140,7 @@ public class WizardSpells {
         configureFrostRuneCost(spell);
         SpellBuilder.Cost.cooldown(spell, 30);
 
-        return new Entry(id, spell, "", "", null);
+        return new Entry(id, spell, "", "").book(Book.FROST);
     }
 
     public static Entry frost_blizzard = add(frost_blizzard());
@@ -1128,10 +1152,9 @@ public class WizardSpells {
         spell.range = 32;
 
         spell.learn = new Spell.Learn();
-        spell.active.scroll = new Spell.Active.Scroll();
 
         SpellBuilder.Casting.channel(spell, 8, 12);
-        spell.active.cast.animation = "spell_engine:one_handed_sky_charge";
+        spell.active.cast.animation = PlayerAnimation.of("spell_engine:one_handed_sky_charge");
         spell.active.cast.sound = new Sound(WizardsSounds.FROST_BLIZZARD_CASTING.id(), 0);
         spell.active.cast.particles = new ParticleBatch[] { frostCastingParticles() };
 
@@ -1164,7 +1187,7 @@ public class WizardSpells {
                         .color(FROST_COLOR.toRGBA())
         };
         projectile.client_data.model = new Spell.ProjectileModel();
-        projectile.client_data.model.model_id = "wizards:projectile/frost_shard";
+        projectile.client_data.model.model_id = "wizards:spell_projectile/frost_shard";
         projectile.client_data.model.scale = 0.8F;
         spell.deliver.meteor.projectile = projectile;
 
@@ -1223,6 +1246,6 @@ public class WizardSpells {
         SpellBuilder.Cost.cooldown(spell, 16);
         spell.cost.cooldown.proportional = true;
 
-        return new Entry(id, spell, "", "", null);
+        return new Entry(id, spell, "", "").book(Book.FROST);
     }
 }

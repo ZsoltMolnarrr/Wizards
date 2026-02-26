@@ -4,10 +4,11 @@
   "tier": 2,
   "learn": {},
   "active": {
-    "scroll": {},
     "cast": {
       "duration": 0.5,
-      "animation": "spell_engine:one_handed_area_charge",
+      "animation": {
+        "id": "spell_engine:one_handed_area_charge"
+      },
       "sound": {
         "id": "spell_engine:generic_frost_casting",
         "randomness": 0.0
@@ -25,7 +26,9 @@
     }
   },
   "release": {
-    "animation": "spell_engine:one_handed_area_release",
+    "animation": {
+      "id": "spell_engine:one_handed_area_release"
+    },
     "particles": [
       {
         "particle_id": "spell_engine:snowflake",

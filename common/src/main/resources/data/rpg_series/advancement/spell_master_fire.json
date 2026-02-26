@@ -20,7 +20,7 @@
       "trigger": "spell_engine:spell_binding",
       "conditions": {
         "complete": true,
-        "spell_pool": "wizards:fire"
+        "spell_pool": "wizards:spell_book/fire"
       }
     }
   },

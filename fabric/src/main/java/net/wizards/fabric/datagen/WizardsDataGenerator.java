@@ -4,6 +4,7 @@ import net.fabricmc.fabric.api.datagen.v1.DataGeneratorEntrypoint;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricRecipeProvider;
+import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagProvider;
 import net.minecraft.data.server.recipe.RecipeExporter;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemConvertible;
@@ -12,8 +13,11 @@ import net.minecraft.recipe.book.RecipeCategory;
 import net.minecraft.registry.RegistryWrapper;
 import net.spell_engine.api.datagen.SimpleSoundGeneratorV2;
 import net.spell_engine.api.datagen.SpellGenerator;
-import net.spell_engine.api.item.armor.Armor;
+import net.spell_engine.api.spell.Spell;
+import net.spell_engine.api.spell.registry.SpellRegistry;
+import net.spell_engine.api.tags.SpellTags;
 import net.spell_engine.rpg_series.datagen.RPGSeriesDataGen;
+import net.spell_engine.rpg_series.item.Armor;
 import net.spell_engine.rpg_series.tags.RPGSeriesItemTags;
 import net.wizards.WizardsMod;
 import net.wizards.content.WizardSpells;
@@ -30,6 +34,7 @@ public class WizardsDataGenerator implements DataGeneratorEntrypoint {
         FabricDataGenerator.Pack pack = fabricDataGenerator.createPack();
         pack.addProvider(SoundGen::new);
         pack.addProvider(SpellGen::new);
+        pack.addProvider(SpellTagGenerator::new);
         pack.addProvider(ItemTagGenerator::new);
         pack.addProvider(UnsmeltGenerator::new);
         pack.addProvider(WizardRecipes::new);
@@ -57,6 +62,32 @@ public class WizardsDataGenerator implements DataGeneratorEntrypoint {
             for (var entry: WizardSpells.entries) {
                 builder.add(entry.id(), entry.spell());
             }
+        }
+    }
+
+    public static class SpellTagGenerator extends FabricTagProvider<Spell> {
+        public SpellTagGenerator(FabricDataOutput output, CompletableFuture<RegistryWrapper.WrapperLookup> registriesFuture) {
+            super(output, SpellRegistry.KEY, registriesFuture);
+        }
+
+        @Override
+        protected void configure(RegistryWrapper.WrapperLookup wrapperLookup) {
+            var namespace = WizardsMod.ID;
+            WizardSpells.entries.forEach(entry -> {
+                if (entry.book() != null) {
+                    var bookTagKey = SpellTags.spellBook(namespace, entry.book().toString().toLowerCase());
+                    var bookTag = getOrCreateTagBuilder(bookTagKey);
+                    bookTag.addOptional(entry.id());
+                    var scroll = SpellTags.spellScroll(namespace, entry.book().toString().toLowerCase());
+                    var scrollTag = getOrCreateTagBuilder(scroll);
+                    scrollTag.addOptional(entry.id());
+                }
+                for (var group : entry.weaponGroups()) {
+                    var weaponGroupTagKey = SpellTags.weapon(namespace, group.toString().toLowerCase());
+                    var weaponGroupTag = getOrCreateTagBuilder(weaponGroupTagKey);
+                    weaponGroupTag.addOptional(entry.id());
+                }
+            });
         }
     }
 

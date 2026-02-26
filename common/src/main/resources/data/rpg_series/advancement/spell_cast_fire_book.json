@@ -1,7 +1,10 @@
 {
   "display": {
     "icon": {
-      "id": "wizards:fire_spell_book"
+      "id": "spell_engine:spell_book",
+      "components": {
+        "spell_engine:item_model": "wizards:item/spell_book/fire"
+      }
     },
     "title": {
       "translate": "advancements.rpg_series.spell_cast_fire_book.title"
@@ -19,7 +22,7 @@
     "cast": {
       "trigger": "spell_engine:spell_cast",
       "conditions": {
-        "spell": "#wizards:fire"
+        "spell": "#wizards:spell_book/fire"
       }
     }
   },

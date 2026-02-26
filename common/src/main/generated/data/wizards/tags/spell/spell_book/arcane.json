@@ -1,15 +1,15 @@
 {
   "values": [
     {
-      "id": "wizards:staff_ruby_fire",
+      "id": "wizards:arcane_missile",
       "required": false
     },
     {
-      "id": "wizards:staff_crystal_arcane",
+      "id": "wizards:arcane_beam",
       "required": false
     },
     {
-      "id": "wizards:staff_smaragdant_frost",
+      "id": "wizards:arcane_blink",
       "required": false
     }
   ]

@@ -14,8 +14,8 @@ import net.spell_engine.api.render.LightEmission;
 import net.wizards.WizardsMod;
 
 public class FrostShieldRenderer implements CustomModelStatusEffect.Renderer {
-    public static final Identifier modelId_base = Identifier.of(WizardsMod.ID, "effect/frost_shield_base");
-    public static final Identifier modelId_overlay = Identifier.of(WizardsMod.ID, "effect/frost_shield_overlay");
+    public static final Identifier modelId_base = Identifier.of(WizardsMod.ID, "spell_effect/frost_shield_base");
+    public static final Identifier modelId_overlay = Identifier.of(WizardsMod.ID, "spell_effect/frost_shield_overlay");
 
     private static final RenderLayer BASE_RENDER_LAYER = RenderLayer.getEntityTranslucent(SpriteAtlasTexture.BLOCK_ATLAS_TEXTURE);
     private static final RenderLayer OVERLAY_RENDER_LAYER = CustomLayers.spellEffect(LightEmission.RADIATE, false);

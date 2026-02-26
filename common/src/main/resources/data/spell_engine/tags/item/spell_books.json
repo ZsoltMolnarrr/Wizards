@@ -1,8 +1,0 @@
-{
-  "replace": false,
-  "values": [
-    "wizards:arcane_spell_book",
-    "wizards:fire_spell_book",
-    "wizards:frost_spell_book"
-  ]
-}

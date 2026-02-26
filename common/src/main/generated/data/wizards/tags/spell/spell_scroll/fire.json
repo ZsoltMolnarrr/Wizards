@@ -1,0 +1,16 @@
+{
+  "values": [
+    {
+      "id": "wizards:fire_breath",
+      "required": false
+    },
+    {
+      "id": "wizards:fire_meteor",
+      "required": false
+    },
+    {
+      "id": "wizards:fire_wall",
+      "required": false
+    }
+  ]
+}

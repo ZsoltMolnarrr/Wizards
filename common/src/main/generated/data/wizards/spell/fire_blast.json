@@ -5,10 +5,11 @@
   "tier": 1,
   "learn": {},
   "active": {
-    "scroll": {},
     "cast": {
       "duration": 1.5,
-      "animation": "spell_engine:one_handed_projectile_charge",
+      "animation": {
+        "id": "spell_engine:one_handed_projectile_charge"
+      },
       "sound": {
         "id": "spell_engine:generic_fire_casting",
         "randomness": 0.0
@@ -26,7 +27,9 @@
     }
   },
   "release": {
-    "animation": "spell_engine:one_handed_projectile_release"
+    "animation": {
+      "id": "spell_engine:one_handed_projectile_release"
+    }
   },
   "target": {
     "type": "AIM",
@@ -71,7 +74,7 @@
             }
           ],
           "model": {
-            "model_id": "wizards:projectile/fire_blast",
+            "model_id": "wizards:spell_projectile/fire_blast",
             "scale": 0.9
           }
         }
@@ -126,6 +129,9 @@
     }
   },
   "cost": {
+    "cooldown": {
+      "group": "weapon"
+    },
     "item": {
       "id": "runes:fire_stone"
     }

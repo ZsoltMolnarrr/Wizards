@@ -3,10 +3,13 @@
   "range": 48.0,
   "group": "primary",
   "tier": 0,
+  "learn": {},
   "active": {
     "cast": {
       "duration": 1.0,
-      "animation": "spell_engine:one_handed_projectile_charge",
+      "animation": {
+        "id": "spell_engine:one_handed_projectile_charge"
+      },
       "sound": {
         "id": "spell_engine:generic_arcane_casting",
         "randomness": 0.0
@@ -25,7 +28,9 @@
     }
   },
   "release": {
-    "animation": "spell_engine:one_handed_projectile_release",
+    "animation": {
+      "id": "spell_engine:one_handed_projectile_release"
+    },
     "sound": {
       "id": "wizards:arcane_missile_release"
     }
@@ -53,7 +58,7 @@
             }
           ],
           "model": {
-            "model_id": "wizards:projectile/arcane_bolt",
+            "model_id": "wizards:spell_projectile/arcane_bolt",
             "scale": 0.5
           }
         }
@@ -86,6 +91,9 @@
     }
   ],
   "cost": {
+    "cooldown": {
+      "group": "weapon"
+    },
     "item": {
       "id": "runes:arcane_stone"
     }

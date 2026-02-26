@@ -6,10 +6,11 @@
   "sub_tier": 2,
   "learn": {},
   "active": {
-    "scroll": {},
     "cast": {
       "duration": 1.1,
-      "animation": "spell_engine:one_handed_projectile_charge",
+      "animation": {
+        "id": "spell_engine:one_handed_projectile_charge"
+      },
       "sound": {
         "id": "spell_engine:generic_frost_casting",
         "randomness": 0.0
@@ -27,7 +28,9 @@
     }
   },
   "release": {
-    "animation": "spell_engine:one_handed_projectile_release"
+    "animation": {
+      "id": "spell_engine:one_handed_projectile_release"
+    }
   },
   "target": {
     "type": "AIM",
@@ -71,7 +74,7 @@
             }
           ],
           "model": {
-            "model_id": "wizards:projectile/frostbolt",
+            "model_id": "wizards:spell_projectile/frostbolt",
             "scale": 0.5
           }
         }
@@ -128,6 +131,9 @@
     }
   ],
   "cost": {
+    "cooldown": {
+      "group": "weapon"
+    },
     "item": {
       "id": "runes:frost_stone"
     }

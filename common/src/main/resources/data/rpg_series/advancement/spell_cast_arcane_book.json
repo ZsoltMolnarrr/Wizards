@@ -1,7 +1,10 @@
 {
   "display": {
     "icon": {
-      "id": "wizards:arcane_spell_book"
+      "id": "spell_engine:spell_book",
+      "components": {
+        "spell_engine:item_model": "wizards:item/spell_book/arcane"
+      }
     },
     "title": {
       "translate": "advancements.rpg_series.spell_cast_arcane_book.title"
@@ -19,7 +22,7 @@
     "cast": {
       "trigger": "spell_engine:spell_cast",
       "conditions": {
-        "spell": "#wizards:arcane"
+        "spell": "#wizards:spell_book/arcane"
       }
     }
   },

@@ -4,11 +4,12 @@
   "tier": 4,
   "learn": {},
   "active": {
-    "scroll": {},
     "cast": {
       "duration": 8.0,
       "channel_ticks": 12,
-      "animation": "spell_engine:one_handed_sky_charge",
+      "animation": {
+        "id": "spell_engine:one_handed_sky_charge"
+      },
       "sound": {
         "id": "wizards:frost_blizzard_casting",
         "randomness": 0.0
@@ -68,7 +69,7 @@
             }
           ],
           "model": {
-            "model_id": "wizards:projectile/frost_shard",
+            "model_id": "wizards:spell_projectile/frost_shard",
             "scale": 0.8
           }
         }
