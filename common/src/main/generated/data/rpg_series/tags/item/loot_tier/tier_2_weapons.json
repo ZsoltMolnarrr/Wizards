@@ -1,0 +1,28 @@
+{
+  "values": [
+    {
+      "id": "wizards:wand_arcane",
+      "required": false
+    },
+    {
+      "id": "wizards:wand_fire",
+      "required": false
+    },
+    {
+      "id": "wizards:wand_frost",
+      "required": false
+    },
+    {
+      "id": "wizards:staff_arcane",
+      "required": false
+    },
+    {
+      "id": "wizards:staff_fire",
+      "required": false
+    },
+    {
+      "id": "wizards:staff_frost",
+      "required": false
+    }
+  ]
+}
