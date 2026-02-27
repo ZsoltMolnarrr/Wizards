@@ -1,0 +1,16 @@
+{
+  "values": [
+    {
+      "id": "#wizards:spell_scroll/arcane",
+      "required": false
+    },
+    {
+      "id": "#wizards:spell_scroll/fire",
+      "required": false
+    },
+    {
+      "id": "#wizards:spell_scroll/frost",
+      "required": false
+    }
+  ]
+}

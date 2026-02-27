@@ -25,6 +25,7 @@ import net.wizards.content.WizardsSounds;
 import net.wizards.item.WizardArmors;
 import net.wizards.item.WizardWeapons;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
@@ -73,14 +74,19 @@ public class WizardsDataGenerator implements DataGeneratorEntrypoint {
         @Override
         protected void configure(RegistryWrapper.WrapperLookup wrapperLookup) {
             var namespace = WizardsMod.ID;
+            var treasureTagBuilder = getOrCreateTagBuilder(SpellTags.TREASURE);
+            var processedBooks = new HashSet<WizardSpells.Book>();
             WizardSpells.entries.forEach(entry -> {
                 if (entry.book() != null) {
                     var bookTagKey = SpellTags.spellBook(namespace, entry.book().toString().toLowerCase());
                     var bookTag = getOrCreateTagBuilder(bookTagKey);
                     bookTag.addOptional(entry.id());
-                    var scroll = SpellTags.spellScroll(namespace, entry.book().toString().toLowerCase());
-                    var scrollTag = getOrCreateTagBuilder(scroll);
+                    var scrollTagKey = SpellTags.spellScroll(namespace, entry.book().toString().toLowerCase());
+                    var scrollTag = getOrCreateTagBuilder(scrollTagKey);
                     scrollTag.addOptional(entry.id());
+                    if (processedBooks.add(entry.book())) {
+                        treasureTagBuilder.addOptionalTag(scrollTagKey);
+                    }
                 }
                 for (var group : entry.weaponGroups()) {
                     var weaponGroupTagKey = SpellTags.weapon(namespace, group.toString().toLowerCase());
