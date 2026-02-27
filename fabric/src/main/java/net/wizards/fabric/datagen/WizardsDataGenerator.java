@@ -13,6 +13,7 @@ import net.minecraft.recipe.book.RecipeCategory;
 import net.minecraft.registry.RegistryWrapper;
 import net.spell_engine.api.datagen.SimpleSoundGeneratorV2;
 import net.spell_engine.api.datagen.SpellGenerator;
+import net.spell_engine.api.datagen.WeaponAttributeGenerator;
 import net.spell_engine.api.spell.Spell;
 import net.spell_engine.api.spell.registry.SpellRegistry;
 import net.spell_engine.api.tags.SpellTags;
@@ -39,6 +40,7 @@ public class WizardsDataGenerator implements DataGeneratorEntrypoint {
         pack.addProvider(ItemTagGenerator::new);
         pack.addProvider(UnsmeltGenerator::new);
         pack.addProvider(WizardRecipes::new);
+        pack.addProvider(WeaponGen::new);
     }
 
     public static class ItemTagGenerator extends RPGSeriesDataGen.ItemTagGenerator {
@@ -190,6 +192,21 @@ public class WizardsDataGenerator implements DataGeneratorEntrypoint {
                     UNSMELT_TIME / 2,
                     "disassemble"
             );
+        }
+    }
+
+    public static class WeaponGen extends WeaponAttributeGenerator {
+        public WeaponGen(FabricDataOutput dataOutput, CompletableFuture<RegistryWrapper.WrapperLookup> registryLookup) {
+            super(dataOutput, registryLookup);
+        }
+
+        @Override
+        public void generateWeaponAttributes(Builder builder) {
+            WizardWeapons.entries.forEach(entry -> {
+                if (entry.weaponAttributesPreset != null && !entry.weaponAttributesPreset.isEmpty()) {
+                    builder.entries.add(new Entry(entry.id(), entry.weaponAttributesPreset));
+                }
+            });
         }
     }
 }
