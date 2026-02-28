@@ -3,6 +3,11 @@
 DISCLAIMER: All spell books and spell scrolls will be reset, due to major API changes. Some (looted) weapons with custom spell containers become non-functional, and need to be re-obtained. Apologies for the inconvenience.
 
 - Update to Spell Engine 1.9.0
+- Spell books now offer 3 spells only, to match other classes
+- Arcane Blast spell is now attached to Arcane Staff variants
+- Frostbolt spell is now attached to Frost Staff variants
+- Pyroblast spell is now attached to Fire Staff variants
+- Wizard Staff now comes with spell choices
 
 # 2.6.5
 
