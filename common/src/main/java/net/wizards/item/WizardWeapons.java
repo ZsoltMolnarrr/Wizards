@@ -95,7 +95,7 @@ public class WizardWeapons {
 
     // MARK: Staves
 
-    public static final Weapon.Entry wizardStaff = add(Weapons.damageWand(
+    public static final Weapon.Entry wizardStaff = add(Weapons.damageStaff(
                     NAMESPACE, "staff_wizard",
                     Equipment.Tier.TIER_1, () -> Ingredient.ofItems(Items.STICK),
                     List.of(SpellSchools.ARCANE.id, SpellSchools.FIRE.id, SpellSchools.FROST.id))

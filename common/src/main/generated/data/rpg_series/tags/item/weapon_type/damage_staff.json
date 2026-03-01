@@ -1,6 +1,10 @@
 {
   "values": [
     {
+      "id": "wizards:staff_wizard",
+      "required": false
+    },
+    {
       "id": "wizards:staff_arcane",
       "required": false
     },

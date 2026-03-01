@@ -27,10 +27,6 @@
     {
       "id": "wizards:wand_netherite_frost",
       "required": false
-    },
-    {
-      "id": "wizards:staff_wizard",
-      "required": false
     }
   ]
 }
