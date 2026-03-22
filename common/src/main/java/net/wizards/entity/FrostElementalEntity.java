@@ -1,22 +1,24 @@
 package net.wizards.entity;
 
+import net.minecraft.entity.AnimationState;
 import net.minecraft.entity.EntityType;
-import net.minecraft.util.Identifier;
-import net.wizards.WizardsMod;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.ai.TargetPredicate;
 import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
 import net.minecraft.entity.attribute.EntityAttributes;
-import net.minecraft.registry.Registries;
 import net.minecraft.entity.data.DataTracker;
 import net.minecraft.entity.data.TrackedData;
 import net.minecraft.entity.data.TrackedDataHandlerRegistry;
 import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.passive.GolemEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.registry.Registries;
+import net.minecraft.util.Identifier;
 import net.minecraft.world.World;
 import net.spell_engine.internals.target.EntityRelation;
 import net.spell_engine.internals.target.EntityRelations;
+import net.wizards.WizardsMod;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.EnumSet;
@@ -40,6 +42,7 @@ public class FrostElementalEntity extends GolemEntity implements SpellSummoned {
     public static DefaultAttributeContainer.Builder createMobAttributes() {
         var cfg = WizardsMod.entityConfig.value.entries.get(ID.getPath());
         var builder = LivingEntity.createLivingAttributes()
+                .add(EntityAttributes.GENERIC_FOLLOW_RANGE, cfg.common.follow_range)
                 .add(EntityAttributes.GENERIC_MAX_HEALTH, cfg.common.max_health)
                 .add(EntityAttributes.GENERIC_MOVEMENT_SPEED, cfg.common.movement_speed)
                 .add(EntityAttributes.GENERIC_ATTACK_DAMAGE, cfg.common.attack_damage);
@@ -62,28 +65,30 @@ public class FrostElementalEntity extends GolemEntity implements SpellSummoned {
     protected void initGoals() {
         if (behaviour == null) return;
 
+        // --- Goal selector ---
+
         goalSelector.add(0, new SwimGoal(this));
-
-
-        if (behaviour.targeting.revenge) {
-            targetSelector.add(1, new RevengeGoal(this));
+        if (behaviour.actions.melee_attack) {
+            goalSelector.add(2, new MeleeAttackGoal(this, 1.2, false));
         }
-
-        goalSelector.add(2, new MeleeAttackGoal(this, 1.2, false));
-        goalSelector.add(8, new LookAtEntityGoal(this, PlayerEntity.class, 8.0F));
-        goalSelector.add(9, new LookAroundGoal(this));
-
         if (behaviour.movement == SummonBehaviour.Movement.FOLLOW) {
             goalSelector.add(3, new FollowSummonerGoal());
             goalSelector.add(7, new WanderAroundFarGoal(this, 1.0));
         }
+        goalSelector.add(8, new LookAtEntityGoal(this, PlayerEntity.class, 8.0F));
+        goalSelector.add(9, new LookAroundGoal(this));
 
-        if (behaviour.targeting.revenge) {
-            targetSelector.add(2, new FollowOwnerTargetGoal());
+        // --- Target selector ---
+
+        if (behaviour.targeting.attack_with_owner) {
+            targetSelector.add(1, new DefendOwnerGoal());
+            targetSelector.add(2, new MirrorOwnerAttackGoal());
         }
-
-        if (behaviour.targeting.automatic == SummonBehaviour.Targeting.AutomaticMode.HOSTILE) {
-            targetSelector.add(3, new ActiveTargetGoal<>(this, MobEntity.class, 10, true, false, this::shouldTarget));
+        if (behaviour.targeting.revenge) {
+            targetSelector.add(3, new RevengeGoal(this));
+        }
+        if (behaviour.targeting.automatic_targeting) {
+            targetSelector.add(4, new ActiveTargetGoal<>(this, MobEntity.class, 10, true, false, this::shouldTarget));
         }
     }
 
@@ -91,8 +96,13 @@ public class FrostElementalEntity extends GolemEntity implements SpellSummoned {
         LivingEntity owner = getOwner();
         if (owner == null) return false;
         if (candidate == owner) return false;
-        EntityRelation relation = EntityRelations.getRelation(owner, candidate);
-        return relation == EntityRelation.HOSTILE;
+        return EntityRelations.getRelation(owner, candidate) == EntityRelation.HOSTILE;
+    }
+
+    private boolean canAttackTarget(@Nullable LivingEntity target, LivingEntity owner) {
+        if (target == null) return false;
+        EntityRelation relation = EntityRelations.getRelation(owner, target);
+        return relation == EntityRelation.HOSTILE || relation == EntityRelation.NEUTRAL;
     }
 
     @Override
@@ -100,7 +110,6 @@ public class FrostElementalEntity extends GolemEntity implements SpellSummoned {
         super.initDataTracker(builder);
         builder.add(OWNER_UUID, Optional.empty());
     }
-
 
     public void setOwnerUuid(@Nullable UUID uuid) {
         this.getDataTracker().set(OWNER_UUID, Optional.ofNullable(uuid));
@@ -118,11 +127,24 @@ public class FrostElementalEntity extends GolemEntity implements SpellSummoned {
         return this.getWorld().getPlayerByUuid(uuid);
     }
 
+
+    public final AnimationState idleAnimationState = new AnimationState();
+    private int idleAnimationTimeout = 0;
+
     @Override
     public void tick() {
         super.tick();
         if (!this.getWorld().isClient() && timeToLive > 0 && this.age >= timeToLive) {
             this.discard();
+        }
+    }
+
+    private void setupAnimationStates() {
+        if (this.idleAnimationTimeout <= 0) {
+            this.idleAnimationState.start(this.age);
+            this.idleAnimationTimeout = 40;
+        } else {
+            this.idleAnimationTimeout--;
         }
     }
 
@@ -146,8 +168,13 @@ public class FrostElementalEntity extends GolemEntity implements SpellSummoned {
 //        nbt.putInt(NBT_TTL, this.timeToLive);
 //    }
 
-    private class FollowOwnerTargetGoal extends Goal {
-        public FollowOwnerTargetGoal() {
+    // Targets whoever attacked the owner (mirrors TrackOwnerAttackerGoal)
+    private class DefendOwnerGoal extends TrackTargetGoal {
+        private LivingEntity attacker;
+        private int lastAttackedTime;
+
+        public DefendOwnerGoal() {
+            super(FrostElementalEntity.this, false);
             setControls(EnumSet.of(Control.TARGET));
         }
 
@@ -155,16 +182,49 @@ public class FrostElementalEntity extends GolemEntity implements SpellSummoned {
         public boolean canStart() {
             LivingEntity owner = getOwner();
             if (owner == null) return false;
-            LivingEntity ownerTarget = owner.getAttacking();
-            if (ownerTarget == null) return false;
-            setTarget(ownerTarget);
-            return true;
+            attacker = owner.getAttacker();
+            int time = owner.getLastAttackedTime();
+            return time != lastAttackedTime
+                    && canTrack(attacker, TargetPredicate.DEFAULT)
+                    && canAttackTarget(attacker, owner);
         }
 
         @Override
-        public boolean shouldContinue() {
-            LivingEntity ownerTarget = getOwner() != null ? getOwner().getAttacking() : null;
-            return ownerTarget != null && getTarget() == ownerTarget;
+        public void start() {
+            FrostElementalEntity.this.setTarget(attacker);
+            LivingEntity owner = getOwner();
+            if (owner != null) lastAttackedTime = owner.getLastAttackedTime();
+            super.start();
+        }
+    }
+
+    // Joins the owner's current attack target (mirrors AttackWithOwnerGoal)
+    private class MirrorOwnerAttackGoal extends TrackTargetGoal {
+        private LivingEntity attacking;
+        private int lastAttackTime;
+
+        public MirrorOwnerAttackGoal() {
+            super(FrostElementalEntity.this, false);
+            setControls(EnumSet.of(Control.TARGET));
+        }
+
+        @Override
+        public boolean canStart() {
+            LivingEntity owner = getOwner();
+            if (owner == null) return false;
+            attacking = owner.getAttacking();
+            int time = owner.getLastAttackTime();
+            return time != lastAttackTime
+                    && canTrack(attacking, TargetPredicate.DEFAULT)
+                    && canAttackTarget(attacking, owner);
+        }
+
+        @Override
+        public void start() {
+            FrostElementalEntity.this.setTarget(attacking);
+            LivingEntity owner = getOwner();
+            if (owner != null) lastAttackTime = owner.getLastAttackTime();
+            super.start();
         }
     }
 
@@ -193,17 +253,13 @@ public class FrostElementalEntity extends GolemEntity implements SpellSummoned {
         @Override
         public void start() {
             LivingEntity owner = getOwner();
-            if (owner != null) {
-                getNavigation().startMovingTo(owner, 1.0);
-            }
+            if (owner != null) getNavigation().startMovingTo(owner, 1.0);
         }
 
         @Override
         public void tick() {
             LivingEntity owner = getOwner();
-            if (owner != null) {
-                getNavigation().startMovingTo(owner, 1.0);
-            }
+            if (owner != null) getNavigation().startMovingTo(owner, 1.0);
         }
     }
 }
