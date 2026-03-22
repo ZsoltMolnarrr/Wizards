@@ -11,7 +11,12 @@ import net.spell_engine.api.config.ConfigFile;
 import net.tiny_config.ConfigManager;
 import net.wizards.config.Default;
 import net.wizards.config.TweaksConfig;
+import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRegistry;
 import net.wizards.effect.WizardsEffects;
+import net.wizards.entity.EntityConfig;
+import net.wizards.entity.FrostElementalEntity;
+import net.wizards.entity.WizardEntities;
+
 import net.wizards.item.WizardArmors;
 import net.wizards.item.Group;
 import net.wizards.item.WizardWeapons;
@@ -46,15 +51,28 @@ public class WizardsMod {
             .setDirectory(ID)
             .sanitize(true)
             .build();
+    public static ConfigManager<EntityConfig> entityConfig = new ConfigManager<>
+            ("entities", WizardEntities.defaultEntityConfig())
+            .builder()
+            .setDirectory(ID)
+            .sanitize(true)
+            .build();
 
     public static void init() {
         equipmentConfig.refresh();
         effectsConfig.refresh();
         villageConfig.refresh();
         tweaksConfig.refresh();
+        entityConfig.refresh();
         if (FabricLoader.getInstance().isDevelopmentEnvironment()) {
             tweaksConfig.value.ignore_items_required_mods = true;
         }
+    }
+
+    public static void registerEntities() {
+        WizardEntities.register();
+        FabricDefaultAttributeRegistry.register(FrostElementalEntity.TYPE, FrostElementalEntity.createMobAttributes().build());
+        entityConfig.save();
     }
 
     public static void registerSounds() {

@@ -16,6 +16,9 @@ public final class NeoForgeMod {
     }
 
     public static void register(RegisterEvent event) {
+        event.register(RegistryKeys.ENTITY_TYPE, reg -> {
+            WizardsMod.registerEntities();
+        });
         event.register(RegistryKeys.SOUND_EVENT, reg -> {
             WizardsMod.registerSounds();
         });

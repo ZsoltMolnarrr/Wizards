@@ -8,6 +8,7 @@ public final class FabricMod implements ModInitializer {
     public void onInitialize() {
         // Run our common setup.
         WizardsMod.init();
+        WizardsMod.registerEntities();
         WizardsMod.registerSounds();
         WizardsMod.registerItems();
         WizardsMod.registerEffects();

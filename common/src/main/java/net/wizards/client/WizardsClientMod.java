@@ -2,6 +2,7 @@ package net.wizards.client;
 
 import mod.azure.azurelibarmor.common.render.armor.AzArmorRenderer;
 import mod.azure.azurelibarmor.common.render.armor.AzArmorRendererRegistry;
+import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
 import net.spell_engine.api.effect.CustomModelStatusEffect;
 import net.spell_engine.api.effect.CustomParticleStatusEffect;
 import net.spell_engine.rpg_series.item.Armor;
@@ -10,13 +11,16 @@ import net.wizards.client.effect.FrostShieldRenderer;
 import net.wizards.client.effect.FrozenParticles;
 import net.wizards.client.effect.FrozenRenderer;
 import net.wizards.client.effect.ArcaneChargeRenderer;
+import net.wizards.client.entity.FrostElementalRenderer;
 import net.wizards.effect.WizardsEffects;
+import net.wizards.entity.FrostElementalEntity;
 import net.wizards.item.WizardArmors;
 
 import java.util.function.Supplier;
 
 public class WizardsClientMod {
     public static void init() {
+        EntityRendererRegistry.register(FrostElementalEntity.TYPE, FrostElementalRenderer::new);
         CustomModelStatusEffect.register(WizardsEffects.arcaneCharge.effect, new ArcaneChargeRenderer());
         CustomParticleStatusEffect.register(WizardsEffects.frostSlowness.effect, new FrozenParticles(1));
         CustomParticleStatusEffect.register(WizardsEffects.frozen.effect, new FrozenParticles(2));
