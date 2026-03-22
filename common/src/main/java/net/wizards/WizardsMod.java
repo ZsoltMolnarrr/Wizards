@@ -11,8 +11,10 @@ import net.spell_engine.api.config.ConfigFile;
 import net.tiny_config.ConfigManager;
 import net.wizards.config.Default;
 import net.wizards.config.TweaksConfig;
+import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRegistry;
 import net.wizards.effect.WizardsEffects;
 import net.wizards.entity.EntityConfig;
+import net.wizards.entity.FrostElementalEntity;
 import net.wizards.entity.WizardEntities;
 
 import net.wizards.item.WizardArmors;
@@ -65,6 +67,12 @@ public class WizardsMod {
         if (FabricLoader.getInstance().isDevelopmentEnvironment()) {
             tweaksConfig.value.ignore_items_required_mods = true;
         }
+    }
+
+    public static void registerEntities() {
+        WizardEntities.register();
+        FabricDefaultAttributeRegistry.register(FrostElementalEntity.TYPE, FrostElementalEntity.createMobAttributes().build());
+        entityConfig.save();
     }
 
     public static void registerSounds() {

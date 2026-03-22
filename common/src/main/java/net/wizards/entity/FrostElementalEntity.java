@@ -3,6 +3,7 @@ package net.wizards.entity;
 import net.minecraft.entity.AnimationState;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.Tameable;
 import net.minecraft.entity.ai.TargetPredicate;
 import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
@@ -25,7 +26,7 @@ import java.util.EnumSet;
 import java.util.Optional;
 import java.util.UUID;
 
-public class FrostElementalEntity extends GolemEntity implements SpellSummoned {
+public class FrostElementalEntity extends GolemEntity implements SpellSummoned, Tameable {
     public static final Identifier ID = Identifier.of(WizardsMod.ID, "frost_elemental");
     public static EntityType<FrostElementalEntity> TYPE;
 
