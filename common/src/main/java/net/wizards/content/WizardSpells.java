@@ -13,6 +13,7 @@ import net.spell_engine.fx.SpellEngineSounds;
 import net.spell_power.api.SpellSchools;
 import net.wizards.WizardsMod;
 import net.wizards.effect.WizardsEffects;
+import net.wizards.entity.WizardEntities;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -1139,6 +1140,26 @@ public class WizardSpells {
         SpellBuilder.Cost.exhaust(spell, 0.3F);
         configureFrostRuneCost(spell);
         SpellBuilder.Cost.cooldown(spell, 30);
+
+        return new Entry(id, spell, "", "").book(Book.FROST);
+    }
+
+    public static Entry frost_elemental = add(frost_elemental());
+    private static Entry frost_elemental() {
+        var id = Identifier.of(WizardsMod.ID, "frost_elemental");
+        var spell = SpellBuilder.createSpellActive();
+        spell.school = SpellSchools.FROST;
+        spell.tier = 4;
+        spell.range = 16;
+
+        spell.learn = new Spell.Learn();
+
+        var impact = new Spell.Impact();
+        impact.action = new Spell.Impact.Action();
+        impact.action.type = Spell.Impact.Action.Type.CUSTOM;
+        impact.action.custom = new Spell.Impact.Action.Custom();
+        impact.action.custom.handler = WizardEntities.summon.toString();
+        spell.impacts = List.of(impact);
 
         return new Entry(id, spell, "", "").book(Book.FROST);
     }

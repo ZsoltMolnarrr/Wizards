@@ -9,6 +9,10 @@
       "required": false
     },
     {
+      "id": "wizards:frost_elemental",
+      "required": false
+    },
+    {
       "id": "wizards:frost_blizzard",
       "required": false
     }

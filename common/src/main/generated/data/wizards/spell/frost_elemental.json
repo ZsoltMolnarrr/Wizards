@@ -1,0 +1,17 @@
+{
+  "school": "spell_power:frost",
+  "range": 16.0,
+  "tier": 4,
+  "learn": {},
+  "active": {},
+  "impacts": [
+    {
+      "action": {
+        "type": "CUSTOM",
+        "custom": {
+          "handler": "wizards:summon"
+        }
+      }
+    }
+  ]
+}
