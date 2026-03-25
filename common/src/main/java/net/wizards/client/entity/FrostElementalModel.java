@@ -158,6 +158,7 @@ public class FrostElementalModel<T extends FrostElementalEntity> extends SingleP
         this.setHeadAngles(netHeadYaw, netHeadPitch);
         this.animateMovement(FrostElementalAnimations.Walk, limbSwing, limbSwingAmount, 2F, 2.5F);
         this.updateAnimation(entity.idleAnimationState, FrostElementalAnimations.idle, ageInTicks, 1F);
+        this.updateAnimation(entity.attackAnimationState, FrostElementalAnimations.Attack, ageInTicks, 1F);
     }
 
     private void setHeadAngles(float headYaw, float headPitch) {

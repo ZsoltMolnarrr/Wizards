@@ -2,12 +2,14 @@ package net.wizards.entity;
 
 import com.google.gson.Gson;
 import net.minecraft.entity.AnimationState;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.Tameable;
 import net.minecraft.entity.ai.TargetPredicate;
 import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
+import net.minecraft.entity.attribute.EntityAttributeModifier;
 import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.data.DataTracker;
 import net.minecraft.entity.data.TrackedData;
@@ -57,11 +59,73 @@ public class FrostElementalEntity extends GolemEntity implements SpellSummoned, 
     }
 
     @Override
+    public boolean isPushable() {
+        return behaviour != null && behaviour.movement.is_pushable;
+    }
+
+    @Override
+    public boolean collidesWith(Entity other) {
+        if (behaviour != null) {
+            switch (behaviour.movement.collision) {
+                case NONE -> {
+                    return false;
+                }
+                case ALL -> {
+                    return super.collidesWith(other);
+                }
+                case ENEMIES -> {
+                    var collidesAccordingToRelation = false;
+                    if (getOwner() != null) {
+                         var relation = EntityRelations.getRelation(getOwner(), other);
+                        collidesAccordingToRelation = relation == EntityRelation.HOSTILE || relation == EntityRelation.NEUTRAL;
+                    }
+                    return super.collidesWith(other) && collidesAccordingToRelation;
+                }
+            }
+        }
+        return super.collidesWith(other);
+    }
+
+    @Override
     public void onSummonedBySpell(SpellSummoned.Args args) {
-        setOwnerUuid(args.owner.getUuid());
-        this.behaviour = args.behaviour;
         this.timeToLive = args.behaviour.timeToLive * 20;
-        initGoals();
+        setOwnerUuid(args.owner.getUuid());
+        setBehaviour(args.behaviour);
+    }
+
+    private void setBehaviour(SummonBehaviour behaviour) {
+        if (this.behaviour != null) {
+            return;
+        }
+        this.behaviour = behaviour;
+        this.initGoals();
+        LivingEntity owner = getOwner();
+        if (owner != null) {
+            this.applyAttributeScaling(owner);
+        }
+    }
+
+    private void applyAttributeScaling(LivingEntity owner) {
+        if (behaviour == null) return;
+        for (var entry : behaviour.attribute_scaling.entries) {
+            var targetAttrOpt = Registries.ATTRIBUTE.getEntry(Identifier.of(entry.attribute_id));
+            if (targetAttrOpt.isEmpty()) continue;
+            var instance = this.getAttributeInstance(targetAttrOpt.get());
+            if (instance == null) continue;
+
+            double bonus = 0;
+            for (var modifier : entry.modifiers) {
+                var ownerAttrOpt = Registries.ATTRIBUTE.getEntry(Identifier.of(modifier.attribute_id));
+                if (ownerAttrOpt.isEmpty()) continue;
+                var ownerInstance = owner.getAttributeInstance(ownerAttrOpt.get());
+                if (ownerInstance == null) continue;
+                bonus += ownerInstance.getValue() * modifier.coefficient;
+            }
+
+            var modifierId = Identifier.of(WizardsMod.ID, "summon_scaling/" + entry.attribute_id.replace(":", "/"));
+            instance.removeModifier(modifierId);
+            instance.addTemporaryModifier(new EntityAttributeModifier(modifierId, bonus, EntityAttributeModifier.Operation.ADD_VALUE));
+        }
     }
 
     @Override
@@ -148,23 +212,27 @@ public class FrostElementalEntity extends GolemEntity implements SpellSummoned, 
 
 
     public final AnimationState idleAnimationState = new AnimationState();
-    private int idleAnimationTimeout = 0;
+    public final AnimationState attackAnimationState = new AnimationState();
 
     @Override
     public void tick() {
         super.tick();
-        if (!this.getWorld().isClient() && timeToLive > 0 && this.age >= timeToLive) {
+        if (this.getWorld().isClient()) {
+            setupAnimationStates();
+        } else if (timeToLive > 0 && this.age >= timeToLive) {
             this.discard();
         }
     }
 
     private void setupAnimationStates() {
-        if (this.idleAnimationTimeout <= 0) {
-            this.idleAnimationState.start(this.age);
-            this.idleAnimationTimeout = 40;
-        } else {
-            this.idleAnimationTimeout--;
-        }
+        idleAnimationState.setRunning(true, this.age);
+    }
+
+    @Override
+    public boolean tryAttack(Entity target) {
+        boolean success = super.tryAttack(target);
+        if (success) attackAnimationState.start(this.age);
+        return success;
     }
 
     private static final Gson GSON = new Gson();
@@ -180,8 +248,8 @@ public class FrostElementalEntity extends GolemEntity implements SpellSummoned, 
         }
         this.timeToLive = nbt.getInt(NBT_TTL);
         if (nbt.contains(NBT_BEHAVIOUR)) {
-            this.behaviour = GSON.fromJson(nbt.getString(NBT_BEHAVIOUR), SummonBehaviour.class);
-            initGoals();
+            var behaviour = GSON.fromJson(nbt.getString(NBT_BEHAVIOUR), SummonBehaviour.class);
+            setBehaviour(behaviour);
         }
     }
 

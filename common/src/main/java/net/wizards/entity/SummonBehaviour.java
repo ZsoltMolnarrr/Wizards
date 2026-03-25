@@ -1,5 +1,7 @@
 package net.wizards.entity;
 
+import net.minecraft.entity.attribute.EntityAttributeModifier;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,24 +22,18 @@ public class SummonBehaviour {
 
             public static class OwnerModifier {
                 public String attribute_id = "";
+                public EntityAttributeModifier.Operation operation = EntityAttributeModifier.Operation.ADD_VALUE;
                 public double coefficient = 1.0;
 
                 public OwnerModifier() {}
 
-                public OwnerModifier(String attribute_id, double coefficient) {
+                public OwnerModifier(String attribute_id, EntityAttributeModifier.Operation operation, double coefficient) {
                     this.attribute_id = attribute_id;
+                    this.operation = operation;
                     this.coefficient = coefficient;
                 }
             }
         }
-    }
-
-    // --- Collision ---
-
-    public boolean canBePushed = false;
-    public CollisionMode collision_mode = CollisionMode.ALLIES_PASSTHROUGH;
-    public enum CollisionMode {
-        PASSTHROUGH, ALLIES_PASSTHROUGH, ENEMIES_BUMP
     }
 
     // --- Movement ---
@@ -63,6 +59,12 @@ public class SummonBehaviour {
             /// If greater than 0, teleports to the owner when the distance exceeds this value.
             public float teleport_after_distance = 12F;
         }
+
+        public boolean is_pushable = true;
+        public CollisionMode collision = CollisionMode.NONE;
+        public enum CollisionMode {
+            NONE, ALL, ENEMIES
+        }
     }
 
     // --- Targeting ---
@@ -87,12 +89,30 @@ public class SummonBehaviour {
             public SpellCast spell_cast;
         }
 
+        public static Entry attack(float max_range, float speed) {
+            var a = new MeleeAttack();
+            a.max_range = max_range;
+            a.speed = speed;
+            var e = new Entry();
+            e.type = Type.MELEE_ATTACK;
+            e.melee_attack = a;
+            return e;
+        }
         public static class MeleeAttack {
             /// If greater than 0, the entity will perform a melee attack every attack_cooldown ticks.
             public float max_range = 0;
             public float speed = 1.2F;
         }
 
+        public static Entry spell(String spell_id, int cooldown) {
+            var s = new SpellCast();
+            s.spell_id = spell_id;
+            s.cooldown = cooldown;
+            var e = new Entry();
+            e.type = Type.SPELL_CAST;
+            e.spell_cast = s;
+            return e;
+        }
         public static class SpellCast {
             public String spell_id = "";
             public int cooldown = 20;
