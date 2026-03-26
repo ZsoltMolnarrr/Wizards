@@ -157,8 +157,11 @@ public class FrostElementalModel<T extends FrostElementalEntity> extends SingleP
         this.getPart().traverse().forEach(ModelPart::resetTransform);
         this.setHeadAngles(netHeadYaw, netHeadPitch);
         this.animateMovement(FrostElementalAnimations.Walk, limbSwing, limbSwingAmount, 2F, 2.5F);
-        this.updateAnimation(entity.idleAnimationState, FrostElementalAnimations.idle, ageInTicks, 1F);
-        this.updateAnimation(entity.attackAnimationState, FrostElementalAnimations.Attack, ageInTicks, 1F);
+        this.updateAnimation(entity.spawnAnimationState,   FrostElementalAnimations.Spawn,   ageInTicks, 1F);
+        this.updateAnimation(entity.despawnAnimationState, FrostElementalAnimations.Despawn, ageInTicks, 1F);
+        this.updateAnimation(entity.idleAnimationState,    FrostElementalAnimations.idle,    ageInTicks, 1F);
+        this.updateAnimation(entity.moveAnimationState,    FrostElementalAnimations.Walk,    ageInTicks, 1F);
+        this.updateAnimation(entity.attackAnimationState,  FrostElementalAnimations.Attack,  ageInTicks, 1F);
     }
 
     private void setHeadAngles(float headYaw, float headPitch) {

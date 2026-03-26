@@ -15,6 +15,7 @@ import net.spell_engine.api.spell.Spell;
 import net.spell_engine.api.spell.event.SpellHandlers;
 import net.spell_engine.internals.SpellHelper;
 import net.spell_power.api.SpellPower;
+import net.spell_power.api.SpellSchools;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -24,6 +25,8 @@ public class WizardEntities {
         var c = new EntityConfig();
         var entry = new EntityConfig.Entry();
         entry.common = new EntityConfig.CommonAttributes(30, 0.25, 4);
+        entry.common.follow_range = 32;
+        entry.custom.add(new EntityConfig.CustomAttribute(SpellSchools.FROST.id.toString(), 1));
         c.entries.put(FrostElementalEntity.ID.getPath(), entry);
         return c;
     }
@@ -52,29 +55,37 @@ public class WizardEntities {
 
                 // Movement: follow owner, teleport if too far
                 summonBehaviour.movement.follow = new SummonBehaviour.Movement.Follow();
+                summonBehaviour.movement.follow.teleport_after_distance = 32;
 
                 // Targeting: mirror owner's attacks and retaliate, but don't auto-aggro
                 summonBehaviour.targeting.attack_with_owner = true;
                 summonBehaviour.targeting.revenge = true;
                 summonBehaviour.targeting.automatic_targeting = false;
 
-                // Actions: standard melee (chases target)
+                // Actions: frost shard spell (preferred), melee as fallback
                 summonBehaviour.actions = List.of(
-                    SummonBehaviour.Action.attack(0, 1.5F)
+                    SummonBehaviour.Action.spell("wizards:frost_shard", 60),
+                    SummonBehaviour.Action.attack(3, 1.5F)
                 );
 
                 // Attribute scaling: health and attack scale with owner's frost spell power
                 var healthEntry = new SummonBehaviour.AttributeScaling.Entry();
                 healthEntry.attribute_id = "minecraft:generic.max_health";
                 healthEntry.modifiers = List.of(new SummonBehaviour.AttributeScaling.Entry.OwnerModifier(
-                    "spell_power:power.frost", EntityAttributeModifier.Operation.ADD_VALUE, 2.0));
+                    SpellSchools.FROST.id.toString(), EntityAttributeModifier.Operation.ADD_VALUE, 2.0));
 
                 var attackEntry = new SummonBehaviour.AttributeScaling.Entry();
                 attackEntry.attribute_id = "minecraft:generic.attack_damage";
                 attackEntry.modifiers = List.of(new SummonBehaviour.AttributeScaling.Entry.OwnerModifier(
-                    "spell_power:power.frost", EntityAttributeModifier.Operation.ADD_VALUE, 0.5));
+                    SpellSchools.FROST.id.toString(), EntityAttributeModifier.Operation.ADD_VALUE, 0.5));
 
-                summonBehaviour.attribute_scaling.entries = List.of(healthEntry, attackEntry);
+                var spellPowerEntry = new SummonBehaviour.AttributeScaling.Entry();
+                spellPowerEntry.attribute_id = SpellSchools.FROST.id.toString();
+                spellPowerEntry.modifiers = List.of(new SummonBehaviour.AttributeScaling.Entry.OwnerModifier(
+                        SpellSchools.FROST.id.toString(), EntityAttributeModifier.Operation.ADD_VALUE, 1F));
+
+                summonBehaviour.attribute_scaling.entries = List.of(healthEntry, attackEntry, spellPowerEntry);
+
                 var world = livingEntity.getWorld();
                 if (world instanceof ServerWorld serverWorld) {
                     var summoned = new FrostElementalEntity(FrostElementalEntity.TYPE, livingEntity.getWorld());

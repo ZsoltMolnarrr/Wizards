@@ -19,10 +19,18 @@ import net.minecraft.entity.passive.GolemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.registry.Registries;
+import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import net.spell_engine.api.spell.Spell;
+import net.spell_engine.api.spell.registry.SpellRegistry;
+import net.spell_engine.internals.SpellCooldownManager;
+import net.spell_engine.internals.SpellHelper;
 import net.spell_engine.internals.target.EntityRelation;
 import net.spell_engine.internals.target.EntityRelations;
+import net.spell_engine.internals.target.SpellTarget;
+import net.spell_power.api.SpellPower;
 import net.wizards.WizardsMod;
 import org.jetbrains.annotations.Nullable;
 
@@ -36,8 +44,16 @@ public class FrostElementalEntity extends GolemEntity implements SpellSummoned, 
 
     private static final TrackedData<Optional<UUID>> OWNER_UUID =
             DataTracker.registerData(FrostElementalEntity.class, TrackedDataHandlerRegistry.OPTIONAL_UUID);
+    private static final TrackedData<Byte> PHASE =
+            DataTracker.registerData(FrostElementalEntity.class, TrackedDataHandlerRegistry.BYTE);
+
+    private static final byte PHASE_SPAWNING   = 0;
+    private static final byte PHASE_ACTIVE     = 1;
+    private static final byte PHASE_DESPAWNING = 2;
 
     private int timeToLive = 0;
+    private int spawnEndAge = 0;
+    private int despawnStartAge = 0;
     @Nullable private SummonBehaviour behaviour = null;
 
     public FrostElementalEntity(EntityType<? extends FrostElementalEntity> entityType, World world) {
@@ -86,9 +102,17 @@ public class FrostElementalEntity extends GolemEntity implements SpellSummoned, 
         return super.collidesWith(other);
     }
 
+    public boolean isSpawning()   { return getDataTracker().get(PHASE) == PHASE_SPAWNING; }
+    public boolean isDespawning() { return getDataTracker().get(PHASE) == PHASE_DESPAWNING; }
+    public boolean isActive()     { return getDataTracker().get(PHASE) == PHASE_ACTIVE; }
+    private void setPhase(byte phase) { getDataTracker().set(PHASE, phase); }
+
     @Override
     public void onSummonedBySpell(SpellSummoned.Args args) {
-        this.timeToLive = args.behaviour.timeToLive * 20;
+        var sd = args.behaviour.spawn_despawn;
+        this.spawnEndAge     = sd.spawn_ticks;
+        this.timeToLive      = args.behaviour.timeToLive * 20 + sd.spawn_ticks + sd.despawn_ticks;
+        this.despawnStartAge = this.timeToLive - sd.despawn_ticks;
         setOwnerUuid(args.owner.getUuid());
         setBehaviour(args.behaviour);
     }
@@ -135,7 +159,8 @@ public class FrostElementalEntity extends GolemEntity implements SpellSummoned, 
         // --- Goal selector ---
 
         goalSelector.add(0, new SwimGoal(this));
-        int actionPriority = 2;
+        goalSelector.add(1, new PhaseBlockGoal());
+        int actionPriority = 3;
         for (var action : behaviour.actions) {
             switch (action.type) {
                 case MELEE_ATTACK -> {
@@ -192,6 +217,7 @@ public class FrostElementalEntity extends GolemEntity implements SpellSummoned, 
     protected void initDataTracker(DataTracker.Builder builder) {
         super.initDataTracker(builder);
         builder.add(OWNER_UUID, Optional.empty());
+        builder.add(PHASE, PHASE_SPAWNING);
     }
 
     public void setOwnerUuid(@Nullable UUID uuid) {
@@ -211,21 +237,39 @@ public class FrostElementalEntity extends GolemEntity implements SpellSummoned, 
     }
 
 
-    public final AnimationState idleAnimationState = new AnimationState();
-    public final AnimationState attackAnimationState = new AnimationState();
+    public final AnimationState spawnAnimationState   = new AnimationState();
+    public final AnimationState despawnAnimationState = new AnimationState();
+    public final AnimationState idleAnimationState    = new AnimationState();
+    public final AnimationState moveAnimationState    = new AnimationState();
+    public final AnimationState attackAnimationState  = new AnimationState();
+
+    private final SpellCooldownManager cooldownManager = new SpellCooldownManager(this);
 
     @Override
     public void tick() {
         super.tick();
         if (this.getWorld().isClient()) {
             setupAnimationStates();
-        } else if (timeToLive > 0 && this.age >= timeToLive) {
-            this.discard();
+        } else {
+            cooldownManager.tickUpdate();
+            if (timeToLive > 0 && this.age >= timeToLive) {
+                this.discard();
+            } else if (this.age < spawnEndAge) {
+                setPhase(PHASE_SPAWNING);
+            } else if (timeToLive > 0 && this.age >= despawnStartAge) {
+                setPhase(PHASE_DESPAWNING);
+            } else {
+                setPhase(PHASE_ACTIVE);
+            }
         }
     }
 
     private void setupAnimationStates() {
-        idleAnimationState.setRunning(true, this.age);
+        byte phase = getDataTracker().get(PHASE);
+        spawnAnimationState.setRunning(phase == PHASE_SPAWNING, this.age);
+        despawnAnimationState.setRunning(phase == PHASE_DESPAWNING, this.age);
+        idleAnimationState.setRunning(phase == PHASE_ACTIVE, this.age);
+        moveAnimationState.setRunning(phase == PHASE_ACTIVE && this.getVelocity().horizontalLength() > 0.01, this.age);
     }
 
     @Override
@@ -238,6 +282,8 @@ public class FrostElementalEntity extends GolemEntity implements SpellSummoned, 
     private static final Gson GSON = new Gson();
     private static final String NBT_OWNER_UUID = "OwnerUUID";
     private static final String NBT_TTL = "TTL";
+    private static final String NBT_SPAWN_END_AGE = "SpawnEndAge";
+    private static final String NBT_DESPAWN_START_AGE = "DespawnStartAge";
     private static final String NBT_BEHAVIOUR = "Behaviour";
 
     @Override
@@ -246,7 +292,9 @@ public class FrostElementalEntity extends GolemEntity implements SpellSummoned, 
         if (nbt.containsUuid(NBT_OWNER_UUID)) {
             setOwnerUuid(nbt.getUuid(NBT_OWNER_UUID));
         }
-        this.timeToLive = nbt.getInt(NBT_TTL);
+        this.timeToLive      = nbt.getInt(NBT_TTL);
+        this.spawnEndAge     = nbt.getInt(NBT_SPAWN_END_AGE);
+        this.despawnStartAge = nbt.getInt(NBT_DESPAWN_START_AGE);
         if (nbt.contains(NBT_BEHAVIOUR)) {
             var behaviour = GSON.fromJson(nbt.getString(NBT_BEHAVIOUR), SummonBehaviour.class);
             setBehaviour(behaviour);
@@ -261,6 +309,8 @@ public class FrostElementalEntity extends GolemEntity implements SpellSummoned, 
             nbt.putUuid(NBT_OWNER_UUID, uuid);
         }
         nbt.putInt(NBT_TTL, this.timeToLive);
+        nbt.putInt(NBT_SPAWN_END_AGE, this.spawnEndAge);
+        nbt.putInt(NBT_DESPAWN_START_AGE, this.despawnStartAge);
         if (this.behaviour != null) {
             nbt.putString(NBT_BEHAVIOUR, GSON.toJson(this.behaviour));
         }
@@ -393,15 +443,169 @@ public class FrostElementalEntity extends GolemEntity implements SpellSummoned, 
         }
     }
 
+    // Holds MOVE/LOOK/JUMP controls during spawn and despawn phases, making the entity inactionable.
+    private class PhaseBlockGoal extends Goal {
+        public PhaseBlockGoal() {
+            setControls(EnumSet.of(Control.MOVE, Control.LOOK, Control.JUMP));
+        }
+
+        @Override
+        public boolean canStart() { return !isActive(); }
+
+        @Override
+        public boolean shouldContinue() { return !isActive(); }
+    }
+
     private class SpellCastGoal extends Goal {
         private final SummonBehaviour.Action.SpellCast config;
+
+        // Spell registry entry — resolved lazily and cached (registry is stable at runtime)
+        @Nullable private RegistryEntry<Spell> spellEntry = null;
+        private boolean spellLookupAttempted = false;
+
+        // Per-activation state
+        private int castTick = 0;
+        private int castDuration = 1;
+        private boolean released = false;
+        private int targetSeeingTicker = 0;
 
         public SpellCastGoal(SummonBehaviour.Action.SpellCast config) {
             this.config = config;
             setControls(EnumSet.of(Control.MOVE, Control.LOOK));
         }
 
+        @Nullable
+        private RegistryEntry<Spell> resolveSpell() {
+            if (spellLookupAttempted) return spellEntry;
+            spellLookupAttempted = true;
+            var id = Identifier.of(config.spell_id);
+            spellEntry = SpellRegistry.from(getWorld()).getEntry(id).orElse(null);
+            return spellEntry;
+        }
+
         @Override
-        public boolean canStart() { return false; }
+        public boolean shouldRunEveryTick() { return true; }
+
+        @Override
+        public boolean canStart() {
+            var entry = resolveSpell();
+            if (entry == null) return false;
+            var spell = entry.value();
+            if (spell.active == null) return false;           // ACTIVE spells only
+            if (SpellHelper.isChanneled(spell)) return false; // INSTANT or CHARGE only
+            if (!isActive()) return false;                    // not in spawn/despawn phase
+            var target = getTarget();
+            if (target == null || !target.isAlive()) return false;
+            return !cooldownManager.isCoolingDown(entry);
+        }
+
+        @Override
+        public void start() {
+            castTick = 0;
+            released = false;
+            targetSeeingTicker = 0;
+            var entry = spellEntry; // already resolved by canStart()
+            if (entry != null) {
+                var spell = entry.value();
+                castDuration = SpellHelper.isInstant(spell)
+                        ? 1
+                        : SpellHelper.getCastTimeDetails(FrostElementalEntity.this, spell).length();
+                if (castDuration <= 0) castDuration = 1;
+            }
+            attackAnimationState.start(age);
+            setAttacking(true);
+        }
+
+        @Override
+        public boolean shouldContinue() {
+            if (released) return false;
+            if (!isActive()) return false;
+            var target = getTarget();
+            return target != null && target.isAlive();
+        }
+
+        @Override
+        public void stop() {
+            setAttacking(false);
+            getNavigation().stop();
+        }
+
+        @Override
+        public void tick() {
+            if (released) return;
+            var target = getTarget();
+            if (target == null) return;
+            var entry = spellEntry;
+            if (entry == null) return;
+            var spell = entry.value();
+
+            // Desired range based on target movement direction
+            Vec3d toTarget = target.getPos().subtract(FrostElementalEntity.this.getPos()).normalize();
+            double dot = target.getVelocity().dotProduct(toTarget);
+            // dot > 0  → target fleeing    → close in (50% range)
+            // dot < 0  → target approaching → hold back (90% range)
+            float rangeFraction = (dot > 0.01) ? 0.5f : (dot < -0.01) ? 0.9f : 0.7f;
+            float desiredRange = spell.range * rangeFraction;
+            double desiredRangeSq = (double) desiredRange * desiredRange;
+
+            // Line-of-sight tracking
+            boolean canSee = getVisibilityCache().canSee(target);
+            if (canSee) { if (targetSeeingTicker < 10) targetSeeingTicker++; }
+            else         { if (targetSeeingTicker > 0)  targetSeeingTicker--; }
+
+            // Navigation
+            double distSq = squaredDistanceTo(target);
+            if (distSq > desiredRangeSq || targetSeeingTicker <= 0) {
+                getNavigation().startMovingTo(target, 1.0);
+            } else {
+                getNavigation().stop();
+            }
+            getLookControl().lookAt(target, 30F, 30F);
+
+            // Check facing angle using head yaw (body yaw lags behind look control)
+            Vec3d lookDir = getRotationVector(getPitch(), getHeadYaw()).normalize();
+            Vec3d targetDir = target.getEyePos().subtract(getEyePos()).normalize();
+            boolean isFacing = lookDir.dotProduct(targetDir) > 0.95; // ~18° threshold
+
+            // Cast progress — only while in range, target visible, and facing the target
+            if (distSq <= desiredRangeSq && targetSeeingTicker > 0 && isFacing) {
+                castTick++;
+            }
+            if (castTick >= castDuration) {
+                releaseSpell(target, entry, spell);
+                released = true;
+            }
+        }
+
+        private void releaseSpell(LivingEntity target, RegistryEntry<Spell> entry, Spell spell) {
+            if (getWorld().isClient()) return;
+            // Snap body yaw/pitch to face the target exactly — shootProjectile uses caster.getYaw()
+            // and caster.getPitch() (inherit_shooter_yaw/pitch default to true), and body yaw lags
+            // behind head yaw, so we align them at the moment of release.
+            Vec3d toTarget = target.getEyePos().subtract(getEyePos()).normalize();
+            float releaseYaw = (float) Math.toDegrees(Math.atan2(-toTarget.x, toTarget.z));
+            float releasePitch = (float) -Math.toDegrees(Math.asin(Math.max(-1.0, Math.min(1.0, toTarget.y))));
+            setYaw(releaseYaw);
+            setHeadYaw(releaseYaw);
+            setBodyYaw(releaseYaw);
+            setPitch(releasePitch);
+            var power = SpellPower.getSpellPower(spell.school, FrostElementalEntity.this);
+            var context = new SpellHelper.ImpactContext()
+                    .power(power)
+                    .target(SpellTarget.FocusMode.DIRECT);
+            SpellHelper.shootProjectile(getWorld(), FrostElementalEntity.this, target, entry, context);
+
+            // Cooldown: use spell's own duration if set, else fall back to config override (ticks)
+            int cooldownTicks;
+            if (spell.cost.cooldown != null && spell.cost.cooldown.duration > 0) {
+                cooldownTicks = Math.round(
+                        SpellHelper.getCooldownDuration(FrostElementalEntity.this, entry) * 20F);
+            } else {
+                cooldownTicks = config.cooldown; // already in ticks; default = 20
+            }
+            if (cooldownTicks > 0) {
+                cooldownManager.set(entry, cooldownTicks);
+            }
+        }
     }
 }

@@ -76,6 +76,16 @@ public class SummonBehaviour {
         public boolean automatic_targeting = false;
     }
 
+    // --- Spawn / Despawn ---
+
+    public SpawnDespawn spawn_despawn = new SpawnDespawn();
+    public static class SpawnDespawn {
+        /** Ticks the entity spends in the spawning phase (inactionable). */
+        public int spawn_ticks = 10;
+        /** Ticks the entity spends in the despawning phase (inactionable) before being discarded. */
+        public int despawn_ticks = 10;
+    }
+
     // --- Actions ---
 
     public List<Action.Entry> actions = List.of();

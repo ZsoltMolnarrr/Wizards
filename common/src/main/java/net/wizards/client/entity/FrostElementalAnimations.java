@@ -915,4 +915,20 @@ public class FrostElementalAnimations {
                     new Keyframe(1.0F, AnimationHelper.createRotationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR)
             ))
             .build();
+
+    // Placeholder — replace with actual spawn keyframes
+    public static final Animation Spawn = Animation.Builder.create(0.5F)
+            .addBoneAnimation("mantis", new Transformation(Transformation.Targets.TRANSLATE,
+                    new Keyframe(0.0F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR),
+                    new Keyframe(0.5F,  AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR)
+            ))
+            .build();
+
+    // Placeholder — replace with actual despawn keyframes
+    public static final Animation Despawn = Animation.Builder.create(0.5F)
+            .addBoneAnimation("mantis", new Transformation(Transformation.Targets.TRANSLATE,
+                    new Keyframe(0.0F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR),
+                    new Keyframe(0.5F,  AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR)
+            ))
+            .build();
 }
