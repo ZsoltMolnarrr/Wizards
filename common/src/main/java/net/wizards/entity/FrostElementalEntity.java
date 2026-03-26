@@ -176,6 +176,7 @@ public class FrostElementalEntity extends GolemEntity implements SpellSummoned, 
             actionPriority++;
         }
         int priority = actionPriority;
+        goalSelector.add(priority++, new FaceTargetGoal());
         var movement = behaviour.movement;
         if (movement.can_move) {
             if (movement.follow != null) {
@@ -456,6 +457,37 @@ public class FrostElementalEntity extends GolemEntity implements SpellSummoned, 
         public boolean shouldContinue() { return !isActive(); }
     }
 
+    // Holds LOOK control whenever the entity has an attack target, keeping it facing that target
+    // between spell casts and melee attacks. Sits just below action goals so it is displaced
+    // when any combat goal is active but takes over as soon as they release controls.
+    private class FaceTargetGoal extends Goal {
+        public FaceTargetGoal() {
+            setControls(EnumSet.of(Control.LOOK));
+        }
+
+        @Override
+        public boolean canStart() {
+            LivingEntity target = getTarget();
+            return target != null && target.isAlive() && isActive();
+        }
+
+        @Override
+        public boolean shouldContinue() {
+            return canStart();
+        }
+
+        @Override
+        public boolean shouldRunEveryTick() { return true; }
+
+        @Override
+        public void tick() {
+            LivingEntity target = getTarget();
+            if (target == null) return;
+            getLookControl().lookAt(target, 30F, 30F);
+            setBodyYaw(getHeadYaw());
+        }
+    }
+
     private class SpellCastGoal extends Goal {
         private final SummonBehaviour.Action.SpellCast config;
 
@@ -560,12 +592,26 @@ public class FrostElementalEntity extends GolemEntity implements SpellSummoned, 
             } else {
                 getNavigation().stop();
             }
-            getLookControl().lookAt(target, 30F, 30F);
+            // Compute exact yaw/pitch to face the target's eyes
+            Vec3d toTargetEye = target.getEyePos().subtract(getEyePos()).normalize();
+            float faceYaw   = (float)  Math.toDegrees(Math.atan2(-toTargetEye.x, toTargetEye.z));
+            float facePitch = (float) -Math.toDegrees(Math.asin(Math.max(-1.0, Math.min(1.0, toTargetEye.y))));
 
-            // Check facing angle using head yaw (body yaw lags behind look control)
-            Vec3d lookDir = getRotationVector(getPitch(), getHeadYaw()).normalize();
-            Vec3d targetDir = target.getEyePos().subtract(getEyePos()).normalize();
-            boolean isFacing = lookDir.dotProduct(targetDir) > 0.95; // ~18° threshold
+            boolean isFacing;
+            if (castTick > 0) {
+                // Casting in progress — lock rotation directly onto target every tick
+                setYaw(faceYaw);
+                setHeadYaw(faceYaw);
+                setBodyYaw(faceYaw);
+                setPitch(facePitch);
+                isFacing = true;
+            } else {
+                // Not yet casting — turn gradually via look control
+                getLookControl().lookAt(target, 30F, 30F);
+                setBodyYaw(getHeadYaw());
+                Vec3d lookDir = getRotationVector(getPitch(), getHeadYaw()).normalize();
+                isFacing = lookDir.dotProduct(toTargetEye) > 0.95; // ~18° threshold
+            }
 
             // Cast progress — only while in range, target visible, and facing the target
             if (distSq <= desiredRangeSq && targetSeeingTicker > 0 && isFacing) {

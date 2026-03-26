@@ -60,7 +60,7 @@ public class WizardEntities {
                 // Targeting: mirror owner's attacks and retaliate, but don't auto-aggro
                 summonBehaviour.targeting.attack_with_owner = true;
                 summonBehaviour.targeting.revenge = true;
-                summonBehaviour.targeting.automatic_targeting = false;
+                summonBehaviour.targeting.automatic_targeting = true;
 
                 // Actions: frost shard spell (preferred), melee as fallback
                 summonBehaviour.actions = List.of(
