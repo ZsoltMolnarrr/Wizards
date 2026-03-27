@@ -65,6 +65,7 @@ public class WizardEntities {
                 // Actions: frost shard spell (preferred), melee as fallback
                 summonBehaviour.actions = List.of(
                     SummonBehaviour.Action.spell("wizards:frost_shard", 60),
+                    SummonBehaviour.Action.spell("wizards:frost_nova", 60),
                     SummonBehaviour.Action.attack(3, 1.5F)
                 );
 

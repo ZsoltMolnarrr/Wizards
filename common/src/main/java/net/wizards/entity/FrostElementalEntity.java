@@ -29,8 +29,6 @@ import net.spell_engine.internals.SpellCooldownManager;
 import net.spell_engine.internals.SpellHelper;
 import net.spell_engine.internals.target.EntityRelation;
 import net.spell_engine.internals.target.EntityRelations;
-import net.spell_engine.internals.target.SpellTarget;
-import net.spell_power.api.SpellPower;
 import net.wizards.WizardsMod;
 import org.jetbrains.annotations.Nullable;
 
@@ -625,9 +623,8 @@ public class FrostElementalEntity extends GolemEntity implements SpellSummoned, 
 
         private void releaseSpell(LivingEntity target, RegistryEntry<Spell> entry, Spell spell) {
             if (getWorld().isClient()) return;
-            // Snap body yaw/pitch to face the target exactly — shootProjectile uses caster.getYaw()
-            // and caster.getPitch() (inherit_shooter_yaw/pitch default to true), and body yaw lags
-            // behind head yaw, so we align them at the moment of release.
+            // Snap rotation to face the target exactly — targetAndPerformSpell uses the caster's
+            // look vector for raycasting (AIM/BEAM) and projectile direction.
             Vec3d toTarget = target.getEyePos().subtract(getEyePos()).normalize();
             float releaseYaw = (float) Math.toDegrees(Math.atan2(-toTarget.x, toTarget.z));
             float releasePitch = (float) -Math.toDegrees(Math.asin(Math.max(-1.0, Math.min(1.0, toTarget.y))));
@@ -635,11 +632,7 @@ public class FrostElementalEntity extends GolemEntity implements SpellSummoned, 
             setHeadYaw(releaseYaw);
             setBodyYaw(releaseYaw);
             setPitch(releasePitch);
-            var power = SpellPower.getSpellPower(spell.school, FrostElementalEntity.this);
-            var context = new SpellHelper.ImpactContext()
-                    .power(power)
-                    .target(SpellTarget.FocusMode.DIRECT);
-            SpellHelper.shootProjectile(getWorld(), FrostElementalEntity.this, target, entry, context);
+            SpellHelper.targetAndPerformSpell(getWorld(), FrostElementalEntity.this, entry);
 
             // Cooldown: use spell's own duration if set, else fall back to config override (ticks)
             int cooldownTicks;
