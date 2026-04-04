@@ -70,6 +70,7 @@ public class WizardsSounds {
     public static final Entry ARCANE_BEAM_CASTING = add(new Entry("arcane_beam_casting"));
     public static final Entry ARCANE_BEAM_IMPACT = add(new Entry("arcane_beam_impact"));
     public static final Entry ARCANE_BEAM_RELEASE = add(new Entry("arcane_beam_release"));
+    public static final Entry ARCANE_EXPLOSION_RELEASE = add(new Entry("arcane_explosion_release"));
 
     public static final Entry FIRE_SCORCH_IMPACT = add(new Entry("fire_scorch_impact"));
     public static final Entry FIREBALL_IMPACT = add(new Entry("fireball_impact"));

@@ -5,6 +5,10 @@
       "required": false
     },
     {
+      "id": "wizards:arcane_explosion",
+      "required": false
+    },
+    {
       "id": "wizards:arcane_beam",
       "required": false
     },

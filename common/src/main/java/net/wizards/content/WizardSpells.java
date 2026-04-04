@@ -51,6 +51,8 @@ public class WizardSpells {
     private static final String PRIMARY_GROUP = "primary";
     private static final float BASIC_PROJECTILE_RANGE = 48F;
     private static final Color ARCANE_COLOR = Color.from(SpellSchools.ARCANE.color);
+    private static final Color ARCANE_COLOR_LIGHT = Color.from(0xFF99FF);
+    private static final Color ARCANE_COLOR_VERY_LIGHT = Color.from(0xFFCCFF);
     private static final Color FIRE_COLOR = Color.from(SpellSchools.FIRE.color);
     private static final Color FROST_COLOR = Color.from(SpellSchools.FROST.color);
 
@@ -335,6 +337,83 @@ public class WizardSpells {
         configureArcaneRuneCost(spell);
         SpellBuilder.Cost.cooldown(spell, 2);
         spell.cost.cooldown.proportional = true;
+
+        return new Entry(id, spell, "", "").book(Book.ARCANE);
+    }
+
+    public static Entry arcane_explosion = add(arcane_explosion());
+    private static Entry arcane_explosion() {
+        var id = Identifier.of(WizardsMod.ID, "arcane_explosion");
+        var spell = SpellBuilder.createSpellActive();
+        spell.school = SpellSchools.ARCANE;
+        spell.tier = 2;
+        spell.range = 6;
+
+        spell.learn = new Spell.Learn();
+
+        spell.active.cast.duration = 1.5F;
+        spell.active.cast.animation = PlayerAnimation.of("spell_engine:one_handed_area_charge");
+        spell.active.cast.sound = new Sound(SpellEngineSounds.GENERIC_ARCANE_CASTING.id(), 0);
+        spell.active.cast.particles = new ParticleBatch[] { arcaneCastingParticles() };
+
+        spell.target.type = Spell.Target.Type.AREA;
+        spell.target.area = new Spell.Target.Area();
+        spell.target.area.vertical_range_multiplier = 0.5F;
+
+        spell.release = new Spell.Release();
+        spell.release.animation = PlayerAnimation.of("spell_engine:one_handed_area_release");
+        spell.release.sound = new Sound(WizardsSounds.ARCANE_EXPLOSION_RELEASE.id());
+        spell.release.particles = new ParticleBatch[] {
+                new ParticleBatch(
+                        SpellEngineParticles.MagicParticles.get(
+                                SpellEngineParticles.MagicParticles.Shape.SPARK,
+                                SpellEngineParticles.MagicParticles.Motion.DECELERATE
+                        ).id().toString(),
+                        ParticleBatch.Shape.SPHERE, ParticleBatch.Origin.CENTER,
+                        80, 0.7F, 0.7F)
+                        .color(ARCANE_COLOR_LIGHT.toRGBA()),
+                new ParticleBatch(
+                        SpellEngineParticles.MagicParticles.get(
+                                SpellEngineParticles.MagicParticles.Shape.SPARK,
+                                SpellEngineParticles.MagicParticles.Motion.DECELERATE
+                        ).id().toString(),
+                        ParticleBatch.Shape.SPHERE, ParticleBatch.Origin.CENTER,
+                        80, 0.7F, 0.7F)
+                        .color(ARCANE_COLOR.toRGBA()).preSpawnTravel(2)
+        };
+        spell.release.particles_scaled_with_ranged = new ParticleBatch[] {
+                new ParticleBatch(
+                        SpellEngineParticles.area_effect_574.id().toString(),
+                        ParticleBatch.Shape.SPHERE, ParticleBatch.Origin.CENTER,
+                        1, 0, 0)
+                        .scale(0.8F)
+                        .color(ARCANE_COLOR_LIGHT.toRGBA()),
+                new ParticleBatch(
+                        SpellEngineParticles.aura_effect_574.id().toString(),
+                        ParticleBatch.Shape.SPHERE, ParticleBatch.Origin.CENTER,
+                        1, 0, 0)
+                        .scale(0.8F)
+                        .color(ARCANE_COLOR_LIGHT.toRGBA())
+        };
+
+        var damage = SpellBuilder.Impacts.damage(0.9F, 0.8F);
+        damage.particles = new ParticleBatch[] {
+                new ParticleBatch(
+                        SpellEngineParticles.MagicParticles.get(
+                                SpellEngineParticles.MagicParticles.Shape.SPELL,
+                                SpellEngineParticles.MagicParticles.Motion.BURST
+                        ).id().toString(),
+                        ParticleBatch.Shape.SPHERE, ParticleBatch.Origin.CENTER,
+                        30, 0.2F, 0.7F)
+                        .color(ARCANE_COLOR.toRGBA())
+        };
+        damage.sound = new Sound(WizardsSounds.ARCANE_BLAST_IMPACT.id());
+
+        spell.impacts = List.of(damage);
+
+        SpellBuilder.Cost.exhaust(spell, 0.2F);
+        configureArcaneRuneCost(spell);
+        SpellBuilder.Cost.cooldown(spell, 10);
 
         return new Entry(id, spell, "", "").book(Book.ARCANE);
     }

@@ -11,6 +11,10 @@ import net.minecraft.registry.Registry;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.hit.HitResult;
+import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.RaycastContext;
+import net.spell_engine.utils.TargetHelper;
 import net.spell_engine.api.spell.Spell;
 import net.spell_engine.api.spell.event.SpellHandlers;
 import net.spell_engine.internals.SpellHelper;
@@ -89,14 +93,40 @@ public class WizardEntities {
 
                 var world = livingEntity.getWorld();
                 if (world instanceof ServerWorld serverWorld) {
-                    var summoned = new FrostElementalEntity(FrostElementalEntity.TYPE, livingEntity.getWorld());
+                    var summoned = new FrostElementalEntity(FrostElementalEntity.TYPE, world);
                     summoned.onSummonedBySpell(new SpellSummoned.Args(livingEntity, registryEntry, summonBehaviour, impactContext));
-                    summoned.setPos(livingEntity.getX(), livingEntity.getY(), livingEntity.getZ());
+                    Vec3d spawnPos = findSpawnPosition(livingEntity, serverWorld);
+                    summoned.setPos(spawnPos.x, spawnPos.y, spawnPos.z);
                     serverWorld.spawnEntity(summoned);
                 }
 
                 return new SpellHandlers.ImpactResult(true, false);
             }
         });
+    }
+
+    // Tries N/E/S/W positions 2 blocks away; picks the first that has solid ground and clear LOS
+    // to the summoner. Falls back to a ground-snapped position at the summoner's feet, then to the
+    // summoner's raw position if no solid ground is found at all.
+    private static Vec3d findSpawnPosition(LivingEntity summoner, ServerWorld world) {
+        double[][] offsets = { {0, -2}, {2, 0}, {0, 2}, {-2, 0} };
+        for (double[] offset : offsets) {
+            Vec3d candidate = summoner.getPos().add(offset[0], 0, offset[1]);
+            Vec3d grounded = TargetHelper.findSolidBlockBelow(summoner, candidate, world, -5);
+            if (grounded == null) continue;
+            if (!hasLineOfSight(summoner, grounded, world)) continue;
+            return grounded;
+        }
+        Vec3d selfGrounded = TargetHelper.findSolidBlockBelow(summoner, summoner.getPos(), world, -5);
+        return selfGrounded != null ? selfGrounded : summoner.getPos();
+    }
+
+    private static boolean hasLineOfSight(LivingEntity summoner, Vec3d target, ServerWorld world) {
+        var hit = world.raycast(new RaycastContext(
+                summoner.getEyePos(), target,
+                RaycastContext.ShapeType.COLLIDER,
+                RaycastContext.FluidHandling.NONE,
+                summoner));
+        return hit.getType() != HitResult.Type.BLOCK;
     }
 }

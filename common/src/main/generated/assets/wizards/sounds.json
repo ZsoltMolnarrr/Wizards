@@ -29,6 +29,11 @@
       "wizards:arcane_blast_release"
     ]
   },
+  "arcane_explosion_release": {
+    "sounds": [
+      "wizards:arcane_explosion_release"
+    ]
+  },
   "arcane_missile_impact": {
     "sounds": [
       "wizards:arcane_missile_impact"

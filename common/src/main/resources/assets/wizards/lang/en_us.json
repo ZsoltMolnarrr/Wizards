@@ -66,6 +66,8 @@
   "effect.wizards.arcane_charge.description": "Increases Arcane spell damage done",
   "spell.wizards.arcane_missile.name": "Arcane Missiles",
   "spell.wizards.arcane_missile.description": "Continuously shoots bolts of energy piercing thru {pierce} targets, causing {damage} arcane damage every second.",
+  "spell.wizards.arcane_explosion.name": "Arcane Explosion",
+  "spell.wizards.arcane_explosion.description": "Creates a magical explosion around you, causing {damage} arcane damage to nearby enemies.",
   "spell.wizards.arcane_beam.name": "Arcane Beam",
   "spell.wizards.arcane_beam.description": "Channels a beam of energy, dealing {damage} arcane damage every second. Consumes all Arcane Charges.",
   "spell.wizards.arcane_blink.name": "Blink",
