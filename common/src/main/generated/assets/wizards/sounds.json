@@ -29,6 +29,21 @@
       "wizards:arcane_blast_release"
     ]
   },
+  "arcane_evocation_casting": {
+    "sounds": [
+      "wizards:arcane_evocation_casting"
+    ]
+  },
+  "arcane_evocation_release": {
+    "sounds": [
+      "wizards:arcane_evocation_release"
+    ]
+  },
+  "arcane_evocation_start": {
+    "sounds": [
+      "wizards:arcane_evocation_start"
+    ]
+  },
   "arcane_explosion_release": {
     "sounds": [
       "wizards:arcane_explosion_release"

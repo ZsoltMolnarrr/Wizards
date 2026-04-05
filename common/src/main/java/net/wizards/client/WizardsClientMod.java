@@ -7,10 +7,7 @@ import net.spell_engine.api.effect.CustomModelStatusEffect;
 import net.spell_engine.api.effect.CustomParticleStatusEffect;
 import net.spell_engine.rpg_series.item.Armor;
 import net.wizards.client.armor.WizardArmorRenderer;
-import net.wizards.client.effect.FrostShieldRenderer;
-import net.wizards.client.effect.FrozenParticles;
-import net.wizards.client.effect.FrozenRenderer;
-import net.wizards.client.effect.ArcaneChargeRenderer;
+import net.wizards.client.effect.*;
 import net.wizards.client.entity.FrostElementalRenderer;
 import net.wizards.effect.WizardsEffects;
 import net.wizards.entity.FrostElementalEntity;
@@ -33,6 +30,8 @@ public class WizardsClientMod {
         registerArmorRenderer(WizardArmors.netherite_arcane, WizardArmorRenderer::netheriteArcane);
         registerArmorRenderer(WizardArmors.netherite_fire, WizardArmorRenderer::netheriteFire);
         registerArmorRenderer(WizardArmors.netherite_frost, WizardArmorRenderer::netheriteFrost);
+
+        CustomParticleStatusEffect.register(WizardsEffects.evocation.effect, new EvocationParticles());
     }
 
     private static void registerArmorRenderer(Armor.Set set, Supplier<AzArmorRenderer> armorRendererSupplier) {

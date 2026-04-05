@@ -1,7 +1,6 @@
 {
   "school": "spell_power:fire",
   "range": 64.0,
-  "group": "primary",
   "tier": 1,
   "learn": {},
   "active": {

@@ -56,14 +56,6 @@ public class WizardSpells {
     private static final Color FIRE_COLOR = Color.from(SpellSchools.FIRE.color);
     private static final Color FROST_COLOR = Color.from(SpellSchools.FROST.color);
 
-    private static Spell activeSpellBase() {
-        var spell = new Spell();
-        spell.type = Spell.Type.ACTIVE;
-        spell.active = new Spell.Active();
-        spell.active.cast = new Spell.Active.Cast();
-        return spell;
-    }
-
     private static ParticleBatch arcaneCastingParticles() {
         return new ParticleBatch(
                 SpellEngineParticles.MagicParticles.get(
@@ -73,22 +65,6 @@ public class WizardSpells {
                 ParticleBatch.Shape.WIDE_PIPE, ParticleBatch.Origin.FEET,
                 1, 0.05F, 0.1F)
                 .color(ARCANE_COLOR.toRGBA());
-    }
-
-    private static void configureArcaneRuneCost(Spell spell) {
-        if (spell.cost == null) {
-            spell.cost = new Spell.Cost();
-        }
-        spell.cost.item = new Spell.Cost.Item();
-        spell.cost.item.id = "runes:arcane_stone";
-    }
-
-    private static void configureCooldown(Spell spell, float duration) {
-        if (spell.cost == null) {
-            spell.cost = new Spell.Cost();
-        }
-        spell.cost.cooldown = new Spell.Cost.Cooldown();
-        spell.cost.cooldown.duration = duration;
     }
 
     // Fire spell helpers
@@ -152,7 +128,6 @@ public class WizardSpells {
         var id = Identifier.of(WizardsMod.ID, "arcane_bolt");
         var spell = SpellBuilder.createWeaponSpell();
         spell.school = SpellSchools.ARCANE;
-        spell.group = PRIMARY_GROUP;
         spell.tier = 0;
         spell.range = BASIC_PROJECTILE_RANGE;
         spell.active.cast.duration = 1;
@@ -204,7 +179,7 @@ public class WizardSpells {
 
         SpellBuilder.Cost.cooldownGroup(spell, "weapon");
 
-        configureArcaneRuneCost(spell);
+        SpellBuilder.Cost.item(spell, "runes:arcane_stone");
 
         return new Entry(id, spell, "", "");
     }
@@ -214,9 +189,7 @@ public class WizardSpells {
         var id = Identifier.of(WizardsMod.ID, "arcane_blast");
         var spell = SpellBuilder.createWeaponSpell();
         spell.school = SpellSchools.ARCANE;
-        spell.group = PRIMARY_GROUP;
         spell.tier = 1;
-        spell.sub_tier = 2;
         spell.range = 16;
 
         spell.learn = new Spell.Learn();
@@ -259,7 +232,7 @@ public class WizardSpells {
 
         SpellBuilder.Cost.cooldownGroup(spell, "weapon");
 
-        configureArcaneRuneCost(spell);
+        SpellBuilder.Cost.item(spell, "runes:arcane_stone");
 
         return new Entry(id, spell, "", "").weaponGroup(WeaponGroup.ARCANE_STAFF).weaponGroup(WeaponGroup.WIZARD_STAFF);
     }
@@ -270,6 +243,7 @@ public class WizardSpells {
         var spell = SpellBuilder.createSpellActive();
         spell.school = SpellSchools.ARCANE;
         spell.tier = 2;
+        spell.order = 1;
         spell.range = 64;
 
         spell.learn = new Spell.Learn();
@@ -334,7 +308,7 @@ public class WizardSpells {
         damage.sound = new Sound(WizardsSounds.ARCANE_MISSILE_IMPACT.id());
         spell.impacts = List.of(damage);
 
-        configureArcaneRuneCost(spell);
+        SpellBuilder.Cost.item(spell, "runes:arcane_stone");
         SpellBuilder.Cost.cooldown(spell, 2);
         spell.cost.cooldown.proportional = true;
 
@@ -347,6 +321,7 @@ public class WizardSpells {
         var spell = SpellBuilder.createSpellActive();
         spell.school = SpellSchools.ARCANE;
         spell.tier = 2;
+        spell.order = 2;
         spell.range = 6;
 
         spell.learn = new Spell.Learn();
@@ -412,7 +387,7 @@ public class WizardSpells {
         spell.impacts = List.of(damage);
 
         SpellBuilder.Cost.exhaust(spell, 0.2F);
-        configureArcaneRuneCost(spell);
+        SpellBuilder.Cost.item(spell, "runes:arcane_stone");
         SpellBuilder.Cost.cooldown(spell, 10);
 
         return new Entry(id, spell, "", "").book(Book.ARCANE);
@@ -424,6 +399,7 @@ public class WizardSpells {
         var spell = SpellBuilder.createSpellActive();
         spell.school = SpellSchools.ARCANE;
         spell.tier = 3;
+        spell.order = 1;
         spell.range = 32;
 
         spell.learn = new Spell.Learn();
@@ -506,11 +482,90 @@ public class WizardSpells {
 
         SpellBuilder.Cost.exhaust(spell, 0.3F);
         spell.cost.effect_id = WizardsEffects.arcaneCharge.id.toString();
-        configureArcaneRuneCost(spell);
+        SpellBuilder.Cost.item(spell, "runes:arcane_stone");
         SpellBuilder.Cost.cooldown(spell, 10);
         spell.cost.cooldown.proportional = true;
 
         return new Entry(id, spell, "", "").book(Book.ARCANE);
+    }
+
+    public static Entry arcane_barrage = add(arcane_barrage());
+    private static Entry arcane_barrage() {
+        var id = Identifier.of(WizardsMod.ID, "arcane_barrage");
+        var spell = SpellBuilder.createSpellActive();
+        spell.school = SpellSchools.ARCANE;
+        spell.tier = 3;
+        spell.order = 2;
+
+        spell.learn = new Spell.Learn();
+
+        // TODO: implement
+
+        return new Entry(id, spell, "", "").book(Book.ARCANE);
+    }
+
+    public static Entry arcane_evocation = add(arcane_evocation());
+    private static Entry arcane_evocation() {
+        var id = Identifier.of(WizardsMod.ID, "arcane_evocation");
+        var spell = SpellBuilder.createSpellActive();
+        spell.school = SpellSchools.ARCANE;
+        spell.tier = 4;
+        spell.order = 2;
+        spell.range = 0;
+
+        spell.learn = new Spell.Learn();
+
+        var stacks = 10;
+        var effect = WizardsEffects.evocation;
+
+        SpellBuilder.Casting.channel(spell, 5, stacks);
+        spell.active.cast.animation = PlayerAnimation.of("spell_engine:one_handed_levitate_channel");
+        spell.active.cast.movement_speed = 0F;
+        spell.active.cast.start_sound = new Sound(WizardsSounds.ARCANE_EVOCATION_START.id());
+        spell.active.cast.sound = new Sound(WizardsSounds.ARCANE_EVOCATION_CASTING.id(), 0);
+        spell.active.cast.particles = new ParticleBatch[] {
+                new ParticleBatch(
+                        SpellEngineParticles.MagicParticles.get(
+                                SpellEngineParticles.MagicParticles.Shape.SPARK,
+                                SpellEngineParticles.MagicParticles.Motion.DECELERATE
+                        ).id().toString(),
+                        ParticleBatch.Shape.SPHERE, ParticleBatch.Origin.CENTER,
+                        8, 0.2F, 0.3F)
+                        .preSpawnTravel(6)
+                        .invert()
+                        .color(ARCANE_COLOR_LIGHT.toRGBA()),
+                new ParticleBatch(
+                        SpellEngineParticles.MagicParticles.get(
+                                SpellEngineParticles.MagicParticles.Shape.SPARK,
+                                SpellEngineParticles.MagicParticles.Motion.DECELERATE
+                        ).id().toString(),
+                        ParticleBatch.Shape.SPHERE, ParticleBatch.Origin.CENTER,
+                        8, 0.2F, 0.3F)
+                        .preSpawnTravel(6)
+                        .invert()
+                        .color(ARCANE_COLOR.toRGBA())
+        };
+
+        spell.release = new Spell.Release();
+        spell.release.sound = new Sound(WizardsSounds.ARCANE_EVOCATION_RELEASE.id());
+
+        spell.target.type = Spell.Target.Type.CASTER;
+
+        var evocationEffect = SpellBuilder.Impacts.effectAdd(effect.id.toString(), 10, 1, stacks-1);
+        spell.impacts = List.of(evocationEffect);
+
+        SpellBuilder.Cost.exhaust(spell, 0.1F);
+        SpellBuilder.Cost.item(spell, "runes:arcane_stone");
+        SpellBuilder.Cost.cooldown(spell, 45);
+        spell.cost.cooldown.proportional = true;
+
+        SpellTooltip.DescriptionMutator mutator = (args) -> {
+            for (var modifier : effect.config().modifiers) {
+            
+            }
+            return args.description().replace(... );
+        };
+        return new Entry(id, spell, "", "").book(Book.ARCANE).mutator(mutator);
     }
 
     public static Entry arcane_blink = add(arcane_blink());
@@ -519,6 +574,7 @@ public class WizardSpells {
         var spell = SpellBuilder.createSpellActive();
         spell.school = SpellSchools.ARCANE;
         spell.tier = 4;
+        spell.order = 1;
         spell.range = 0;
 
         spell.learn = new Spell.Learn();
@@ -554,7 +610,7 @@ public class WizardSpells {
         spell.impacts = List.of(teleport);
 
         SpellBuilder.Cost.exhaust(spell, 0.4F);
-        configureArcaneRuneCost(spell);
+        SpellBuilder.Cost.item(spell, "runes:arcane_stone");
         SpellBuilder.Cost.cooldown(spell, 12);
 
         return new Entry(id, spell, "", "").book(Book.ARCANE);
@@ -565,9 +621,7 @@ public class WizardSpells {
         var id = Identifier.of(WizardsMod.ID, "fire_scorch");
         var spell = SpellBuilder.createWeaponSpell();
         spell.school = SpellSchools.FIRE;
-        spell.group = PRIMARY_GROUP;
         spell.tier = 0;
-        spell.sub_tier = 0;
         spell.range = 16;
 
         spell.active.cast.duration = 1.2F;
@@ -603,7 +657,6 @@ public class WizardSpells {
         var id = Identifier.of(WizardsMod.ID, "fireball");
         var spell = SpellBuilder.createWeaponSpell();
         spell.school = SpellSchools.FIRE;
-        spell.group = PRIMARY_GROUP;
         spell.tier = 0;
         spell.range = 64;
 
@@ -671,7 +724,6 @@ public class WizardSpells {
         var id = Identifier.of(WizardsMod.ID, "fire_blast");
         var spell = SpellBuilder.createWeaponSpell();
         spell.school = SpellSchools.FIRE;
-        spell.group = PRIMARY_GROUP;
         spell.tier = 1;
         spell.range = 64;
 
@@ -753,6 +805,7 @@ public class WizardSpells {
         var spell = SpellBuilder.createSpellActive();
         spell.school = SpellSchools.FIRE;
         spell.tier = 2;
+        spell.order = 1;
         spell.range = 10;
 
         spell.learn = new Spell.Learn();
@@ -809,6 +862,7 @@ public class WizardSpells {
         var spell = SpellBuilder.createSpellActive();
         spell.school = SpellSchools.FIRE;
         spell.tier = 3;
+        spell.order = 1;
         spell.range = 32;
 
         spell.learn = new Spell.Learn();
@@ -897,6 +951,7 @@ public class WizardSpells {
         var spell = SpellBuilder.createSpellActive();
         spell.range = 0;
         spell.tier = 4;
+        spell.order = 1;
         spell.school = SpellSchools.FIRE;
 
         spell.learn = new Spell.Learn();
@@ -978,7 +1033,6 @@ public class WizardSpells {
         var id = Identifier.of(WizardsMod.ID, "frost_shard");
         var spell = SpellBuilder.createWeaponSpell();
         spell.school = SpellSchools.FROST;
-        spell.group = PRIMARY_GROUP;
         spell.tier = 0;
         spell.range = 48;
 
@@ -1042,9 +1096,7 @@ public class WizardSpells {
         var id = Identifier.of(WizardsMod.ID, "frostbolt");
         var spell = SpellBuilder.createWeaponSpell();
         spell.school = SpellSchools.FROST;
-        spell.group = PRIMARY_GROUP;
         spell.tier = 1;
-        spell.sub_tier = 2;
         spell.range = 64;
 
         spell.learn = new Spell.Learn();
@@ -1121,6 +1173,7 @@ public class WizardSpells {
         var spell = SpellBuilder.createSpellActive();
         spell.school = SpellSchools.FROST;
         spell.tier = 2;
+        spell.order = 1;
         spell.range = 6;
 
         spell.learn = new Spell.Learn();
@@ -1192,6 +1245,7 @@ public class WizardSpells {
         var spell = SpellBuilder.createSpellActive();
         spell.school = SpellSchools.FROST;
         spell.tier = 3;
+        spell.order = 1;
         spell.range = 0;
 
         spell.learn = new Spell.Learn();
@@ -1229,6 +1283,7 @@ public class WizardSpells {
         var spell = SpellBuilder.createSpellActive();
         spell.school = SpellSchools.FROST;
         spell.tier = 4;
+        spell.order = 2;
         spell.range = 16;
 
         spell.learn = new Spell.Learn();
@@ -1249,6 +1304,7 @@ public class WizardSpells {
         var spell = SpellBuilder.createSpellActive();
         spell.school = SpellSchools.FROST;
         spell.tier = 4;
+        spell.order = 1;
         spell.range = 32;
 
         spell.learn = new Spell.Learn();

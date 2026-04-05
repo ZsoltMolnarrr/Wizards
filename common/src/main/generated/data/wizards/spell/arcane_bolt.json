@@ -1,7 +1,6 @@
 {
   "school": "spell_power:arcane",
   "range": 48.0,
-  "group": "primary",
   "tier": 0,
   "learn": {},
   "active": {

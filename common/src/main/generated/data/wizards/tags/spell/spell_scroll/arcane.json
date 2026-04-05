@@ -13,6 +13,14 @@
       "required": false
     },
     {
+      "id": "wizards:arcane_barrage",
+      "required": false
+    },
+    {
+      "id": "wizards:arcane_evocation",
+      "required": false
+    },
+    {
       "id": "wizards:arcane_blink",
       "required": false
     }

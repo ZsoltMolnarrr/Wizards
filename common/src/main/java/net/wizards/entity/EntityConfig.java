@@ -16,7 +16,7 @@ public class EntityConfig {
         public double max_health = 20;
         public double movement_speed = 0.25;
         public double attack_damage = 2;
-        public double follow_range = 10;
+        public double follow_range = 32;
 
         public CommonAttributes() {}
 

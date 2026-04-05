@@ -1,0 +1,75 @@
+{
+  "school": "spell_power:arcane",
+  "range": 0.0,
+  "tier": 4,
+  "order": 2,
+  "learn": {},
+  "active": {
+    "cast": {
+      "duration": 5.0,
+      "channel_ticks": 10,
+      "animation": {
+        "id": "spell_engine:one_handed_levitate_channel"
+      },
+      "movement_speed": 0.0,
+      "start_sound": {
+        "id": "wizards:arcane_evocation_start"
+      },
+      "sound": {
+        "id": "wizards:arcane_evocation_casting",
+        "randomness": 0.0
+      },
+      "particles": [
+        {
+          "particle_id": "spell_engine:magic_spark_decelerate",
+          "origin": "CENTER",
+          "shape": "SPHERE",
+          "count": 8.0,
+          "min_speed": 0.2,
+          "max_speed": 0.3,
+          "pre_spawn_travel": 6.0,
+          "invert": true,
+          "color_rgba": 4288282623
+        },
+        {
+          "particle_id": "spell_engine:magic_spark_decelerate",
+          "origin": "CENTER",
+          "shape": "SPHERE",
+          "count": 8.0,
+          "min_speed": 0.2,
+          "max_speed": 0.3,
+          "pre_spawn_travel": 6.0,
+          "invert": true,
+          "color_rgba": 4284940287
+        }
+      ]
+    }
+  },
+  "release": {
+    "sound": {
+      "id": "wizards:arcane_evocation_release"
+    }
+  },
+  "impacts": [
+    {
+      "action": {
+        "type": "STATUS_EFFECT",
+        "status_effect": {
+          "effect_id": "wizards:arcane_evocation",
+          "amplifier": 1,
+          "amplifier_cap": 9,
+          "apply_mode": "ADD"
+        }
+      }
+    }
+  ],
+  "cost": {
+    "cooldown": {
+      "duration": 45.0,
+      "proportional": true
+    },
+    "item": {
+      "id": "runes:arcane_stone"
+    }
+  }
+}

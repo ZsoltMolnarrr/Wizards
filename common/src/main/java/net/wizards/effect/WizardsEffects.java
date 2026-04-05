@@ -76,6 +76,31 @@ public class WizardsEffects {
             )
     ));
 
+    public static Effects.Entry evocation = add(new Effects.Entry(Identifier.of(WizardsMod.ID, "arcane_evocation"),
+            "Evocation",
+            "Increases ",
+            new CustomStatusEffect(StatusEffectCategory.BENEFICIAL, 0xcc44ff),
+            new EffectConfig(
+                    List.of(
+                            new AttributeModifier(
+                                    "spell_power:critical_chance",
+                                    3.0F,
+                                    EntityAttributeModifier.Operation.ADD_VALUE
+                            ),
+                            new AttributeModifier(
+                                    "spell_power:haste",
+                                    3.0F,
+                                    EntityAttributeModifier.Operation.ADD_VALUE
+                            ),
+                            new AttributeModifier(
+                                    "spell_engine:damage_taken",
+                                    5.0F,
+                                    EntityAttributeModifier.Operation.ADD_VALUE
+                            )
+                    )
+            )
+    ));
+
     public static Effects.Entry arcaneCharge = add(new Effects.Entry(Identifier.of(WizardsMod.ID, "arcane_charge"),
             "Arcane Charge",
             "Empowered by arcane magic",
@@ -96,6 +121,7 @@ public class WizardsEffects {
         Synchronized.configure(frostSlowness.effect, true);
         Synchronized.configure(frozen.effect, true);
         Synchronized.configure(frostShield.effect, true);
+        Synchronized.configure(evocation.effect, true);
         Synchronized.configure(arcaneCharge.effect, true);
 
         Effects.register(entries, config.effects);
