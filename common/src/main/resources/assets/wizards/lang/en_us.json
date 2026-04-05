@@ -72,7 +72,7 @@
   "spell.wizards.arcane_beam.description": "Channels a beam of energy, dealing {damage} arcane damage every second. Consumes all Arcane Charges.",
 
   "spell.wizards.arcane_evocation.name": "Evocation",
-  "spell.wizards.arcane_evocation.description": "Channel to gain Evocation effect, stacking up to {effect_amplifier_cap}, lasting {effect_duration} seconds. Each stack increases spell critical strike chance and spell haste by {boost_1}, but also increases any damage you take by {penalty}.",
+  "spell.wizards.arcane_evocation.description": "Channel to gain Evocation effect, stacking up to {effect_amplifier_cap}, lasting {effect_duration} seconds. Each stack increases spell critical strike chance and spell haste by {bonus_1}, but also increases any damage you take by {bonus_3}.",
   "effect.wizards.arcane_evocation": "Evocation",
   "effect.wizards.arcane_evocation.description": "Increases spell critical strike and speed, but also damage you take",
   "spell.wizards.arcane_blink.name": "Blink",

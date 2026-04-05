@@ -84,18 +84,18 @@ public class WizardsEffects {
                     List.of(
                             new AttributeModifier(
                                     "spell_power:critical_chance",
-                                    3.0F,
-                                    EntityAttributeModifier.Operation.ADD_VALUE
+                                    0.03F,
+                                    EntityAttributeModifier.Operation.ADD_MULTIPLIED_BASE
                             ),
                             new AttributeModifier(
                                     "spell_power:haste",
-                                    3.0F,
-                                    EntityAttributeModifier.Operation.ADD_VALUE
+                                    0.03F,
+                                    EntityAttributeModifier.Operation.ADD_MULTIPLIED_BASE
                             ),
                             new AttributeModifier(
                                     "spell_engine:damage_taken",
-                                    5.0F,
-                                    EntityAttributeModifier.Operation.ADD_VALUE
+                                    0.1F,
+                                    EntityAttributeModifier.Operation.ADD_MULTIPLIED_BASE
                             )
                     )
             )

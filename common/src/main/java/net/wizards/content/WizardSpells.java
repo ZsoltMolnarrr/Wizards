@@ -560,10 +560,10 @@ public class WizardSpells {
         spell.cost.cooldown.proportional = true;
 
         SpellTooltip.DescriptionMutator mutator = (args) -> {
-            for (var modifier : effect.config().modifiers) {
-            
-            }
-            return args.description().replace(... );
+            var values = effect.config.attributes().stream().map(m ->
+                SpellTooltip.bonus(m.value, m.operation)
+            ).toList();
+            return SpellTooltip.replaceTokens(args.description(), "bonus", values);
         };
         return new Entry(id, spell, "", "").book(Book.ARCANE).mutator(mutator);
     }
