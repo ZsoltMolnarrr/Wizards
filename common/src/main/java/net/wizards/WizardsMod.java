@@ -14,6 +14,7 @@ import net.wizards.config.TweaksConfig;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRegistry;
 import net.wizards.effect.WizardsEffects;
 import net.wizards.entity.EntityConfig;
+import net.wizards.entity.ArcaneEmitterEntity;
 import net.wizards.entity.FrostElementalEntity;
 import net.wizards.entity.WizardEntities;
 
@@ -63,15 +64,22 @@ public class WizardsMod {
         effectsConfig.refresh();
         villageConfig.refresh();
         tweaksConfig.refresh();
-        entityConfig.refresh();
         if (FabricLoader.getInstance().isDevelopmentEnvironment()) {
             tweaksConfig.value.ignore_items_required_mods = true;
         }
+        entityConfig.refresh();
     }
 
     public static void registerEntities() {
         WizardEntities.register();
+        var defaults = WizardEntities.defaultEntityConfig();
+        for (var entry : defaults.entries.entrySet()) {
+            if (!entityConfig.value.entries.containsKey(entry.getKey())) {
+                entityConfig.value.entries.put(entry.getKey(), entry.getValue());
+            }
+        }
         FabricDefaultAttributeRegistry.register(FrostElementalEntity.TYPE, FrostElementalEntity.createMobAttributes().build());
+        FabricDefaultAttributeRegistry.register(ArcaneEmitterEntity.TYPE, ArcaneEmitterEntity.createMobAttributes().build());
         entityConfig.save();
     }
 

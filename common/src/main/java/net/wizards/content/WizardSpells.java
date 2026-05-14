@@ -496,10 +496,16 @@ public class WizardSpells {
         spell.school = SpellSchools.ARCANE;
         spell.tier = 3;
         spell.order = 2;
+        spell.range = 16;
 
         spell.learn = new Spell.Learn();
 
-        // TODO: implement
+        var impact = new Spell.Impact();
+        impact.action = new Spell.Impact.Action();
+        impact.action.type = Spell.Impact.Action.Type.CUSTOM;
+        impact.action.custom = new Spell.Impact.Action.Custom();
+        impact.action.custom.handler = WizardEntities.summon_arcane_emitter.toString();
+        spell.impacts = List.of(impact);
 
         return new Entry(id, spell, "", "").book(Book.ARCANE);
     }
@@ -1292,7 +1298,7 @@ public class WizardSpells {
         impact.action = new Spell.Impact.Action();
         impact.action.type = Spell.Impact.Action.Type.CUSTOM;
         impact.action.custom = new Spell.Impact.Action.Custom();
-        impact.action.custom.handler = WizardEntities.summon.toString();
+        impact.action.custom.handler = WizardEntities.summon_frost_elemental.toString();
         spell.impacts = List.of(impact);
 
         return new Entry(id, spell, "", "").book(Book.FROST);

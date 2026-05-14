@@ -10,7 +10,7 @@
       "action": {
         "type": "CUSTOM",
         "custom": {
-          "handler": "wizards:summon"
+          "handler": "wizards:summon_frost_elemental"
         }
       }
     }

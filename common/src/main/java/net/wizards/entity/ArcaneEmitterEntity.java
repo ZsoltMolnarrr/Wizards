@@ -9,11 +9,11 @@ import net.minecraft.util.Identifier;
 import net.minecraft.world.World;
 import net.wizards.WizardsMod;
 
-public class FrostElementalEntity extends SummonedEntity {
-    public static final Identifier ID = Identifier.of(WizardsMod.ID, "frost_elemental");
-    public static EntityType<FrostElementalEntity> TYPE;
+public class ArcaneEmitterEntity extends SummonedEntity {
+    public static final Identifier ID = Identifier.of(WizardsMod.ID, "arcane_emitter");
+    public static EntityType<ArcaneEmitterEntity> TYPE;
 
-    public FrostElementalEntity(EntityType<? extends FrostElementalEntity> entityType, World world) {
+    public ArcaneEmitterEntity(EntityType<? extends ArcaneEmitterEntity> entityType, World world) {
         super(entityType, world);
     }
 

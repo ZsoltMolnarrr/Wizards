@@ -8,6 +8,7 @@ import java.util.List;
 public class SummonBehaviour {
 
     public int timeToLive = 60;
+    public boolean is_attackable = true;
 
     // --- Attribute Scaling ---
 
@@ -42,6 +43,7 @@ public class SummonBehaviour {
     public static class Movement {
         /// Stationary if false
         public boolean can_move = true;
+        public boolean affected_by_gravity = true;
 
         public Wander wander = new Wander();
         public static class Wander {

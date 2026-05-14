@@ -27,15 +27,24 @@ import java.util.List;
 public class WizardEntities {
     public static EntityConfig defaultEntityConfig() {
         var c = new EntityConfig();
-        var entry = new EntityConfig.Entry();
-        entry.common = new EntityConfig.CommonAttributes(30, 0.25, 4);
-        entry.common.follow_range = 32;
-        entry.custom.add(new EntityConfig.CustomAttribute(SpellSchools.FROST.id.toString(), 1));
-        c.entries.put(FrostElementalEntity.ID.getPath(), entry);
+
+        var frostEntry = new EntityConfig.Entry();
+        frostEntry.common = new EntityConfig.CommonAttributes(30, 0.25, 4);
+        frostEntry.common.follow_range = 32;
+        frostEntry.custom.add(new EntityConfig.CustomAttribute(SpellSchools.FROST.id.toString(), 1));
+        c.entries.put(FrostElementalEntity.ID.getPath(), frostEntry);
+
+        var arcaneEntry = new EntityConfig.Entry();
+        arcaneEntry.common = new EntityConfig.CommonAttributes(20, 0.3, 3);
+        arcaneEntry.common.follow_range = 32;
+        arcaneEntry.custom.add(new EntityConfig.CustomAttribute(SpellSchools.ARCANE.id.toString(), 1));
+        c.entries.put(ArcaneEmitterEntity.ID.getPath(), arcaneEntry);
+
         return c;
     }
 
-    public static final Identifier summon = Identifier.of("wizards", "summon");
+    public static final Identifier summon_frost_elemental = Identifier.of("wizards", "summon_frost_elemental");
+    public static final Identifier summon_arcane_emitter = Identifier.of("wizards", "summon_arcane_emitter");
 
     public static void register() {
         FrostElementalEntity.TYPE = Registry.register(
@@ -48,8 +57,18 @@ public class WizardEntities {
                         .build()
         );
 
+        ArcaneEmitterEntity.TYPE = Registry.register(
+                Registries.ENTITY_TYPE,
+                ArcaneEmitterEntity.ID,
+                FabricEntityTypeBuilder.<ArcaneEmitterEntity>create(SpawnGroup.MISC, ArcaneEmitterEntity::new)
+                        .dimensions(EntityDimensions.fixed(0.6F, 1.8F))
+                        .trackRangeBlocks(64)
+                        .trackedUpdateRate(3)
+                        .build()
+        );
 
-        SpellHandlers.registerCustomImpact(summon, new SpellHandlers.CustomImpact() {
+
+        SpellHandlers.registerCustomImpact(summon_frost_elemental, new SpellHandlers.CustomImpact() {
             @Override
             public SpellHandlers.ImpactResult onSpellImpact(RegistryEntry<Spell> registryEntry, SpellPower.Result result,
                                                             LivingEntity livingEntity, @Nullable Entity entity,
@@ -94,6 +113,51 @@ public class WizardEntities {
                 var world = livingEntity.getWorld();
                 if (world instanceof ServerWorld serverWorld) {
                     var summoned = new FrostElementalEntity(FrostElementalEntity.TYPE, world);
+                    summoned.onSummonedBySpell(new SpellSummoned.Args(livingEntity, registryEntry, summonBehaviour, impactContext));
+                    Vec3d spawnPos = findSpawnPosition(livingEntity, serverWorld);
+                    summoned.setPos(spawnPos.x, spawnPos.y, spawnPos.z);
+                    serverWorld.spawnEntity(summoned);
+                }
+
+                return new SpellHandlers.ImpactResult(true, false);
+            }
+        });
+
+        SpellHandlers.registerCustomImpact(summon_arcane_emitter, new SpellHandlers.CustomImpact() {
+            @Override
+            public SpellHandlers.ImpactResult onSpellImpact(RegistryEntry<Spell> registryEntry, SpellPower.Result result,
+                                                            LivingEntity livingEntity, @Nullable Entity entity,
+                                                            SpellHelper.ImpactContext impactContext) {
+                var summonBehaviour = new SummonBehaviour();
+                summonBehaviour.timeToLive = 60;
+                summonBehaviour.is_attackable = false;
+
+                // Movement: stationary — no follow, no wander
+                summonBehaviour.movement.can_move = false;
+                summonBehaviour.movement.is_pushable = false;
+                summonBehaviour.movement.affected_by_gravity = false;
+                summonBehaviour.movement.collision = SummonBehaviour.Movement.CollisionMode.NONE;
+
+                // Targeting: mirror owner's attacks and retaliate, but don't auto-aggro
+                summonBehaviour.targeting.attack_with_owner = true;
+                summonBehaviour.targeting.revenge = true;
+                summonBehaviour.targeting.automatic_targeting = true;
+
+                // Actions: arcane bolt only
+                summonBehaviour.actions = List.of(
+                    SummonBehaviour.Action.spell("wizards:arcane_bolt", 5)
+                );
+
+                var spellPowerEntry = new SummonBehaviour.AttributeScaling.Entry();
+                spellPowerEntry.attribute_id = SpellSchools.ARCANE.id.toString();
+                spellPowerEntry.modifiers = List.of(new SummonBehaviour.AttributeScaling.Entry.OwnerModifier(
+                        SpellSchools.ARCANE.id.toString(), EntityAttributeModifier.Operation.ADD_VALUE, 1F));
+
+                summonBehaviour.attribute_scaling.entries = List.of(spellPowerEntry);
+
+                var world = livingEntity.getWorld();
+                if (world instanceof ServerWorld serverWorld) {
+                    var summoned = new ArcaneEmitterEntity(ArcaneEmitterEntity.TYPE, world);
                     summoned.onSummonedBySpell(new SpellSummoned.Args(livingEntity, registryEntry, summonBehaviour, impactContext));
                     Vec3d spawnPos = findSpawnPosition(livingEntity, serverWorld);
                     summoned.setPos(spawnPos.x, spawnPos.y, spawnPos.z);

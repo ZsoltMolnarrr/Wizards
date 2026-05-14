@@ -1,7 +1,18 @@
 {
   "school": "spell_power:arcane",
+  "range": 16.0,
   "tier": 3,
   "order": 2,
   "learn": {},
-  "active": {}
+  "active": {},
+  "impacts": [
+    {
+      "action": {
+        "type": "CUSTOM",
+        "custom": {
+          "handler": "wizards:summon_arcane_emitter"
+        }
+      }
+    }
+  ]
 }

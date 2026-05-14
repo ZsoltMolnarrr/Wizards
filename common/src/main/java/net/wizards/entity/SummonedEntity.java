@@ -1,0 +1,710 @@
+package net.wizards.entity;
+
+import com.google.gson.Gson;
+import net.minecraft.entity.AnimationState;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.Tameable;
+import net.minecraft.entity.ai.TargetPredicate;
+import net.minecraft.entity.ai.goal.*;
+import net.minecraft.entity.attribute.EntityAttributeModifier;
+import net.minecraft.entity.attribute.EntityAttributes;
+import net.minecraft.entity.damage.DamageSource;
+import net.minecraft.entity.data.DataTracker;
+import net.minecraft.entity.data.TrackedData;
+import net.minecraft.entity.data.TrackedDataHandlerRegistry;
+import net.minecraft.entity.mob.MobEntity;
+import net.minecraft.entity.passive.GolemEntity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.nbt.NbtCompound;
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.entry.RegistryEntry;
+import net.minecraft.util.Identifier;
+import net.minecraft.util.math.Box;
+import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.World;
+import net.minecraft.world.explosion.Explosion;
+import net.spell_engine.api.spell.Spell;
+import net.spell_engine.api.spell.registry.SpellRegistry;
+import net.spell_engine.internals.SpellCooldownManager;
+import net.spell_engine.internals.SpellHelper;
+import net.spell_engine.internals.target.EntityRelation;
+import net.spell_engine.internals.target.EntityRelations;
+import net.wizards.WizardsMod;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.EnumSet;
+import java.util.Optional;
+import java.util.UUID;
+
+public abstract class SummonedEntity extends GolemEntity implements SpellSummoned, Tameable {
+
+    private static final TrackedData<Optional<UUID>> OWNER_UUID =
+            DataTracker.registerData(SummonedEntity.class, TrackedDataHandlerRegistry.OPTIONAL_UUID);
+    private static final TrackedData<Byte> PHASE =
+            DataTracker.registerData(SummonedEntity.class, TrackedDataHandlerRegistry.BYTE);
+
+    private static final byte PHASE_SPAWNING   = 0;
+    private static final byte PHASE_ACTIVE     = 1;
+    private static final byte PHASE_DESPAWNING = 2;
+
+    private int timeToLive = 0;
+    private int spawnEndAge = 0;
+    private int despawnStartAge = 0;
+    @Nullable protected SummonBehaviour behaviour = null;
+
+    public SummonedEntity(EntityType<? extends SummonedEntity> entityType, World world) {
+        super(entityType, world);
+    }
+
+    @Override
+    public boolean isPushable() {
+        return (behaviour == null || behaviour.movement.is_pushable) && super.isPushable();
+    }
+
+    @Override
+    public boolean isAttackable() {
+        return (behaviour == null || behaviour.is_attackable) && super.isAttackable();
+    }
+
+    @Override
+    public boolean canHit() {
+        return (behaviour == null || behaviour.is_attackable) && super.canHit();
+    }
+
+    @Override
+    public boolean damage(DamageSource source, float amount) {
+        return (behaviour == null || behaviour.is_attackable) && super.damage(source, amount);
+    }
+
+    @Override
+    public boolean isInvulnerableTo(DamageSource damageSource) {
+        return (behaviour == null || !behaviour.is_attackable) && super.isInvulnerableTo(damageSource);
+    }
+
+    @Override
+    public boolean isImmuneToExplosion(Explosion explosion) {
+        return (behaviour == null || !behaviour.is_attackable) && super.isImmuneToExplosion(explosion);
+    }
+
+    public void takeKnockback(double strength, double x, double z) {
+        if (behaviour != null && !behaviour.is_attackable) {
+            return;
+        }
+        super.takeKnockback(strength, x, z);
+    }
+
+    @Override
+    public boolean isCollidable() {
+        return (behaviour == null || behaviour.movement.collision != SummonBehaviour.Movement.CollisionMode.NONE) && super.isCollidable();
+    }
+
+    @Override
+    public boolean collidesWith(Entity other) {
+        if (behaviour != null) {
+            switch (behaviour.movement.collision) {
+                case NONE -> { return false; }
+                case ALL  -> { return super.collidesWith(other); }
+                case ENEMIES -> {
+                    var collidesAccordingToRelation = false;
+                    if (getOwner() != null) {
+                        var relation = EntityRelations.getRelation(getOwner(), other);
+                        collidesAccordingToRelation = relation == EntityRelation.HOSTILE || relation == EntityRelation.NEUTRAL;
+                    }
+                    return super.collidesWith(other) && collidesAccordingToRelation;
+                }
+            }
+        }
+        return super.collidesWith(other);
+    }
+
+    public boolean isSpawning()   { return getDataTracker().get(PHASE) == PHASE_SPAWNING; }
+    public boolean isDespawning() { return getDataTracker().get(PHASE) == PHASE_DESPAWNING; }
+    public boolean isActive()     { return getDataTracker().get(PHASE) == PHASE_ACTIVE; }
+    private void setPhase(byte phase) { getDataTracker().set(PHASE, phase); }
+
+    @Override
+    public void onSummonedBySpell(SpellSummoned.Args args) {
+        var sd = args.behaviour.spawn_despawn;
+        this.spawnEndAge     = sd.spawn_ticks;
+        this.timeToLive      = args.behaviour.timeToLive * 20 + sd.spawn_ticks + sd.despawn_ticks;
+        this.despawnStartAge = this.timeToLive - sd.despawn_ticks;
+        setOwnerUuid(args.owner.getUuid());
+        setBehaviour(args.behaviour);
+    }
+
+    private void setBehaviour(SummonBehaviour behaviour) {
+        if (this.behaviour != null) return;
+        this.behaviour = behaviour;
+        this.initGoals();
+        LivingEntity owner = getOwner();
+        if (owner != null) {
+            this.applyAttributeScaling(owner);
+        }
+        if (behaviour.movement.collision == SummonBehaviour.Movement.CollisionMode.NONE) {
+            this.noClip = true;
+        }
+        if (!behaviour.movement.affected_by_gravity) {
+            this.setNoGravity(true);
+        }
+        if (!behaviour.movement.is_pushable) {
+            this.getAttributeInstance(EntityAttributes.GENERIC_EXPLOSION_KNOCKBACK_RESISTANCE).addTemporaryModifier(new EntityAttributeModifier(Identifier.of("unpushable"), 9999, EntityAttributeModifier.Operation.ADD_VALUE));
+        }
+    }
+
+    private void applyAttributeScaling(LivingEntity owner) {
+        if (behaviour == null) return;
+        for (var entry : behaviour.attribute_scaling.entries) {
+            var targetAttrOpt = Registries.ATTRIBUTE.getEntry(Identifier.of(entry.attribute_id));
+            if (targetAttrOpt.isEmpty()) continue;
+            var instance = this.getAttributeInstance(targetAttrOpt.get());
+            if (instance == null) continue;
+
+            double bonus = 0;
+            for (var modifier : entry.modifiers) {
+                var ownerAttrOpt = Registries.ATTRIBUTE.getEntry(Identifier.of(modifier.attribute_id));
+                if (ownerAttrOpt.isEmpty()) continue;
+                var ownerInstance = owner.getAttributeInstance(ownerAttrOpt.get());
+                if (ownerInstance == null) continue;
+                bonus += ownerInstance.getValue() * modifier.coefficient;
+            }
+
+            var modifierId = Identifier.of(WizardsMod.ID, "summon_scaling/" + entry.attribute_id.replace(":", "/"));
+            instance.removeModifier(modifierId);
+            instance.addTemporaryModifier(new EntityAttributeModifier(modifierId, bonus, EntityAttributeModifier.Operation.ADD_VALUE));
+        }
+    }
+
+    @Override
+    protected void initGoals() {
+        if (behaviour == null) return;
+
+        // --- Goal selector ---
+
+        goalSelector.add(0, new SwimGoal(this));
+        goalSelector.add(1, new PhaseBlockGoal());
+        int actionPriority = 3;
+        for (var action : behaviour.actions) {
+            switch (action.type) {
+                case MELEE_ATTACK -> {
+                    var cfg = action.melee_attack;
+                    if (cfg.max_range > 0) {
+                        goalSelector.add(actionPriority, new RangedMeleeAttackGoal(cfg.speed, cfg.max_range));
+                    } else {
+                        goalSelector.add(actionPriority, new MeleeAttackGoal(this, cfg.speed, false));
+                    }
+                }
+                case SPELL_CAST -> goalSelector.add(actionPriority, new SpellCastGoal(action.spell_cast));
+            }
+            actionPriority++;
+        }
+        int priority = actionPriority;
+        goalSelector.add(priority++, new FaceTargetGoal());
+        var movement = behaviour.movement;
+        if (movement.can_move) {
+            if (movement.follow != null) {
+                goalSelector.add(priority++, new FollowSummonerGoal());
+            }
+            goalSelector.add(priority++, new WanderAroundFarGoal(this, movement.wander.speed, movement.wander.probability));
+        }
+        goalSelector.add(priority++, new LookAtEntityGoal(this, PlayerEntity.class, 8.0F));
+        goalSelector.add(priority, new LookAroundGoal(this));
+
+        // --- Target selector ---
+
+        if (behaviour.targeting.attack_with_owner) {
+            targetSelector.add(1, new DefendOwnerGoal());
+            targetSelector.add(2, new MirrorOwnerAttackGoal());
+        }
+        if (behaviour.targeting.revenge) {
+            targetSelector.add(3, new RevengeGoal(this));
+        }
+        if (behaviour.targeting.automatic_targeting) {
+            targetSelector.add(4, new ActiveTargetGoal<>(this, MobEntity.class, 10, true, false, this::shouldTarget));
+        }
+    }
+
+    private boolean shouldTarget(LivingEntity candidate) {
+        LivingEntity owner = getOwner();
+        if (owner == null) return false;
+        if (candidate == owner) return false;
+        if (candidate instanceof Tameable t && owner.getUuid().equals(t.getOwnerUuid())) return false;
+        return EntityRelations.getRelation(owner, candidate) == EntityRelation.HOSTILE;
+    }
+
+    private boolean canAttackTarget(@Nullable LivingEntity target, LivingEntity owner) {
+        if (target == null) return false;
+        EntityRelation relation = EntityRelations.getRelation(owner, target);
+        return relation == EntityRelation.HOSTILE || relation == EntityRelation.NEUTRAL;
+    }
+
+    @Override
+    protected void initDataTracker(DataTracker.Builder builder) {
+        super.initDataTracker(builder);
+        builder.add(OWNER_UUID, Optional.empty());
+        builder.add(PHASE, PHASE_SPAWNING);
+    }
+
+    public void setOwnerUuid(@Nullable UUID uuid) {
+        this.getDataTracker().set(OWNER_UUID, Optional.ofNullable(uuid));
+    }
+
+    @Nullable
+    public UUID getOwnerUuid() {
+        return this.getDataTracker().get(OWNER_UUID).orElse(null);
+    }
+
+    @Nullable
+    public LivingEntity getOwner() {
+        UUID uuid = getOwnerUuid();
+        if (uuid == null) return null;
+        return this.getWorld().getPlayerByUuid(uuid);
+    }
+
+    // --- Animation states ---
+    // Standard set shared by all summoned entities. Subclasses may override the hook methods
+    // below if they need non-standard animation behaviour.
+
+    public final AnimationState spawnAnimationState   = new AnimationState();
+    public final AnimationState despawnAnimationState = new AnimationState();
+    public final AnimationState idleAnimationState    = new AnimationState();
+    public final AnimationState moveAnimationState    = new AnimationState();
+    public final AnimationState attackAnimationState  = new AnimationState();
+
+    /** Called each client tick. Default drives the five standard states from lifecycle phase. */
+    protected void setupAnimationStates() {
+        spawnAnimationState.setRunning(isSpawning(), this.age);
+        despawnAnimationState.setRunning(isDespawning(), this.age);
+        idleAnimationState.setRunning(isActive(), this.age);
+        moveAnimationState.setRunning(isActive() && this.getVelocity().horizontalLength() > 0.01, this.age);
+    }
+
+    /** Called when a spell cast begins. Default starts the attack animation. */
+    protected void onSpellCastStarted() { attackAnimationState.start(age); }
+
+    /** Called on a successful melee hit. Default starts the attack animation. */
+    protected void onAttackAnimated() { attackAnimationState.start(age); }
+
+    // --- Spell cooldowns ---
+
+    private final SpellCooldownManager cooldownManager = new SpellCooldownManager(this);
+
+    @Override
+    public void tick() {
+        super.tick();
+        if (this.getWorld().isClient()) {
+            setupAnimationStates();
+        } else {
+            cooldownManager.tickUpdate();
+            if (timeToLive > 0 && this.age >= timeToLive) {
+                this.discard();
+            } else if (this.age < spawnEndAge) {
+                setPhase(PHASE_SPAWNING);
+            } else if (timeToLive > 0 && this.age >= despawnStartAge) {
+                setPhase(PHASE_DESPAWNING);
+            } else {
+                setPhase(PHASE_ACTIVE);
+            }
+        }
+    }
+
+    @Override
+    public boolean tryAttack(Entity target) {
+        boolean success = super.tryAttack(target);
+        if (success) onAttackAnimated();
+        return success;
+    }
+
+    // --- NBT ---
+
+    private static final Gson GSON = new Gson();
+    private static final String NBT_OWNER_UUID        = "OwnerUUID";
+    private static final String NBT_TTL               = "TTL";
+    private static final String NBT_SPAWN_END_AGE     = "SpawnEndAge";
+    private static final String NBT_DESPAWN_START_AGE = "DespawnStartAge";
+    private static final String NBT_BEHAVIOUR         = "Behaviour";
+
+    @Override
+    public void readCustomDataFromNbt(NbtCompound nbt) {
+        super.readCustomDataFromNbt(nbt);
+        if (nbt.containsUuid(NBT_OWNER_UUID)) {
+            setOwnerUuid(nbt.getUuid(NBT_OWNER_UUID));
+        }
+        this.timeToLive      = nbt.getInt(NBT_TTL);
+        this.spawnEndAge     = nbt.getInt(NBT_SPAWN_END_AGE);
+        this.despawnStartAge = nbt.getInt(NBT_DESPAWN_START_AGE);
+        if (nbt.contains(NBT_BEHAVIOUR)) {
+            var behaviour = GSON.fromJson(nbt.getString(NBT_BEHAVIOUR), SummonBehaviour.class);
+            setBehaviour(behaviour);
+        }
+    }
+
+    @Override
+    public void writeCustomDataToNbt(NbtCompound nbt) {
+        super.writeCustomDataToNbt(nbt);
+        UUID uuid = getOwnerUuid();
+        if (uuid != null) {
+            nbt.putUuid(NBT_OWNER_UUID, uuid);
+        }
+        nbt.putInt(NBT_TTL, this.timeToLive);
+        nbt.putInt(NBT_SPAWN_END_AGE, this.spawnEndAge);
+        nbt.putInt(NBT_DESPAWN_START_AGE, this.despawnStartAge);
+        if (this.behaviour != null) {
+            nbt.putString(NBT_BEHAVIOUR, GSON.toJson(this.behaviour));
+        }
+    }
+
+    // --- Inner goal classes ---
+
+    // Targets whoever attacked the owner (mirrors TrackOwnerAttackerGoal)
+    private class DefendOwnerGoal extends TrackTargetGoal {
+        private LivingEntity attacker;
+        private int lastAttackedTime;
+
+        public DefendOwnerGoal() {
+            super(SummonedEntity.this, false);
+            setControls(EnumSet.of(Control.TARGET));
+        }
+
+        @Override
+        public boolean canStart() {
+            LivingEntity owner = getOwner();
+            if (owner == null) return false;
+            attacker = owner.getAttacker();
+            int time = owner.getLastAttackedTime();
+            return time != lastAttackedTime
+                    && canTrack(attacker, TargetPredicate.DEFAULT)
+                    && canAttackTarget(attacker, owner);
+        }
+
+        @Override
+        public void start() {
+            SummonedEntity.this.setTarget(attacker);
+            LivingEntity owner = getOwner();
+            if (owner != null) lastAttackedTime = owner.getLastAttackedTime();
+            super.start();
+        }
+    }
+
+    // Joins the owner's current attack target (mirrors AttackWithOwnerGoal)
+    private class MirrorOwnerAttackGoal extends TrackTargetGoal {
+        private LivingEntity attacking;
+        private int lastAttackTime;
+
+        public MirrorOwnerAttackGoal() {
+            super(SummonedEntity.this, false);
+            setControls(EnumSet.of(Control.TARGET));
+        }
+
+        @Override
+        public boolean canStart() {
+            LivingEntity owner = getOwner();
+            if (owner == null) return false;
+            attacking = owner.getAttacking();
+            int time = owner.getLastAttackTime();
+            return time != lastAttackTime
+                    && canTrack(attacking, TargetPredicate.DEFAULT)
+                    && canAttackTarget(attacking, owner);
+        }
+
+        @Override
+        public void start() {
+            SummonedEntity.this.setTarget(attacking);
+            LivingEntity owner = getOwner();
+            if (owner != null) lastAttackTime = owner.getLastAttackTime();
+            super.start();
+        }
+    }
+
+    private class FollowSummonerGoal extends Goal {
+        // Last horizontal velocity of the owner that was significant enough to determine orientation.
+        // Null until the owner is seen moving; falls back to north when still null.
+        @Nullable private Vec3d lastOwnerForward = null;
+
+        public FollowSummonerGoal() {
+            setControls(EnumSet.of(Control.MOVE, Control.LOOK));
+        }
+
+        private SummonBehaviour.Movement.Follow follow() {
+            return behaviour.movement.follow;
+        }
+
+        @Override
+        public boolean canStart() {
+            LivingEntity owner = getOwner();
+            if (owner == null) return false;
+            float start = follow().start_distance;
+            return squaredDistanceTo(owner) > start * start;
+        }
+
+        @Override
+        public boolean shouldContinue() {
+            LivingEntity owner = getOwner();
+            if (owner == null) return false;
+            float stop = follow().stop_distance;
+            return squaredDistanceTo(owner) > stop * stop;
+        }
+
+        @Override
+        public void start() {
+            LivingEntity owner = getOwner();
+            if (owner == null) return;
+            Vec3d target = computeFollowTarget(owner);
+            getNavigation().startMovingTo(target.x, target.y, target.z, 1.0);
+        }
+
+        @Override
+        public void tick() {
+            LivingEntity owner = getOwner();
+            if (owner == null) return;
+            Vec3d target = computeFollowTarget(owner);
+            float teleportDist = follow().teleport_after_distance;
+            if (teleportDist > 0 && squaredDistanceTo(owner) > teleportDist * teleportDist) {
+                teleport(target.x, target.y, target.z, false);
+            } else {
+                getNavigation().startMovingTo(target.x, target.y, target.z, 1.0);
+            }
+        }
+
+        // Returns a position 2 blocks to the owner's right side.
+        // Forward is taken from the owner's current velocity when significant; otherwise the last
+        // cached forward is reused. If no valid forward has ever been observed, falls back to north.
+        private Vec3d computeFollowTarget(LivingEntity owner) {
+            Vec3d vel = owner.getVelocity();
+            double horizSpeed = Math.sqrt(vel.x * vel.x + vel.z * vel.z);
+            if (horizSpeed > 0.02) {
+                lastOwnerForward = new Vec3d(vel.x / horizSpeed, 0, vel.z / horizSpeed);
+            }
+            // North (-Z) as the last-resort default before the owner has ever moved
+            Vec3d forward = lastOwnerForward != null ? lastOwnerForward : new Vec3d(0, 0, -1);
+            // Right = forward rotated 90° clockwise (viewed from above) in Minecraft's coordinate system
+            Vec3d right = new Vec3d(-forward.z, 0, forward.x);
+            return owner.getPos().add(right.multiply(2.0));
+        }
+    }
+
+    // Melee attack that only activates when the target is within a configured range.
+    // Unlike the default MeleeAttackGoal, the entity will not chase a distant target to engage.
+    private class RangedMeleeAttackGoal extends MeleeAttackGoal {
+        private final float maxRange;
+
+        public RangedMeleeAttackGoal(float speed, float maxRange) {
+            super(SummonedEntity.this, speed, false);
+            this.maxRange = maxRange;
+        }
+
+        @Override
+        public boolean canStart() {
+            LivingEntity target = getTarget();
+            if (target == null) return false;
+            if (squaredDistanceTo(target) > maxRange * maxRange) return false;
+            return super.canStart();
+        }
+    }
+
+    // Holds MOVE/LOOK/JUMP controls during spawn and despawn phases, making the entity inactionable.
+    private class PhaseBlockGoal extends Goal {
+        public PhaseBlockGoal() {
+            setControls(EnumSet.of(Control.MOVE, Control.LOOK, Control.JUMP));
+        }
+
+        @Override
+        public boolean canStart() { return !isActive(); }
+
+        @Override
+        public boolean shouldContinue() { return !isActive(); }
+    }
+
+    // Holds LOOK control whenever the entity has an attack target, keeping it facing that target
+    // between spell casts and melee attacks. Sits just below action goals so it is displaced
+    // when any combat goal is active but takes over as soon as they release controls.
+    private class FaceTargetGoal extends Goal {
+        public FaceTargetGoal() {
+            setControls(EnumSet.of(Control.LOOK));
+        }
+
+        @Override
+        public boolean canStart() {
+            LivingEntity target = getTarget();
+            return target != null && target.isAlive() && isActive();
+        }
+
+        @Override
+        public boolean shouldContinue() { return canStart(); }
+
+        @Override
+        public boolean shouldRunEveryTick() { return true; }
+
+        @Override
+        public void tick() {
+            LivingEntity target = getTarget();
+            if (target == null) return;
+            getLookControl().lookAt(target, 30F, 30F);
+            setBodyYaw(getHeadYaw());
+        }
+    }
+
+    private class SpellCastGoal extends Goal {
+        private final SummonBehaviour.Action.SpellCast config;
+
+        // Spell registry entry — resolved lazily and cached (registry is stable at runtime)
+        @Nullable private RegistryEntry<Spell> spellEntry = null;
+        private boolean spellLookupAttempted = false;
+
+        // Per-activation state
+        private int castTick = 0;
+        private int castDuration = 1;
+        private boolean released = false;
+        private int targetSeeingTicker = 0;
+
+        public SpellCastGoal(SummonBehaviour.Action.SpellCast config) {
+            this.config = config;
+            setControls(EnumSet.of(Control.MOVE, Control.LOOK));
+        }
+
+        @Nullable
+        private RegistryEntry<Spell> resolveSpell() {
+            if (spellLookupAttempted) return spellEntry;
+            spellLookupAttempted = true;
+            var id = Identifier.of(config.spell_id);
+            spellEntry = SpellRegistry.from(getWorld()).getEntry(id).orElse(null);
+            return spellEntry;
+        }
+
+        @Override
+        public boolean shouldRunEveryTick() { return true; }
+
+        @Override
+        public boolean canStart() {
+            var entry = resolveSpell();
+            if (entry == null) return false;
+            var spell = entry.value();
+            if (spell.active == null) return false;           // ACTIVE spells only
+            if (SpellHelper.isChanneled(spell)) return false; // INSTANT or CHARGE only
+            if (!isActive()) return false;                    // not in spawn/despawn phase
+            var target = getTarget();
+            if (target == null || !target.isAlive()) return false;
+            return !cooldownManager.isCoolingDown(entry);
+        }
+
+        @Override
+        public void start() {
+            castTick = 0;
+            released = false;
+            targetSeeingTicker = 0;
+            var entry = spellEntry; // already resolved by canStart()
+            if (entry != null) {
+                var spell = entry.value();
+                castDuration = SpellHelper.isInstant(spell)
+                        ? 1
+                        : SpellHelper.getCastTimeDetails(SummonedEntity.this, spell).length();
+                if (castDuration <= 0) castDuration = 1;
+            }
+            onSpellCastStarted();
+            setAttacking(true);
+        }
+
+        @Override
+        public boolean shouldContinue() {
+            if (released) return false;
+            if (!isActive()) return false;
+            var target = getTarget();
+            return target != null && target.isAlive();
+        }
+
+        @Override
+        public void stop() {
+            setAttacking(false);
+            getNavigation().stop();
+        }
+
+        @Override
+        public void tick() {
+            if (released) return;
+            var target = getTarget();
+            if (target == null) return;
+            var entry = spellEntry;
+            if (entry == null) return;
+            var spell = entry.value();
+
+            // Desired range based on target movement direction
+            Vec3d toTarget = target.getPos().subtract(SummonedEntity.this.getPos()).normalize();
+            double dot = target.getVelocity().dotProduct(toTarget);
+            // dot > 0  → target fleeing    → close in (50% range)
+            // dot < 0  → target approaching → hold back (90% range)
+            float rangeFraction = (dot > 0.01) ? 0.5f : (dot < -0.01) ? 0.9f : 0.7f;
+            float desiredRange = spell.range * rangeFraction;
+            double desiredRangeSq = (double) desiredRange * desiredRange;
+
+            // Line-of-sight tracking
+            boolean canSee = getVisibilityCache().canSee(target);
+            if (canSee) { if (targetSeeingTicker < 10) targetSeeingTicker++; }
+            else         { if (targetSeeingTicker > 0)  targetSeeingTicker--; }
+
+            // Navigation
+            double distSq = squaredDistanceTo(target);
+            if (distSq > desiredRangeSq || targetSeeingTicker <= 0) {
+                getNavigation().startMovingTo(target, 1.0);
+            } else {
+                getNavigation().stop();
+            }
+
+            // Compute exact yaw/pitch to face the target's eyes
+            Vec3d toTargetEye = target.getEyePos().subtract(getEyePos()).normalize();
+            float faceYaw   = (float)  Math.toDegrees(Math.atan2(-toTargetEye.x, toTargetEye.z));
+            float facePitch = (float) -Math.toDegrees(Math.asin(Math.max(-1.0, Math.min(1.0, toTargetEye.y))));
+
+            boolean isFacing;
+            if (castTick > 0) {
+                // Casting in progress — lock rotation directly onto target every tick
+                setYaw(faceYaw);
+                setHeadYaw(faceYaw);
+                setBodyYaw(faceYaw);
+                setPitch(facePitch);
+                isFacing = true;
+            } else {
+                // Not yet casting — turn gradually via look control
+                getLookControl().lookAt(target, 30F, 30F);
+                setBodyYaw(getHeadYaw());
+                Vec3d lookDir = getRotationVector(getPitch(), getHeadYaw()).normalize();
+                isFacing = lookDir.dotProduct(toTargetEye) > 0.95; // ~18° threshold
+            }
+
+            // Cast progress — only while in range, target visible, and facing the target
+            if (distSq <= desiredRangeSq && targetSeeingTicker > 0 && isFacing) {
+                castTick++;
+            }
+            if (castTick >= castDuration) {
+                releaseSpell(target, entry, spell);
+                released = true;
+            }
+        }
+
+        private void releaseSpell(LivingEntity target, RegistryEntry<Spell> entry, Spell spell) {
+            if (getWorld().isClient()) return;
+            // Snap rotation to face the target exactly — targetAndPerformSpell uses the caster's
+            // look vector for raycasting (AIM/BEAM) and projectile direction.
+            Vec3d toTarget = target.getEyePos().subtract(getEyePos()).normalize();
+            float releaseYaw   = (float)  Math.toDegrees(Math.atan2(-toTarget.x, toTarget.z));
+            float releasePitch = (float) -Math.toDegrees(Math.asin(Math.max(-1.0, Math.min(1.0, toTarget.y))));
+            setYaw(releaseYaw);
+            setHeadYaw(releaseYaw);
+            setBodyYaw(releaseYaw);
+            setPitch(releasePitch);
+            SpellHelper.targetAndPerformSpell(getWorld(), SummonedEntity.this, entry);
+
+            // Cooldown: use spell's own duration if set, else fall back to config override (ticks)
+            int cooldownTicks;
+            if (spell.cost.cooldown != null && spell.cost.cooldown.duration > 0) {
+                cooldownTicks = Math.round(
+                        SpellHelper.getCooldownDuration(SummonedEntity.this, entry) * 20F);
+            } else {
+                cooldownTicks = config.cooldown; // already in ticks; default = 20
+            }
+            if (cooldownTicks > 0) {
+                cooldownManager.set(entry, cooldownTicks);
+            }
+        }
+    }
+}
