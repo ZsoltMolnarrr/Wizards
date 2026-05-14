@@ -160,7 +160,7 @@ public class WizardEntities {
                     var summoned = new ArcaneEmitterEntity(ArcaneEmitterEntity.TYPE, world);
                     summoned.onSummonedBySpell(new SpellSummoned.Args(livingEntity, registryEntry, summonBehaviour, impactContext));
                     Vec3d spawnPos = findSpawnPosition(livingEntity, serverWorld);
-                    summoned.setPos(spawnPos.x, spawnPos.y, spawnPos.z);
+                    summoned.setPos(spawnPos.x, spawnPos.y + 1.0, spawnPos.z);
                     serverWorld.spawnEntity(summoned);
                 }
 

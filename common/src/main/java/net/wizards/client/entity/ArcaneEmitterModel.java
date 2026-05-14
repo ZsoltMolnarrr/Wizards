@@ -1,17 +1,15 @@
 package net.wizards.client.entity;
 
 import net.minecraft.client.model.*;
-import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.VertexConsumer;
-import net.minecraft.client.render.entity.model.EntityModel;
 import net.minecraft.client.render.entity.model.EntityModelLayer;
+import net.minecraft.client.render.entity.model.SinglePartEntityModel;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.entity.Entity;
 import net.minecraft.util.Identifier;
 import net.wizards.WizardsMod;
 import net.wizards.entity.ArcaneEmitterEntity;
 
-public class ArcaneEmitterModel extends EntityModel<ArcaneEmitterEntity> {
+public class ArcaneEmitterModel extends SinglePartEntityModel<ArcaneEmitterEntity> {
     public static final EntityModelLayer LAYER = new EntityModelLayer(Identifier.of(WizardsMod.ID, "arcane_emitter"), "main");
 
 	private final ModelPart arcane_missile_small_portal;
@@ -50,7 +48,15 @@ public class ArcaneEmitterModel extends EntityModel<ArcaneEmitterEntity> {
 		return TexturedModelData.of(modelData, 64, 64);
 	}
 	@Override
+	public ModelPart getPart() {
+		return arcane_missile_small_portal;
+	}
+
+	@Override
 	public void setAngles(ArcaneEmitterEntity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
+		this.getPart().traverse().forEach(ModelPart::resetTransform);
+		this.updateAnimation(entity.spawnAnimationState, ArcaneEmitterAnimations.spawn, ageInTicks, 1F);
+		this.updateAnimation(entity.idleAnimationState,  ArcaneEmitterAnimations.idle,  ageInTicks, 1F);
 	}
 
 	@Override
