@@ -138,10 +138,15 @@ public class WizardEntities {
                 summonBehaviour.movement.affected_by_gravity = false;
                 summonBehaviour.movement.collision = SummonBehaviour.Movement.CollisionMode.NONE;
 
+                // Bounding box: compact cube
+                summonBehaviour.dimensions.width  = 0.6F;
+                summonBehaviour.dimensions.height = 0.6F;
+
                 // Targeting: mirror owner's attacks and retaliate, but don't auto-aggro
                 summonBehaviour.targeting.attack_with_owner = true;
                 summonBehaviour.targeting.revenge = true;
                 summonBehaviour.targeting.automatic_targeting = true;
+                summonBehaviour.targeting.look_around = false;
 
                 // Actions: arcane bolt only
                 summonBehaviour.actions = List.of(

@@ -37,6 +37,14 @@ public class SummonBehaviour {
         }
     }
 
+    // --- Dimensions ---
+
+    public Dimensions dimensions = new Dimensions();
+    public static class Dimensions {
+        public float width  = 0.6F;
+        public float height = 1.8F;
+    }
+
     // --- Movement ---
 
     public Movement movement = new Movement();
@@ -76,6 +84,7 @@ public class SummonBehaviour {
         public boolean revenge = true;
         public boolean attack_with_owner = true;
         public boolean automatic_targeting = false;
+        public boolean look_around = true;
     }
 
     // --- Spawn / Despawn ---

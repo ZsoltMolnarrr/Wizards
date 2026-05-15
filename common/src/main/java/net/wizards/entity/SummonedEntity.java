@@ -3,6 +3,8 @@ package net.wizards.entity;
 import com.google.gson.Gson;
 import net.minecraft.entity.AnimationState;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityDimensions;
+import net.minecraft.entity.EntityPose;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.Tameable;
@@ -47,6 +49,10 @@ public abstract class SummonedEntity extends GolemEntity implements SpellSummone
             DataTracker.registerData(SummonedEntity.class, TrackedDataHandlerRegistry.BYTE);
     private static final TrackedData<Byte> COLLISION_MODE =
             DataTracker.registerData(SummonedEntity.class, TrackedDataHandlerRegistry.BYTE);
+    private static final TrackedData<Float> BOUNDING_BOX_WIDTH =
+            DataTracker.registerData(SummonedEntity.class, TrackedDataHandlerRegistry.FLOAT);
+    private static final TrackedData<Float> BOUNDING_BOX_HEIGHT =
+            DataTracker.registerData(SummonedEntity.class, TrackedDataHandlerRegistry.FLOAT);
 
     private static final byte PHASE_SPAWNING   = 0;
     private static final byte PHASE_ACTIVE     = 1;
@@ -59,6 +65,13 @@ public abstract class SummonedEntity extends GolemEntity implements SpellSummone
 
     public SummonedEntity(EntityType<? extends SummonedEntity> entityType, World world) {
         super(entityType, world);
+    }
+
+    @Override
+    public EntityDimensions getBaseDimensions(EntityPose pose) {
+        return EntityDimensions.fixed(
+                getDataTracker().get(BOUNDING_BOX_WIDTH),
+                getDataTracker().get(BOUNDING_BOX_HEIGHT));
     }
 
     @Override
@@ -141,6 +154,9 @@ public abstract class SummonedEntity extends GolemEntity implements SpellSummone
     @Override
     public void onTrackedDataSet(TrackedData<?> data) {
         super.onTrackedDataSet(data);
+        if (data.equals(BOUNDING_BOX_WIDTH) || data.equals(BOUNDING_BOX_HEIGHT)) {
+            calculateDimensions();
+        }
         if (data.equals(COLLISION_MODE)) {
             if (collisionMode() == SummonBehaviour.Movement.CollisionMode.NONE) {
                 ((TwoWayCollisionChecker) this).setReverseCollisionChecker(
@@ -176,6 +192,9 @@ public abstract class SummonedEntity extends GolemEntity implements SpellSummone
             this.applyAttributeScaling(owner);
         }
         getDataTracker().set(COLLISION_MODE, (byte) behaviour.movement.collision.ordinal());
+        getDataTracker().set(BOUNDING_BOX_WIDTH,  behaviour.dimensions.width);
+        getDataTracker().set(BOUNDING_BOX_HEIGHT, behaviour.dimensions.height);
+        calculateDimensions();
         if (!behaviour.movement.affected_by_gravity) {
             this.setNoGravity(true);
         }
@@ -239,8 +258,10 @@ public abstract class SummonedEntity extends GolemEntity implements SpellSummone
             }
             goalSelector.add(priority++, new WanderAroundFarGoal(this, movement.wander.speed, movement.wander.probability));
         }
-        goalSelector.add(priority++, new LookAtEntityGoal(this, PlayerEntity.class, 8.0F));
-        goalSelector.add(priority, new LookAroundGoal(this));
+        if (behaviour.targeting.look_around) {
+            goalSelector.add(priority++, new LookAtEntityGoal(this, PlayerEntity.class, 8.0F));
+            goalSelector.add(priority, new LookAroundGoal(this));
+        }
 
         // --- Target selector ---
 
@@ -276,6 +297,8 @@ public abstract class SummonedEntity extends GolemEntity implements SpellSummone
         builder.add(OWNER_UUID, Optional.empty());
         builder.add(PHASE, PHASE_SPAWNING);
         builder.add(COLLISION_MODE, (byte) SummonBehaviour.Movement.CollisionMode.ALL.ordinal());
+        builder.add(BOUNDING_BOX_WIDTH,  new SummonBehaviour.Dimensions().width);
+        builder.add(BOUNDING_BOX_HEIGHT, new SummonBehaviour.Dimensions().height);
     }
 
     public void setOwnerUuid(@Nullable UUID uuid) {
