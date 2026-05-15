@@ -53,7 +53,7 @@ public abstract class SummonedEntity extends GolemEntity implements SpellSummone
             DataTracker.registerData(SummonedEntity.class, TrackedDataHandlerRegistry.FLOAT);
     private static final TrackedData<Float> BOUNDING_BOX_HEIGHT =
             DataTracker.registerData(SummonedEntity.class, TrackedDataHandlerRegistry.FLOAT);
-    private static final TrackedData<Integer> SPAWN_END_AGE =
+    private static final TrackedData<Integer> END_OF_PHASE_AGE =
             DataTracker.registerData(SummonedEntity.class, TrackedDataHandlerRegistry.INTEGER);
 
     private static final byte PHASE_SPAWNING   = 0;
@@ -173,13 +173,21 @@ public abstract class SummonedEntity extends GolemEntity implements SpellSummone
     public boolean isSpawning()   { return getDataTracker().get(PHASE) == PHASE_SPAWNING; }
     public boolean isDespawning() { return getDataTracker().get(PHASE) == PHASE_DESPAWNING; }
     public boolean isActive()     { return getDataTracker().get(PHASE) == PHASE_ACTIVE; }
-    private void setPhase(byte phase) { getDataTracker().set(PHASE, phase); }
+    private void setPhase(byte phase) {
+        getDataTracker().set(PHASE, phase);
+        int endAge = switch (phase) {
+            case PHASE_SPAWNING   -> spawnEndAge;
+            case PHASE_ACTIVE     -> despawnStartAge;
+            case PHASE_DESPAWNING -> timeToLive;
+            default               -> 0;
+        };
+        getDataTracker().set(END_OF_PHASE_AGE, endAge);
+    }
 
     @Override
     public void onSummonedBySpell(SpellSummoned.Args args) {
         var sd = args.behaviour.spawn_despawn;
         this.spawnEndAge     = sd.spawn_ticks;
-        getDataTracker().set(SPAWN_END_AGE, sd.spawn_ticks);
         this.timeToLive      = args.behaviour.timeToLive * 20 + sd.spawn_ticks + sd.despawn_ticks;
         this.despawnStartAge = this.timeToLive - sd.despawn_ticks;
         setOwnerUuid(args.owner.getUuid());
@@ -302,7 +310,7 @@ public abstract class SummonedEntity extends GolemEntity implements SpellSummone
         builder.add(COLLISION_MODE, (byte) SummonBehaviour.Movement.CollisionMode.ALL.ordinal());
         builder.add(BOUNDING_BOX_WIDTH,  new SummonBehaviour.Dimensions().width);
         builder.add(BOUNDING_BOX_HEIGHT, new SummonBehaviour.Dimensions().height);
-        builder.add(SPAWN_END_AGE, 0);
+        builder.add(END_OF_PHASE_AGE, 0);
     }
 
     public void setOwnerUuid(@Nullable UUID uuid) {
@@ -336,9 +344,10 @@ public abstract class SummonedEntity extends GolemEntity implements SpellSummone
         spawnAnimationState.setRunning(isSpawning(), this.age);
         boolean despawning = isDespawning();
         if (despawning && !despawnAnimationState.isRunning()) {
-            // Offset by spawnEndAge so getTimeRunning() starts at -(spawnEndAge*50)ms.
-            // With speedMultiplier=-1F: f = -timeRunning/1000 goes from spawnDuration→0.
-            despawnAnimationState.start(this.age + getDataTracker().get(SPAWN_END_AGE));
+            // END_OF_PHASE_AGE = timeToLive during DESPAWNING (a future absolute age).
+            // getTimeRunning() starts negative; with speedMultiplier=-1F it maps to
+            // the end of the spawn animation and counts down to 0 as despawn progresses.
+            despawnAnimationState.start(getDataTracker().get(END_OF_PHASE_AGE));
         } else if (!despawning) {
             despawnAnimationState.stop();
         }
