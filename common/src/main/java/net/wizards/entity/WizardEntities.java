@@ -129,7 +129,7 @@ public class WizardEntities {
                                                             LivingEntity livingEntity, @Nullable Entity entity,
                                                             SpellHelper.ImpactContext impactContext) {
                 var summonBehaviour = new SummonBehaviour();
-                summonBehaviour.timeToLive = 60;
+                summonBehaviour.timeToLive = 15;
                 summonBehaviour.is_attackable = false;
 
                 // Movement: stationary — no follow, no wander

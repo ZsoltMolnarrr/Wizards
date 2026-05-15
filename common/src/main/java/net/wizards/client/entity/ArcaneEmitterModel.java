@@ -55,8 +55,9 @@ public class ArcaneEmitterModel extends SinglePartEntityModel<ArcaneEmitterEntit
 	@Override
 	public void setAngles(ArcaneEmitterEntity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
 		this.getPart().traverse().forEach(ModelPart::resetTransform);
-		this.updateAnimation(entity.spawnAnimationState, ArcaneEmitterAnimations.spawn, ageInTicks, 1F);
-		this.updateAnimation(entity.idleAnimationState,  ArcaneEmitterAnimations.idle,  ageInTicks, 1F);
+		this.updateAnimation(entity.spawnAnimationState,   ArcaneEmitterAnimations.spawn, ageInTicks,  1F);
+		this.updateAnimation(entity.idleAnimationState,    ArcaneEmitterAnimations.idle,  ageInTicks,  1F);
+		this.updateAnimation(entity.despawnAnimationState, ArcaneEmitterAnimations.spawn, ageInTicks, -1F);
 	}
 
 	@Override
