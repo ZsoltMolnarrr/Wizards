@@ -25,6 +25,7 @@ import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraft.world.explosion.Explosion;
+import net.spell_engine.api.entity.TwoWayCollisionChecker;
 import net.spell_engine.api.spell.Spell;
 import net.spell_engine.api.spell.registry.SpellRegistry;
 import net.spell_engine.internals.SpellCooldownManager;
@@ -44,6 +45,8 @@ public abstract class SummonedEntity extends GolemEntity implements SpellSummone
             DataTracker.registerData(SummonedEntity.class, TrackedDataHandlerRegistry.OPTIONAL_UUID);
     private static final TrackedData<Byte> PHASE =
             DataTracker.registerData(SummonedEntity.class, TrackedDataHandlerRegistry.BYTE);
+    private static final TrackedData<Byte> COLLISION_MODE =
+            DataTracker.registerData(SummonedEntity.class, TrackedDataHandlerRegistry.BYTE);
 
     private static final byte PHASE_SPAWNING   = 0;
     private static final byte PHASE_ACTIVE     = 1;
@@ -60,7 +63,8 @@ public abstract class SummonedEntity extends GolemEntity implements SpellSummone
 
     @Override
     public boolean isPushable() {
-        return (behaviour == null || behaviour.movement.is_pushable) && super.isPushable();
+        return collisionMode() != SummonBehaviour.Movement.CollisionMode.NONE;
+        // return (behaviour == null || behaviour.movement.is_pushable) && super.isPushable();
     }
 
     @Override
@@ -95,28 +99,57 @@ public abstract class SummonedEntity extends GolemEntity implements SpellSummone
         super.takeKnockback(strength, x, z);
     }
 
+    private SummonBehaviour.Movement.CollisionMode collisionMode() {
+        return SummonBehaviour.Movement.CollisionMode.values()[getDataTracker().get(COLLISION_MODE)];
+    }
+
     @Override
     public boolean isCollidable() {
-        return (behaviour == null || behaviour.movement.collision != SummonBehaviour.Movement.CollisionMode.NONE) && super.isCollidable();
+        if (collisionMode() == SummonBehaviour.Movement.CollisionMode.NONE) return false;
+        return super.isCollidable();
     }
 
     @Override
     public boolean collidesWith(Entity other) {
-        if (behaviour != null) {
-            switch (behaviour.movement.collision) {
-                case NONE -> { return false; }
-                case ALL  -> { return super.collidesWith(other); }
-                case ENEMIES -> {
-                    var collidesAccordingToRelation = false;
-                    if (getOwner() != null) {
-                        var relation = EntityRelations.getRelation(getOwner(), other);
-                        collidesAccordingToRelation = relation == EntityRelation.HOSTILE || relation == EntityRelation.NEUTRAL;
-                    }
-                    return super.collidesWith(other) && collidesAccordingToRelation;
+        switch (collisionMode()) {
+            case NONE -> { return false; }
+            case ALL  -> { return super.collidesWith(other); }
+            case ENEMIES -> {
+                var collidesAccordingToRelation = false;
+                if (getOwner() != null) {
+                    var relation = EntityRelations.getRelation(getOwner(), other);
+                    collidesAccordingToRelation = relation == EntityRelation.HOSTILE || relation == EntityRelation.NEUTRAL;
                 }
+                return super.collidesWith(other) && collidesAccordingToRelation;
             }
         }
         return super.collidesWith(other);
+    }
+
+    // Stops tickCramming() from pushing other entities through player.pushAwayFrom(this).
+    // Both client and server call pushAway(), so the DataTracker-synced collisionMode() is enough.
+    @Override
+    protected void pushAway(Entity entity) {
+        if (collisionMode() != SummonBehaviour.Movement.CollisionMode.NONE) {
+            super.pushAway(entity);
+        }
+    }
+
+    // Mirrors BarrierEntity's constructor pattern: install a TwoWayCollisionChecker reverseCollisionChecker
+    // so SpellEngine's EntityCollision mixin also lets everything pass through this entity.
+    // Runs on both sides: server when setBehaviour sets the value, client when the DataTracker update arrives.
+    @Override
+    public void onTrackedDataSet(TrackedData<?> data) {
+        super.onTrackedDataSet(data);
+        if (data.equals(COLLISION_MODE)) {
+            if (collisionMode() == SummonBehaviour.Movement.CollisionMode.NONE) {
+                ((TwoWayCollisionChecker) this).setReverseCollisionChecker(
+                        entity -> TwoWayCollisionChecker.CollisionResult.PASS
+                );
+            } else {
+                ((TwoWayCollisionChecker) this).setReverseCollisionChecker(null);
+            }
+        }
     }
 
     public boolean isSpawning()   { return getDataTracker().get(PHASE) == PHASE_SPAWNING; }
@@ -142,9 +175,7 @@ public abstract class SummonedEntity extends GolemEntity implements SpellSummone
         if (owner != null) {
             this.applyAttributeScaling(owner);
         }
-        if (behaviour.movement.collision == SummonBehaviour.Movement.CollisionMode.NONE) {
-            this.noClip = true;
-        }
+        getDataTracker().set(COLLISION_MODE, (byte) behaviour.movement.collision.ordinal());
         if (!behaviour.movement.affected_by_gravity) {
             this.setNoGravity(true);
         }
@@ -244,6 +275,7 @@ public abstract class SummonedEntity extends GolemEntity implements SpellSummone
         super.initDataTracker(builder);
         builder.add(OWNER_UUID, Optional.empty());
         builder.add(PHASE, PHASE_SPAWNING);
+        builder.add(COLLISION_MODE, (byte) SummonBehaviour.Movement.CollisionMode.ALL.ordinal());
     }
 
     public void setOwnerUuid(@Nullable UUID uuid) {
