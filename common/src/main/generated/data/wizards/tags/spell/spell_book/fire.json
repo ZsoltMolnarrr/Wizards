@@ -5,7 +5,15 @@
       "required": false
     },
     {
+      "id": "wizards:fire_slash",
+      "required": false
+    },
+    {
       "id": "wizards:fire_meteor",
+      "required": false
+    },
+    {
+      "id": "wizards:fire_storm",
       "required": false
     },
     {

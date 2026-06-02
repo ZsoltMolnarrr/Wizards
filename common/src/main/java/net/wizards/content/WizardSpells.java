@@ -862,6 +862,65 @@ public class WizardSpells {
         return new Entry(id, spell, "", "").book(Book.FIRE);
     }
 
+    public static Entry fire_slash = add(fire_slash());
+    private static Entry fire_slash() {
+        var id = Identifier.of(WizardsMod.ID, "fire_slash");
+        var spell = SpellBuilder.createSpellActive();
+        spell.school = SpellSchools.FIRE;
+        spell.tier = 2;
+        spell.order = 2;
+        spell.range = 16;
+
+        spell.learn = new Spell.Learn();
+
+        SpellBuilder.Casting.instant(spell);
+
+        spell.release = new Spell.Release();
+        spell.release.animation = PlayerAnimation.of("spell_engine:one_handed_area_release");
+        spell.release.sound = new Sound(SpellEngineSounds.GENERIC_FIRE_RELEASE.id());
+
+        spell.target.type = Spell.Target.Type.AIM;
+        spell.target.aim = new Spell.Target.Aim();
+
+        spell.deliver.type = Spell.Delivery.Type.PROJECTILE;
+        spell.deliver.projectile = new Spell.Delivery.ShootProjectile();
+        spell.deliver.projectile.launch_properties.velocity = 0.5F;
+
+        var projectile = new Spell.ProjectileData();
+        projectile.perks.pierce = 9999;
+        projectile.hitbox = new Spell.ProjectileData.HitBox(3F, 0.25F);
+        projectile.hitbox.length = 1F;
+        projectile.client_data = new Spell.ProjectileData.Client();
+        projectile.client_data.light_level = 12;
+        projectile.client_data.travel_particles = new ParticleBatch[] {
+                new ParticleBatch(
+                        SpellEngineParticles.flame_medium_b.id().toString(),
+                        ParticleBatch.Shape.CIRCLE, ParticleBatch.Origin.CENTER,
+                        ParticleBatch.Rotation.LOOK, 6, 0.15F, 0.2F, 0),
+                new ParticleBatch(
+                        "smoke",
+                        ParticleBatch.Shape.CIRCLE, ParticleBatch.Origin.CENTER,
+                        ParticleBatch.Rotation.LOOK, 3, 0.15F, 0.2F, 0)
+        };
+        projectile.client_data.model = new Spell.ProjectileModel();
+        projectile.client_data.model.model_id = "wizards:spell_projectile/fire_wave";
+        projectile.client_data.model.rotate_degrees_per_tick = 0;
+        spell.deliver.projectile.projectile = projectile;
+
+        var damage = SpellBuilder.Impacts.damage(0.8F, 0.8F);
+        damage.particles = fireImpactParticles();
+        damage.sound = new Sound(WizardsSounds.FIRE_SCORCH_IMPACT.id());
+
+        var fire = SpellBuilder.Impacts.fire(3);
+        spell.impacts = List.of(damage, fire);
+
+        SpellBuilder.Cost.exhaust(spell, 0.2F);
+        configureFireRuneCost(spell);
+        SpellBuilder.Cost.cooldown(spell, 8);
+
+        return new Entry(id, spell, "", "").book(Book.FIRE);
+    }
+
     public static Entry fire_meteor = add(fire_meteor());
     private static Entry fire_meteor() {
         var id = Identifier.of(WizardsMod.ID, "fire_meteor");
@@ -944,6 +1003,76 @@ public class WizardSpells {
         SpellBuilder.Cost.exhaust(spell, 0.3F);
         configureFireRuneCost(spell);
         SpellBuilder.Cost.cooldown(spell, 10);
+
+        return new Entry(id, spell, "", "").book(Book.FIRE);
+    }
+
+    public static Entry firestorm = add(firestorm());
+    private static Entry firestorm() {
+        var id = Identifier.of(WizardsMod.ID, "fire_storm");
+        var spell = SpellBuilder.createSpellActive();
+        spell.school = SpellSchools.FIRE;
+        spell.tier = 3;
+        spell.order = 2;
+        spell.range = 4;
+
+        spell.learn = new Spell.Learn();
+
+        SpellBuilder.Casting.channel(spell, 5, 4);
+        spell.active.cast.animation = PlayerAnimation.of("spell_engine:two_handed_channeling");
+        spell.active.cast.start_sound = new Sound(WizardsSounds.FIRE_BREATH_START.id());
+        spell.active.cast.sound = new Sound(WizardsSounds.FIRE_BREATH_CASTING.id(), 0);
+        spell.active.cast.particles = new ParticleBatch[] {
+                new ParticleBatch(
+                        SpellEngineParticles.flame_medium_a.id().toString(),
+                        ParticleBatch.Shape.SPHERE, ParticleBatch.Origin.CENTER,
+                        4, 0.5F, 0.5F),
+                new ParticleBatch(
+                        SpellEngineParticles.flame_spark.id().toString(),
+                        ParticleBatch.Shape.SPHERE, ParticleBatch.Origin.CENTER,
+                        6, 0.4F, 0.4F)
+        };
+        spell.active.cast.channeled_release_fx = true;
+
+        spell.release = new Spell.Release();
+        spell.release.sound = Sound.withVolume(WizardsSounds.FIREBALL_IMPACT.id(), 1.2F);
+        spell.release.particles = new ParticleBatch[] {
+                new ParticleBatch("lava",
+                        ParticleBatch.Shape.CIRCLE, ParticleBatch.Origin.GROUND,
+                        90, 1.5F, 5F),
+                new ParticleBatch(
+                        SpellEngineParticles.fire_explosion.id().toString(),
+                        ParticleBatch.Shape.SPHERE, ParticleBatch.Origin.CENTER,
+                        6, 0.5F, 0.3F)
+        };
+        spell.release.particles_scaled_with_ranged = new ParticleBatch[] {
+                new ParticleBatch(
+                        SpellEngineParticles.area_effect_748.id().toString(),
+                        ParticleBatch.Shape.SPHERE, ParticleBatch.Origin.CENTER,
+                        1, 0, 0)
+                        .scale(0.8F)
+                        .color(0xFF4400FFL),
+        };
+
+        spell.target.type = Spell.Target.Type.AREA;
+        spell.target.area = new Spell.Target.Area();
+        spell.target.area.distance_dropoff = Spell.Target.Area.DropoffCurve.SQUARED;
+        spell.target.area.vertical_range_multiplier = 0.5F;
+
+        var damage = SpellBuilder.Impacts.damage(1.5F, 1.2F);
+        damage.particles = new ParticleBatch[] {
+                new ParticleBatch(
+                        SpellEngineParticles.fire_explosion.id().toString(),
+                        ParticleBatch.Shape.SPHERE, ParticleBatch.Origin.CENTER,
+                        3, 0.2F, 0.3F)
+        };
+        damage.sound = new Sound(WizardsSounds.FIRE_BREATH_IMPACT.id());
+        spell.impacts = List.of(damage);
+
+        SpellBuilder.Cost.exhaust(spell, 0.4F);
+        configureFireRuneCost(spell);
+        SpellBuilder.Cost.cooldown(spell, 20);
+        spell.cost.cooldown.proportional = true;
 
         return new Entry(id, spell, "", "").book(Book.FIRE);
     }

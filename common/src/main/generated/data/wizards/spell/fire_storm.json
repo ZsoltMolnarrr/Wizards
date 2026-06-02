@@ -1,0 +1,118 @@
+{
+  "school": "spell_power:fire",
+  "range": 4.0,
+  "tier": 3,
+  "order": 2,
+  "learn": {},
+  "active": {
+    "cast": {
+      "duration": 5.0,
+      "channel_ticks": 4,
+      "channeled_release_fx": true,
+      "animation": {
+        "id": "spell_engine:two_handed_channeling"
+      },
+      "start_sound": {
+        "id": "wizards:fire_breath_start"
+      },
+      "sound": {
+        "id": "wizards:fire_breath_casting",
+        "randomness": 0.0
+      },
+      "particles": [
+        {
+          "particle_id": "spell_engine:flame_medium_a",
+          "origin": "CENTER",
+          "shape": "SPHERE",
+          "count": 4.0,
+          "min_speed": 0.5,
+          "max_speed": 0.5
+        },
+        {
+          "particle_id": "spell_engine:flame_spark",
+          "origin": "CENTER",
+          "shape": "SPHERE",
+          "count": 6.0,
+          "min_speed": 0.4,
+          "max_speed": 0.4
+        }
+      ]
+    }
+  },
+  "release": {
+    "particles": [
+      {
+        "particle_id": "lava",
+        "origin": "GROUND",
+        "shape": "CIRCLE",
+        "count": 90.0,
+        "min_speed": 1.5,
+        "max_speed": 5.0
+      },
+      {
+        "particle_id": "spell_engine:fire_explosion",
+        "origin": "CENTER",
+        "shape": "SPHERE",
+        "count": 6.0,
+        "min_speed": 0.5,
+        "max_speed": 0.3
+      }
+    ],
+    "particles_scaled_with_ranged": [
+      {
+        "particle_id": "spell_engine:area_effect_748",
+        "origin": "CENTER",
+        "shape": "SPHERE",
+        "count": 1.0,
+        "max_speed": 0.0,
+        "color_rgba": 4282646783,
+        "scale": 0.8
+      }
+    ],
+    "sound": {
+      "id": "wizards:fireball_impact",
+      "volume": 1.2
+    }
+  },
+  "target": {
+    "type": "AREA",
+    "area": {
+      "distance_dropoff": "SQUARED",
+      "vertical_range_multiplier": 0.5
+    }
+  },
+  "impacts": [
+    {
+      "action": {
+        "type": "DAMAGE",
+        "damage": {
+          "spell_power_coefficient": 1.5,
+          "knockback": 1.2
+        }
+      },
+      "particles": [
+        {
+          "particle_id": "spell_engine:fire_explosion",
+          "origin": "CENTER",
+          "shape": "SPHERE",
+          "count": 3.0,
+          "min_speed": 0.2,
+          "max_speed": 0.3
+        }
+      ],
+      "sound": {
+        "id": "wizards:fire_breath_impact"
+      }
+    }
+  ],
+  "cost": {
+    "exhaust": 0.4,
+    "cooldown": {
+      "duration": 20.0,
+      "proportional": true
+    },
+    "item": {
+      "id": "runes:fire_stone"
+    }
+  }
+}

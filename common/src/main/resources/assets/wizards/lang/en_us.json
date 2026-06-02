@@ -86,8 +86,12 @@
   "spell.wizards.fire_blast.description": "Launches an explosive ball of fire, causing up to {damage} fire spell damage in {impact_range} blocks radius.",
   "spell.wizards.fire_breath.name": "Fire Breath",
   "spell.wizards.fire_breath.description": "Incinerates targets in front, dealing up to {damage} fire spell damage every second.",
+  "spell.wizards.fire_slash.name": "Flame Slash",
+  "spell.wizards.fire_slash.description": "Launches a wide slash of fiery wave, causing up to {damage} fire spell damage in front.",
   "spell.wizards.fire_meteor.name": "Meteor",
   "spell.wizards.fire_meteor.description": "Crashes a meteors on the target, each causing up to {damage} fire spell damage within {impact_range} blocks.",
+  "spell.wizards.fire_storm.name": "Firestorm",
+  "spell.wizards.fire_storm.description": "Incinerates targets around you, dealing up to {damage} fire spell damage every second.",
   "spell.wizards.fire_wall.name": "Wall of Flames",
   "spell.wizards.fire_wall.description": "Creates a wall of fire, lasting {cloud_duration} seconds, dealing up to {damage} fire spell damage continuously to enemies passing thru.",
 
