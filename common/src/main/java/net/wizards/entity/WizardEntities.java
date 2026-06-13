@@ -51,7 +51,7 @@ public class WizardEntities {
                 Registries.ENTITY_TYPE,
                 FrostElementalEntity.ID,
                 FabricEntityTypeBuilder.<FrostElementalEntity>create(SpawnGroup.MISC, FrostElementalEntity::new)
-                        .dimensions(EntityDimensions.fixed(0.6F, 1.8F))
+                        .dimensions(EntityDimensions.fixed(1F, 2F))
                         .trackRangeBlocks(64)
                         .trackedUpdateRate(3)
                         .build()

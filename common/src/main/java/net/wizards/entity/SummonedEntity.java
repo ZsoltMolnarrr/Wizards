@@ -55,10 +55,20 @@ public abstract class SummonedEntity extends GolemEntity implements SpellSummone
             DataTracker.registerData(SummonedEntity.class, TrackedDataHandlerRegistry.FLOAT);
     private static final TrackedData<Integer> END_OF_PHASE_AGE =
             DataTracker.registerData(SummonedEntity.class, TrackedDataHandlerRegistry.INTEGER);
+    private static final TrackedData<Byte> ANIMATION_ACTION =
+            DataTracker.registerData(SummonedEntity.class, TrackedDataHandlerRegistry.BYTE);
 
     private static final byte PHASE_SPAWNING   = 0;
     private static final byte PHASE_ACTIVE     = 1;
     private static final byte PHASE_DESPAWNING = 2;
+
+    protected static final byte ACTION_NONE          = 0;
+    protected static final byte ACTION_MELEE         = 1;
+    protected static final byte ACTION_SPELL_CAST    = 2;
+    protected static final byte ACTION_SPELL_RELEASE = 3;
+
+    protected static final int ATTACK_DURATION_TICKS        = 40;
+    protected static final int SPELL_RELEASE_DURATION_TICKS = 26;
 
     private int timeToLive = 0;
     private int spawnEndAge = 0;
@@ -166,6 +176,17 @@ public abstract class SummonedEntity extends GolemEntity implements SpellSummone
                 );
             } else {
                 ((TwoWayCollisionChecker) this).setReverseCollisionChecker(null);
+            }
+        }
+        if (data.equals(ANIMATION_ACTION)) {
+            byte action = getDataTracker().get(ANIMATION_ACTION);
+            attackAnimationState.stop();
+            spellCastAnimationState.stop();
+            spellReleaseAnimationState.stop();
+            switch (action) {
+                case ACTION_MELEE         -> attackAnimationState.start(age);
+                case ACTION_SPELL_CAST    -> spellCastAnimationState.start(age);
+                case ACTION_SPELL_RELEASE -> spellReleaseAnimationState.start(age);
             }
         }
     }
@@ -311,6 +332,7 @@ public abstract class SummonedEntity extends GolemEntity implements SpellSummone
         builder.add(BOUNDING_BOX_WIDTH,  new SummonBehaviour.Dimensions().width);
         builder.add(BOUNDING_BOX_HEIGHT, new SummonBehaviour.Dimensions().height);
         builder.add(END_OF_PHASE_AGE, 0);
+        builder.add(ANIMATION_ACTION, ACTION_NONE);
     }
 
     public void setOwnerUuid(@Nullable UUID uuid) {
@@ -333,11 +355,15 @@ public abstract class SummonedEntity extends GolemEntity implements SpellSummone
     // Standard set shared by all summoned entities. Subclasses may override the hook methods
     // below if they need non-standard animation behaviour.
 
-    public final AnimationState spawnAnimationState   = new AnimationState();
-    public final AnimationState despawnAnimationState = new AnimationState();
-    public final AnimationState idleAnimationState    = new AnimationState();
-    public final AnimationState moveAnimationState    = new AnimationState();
-    public final AnimationState attackAnimationState  = new AnimationState();
+    public final AnimationState spawnAnimationState        = new AnimationState();
+    public final AnimationState despawnAnimationState      = new AnimationState();
+    public final AnimationState idleAnimationState         = new AnimationState();
+    public final AnimationState moveAnimationState         = new AnimationState();
+    public final AnimationState attackAnimationState       = new AnimationState();
+    public final AnimationState spellCastAnimationState    = new AnimationState();
+    public final AnimationState spellReleaseAnimationState = new AnimationState();
+
+    private int actionEndAge;
 
     /** Called each client tick. Default drives the five standard states from lifecycle phase. */
     protected void setupAnimationStates() {
@@ -355,14 +381,22 @@ public abstract class SummonedEntity extends GolemEntity implements SpellSummone
         moveAnimationState.setRunning(isActive() && this.getVelocity().horizontalLength() > 0.01, this.age);
     }
 
-    /** Called when a spell cast begins. Default starts the attack animation. */
-    protected void onSpellCastStarted() { attackAnimationState.start(age); }
+    /** Called when a spell cast begins. */
+    protected void onSpellCastStarted() {
+        getDataTracker().set(ANIMATION_ACTION, ACTION_SPELL_CAST);
+    }
 
-    /** Called when a spell is released. Default does nothing. */
-    protected void onSpellReleased() { }
+    /** Called when a spell is released. */
+    protected void onSpellReleased() {
+        getDataTracker().set(ANIMATION_ACTION, ACTION_SPELL_RELEASE);
+        actionEndAge = age + SPELL_RELEASE_DURATION_TICKS;
+    }
 
-    /** Called on a successful melee hit. Default starts the attack animation. */
-    protected void onAttackAnimated() { attackAnimationState.start(age); }
+    /** Called on a successful melee hit. */
+    protected void onAttackAnimated() {
+        getDataTracker().set(ANIMATION_ACTION, ACTION_MELEE);
+        actionEndAge = age + ATTACK_DURATION_TICKS;
+    }
 
     // --- Spell cooldowns ---
 
@@ -383,6 +417,12 @@ public abstract class SummonedEntity extends GolemEntity implements SpellSummone
                 setPhase(PHASE_DESPAWNING);
             } else {
                 setPhase(PHASE_ACTIVE);
+            }
+            byte action = getDataTracker().get(ANIMATION_ACTION);
+            if ((action == ACTION_MELEE || action == ACTION_SPELL_RELEASE) && age >= actionEndAge) {
+                getDataTracker().set(ANIMATION_ACTION, ACTION_NONE);
+            } else if (action == ACTION_SPELL_CAST && !isAttacking()) {
+                getDataTracker().set(ANIMATION_ACTION, ACTION_NONE);
             }
         }
     }
