@@ -358,6 +358,9 @@ public abstract class SummonedEntity extends GolemEntity implements SpellSummone
     /** Called when a spell cast begins. Default starts the attack animation. */
     protected void onSpellCastStarted() { attackAnimationState.start(age); }
 
+    /** Called when a spell is released. Default does nothing. */
+    protected void onSpellReleased() { }
+
     /** Called on a successful melee hit. Default starts the attack animation. */
     protected void onAttackAnimated() { attackAnimationState.start(age); }
 
@@ -768,6 +771,7 @@ public abstract class SummonedEntity extends GolemEntity implements SpellSummone
             setBodyYaw(releaseYaw);
             setPitch(releasePitch);
             SpellHelper.targetAndPerformSpell(getWorld(), SummonedEntity.this, entry);
+            onSpellReleased();
 
             // Cooldown: use spell's own duration if set, else fall back to config override (ticks)
             int cooldownTicks;

@@ -2,13 +2,16 @@ package net.wizards.client.entity;
 
 import net.minecraft.client.model.*;
 import net.minecraft.client.render.VertexConsumer;
+import net.minecraft.client.render.entity.animation.AnimationHelper;
 import net.minecraft.client.render.entity.model.EntityModelLayer;
 import net.minecraft.client.render.entity.model.SinglePartEntityModel;
 import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.entity.AnimationState;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
 import net.wizards.WizardsMod;
 import net.wizards.entity.FrostElementalEntity;
+import org.joml.Vector3f;
 
 // Made with Blockbench 5.1.4
 // Exported for Minecraft version 1.17+ for Yarn
@@ -104,18 +107,44 @@ public class FrostElementalModel extends SinglePartEntityModel<FrostElementalEnt
 
 	// Hand-written section
 
+	private static final Vector3f TEMP = new Vector3f();
+
+	// shoot_start animation timing constants
+	private static final long SHOOT_START_INTRO_MS = 2000L; // full animation length
+	private static final long SHOOT_START_LOOP_MS  =  500L; // 25% = loop-back point
+	private static final long SHOOT_START_BODY_MS  = 1500L; // loop body length (75%)
+
 	public static final EntityModelLayer TEXTURE = new EntityModelLayer(Identifier.of(WizardsMod.ID, "frost_elemental"), "main");
 
 	@Override
 	public void setAngles(FrostElementalEntity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float netHeadPitch) {
 		this.getPart().traverse().forEach(ModelPart::resetTransform);
 		this.setHeadAngles(netHeadYaw, netHeadPitch);
-		this.animateMovement(FrostElementalAnimations.Walk, limbSwing, limbSwingAmount, 2F, 2.5F);
-		this.updateAnimation(entity.spawnAnimationState,   FrostElementalAnimations.Spawn,   ageInTicks, 1F);
-		this.updateAnimation(entity.despawnAnimationState, FrostElementalAnimations.Despawn, ageInTicks, 1F);
-		this.updateAnimation(entity.idleAnimationState,    FrostElementalAnimations.idle,    ageInTicks, 1F);
-		this.updateAnimation(entity.moveAnimationState,    FrostElementalAnimations.Walk,    ageInTicks, 1F);
-		this.updateAnimation(entity.attackAnimationState,  FrostElementalAnimations.Attack,  ageInTicks, 1F);
+		this.animateMovement(FrostElementalAnimations.walk, limbSwing, limbSwingAmount, 1F, 1F);
+		this.updateAnimation(entity.spawnAnimationState,        FrostElementalAnimations.Spawn,   ageInTicks, 1F);
+		this.updateAnimation(entity.despawnAnimationState,      FrostElementalAnimations.Despawn, ageInTicks, 1F);
+
+		if (entity.spellReleaseAnimationState.isRunning()) {
+			this.updateAnimation(entity.spellReleaseAnimationState, FrostElementalAnimations.shoot, ageInTicks, 1F);
+		} else if (entity.attackAnimationState.isRunning()) {
+			this.updateAnimation(entity.attackAnimationState,       FrostElementalAnimations.attack,  ageInTicks, 1F);
+		} else if (entity.spellCastAnimationState.isRunning()) {
+			this.animateShootStart(entity.spellCastAnimationState, ageInTicks);
+		} else {
+			this.updateAnimation(entity.idleAnimationState,         FrostElementalAnimations.idle,    ageInTicks, 1F);
+		}
+	}
+
+	// Plays shoot_start with a full intro (0–2 s) then loops the 25%–100% portion indefinitely.
+	private void animateShootStart(AnimationState state, float ageInTicks) {
+		state.update(ageInTicks, 1.0f);
+		state.run(s -> {
+			long rawMs = s.getTimeRunning();
+			long animMs = rawMs <= SHOOT_START_INTRO_MS
+					? rawMs
+					: SHOOT_START_LOOP_MS + (rawMs - SHOOT_START_LOOP_MS) % SHOOT_START_BODY_MS;
+			AnimationHelper.animate(this, FrostElementalAnimations.shoot_start, animMs, 1.0F, TEMP);
+		});
 	}
 
 	private void setHeadAngles(float headYaw, float headPitch) {
