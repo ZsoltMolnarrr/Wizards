@@ -21,6 +21,7 @@ import net.spell_engine.api.spell.event.SpellHandlers;
 import net.spell_engine.internals.SpellHelper;
 import net.spell_power.api.SpellPower;
 import net.spell_power.api.SpellSchools;
+import net.wizards.content.WizardsSounds;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -91,20 +92,34 @@ public class WizardEntities {
                 attack.max_range = 3;
                 attack.speed = 2F;
                 attack.radius = 1F;
+                attack.swing_sound  = WizardsSounds.FROST_ELEMENTAL_ATTACK.id().toString();
+                attack.impact_sound = WizardsSounds.FROST_ELEMENTAL_IMPACT.id().toString();
                 summonBehaviour.actions = List.of(
                     SummonBehaviour.Action.spell("wizards:frost_shard", 60),
                     SummonBehaviour.Action.spell("wizards:frost_nova", 60),
                     SummonBehaviour.Action.attack(attack)
                 );
 
+                // Lifecycle sounds
+                summonBehaviour.sounds.spawn   = WizardsSounds.FROST_ELEMENTAL_SPAWN.id().toString();
+                summonBehaviour.sounds.despawn = WizardsSounds.FROST_ELEMENTAL_DESPAWN.id().toString();
+                summonBehaviour.sounds.hurt    = WizardsSounds.FROST_ELEMENTAL_HURT.id().toString();
+                summonBehaviour.sounds.death   = WizardsSounds.FROST_ELEMENTAL_DEATH.id().toString();
+
                 // Attribute scaling: health and attack scale with owner's frost spell power
                 var healthEntry = new SummonBehaviour.AttributeScaling.Entry();
-                healthEntry.attribute_id = "minecraft:generic.max_health";
+                healthEntry.attribute_id = EntityAttributes.GENERIC_MAX_HEALTH.getIdAsString();
                 healthEntry.modifiers = List.of(new SummonBehaviour.AttributeScaling.Entry.OwnerModifier(
                     SpellSchools.FROST.id.toString(), EntityAttributeModifier.Operation.ADD_VALUE, 2.0));
 
+                // Armor
+                var armorEntry = new SummonBehaviour.AttributeScaling.Entry();
+                armorEntry.attribute_id = EntityAttributes.GENERIC_ARMOR.getIdAsString();
+                armorEntry.modifiers = List.of(new SummonBehaviour.AttributeScaling.Entry.OwnerModifier(
+                    SpellSchools.FROST.id.toString(), EntityAttributeModifier.Operation.ADD_VALUE, 10, 0.1));
+
                 var attackEntry = new SummonBehaviour.AttributeScaling.Entry();
-                attackEntry.attribute_id = "minecraft:generic.attack_damage";
+                attackEntry.attribute_id = EntityAttributes.GENERIC_ATTACK_DAMAGE.getIdAsString();
                 attackEntry.modifiers = List.of(new SummonBehaviour.AttributeScaling.Entry.OwnerModifier(
                     SpellSchools.FROST.id.toString(), EntityAttributeModifier.Operation.ADD_VALUE, 0.5));
 
@@ -113,12 +128,17 @@ public class WizardEntities {
                 knockbackEntry.modifiers = List.of(new SummonBehaviour.AttributeScaling.Entry.OwnerModifier(
                     SpellSchools.FROST.id.toString(), EntityAttributeModifier.Operation.ADD_VALUE, 0.1));
 
+                var knockbackResistEntry = new SummonBehaviour.AttributeScaling.Entry();
+                knockbackResistEntry.attribute_id = EntityAttributes.GENERIC_KNOCKBACK_RESISTANCE.getIdAsString();
+                knockbackResistEntry.modifiers = List.of(new SummonBehaviour.AttributeScaling.Entry.OwnerModifier(
+                    SpellSchools.FROST.id.toString(), EntityAttributeModifier.Operation.ADD_VALUE, 5,0.05));
+
                 var spellPowerEntry = new SummonBehaviour.AttributeScaling.Entry();
                 spellPowerEntry.attribute_id = SpellSchools.FROST.id.toString();
                 spellPowerEntry.modifiers = List.of(new SummonBehaviour.AttributeScaling.Entry.OwnerModifier(
-                        SpellSchools.FROST.id.toString(), EntityAttributeModifier.Operation.ADD_VALUE, 1F));
+                        SpellSchools.FROST.id.toString(), EntityAttributeModifier.Operation.ADD_VALUE, 3, 0.1F));
 
-                summonBehaviour.attribute_scaling.entries = List.of(healthEntry, attackEntry, spellPowerEntry);
+                summonBehaviour.attribute_scaling.entries = List.of(healthEntry, armorEntry, attackEntry, spellPowerEntry, knockbackEntry, knockbackResistEntry);
 
                 var world = livingEntity.getWorld();
                 if (world instanceof ServerWorld serverWorld) {

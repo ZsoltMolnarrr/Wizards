@@ -2,6 +2,7 @@ package net.wizards.entity;
 
 import com.google.gson.Gson;
 import com.mojang.logging.LogUtils;
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.AnimationState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityDimensions;
@@ -23,7 +24,9 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.entry.RegistryEntry;
+import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
@@ -129,6 +132,57 @@ public abstract class SummonedEntity extends GolemEntity implements SpellSummone
         super.takeKnockback(strength, x, z);
     }
 
+    @Override
+    @Nullable
+    protected SoundEvent getHurtSound(DamageSource source) {
+        if (behaviour != null) {
+            SoundEvent custom = behaviour.sounds.hurtEvent.get();
+            if (custom != null) return custom;
+        }
+        return super.getHurtSound(source);
+    }
+
+    @Override
+    @Nullable
+    protected SoundEvent getDeathSound() {
+        if (behaviour != null) {
+            SoundEvent custom = behaviour.sounds.deathEvent.get();
+            if (custom != null) return custom;
+        }
+        return super.getDeathSound();
+    }
+
+    @Override
+    @Nullable
+    protected SoundEvent getAmbientSound() {
+        if (behaviour != null) {
+            SoundEvent custom = behaviour.sounds.ambientEvent.get();
+            if (custom != null) return custom;
+        }
+        return super.getAmbientSound();
+    }
+
+    @Override
+    protected void playStepSound(BlockPos pos, BlockState state) {
+        if (behaviour != null) {
+            SoundEvent custom = behaviour.sounds.stepEvent.get();
+            if (custom != null) {
+                // Mirrors the vanilla footstep volume scaling (15% of normal) so the sound
+                // doesn't dominate while the entity walks.
+                this.playSound(custom, 0.15F, 1.0F);
+                return;
+            }
+        }
+        super.playStepSound(pos, state);
+    }
+
+    /// Broadcasts a configured sound from this entity's position. Silent when `sound` is null.
+    private void playConfiguredSound(@Nullable SoundEvent sound) {
+        if (sound == null) return;
+        getWorld().playSound(null, getX(), getY(), getZ(),
+                sound, getSoundCategory(), 1.0F, 1.0F);
+    }
+
     private SummonBehaviour.Movement.CollisionMode collisionMode() {
         return SummonBehaviour.Movement.CollisionMode.values()[getDataTracker().get(COLLISION_MODE)];
     }
@@ -200,6 +254,10 @@ public abstract class SummonedEntity extends GolemEntity implements SpellSummone
     public boolean isDespawning() { return getDataTracker().get(PHASE) == PHASE_DESPAWNING; }
     public boolean isActive()     { return getDataTracker().get(PHASE) == PHASE_ACTIVE; }
     private void setPhase(byte phase) {
+        byte previous = getDataTracker().get(PHASE);
+        if (previous != phase && phase == PHASE_DESPAWNING && behaviour != null) {
+            playConfiguredSound(behaviour.sounds.despawnEvent.get());
+        }
         getDataTracker().set(PHASE, phase);
         int endAge = switch (phase) {
             case PHASE_SPAWNING   -> spawnEndAge;
@@ -218,7 +276,16 @@ public abstract class SummonedEntity extends GolemEntity implements SpellSummone
         this.despawnStartAge = this.timeToLive - sd.despawn_ticks;
         setOwnerUuid(args.owner.getUuid());
         setBehaviour(args.behaviour);
+        // Defer to the first server tick: callers like WizardEntities run
+        //   onSummonedBySpell() → setPos() → spawnEntity()
+        // so playing here broadcasts from the entity's default (0,0,0) position. Setting
+        // this flag fires the sound on the next tick(), by which point setPos has run and
+        // the entity is in the world. NBT-loaded entities go through readCustomDataFromNbt
+        // and skip this path, so they don't re-play the spawn sound on chunk reload.
+        pendingSpawnSound = true;
     }
+
+    private boolean pendingSpawnSound = false;
 
     private void setBehaviour(SummonBehaviour behaviour) {
         if (this.behaviour != null) return;
@@ -242,6 +309,7 @@ public abstract class SummonedEntity extends GolemEntity implements SpellSummone
 
     private void applyAttributeScaling(LivingEntity owner) {
         if (behaviour == null) return;
+        var healthRatio = this.getHealth() / this.getMaxHealth();
         for (var entry : behaviour.attribute_scaling.entries) {
             var targetAttrOpt = Registries.ATTRIBUTE.getEntry(Identifier.of(entry.attribute_id));
             if (targetAttrOpt.isEmpty()) continue;
@@ -254,13 +322,14 @@ public abstract class SummonedEntity extends GolemEntity implements SpellSummone
                 if (ownerAttrOpt.isEmpty()) continue;
                 var ownerInstance = owner.getAttributeInstance(ownerAttrOpt.get());
                 if (ownerInstance == null) continue;
-                bonus += ownerInstance.getValue() * modifier.coefficient;
+                bonus += modifier.base + ownerInstance.getValue() * modifier.coefficient;
             }
 
             var modifierId = Identifier.of(WizardsMod.ID, "summon_scaling/" + entry.attribute_id.replace(":", "/"));
             instance.removeModifier(modifierId);
             instance.addTemporaryModifier(new EntityAttributeModifier(modifierId, bonus, EntityAttributeModifier.Operation.ADD_VALUE));
         }
+        this.setHealth(this.getMaxHealth() * healthRatio);
     }
 
     @Override
@@ -297,10 +366,10 @@ public abstract class SummonedEntity extends GolemEntity implements SpellSummone
 
         if (behaviour.targeting.attack_with_owner) {
             targetSelector.add(1, new DefendOwnerGoal());
-            targetSelector.add(2, new MirrorOwnerAttackGoal());
+            targetSelector.add(3, new MirrorOwnerAttackGoal());
         }
         if (behaviour.targeting.revenge) {
-            targetSelector.add(3, new RevengeGoal(this));
+            targetSelector.add(2, new RevengeGoal(this));
         }
         if (behaviour.targeting.automatic_targeting) {
             targetSelector.add(4, new ActiveTargetGoal<>(this, MobEntity.class, 10, true, false, this::shouldTarget));
@@ -418,6 +487,12 @@ public abstract class SummonedEntity extends GolemEntity implements SpellSummone
         if (this.getWorld().isClient()) {
             setupAnimationStates();
         } else {
+            if (pendingSpawnSound) {
+                pendingSpawnSound = false;
+                if (behaviour != null) {
+                    playConfiguredSound(behaviour.sounds.spawnEvent.get());
+                }
+            }
             cooldownManager.tickUpdate();
             if (timeToLive > 0 && this.age >= timeToLive) {
                 this.discard();
@@ -611,6 +686,12 @@ public abstract class SummonedEntity extends GolemEntity implements SpellSummone
     // silently (no damage). Optional AoE: on a successful impact, all valid hostiles within
     // `radius` of the primary target are also struck.
     private class WindupMeleeAttackGoal extends Goal {
+        // Once a swing has begun, the target can drift up to this multiplier of the normal
+        // attack reach (and configured max_range) before the impact-tick check whiffs.
+        // Keeps the swing from being instantly cancelled by sub-block target jitter, while
+        // the strict (1.0×) range still gates whether a new swing can start.
+        private static final float IN_PROGRESS_RANGE_TOLERANCE = 1.10F;
+
         private final SummonBehaviour.Action.MeleeAttack config;
         private int swingTick = -1; // -1 = not swinging
         private int navUpdateCountdown = 0;
@@ -627,9 +708,14 @@ public abstract class SummonedEntity extends GolemEntity implements SpellSummone
         }
 
         private boolean isTargetInRange(LivingEntity target) {
+            return isTargetInRange(target, 1.0F);
+        }
+
+        private boolean isTargetInRange(LivingEntity target, float toleranceMultiplier) {
             double sq = squaredDistanceTo(target);
-            if (sq > squaredAttackReach(target)) return false;
-            if (config.max_range > 0 && sq > config.max_range * config.max_range) return false;
+            double tolSq = toleranceMultiplier * toleranceMultiplier;
+            if (sq > squaredAttackReach(target) * tolSq) return false;
+            if (config.max_range > 0 && sq > config.max_range * config.max_range * tolSq) return false;
             return true;
         }
 
@@ -638,6 +724,14 @@ public abstract class SummonedEntity extends GolemEntity implements SpellSummone
         private int swingInterval() {
             if (config.speed <= 0) return 1;
             return Math.max(1, Math.round(20F / config.speed));
+        }
+
+        // Tick within the swing at which the impact lands.
+        // `windup` is a 0..1 fraction of `duration`; clamped so the impact never
+        // falls outside the swing window.
+        private int windupTick() {
+            float f = Math.max(0F, Math.min(1F, config.windup));
+            return Math.min(config.duration - 1, Math.round(config.duration * f));
         }
 
         // Mirrors PlayerEntity.getAttackCooldownProgress: 1.0F means fully recovered.
@@ -695,9 +789,10 @@ public abstract class SummonedEntity extends GolemEntity implements SpellSummone
                 swingTick = 0;
                 SummonedEntity.this.onAttacking(target); // saves vanilla lastAttackTime = age
                 onAttackAnimated(config.duration);
-                LOGGER.info("[WindupMelee] attack-start entity={} target={} duration={} windup={} radius={} interval={}",
+                playConfiguredSound(config.swingEvent.get());
+                LOGGER.info("[WindupMelee] attack-start entity={} target={} duration={} windup={}->tick{} radius={} interval={}",
                         SummonedEntity.this.getId(), target.getId(),
-                        config.duration, config.windup, config.radius, swingInterval());
+                        config.duration, config.windup, windupTick(), config.radius, swingInterval());
             }
 
             // Navigation:
@@ -720,9 +815,11 @@ public abstract class SummonedEntity extends GolemEntity implements SpellSummone
 
             // Drive swing progression.
             if (swingTick >= 0) {
-                if (swingTick == config.windup) {
-                    // Re-check reach: if the target slipped out during the windup, the swing whiffs.
-                    boolean hit = isTargetInRange(target);
+                if (swingTick == windupTick()) {
+                    // Re-check reach with in-progress tolerance: if the target drifted only
+                    // slightly out during the windup the swing still connects; only a clear
+                    // dodge whiffs it.
+                    boolean hit = isTargetInRange(target, IN_PROGRESS_RANGE_TOLERANCE);
                     LOGGER.info("[WindupMelee] attack-impact entity={} target={} tick={} hit={}",
                             SummonedEntity.this.getId(), target.getId(), swingTick, hit);
                     if (hit) {
@@ -744,6 +841,8 @@ public abstract class SummonedEntity extends GolemEntity implements SpellSummone
         }
 
         private void performAttackImpact(LivingEntity primary) {
+            // Played once per swing, before any tryAttack calls — AoE hits do not retrigger it.
+            playConfiguredSound(config.impactEvent.get());
             tryAttack(primary);
             if (config.radius <= 0) return;
             LivingEntity owner = getOwner();
@@ -759,6 +858,7 @@ public abstract class SummonedEntity extends GolemEntity implements SpellSummone
                 tryAttack(nearby);
             }
         }
+
     }
 
     // Holds MOVE/LOOK/JUMP controls during spawn and despawn phases, making the entity inactionable.

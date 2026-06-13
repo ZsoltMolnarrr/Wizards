@@ -93,6 +93,13 @@ public class WizardsSounds {
     public static final Entry FROST_SHIELD_IMPACT = add(new Entry("frost_shield_impact"));
     public static final Entry FROST_BLIZZARD_CASTING = add(new Entry("frost_blizzard_casting"));
 
+    public static final Entry FROST_ELEMENTAL_ATTACK = add(new Entry("frost_elemental_attack"));
+    public static final Entry FROST_ELEMENTAL_DEATH = add(new Entry("frost_elemental_death"));
+    public static final Entry FROST_ELEMENTAL_HURT = add(new Entry("frost_elemental_hurt"));
+    public static final Entry FROST_ELEMENTAL_IMPACT = add(new Entry("frost_elemental_impact"));
+    public static final Entry FROST_ELEMENTAL_SPAWN = add(new Entry("frost_elemental_spawn"));
+    public static final Entry FROST_ELEMENTAL_DESPAWN = add(new Entry("frost_elemental_despawn"));
+
     public static final Entry WIZARD_ROBES_EQUIP = add(new Entry("wizard_robes_equip").variants(3));
 
     public static void register() {

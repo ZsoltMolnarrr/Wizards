@@ -1,14 +1,28 @@
 package net.wizards.entity;
 
+import com.google.common.base.Suppliers;
 import net.minecraft.entity.attribute.EntityAttributeModifier;
+import net.minecraft.sound.SoundEvent;
+import net.minecraft.util.Identifier;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Supplier;
 
 public class SummonBehaviour {
 
     public int timeToLive = 60;
     public boolean is_attackable = true;
+
+    /// Parses a sound id string into a SoundEvent. Blank / unparseable → null.
+    /// Used by the lazy accessors in `Sounds` and `Action.MeleeAttack`.
+    @Nullable
+    static SoundEvent parseSoundId(String soundId) {
+        if (soundId == null || soundId.isBlank()) return null;
+        Identifier id = Identifier.tryParse(soundId);
+        return id != null ? SoundEvent.of(id) : null;
+    }
 
     // --- Attribute Scaling ---
 
@@ -24,13 +38,21 @@ public class SummonBehaviour {
             public static class OwnerModifier {
                 public String attribute_id = "";
                 public EntityAttributeModifier.Operation operation = EntityAttributeModifier.Operation.ADD_VALUE;
+                /// Flat amount added before the owner-scaled term. Final contribution is
+                /// `base + ownerValue * coefficient`.
+                public double base = 0.0;
                 public double coefficient = 1.0;
 
                 public OwnerModifier() {}
 
                 public OwnerModifier(String attribute_id, EntityAttributeModifier.Operation operation, double coefficient) {
+                    this(attribute_id, operation, 0.0, coefficient);
+                }
+
+                public OwnerModifier(String attribute_id, EntityAttributeModifier.Operation operation, double base, double coefficient) {
                     this.attribute_id = attribute_id;
                     this.operation = operation;
+                    this.base = base;
                     this.coefficient = coefficient;
                 }
             }
@@ -97,6 +119,36 @@ public class SummonBehaviour {
         public int despawn_ticks = 10;
     }
 
+    // --- Sounds ---
+
+    public Sounds sounds = new Sounds();
+    public static class Sounds {
+        /// Played once when the entity is summoned. Empty for none.
+        public String spawn = "";
+        /// Played once when the entity enters its despawn phase. Empty for none.
+        public String despawn = "";
+        /// Returned from `getHurtSound`. Empty falls back to the vanilla generic hurt sound.
+        public String hurt = "";
+        /// Returned from `getDeathSound`. Empty falls back to the vanilla generic death sound.
+        public String death = "";
+        /// Returned from `getAmbientSound` — vanilla's periodic mob-idle sound. Empty disables
+        /// it (vanilla MobEntity default is also null, so no ambient noise plays).
+        public String ambient = "";
+        /// Played on each footstep from `playStepSound`. Empty falls back to the block's
+        /// step sound (vanilla behaviour: stone-step on stone, wood-step on planks, etc.).
+        public String step = "";
+
+        // Lazy SoundEvent for each id. The lambda reads the instance field each time the
+        // supplier is first invoked, so any value Gson installs into `spawn` / `despawn` /
+        // ... is picked up. `transient` keeps Gson from serializing the Suppliers themselves.
+        public final transient Supplier<SoundEvent> spawnEvent   = Suppliers.memoize(() -> parseSoundId(spawn));
+        public final transient Supplier<SoundEvent> despawnEvent = Suppliers.memoize(() -> parseSoundId(despawn));
+        public final transient Supplier<SoundEvent> hurtEvent    = Suppliers.memoize(() -> parseSoundId(hurt));
+        public final transient Supplier<SoundEvent> deathEvent   = Suppliers.memoize(() -> parseSoundId(death));
+        public final transient Supplier<SoundEvent> ambientEvent = Suppliers.memoize(() -> parseSoundId(ambient));
+        public final transient Supplier<SoundEvent> stepEvent    = Suppliers.memoize(() -> parseSoundId(step));
+    }
+
     // --- Actions ---
 
     public List<Action.Entry> actions = List.of();
@@ -135,13 +187,25 @@ public class SummonBehaviour {
             public float movement_speed = 1.0F;
             /// Total length of one swing, in ticks.
             public int duration = 20;
-            /// Tick offset within the swing at which the impact lands (0 = on swing start).
-            public int windup = 0;
+            /// Fraction of `duration` after which the impact lands (0 = on swing start,
+            /// 0.5 = midway, 1 = on the final tick). The impact tick is `round(duration * windup)`.
+            public float windup = 0.5F;
             /// Multiplier applied to `movement_speed` while the swing is in progress (0 = stop).
             public float movement_modifier = 0.5F;
             /// Radius around the primary target in which additional entities are also struck.
             /// 0 = single-target.
             public float radius = 0;
+            /// Sound played at swing start (e.g. `"minecraft:entity.player.attack.sweep"`).
+            /// Empty / blank disables it. Resolved via `SoundEvent.of(Identifier)`, so any
+            /// sound id present in a loaded sounds.json works.
+            public String swing_sound = "";
+            /// Sound played once on a successful impact (when the swing reaches its windup
+            /// tick with the target still in range). AoE radius hits do not retrigger it.
+            /// Empty / blank disables it.
+            public String impact_sound = "";
+
+            public final transient Supplier<SoundEvent> swingEvent  = Suppliers.memoize(() -> parseSoundId(swing_sound));
+            public final transient Supplier<SoundEvent> impactEvent = Suppliers.memoize(() -> parseSoundId(impact_sound));
         }
 
         public static Entry spell(String spell_id, int cooldown) {

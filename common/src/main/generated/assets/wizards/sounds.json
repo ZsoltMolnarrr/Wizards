@@ -114,6 +114,36 @@
       "wizards:frost_blizzard_casting"
     ]
   },
+  "frost_elemental_attack": {
+    "sounds": [
+      "wizards:frost_elemental_attack"
+    ]
+  },
+  "frost_elemental_death": {
+    "sounds": [
+      "wizards:frost_elemental_death"
+    ]
+  },
+  "frost_elemental_despawn": {
+    "sounds": [
+      "wizards:frost_elemental_despawn"
+    ]
+  },
+  "frost_elemental_hurt": {
+    "sounds": [
+      "wizards:frost_elemental_hurt"
+    ]
+  },
+  "frost_elemental_impact": {
+    "sounds": [
+      "wizards:frost_elemental_impact"
+    ]
+  },
+  "frost_elemental_spawn": {
+    "sounds": [
+      "wizards:frost_elemental_spawn"
+    ]
+  },
   "frost_nova_damage_impact": {
     "sounds": [
       "wizards:frost_nova_damage_impact"
