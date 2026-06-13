@@ -17,7 +17,7 @@ public final class FabricClientMod implements ClientModInitializer {
     public void onInitializeClient() {
         WizardsClientMod.init();
 
-        EntityModelLayerRegistry.registerModelLayer(FrostElementalModel.MANTIS, FrostElementalModel::getTexturedModelData);
+        EntityModelLayerRegistry.registerModelLayer(FrostElementalModel.TEXTURE, FrostElementalModel::getTexturedModelData);
         EntityRendererRegistry.register(FrostElementalEntity.TYPE, FrostElementalRenderer::new);
         EntityModelLayerRegistry.registerModelLayer(ArcaneEmitterModel.LAYER, ArcaneEmitterModel::getTexturedModelData);
         EntityRendererRegistry.register(ArcaneEmitterEntity.TYPE, ArcaneEmitterRenderer::new);

@@ -2,182 +2,136 @@ package net.wizards.client.entity;
 
 import net.minecraft.client.model.*;
 import net.minecraft.client.render.VertexConsumer;
-import net.minecraft.client.render.entity.model.EntityModel;
 import net.minecraft.client.render.entity.model.EntityModelLayer;
 import net.minecraft.client.render.entity.model.SinglePartEntityModel;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.entity.Entity;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
 import net.wizards.WizardsMod;
 import net.wizards.entity.FrostElementalEntity;
 
-public class FrostElementalModel<T extends FrostElementalEntity> extends SinglePartEntityModel<T> {
+// Made with Blockbench 5.1.4
+// Exported for Minecraft version 1.17+ for Yarn
+// Paste this class into your mod and generate all required imports
+public class FrostElementalModel extends SinglePartEntityModel<FrostElementalEntity> {
+	private final ModelPart elemental;
+	private final ModelPart body;
+	private final ModelPart tail;
+	private final ModelPart tail_end;
+	private final ModelPart chest;
+	private final ModelPart right_arm;
+	private final ModelPart right_forearm;
+	private final ModelPart right_finger_2;
+	private final ModelPart right_finger_1;
+	private final ModelPart right_finger_3;
+	private final ModelPart left_arm;
+	private final ModelPart left_forearm;
+	private final ModelPart left_finger_2;
+	private final ModelPart left_finger_1;
+	private final ModelPart left_finger_3;
+	private final ModelPart head;
 
-    public static final EntityModelLayer MANTIS = new EntityModelLayer(Identifier.of(WizardsMod.ID, "frost_elemental"), "main");
+	public FrostElementalModel(ModelPart root) {
+		this.elemental = root.getChild("elemental");
+		this.body = this.elemental.getChild("body");
+		this.tail = this.body.getChild("tail");
+		this.tail_end = this.tail.getChild("tail_end");
+		this.chest = this.body.getChild("chest");
+		this.right_arm = this.chest.getChild("right_arm");
+		this.right_forearm = this.right_arm.getChild("right_forearm");
+		this.right_finger_2 = this.right_forearm.getChild("right_finger_2");
+		this.right_finger_1 = this.right_forearm.getChild("right_finger_1");
+		this.right_finger_3 = this.right_forearm.getChild("right_finger_3");
+		this.left_arm = this.chest.getChild("left_arm");
+		this.left_forearm = this.left_arm.getChild("left_forearm");
+		this.left_finger_2 = this.left_forearm.getChild("left_finger_2");
+		this.left_finger_1 = this.left_forearm.getChild("left_finger_1");
+		this.left_finger_3 = this.left_forearm.getChild("left_finger_3");
+		this.head = this.chest.getChild("head");
+	}
+	public static TexturedModelData getTexturedModelData() {
+		ModelData modelData = new ModelData();
+		ModelPartData modelPartData = modelData.getRoot();
+		ModelPartData elemental = modelPartData.addChild("elemental", ModelPartBuilder.create(), ModelTransform.pivot(0.0F, 12.0F, 0.0F));
 
-    private final ModelPart root;
-    private final ModelPart mantis;
-    private final ModelPart body;
-    private final ModelPart head;
-    private final ModelPart antenna1;
-    private final ModelPart antenna2;
-    private final ModelPart mouth1;
-    private final ModelPart mouth2;
-    private final ModelPart wing1;
-    private final ModelPart wing2;
-    private final ModelPart wing3;
-    private final ModelPart wing4;
-    private final ModelPart arm1;
-    private final ModelPart arm1seg2;
-    private final ModelPart arm1seg3;
-    private final ModelPart arm2;
-    private final ModelPart arm2seg2;
-    private final ModelPart arm2seg3;
-    private final ModelPart frontLeg1;
-    private final ModelPart frontLeg1seg2;
-    private final ModelPart frontLeg1seg3;
-    private final ModelPart frontLeg2;
-    private final ModelPart frontLeg2seg2;
-    private final ModelPart frontLeg2seg3;
-    private final ModelPart backLeg1;
-    private final ModelPart backLeg1seg2;
-    private final ModelPart backLeg1seg3;
-    private final ModelPart backLeg2;
-    private final ModelPart backLeg2seg2;
-    private final ModelPart backLeg2seg3;
-    public FrostElementalModel(ModelPart root) {
-        this.root = root.getChild("root");
-        this.mantis = this.root.getChild("mantis");
-        this.body = this.mantis.getChild("body");
-        this.head = this.mantis.getChild("head");
-        this.antenna1 = this.head.getChild("antenna1");
-        this.antenna2 = this.head.getChild("antenna2");
-        this.mouth1 = this.head.getChild("mouth1");
-        this.mouth2 = this.head.getChild("mouth2");
-        this.wing1 = this.mantis.getChild("wing1");
-        this.wing2 = this.mantis.getChild("wing2");
-        this.wing3 = this.mantis.getChild("wing3");
-        this.wing4 = this.mantis.getChild("wing4");
-        this.arm1 = this.mantis.getChild("arm1");
-        this.arm1seg2 = this.arm1.getChild("arm1seg2");
-        this.arm1seg3 = this.arm1seg2.getChild("arm1seg3");
-        this.arm2 = this.mantis.getChild("arm2");
-        this.arm2seg2 = this.arm2.getChild("arm2seg2");
-        this.arm2seg3 = this.arm2seg2.getChild("arm2seg3");
-        this.frontLeg1 = this.mantis.getChild("frontLeg1");
-        this.frontLeg1seg2 = this.frontLeg1.getChild("frontLeg1seg2");
-        this.frontLeg1seg3 = this.frontLeg1seg2.getChild("frontLeg1seg3");
-        this.frontLeg2 = this.mantis.getChild("frontLeg2");
-        this.frontLeg2seg2 = this.frontLeg2.getChild("frontLeg2seg2");
-        this.frontLeg2seg3 = this.frontLeg2seg2.getChild("frontLeg2seg3");
-        this.backLeg1 = this.mantis.getChild("backLeg1");
-        this.backLeg1seg2 = this.backLeg1.getChild("backLeg1seg2");
-        this.backLeg1seg3 = this.backLeg1seg2.getChild("backLeg1seg3");
-        this.backLeg2 = this.mantis.getChild("backLeg2");
-        this.backLeg2seg2 = this.backLeg2.getChild("backLeg2seg2");
-        this.backLeg2seg3 = this.backLeg2seg2.getChild("backLeg2seg3");
-    }
-    public static TexturedModelData getTexturedModelData() {
-        ModelData modelData = new ModelData();
-        ModelPartData modelPartData = modelData.getRoot();
-        ModelPartData root = modelPartData.addChild("root", ModelPartBuilder.create(), ModelTransform.of(0.0F, 24.0F, 0.0F, 0.0F, 3.1416F, 0.0F));
+		ModelPartData body = elemental.addChild("body", ModelPartBuilder.create().uv(0, 35).cuboid(-5.0F, -10.0F, -4.0F, 10.0F, 10.0F, 6.0F, new Dilation(0.0F))
+		.uv(96, 21).cuboid(-5.0F, -10.0F, -4.0F, 10.0F, 10.0F, 6.0F, new Dilation(0.3F)), ModelTransform.pivot(0.0F, 2.0F, 2.0F));
 
-        ModelPartData mantis = root.addChild("mantis", ModelPartBuilder.create(), ModelTransform.of(-0.5F, -3.0F, -28.0F, 0.3927F, 0.0F, 0.0F));
+		ModelPartData tail = body.addChild("tail", ModelPartBuilder.create().uv(0, 51).cuboid(-3.0F, 0.0F, 0.0F, 6.0F, 9.0F, 4.0F, new Dilation(0.01F)), ModelTransform.pivot(0.0F, 0.0F, -3.0F));
 
-        ModelPartData body = mantis.addChild("body", ModelPartBuilder.create().uv(0, 0).cuboid(-2.5F, -1.0F, 8.75F, 5.0F, 2.0F, 25.0F, new Dilation(0.0F))
-                .uv(0, 0).cuboid(-3.5F, -2.0F, -51.25F, 7.0F, 4.0F, 60.0F, new Dilation(0.0F)), ModelTransform.pivot(0.0F, -12.0F, 26.25F));
+		ModelPartData tail_end = tail.addChild("tail_end", ModelPartBuilder.create().uv(20, 51).cuboid(-3.0F, -2.0F, 0.0F, 6.0F, 3.0F, 5.0F, new Dilation(0.0F)), ModelTransform.pivot(0.0F, 8.1585F, 1.7696F));
 
-        ModelPartData head = mantis.addChild("head", ModelPartBuilder.create().uv(31, 27).cuboid(-3.5F, -1.0F, 0.0F, 7.0F, 4.0F, 3.0F, new Dilation(0.0F))
-                .uv(35, 20).cuboid(-2.5F, 3.0F, 0.0F, 5.0F, 2.0F, 2.0F, new Dilation(0.0F)), ModelTransform.of(0.0F, -13.0F, 60.0F, 0.3491F, 0.0F, 0.0F));
+		ModelPartData chest = body.addChild("chest", ModelPartBuilder.create(), ModelTransform.pivot(0.0F, -9.0F, -2.0F));
 
-        ModelPartData antenna1 = head.addChild("antenna1", ModelPartBuilder.create().uv(56, 71).cuboid(0.0F, 0.0F, 0.0F, 0.0F, 3.0F, 20.0F, new Dilation(0.0F)), ModelTransform.of(-1.5F, -1.0F, 3.0F, 0.4363F, 0.0F, 0.0F));
+		ModelPartData cube_r1 = chest.addChild("cube_r1", ModelPartBuilder.create().uv(28, 3).mirrored().cuboid(-8.2F, -8.2F, 6.4F, 4.0F, 4.0F, 7.0F, new Dilation(0.1F)).mirrored(false)
+		.uv(28, 3).cuboid(4.2F, -8.2F, 6.4F, 4.0F, 4.0F, 7.0F, new Dilation(0.1F))
+		.uv(74, 0).cuboid(-8.0F, -8.0F, -5.0F, 16.0F, 10.0F, 11.0F, new Dilation(0.3F))
+		.uv(0, 14).cuboid(-8.0F, -8.0F, -5.0F, 16.0F, 10.0F, 11.0F, new Dilation(0.0F)), ModelTransform.of(0.0F, -1.0F, 1.0F, 0.3927F, 0.0F, 0.0F));
 
-        ModelPartData antenna2 = head.addChild("antenna2", ModelPartBuilder.create().uv(56, 71).cuboid(0.0F, 0.0F, 0.0F, 0.0F, 3.0F, 20.0F, new Dilation(0.0F)), ModelTransform.of(1.5F, -1.0F, 3.0F, 0.4363F, 0.0F, 0.0F));
+		ModelPartData cube_r2 = chest.addChild("cube_r2", ModelPartBuilder.create().uv(32, 37).mirrored().cuboid(-8.4F, -9.4924F, 2.2213F, 4.0F, 4.0F, 8.0F, new Dilation(0.11F)).mirrored(false)
+		.uv(32, 37).cuboid(4.0F, -9.4924F, 2.2213F, 4.0F, 4.0F, 8.0F, new Dilation(0.11F)), ModelTransform.of(0.2F, -1.0F, 1.0F, 1.1781F, 0.0F, 0.0F));
 
-        ModelPartData mouth1 = head.addChild("mouth1", ModelPartBuilder.create().uv(14, 0).cuboid(-2.0F, 0.0F, 0.0F, 2.0F, 2.0F, 0.0F, new Dilation(0.0F)), ModelTransform.pivot(2.5F, 5.0F, 1.0F));
+		ModelPartData right_arm = chest.addChild("right_arm", ModelPartBuilder.create().uv(54, 10).mirrored().cuboid(-3.0F, -2.0F, -3.0F, 5.0F, 11.0F, 5.0F, new Dilation(0.0F)).mirrored(false)
+		.uv(80, 48).mirrored().cuboid(-3.0F, -2.0F, -3.0F, 5.0F, 11.0F, 5.0F, new Dilation(0.3F)).mirrored(false)
+		.uv(56, 0).mirrored().cuboid(-3.0F, -2.0F, 2.6F, 5.0F, 4.0F, 6.0F, new Dilation(0.3F)).mirrored(false), ModelTransform.pivot(-10.0F, -8.0F, -0.5F));
 
-        ModelPartData mouth2 = head.addChild("mouth2", ModelPartBuilder.create().uv(6, 0).cuboid(0.0F, 0.0F, 0.0F, 2.0F, 2.0F, 0.0F, new Dilation(0.0F)), ModelTransform.pivot(-2.5F, 5.0F, 1.0F));
+		ModelPartData right_forearm = right_arm.addChild("right_forearm", ModelPartBuilder.create().uv(54, 26).mirrored().cuboid(-5.0F, -1.0F, -4.0F, 6.0F, 12.0F, 7.0F, new Dilation(0.0F)).mirrored(false)
+		.uv(54, 45).mirrored().cuboid(-5.0F, -1.0F, -4.0F, 6.0F, 12.0F, 7.0F, new Dilation(0.3F)).mirrored(false), ModelTransform.pivot(0.0F, 10.0F, 0.0F));
 
-        ModelPartData wing1 = mantis.addChild("wing1", ModelPartBuilder.create().uv(56, 0).cuboid(-3.5F, 0.0F, -60.0F, 7.0F, 0.0F, 60.0F, new Dilation(0.0F)), ModelTransform.pivot(0.0F, -14.04F, 35.0F));
+		ModelPartData right_finger_2 = right_forearm.addChild("right_finger_2", ModelPartBuilder.create().uv(0, 14).mirrored().cuboid(-1.0F, 0.0F, -1.5F, 2.0F, 5.0F, 3.0F, new Dilation(0.0F)).mirrored(false), ModelTransform.pivot(-4.0F, 11.0F, 1.5F));
 
-        ModelPartData wing2 = mantis.addChild("wing2", ModelPartBuilder.create().uv(56, 0).mirrored().cuboid(-3.5F, 0.0F, -60.0F, 7.0F, 0.0F, 60.0F, new Dilation(0.0F)).mirrored(false), ModelTransform.pivot(0.0F, -14.03F, 35.0F));
+		ModelPartData right_finger_1 = right_forearm.addChild("right_finger_1", ModelPartBuilder.create().uv(0, 14).mirrored().cuboid(-1.0F, 0.0F, -1.5F, 2.0F, 5.0F, 3.0F, new Dilation(0.0F)).mirrored(false), ModelTransform.pivot(-4.0F, 11.0F, -2.5F));
 
-        ModelPartData wing3 = mantis.addChild("wing3", ModelPartBuilder.create().uv(28, 0).cuboid(-3.5F, 0.0F, -60.0F, 7.0F, 0.0F, 60.0F, new Dilation(0.0F)), ModelTransform.pivot(0.0F, -14.02F, 35.0F));
+		ModelPartData right_finger_3 = right_forearm.addChild("right_finger_3", ModelPartBuilder.create().uv(0, 14).cuboid(-1.0F, 0.0F, -1.5F, 2.0F, 5.0F, 3.0F, new Dilation(0.0F)), ModelTransform.pivot(0.0F, 11.0F, -0.5F));
 
-        ModelPartData wing4 = mantis.addChild("wing4", ModelPartBuilder.create().uv(28, 0).mirrored().cuboid(-3.5F, 0.0F, -60.0F, 7.0F, 0.0F, 60.0F, new Dilation(0.0F)).mirrored(false), ModelTransform.pivot(0.0F, -14.01F, 35.0F));
+		ModelPartData left_arm = chest.addChild("left_arm", ModelPartBuilder.create().uv(54, 10).cuboid(-2.0F, -2.0F, -3.0F, 5.0F, 11.0F, 5.0F, new Dilation(0.0F))
+		.uv(80, 48).cuboid(-2.0F, -2.0F, -3.0F, 5.0F, 11.0F, 5.0F, new Dilation(0.3F))
+		.uv(56, 0).cuboid(-2.0F, -2.0F, 2.6F, 5.0F, 4.0F, 6.0F, new Dilation(0.3F)), ModelTransform.pivot(10.0F, -8.0F, -0.5F));
 
-        ModelPartData arm1 = mantis.addChild("arm1", ModelPartBuilder.create().uv(8, 0).cuboid(-1.0F, -1.0F, -1.0F, 2.0F, 20.0F, 2.0F, new Dilation(0.0F)), ModelTransform.pivot(-2.5F, -11.0F, 51.0F));
+		ModelPartData left_forearm = left_arm.addChild("left_forearm", ModelPartBuilder.create().uv(54, 26).cuboid(-1.0F, -1.0F, -4.0F, 6.0F, 12.0F, 7.0F, new Dilation(0.0F))
+		.uv(54, 45).cuboid(-1.0F, -1.0F, -4.0F, 6.0F, 12.0F, 7.0F, new Dilation(0.3F)), ModelTransform.pivot(0.0F, 10.0F, 0.0F));
 
-        ModelPartData arm1seg2 = arm1.addChild("arm1seg2", ModelPartBuilder.create().uv(0, 64).cuboid(-1.5F, -1.5F, -2.0F, 3.0F, 3.0F, 25.0F, new Dilation(0.0F))
-                .uv(31, 62).cuboid(0.0F, 1.5F, -2.0F, 0.0F, 6.0F, 20.0F, new Dilation(0.0F)), ModelTransform.pivot(0.0F, 19.5F, 0.0F));
+		ModelPartData left_finger_2 = left_forearm.addChild("left_finger_2", ModelPartBuilder.create().uv(0, 14).cuboid(-1.0F, 0.0F, -1.25F, 2.0F, 5.0F, 3.0F, new Dilation(0.0F)), ModelTransform.pivot(4.0F, 11.0F, 1.25F));
 
-        ModelPartData arm1seg3 = arm1seg2.addChild("arm1seg3", ModelPartBuilder.create().uv(10, 27).cuboid(-0.5F, 0.0F, -0.5F, 1.0F, 20.0F, 1.0F, new Dilation(0.0F))
-                .uv(0, 24).cuboid(0.0F, 0.0F, -3.5F, 0.0F, 20.0F, 3.0F, new Dilation(0.0F)), ModelTransform.pivot(0.0F, 0.5F, 21.5F));
+		ModelPartData left_finger_1 = left_forearm.addChild("left_finger_1", ModelPartBuilder.create().uv(0, 14).cuboid(-1.0F, 0.0F, -1.5F, 2.0F, 5.0F, 3.0F, new Dilation(0.0F)), ModelTransform.pivot(4.0F, 11.0F, -2.5F));
 
-        ModelPartData arm2 = mantis.addChild("arm2", ModelPartBuilder.create().uv(8, 0).mirrored().cuboid(-1.0F, -1.0F, -1.0F, 2.0F, 20.0F, 2.0F, new Dilation(0.0F)).mirrored(false), ModelTransform.pivot(2.5F, -11.0F, 51.0F));
+		ModelPartData left_finger_3 = left_forearm.addChild("left_finger_3", ModelPartBuilder.create().uv(0, 14).mirrored().cuboid(-1.0F, 0.0F, -1.5F, 2.0F, 5.0F, 3.0F, new Dilation(0.0F)).mirrored(false), ModelTransform.pivot(0.0F, 11.0F, -0.5F));
 
-        ModelPartData arm2seg2 = arm2.addChild("arm2seg2", ModelPartBuilder.create().uv(0, 64).mirrored().cuboid(-1.5F, -1.5F, -2.0F, 3.0F, 3.0F, 25.0F, new Dilation(0.0F)).mirrored(false)
-                .uv(31, 62).cuboid(0.0F, 1.5F, -2.0F, 0.0F, 6.0F, 20.0F, new Dilation(0.0F)), ModelTransform.pivot(0.0F, 19.5F, 0.0F));
+		ModelPartData head = chest.addChild("head", ModelPartBuilder.create().uv(0, 0).cuboid(-3.5F, -3.0F, -5.0F, 7.0F, 7.0F, 7.0F, new Dilation(0.0F))
+		.uv(99, 44).cuboid(-4.5F, -3.0F, -6.0F, 9.0F, 4.0F, 5.0F, new Dilation(0.0F)), ModelTransform.pivot(0.0F, -6.0F, -5.0F));
+		return TexturedModelData.of(modelData, 128, 128);
+	}
 
-        ModelPartData arm2seg3 = arm2seg2.addChild("arm2seg3", ModelPartBuilder.create().uv(10, 27).mirrored().cuboid(-0.5F, 0.0F, -0.5F, 1.0F, 20.0F, 1.0F, new Dilation(0.0F)).mirrored(false)
-                .uv(0, 25).cuboid(0.0F, 0.0F, -3.5F, 0.0F, 20.0F, 3.0F, new Dilation(0.0F)), ModelTransform.pivot(0.0F, 0.5F, 21.5F));
+	// Hand-written section
 
-        ModelPartData frontLeg1 = mantis.addChild("frontLeg1", ModelPartBuilder.create().uv(39, 34).cuboid(-1.0F, -1.0F, -1.0F, 2.0F, 8.0F, 2.0F, new Dilation(0.0F)), ModelTransform.of(-3.5F, -10.0F, 27.0F, -0.7854F, 0.0F, 0.0F));
+	public static final EntityModelLayer TEXTURE = new EntityModelLayer(Identifier.of(WizardsMod.ID, "frost_elemental"), "main");
 
-        ModelPartData frontLeg1seg2 = frontLeg1.addChild("frontLeg1seg2", ModelPartBuilder.create().uv(54, 94).cuboid(-0.5F, -0.5F, 0.0F, 1.0F, 1.0F, 18.0F, new Dilation(0.0F))
-                .uv(36, 76).cuboid(0.0F, 0.5F, 0.0F, 0.0F, 5.0F, 18.0F, new Dilation(0.0F)), ModelTransform.of(0.0F, 5.5F, 0.0F, 0.3927F, -0.4363F, 0.0F));
+	@Override
+	public void setAngles(FrostElementalEntity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float netHeadPitch) {
+		this.getPart().traverse().forEach(ModelPart::resetTransform);
+		this.setHeadAngles(netHeadYaw, netHeadPitch);
+		this.animateMovement(FrostElementalAnimations.Walk, limbSwing, limbSwingAmount, 2F, 2.5F);
+		this.updateAnimation(entity.spawnAnimationState,   FrostElementalAnimations.Spawn,   ageInTicks, 1F);
+		this.updateAnimation(entity.despawnAnimationState, FrostElementalAnimations.Despawn, ageInTicks, 1F);
+		this.updateAnimation(entity.idleAnimationState,    FrostElementalAnimations.idle,    ageInTicks, 1F);
+		this.updateAnimation(entity.moveAnimationState,    FrostElementalAnimations.Walk,    ageInTicks, 1F);
+		this.updateAnimation(entity.attackAnimationState,  FrostElementalAnimations.Attack,  ageInTicks, 1F);
+	}
 
-        ModelPartData frontLeg1seg3 = frontLeg1seg2.addChild("frontLeg1seg3", ModelPartBuilder.create().uv(18, 27).cuboid(-0.5F, 0.0F, -0.5F, 1.0F, 18.0F, 1.0F, new Dilation(0.0F)), ModelTransform.of(0.0F, 0.5F, 17.5F, 0.2618F, 0.0F, 0.0F));
+	private void setHeadAngles(float headYaw, float headPitch) {
+		headYaw = MathHelper.clamp(headYaw, -60, 60);
+		headPitch = MathHelper.clamp(headPitch, -60, 60);
+		head.yaw = headYaw * 0.017453292F;
+		head.pitch = headPitch * 0.017453292F;
+	}
 
-        ModelPartData frontLeg2 = mantis.addChild("frontLeg2", ModelPartBuilder.create().uv(39, 34).mirrored().cuboid(-1.0F, -1.0F, -1.0F, 2.0F, 8.0F, 2.0F, new Dilation(0.0F)).mirrored(false), ModelTransform.of(3.5F, -10.0F, 27.0F, -0.7854F, 0.0F, 0.0F));
+	@Override
+	public ModelPart getPart() {
+		return elemental;
+	}
 
-        ModelPartData frontLeg2seg2 = frontLeg2.addChild("frontLeg2seg2", ModelPartBuilder.create().uv(54, 94).mirrored().cuboid(-0.5F, -0.5F, 0.0F, 1.0F, 1.0F, 18.0F, new Dilation(0.0F)).mirrored(false)
-                .uv(36, 76).cuboid(0.0F, 0.5F, 0.0F, 0.0F, 5.0F, 18.0F, new Dilation(0.0F)), ModelTransform.of(0.0F, 5.5F, 0.0F, 0.3927F, 0.4363F, 0.0F));
-
-        ModelPartData frontLeg2seg3 = frontLeg2seg2.addChild("frontLeg2seg3", ModelPartBuilder.create().uv(18, 27).mirrored().cuboid(-0.5F, 0.0F, -0.5F, 1.0F, 18.0F, 1.0F, new Dilation(0.0F)).mirrored(false), ModelTransform.of(0.0F, 0.5F, 17.5F, 0.2618F, 0.0F, 0.0F));
-
-        ModelPartData backLeg1 = mantis.addChild("backLeg1", ModelPartBuilder.create().uv(35, 0).cuboid(-1.0F, -1.0F, -1.0F, 2.0F, 8.0F, 2.0F, new Dilation(0.0F)), ModelTransform.of(-3.5F, -10.0F, 20.0F, -0.7854F, 0.0F, 0.0F));
-
-        ModelPartData backLeg1seg2 = backLeg1.addChild("backLeg1seg2", ModelPartBuilder.create().uv(83, 65).cuboid(-0.5F, -0.5F, -25.0F, 1.0F, 1.0F, 25.0F, new Dilation(0.0F))
-                .uv(31, 45).cuboid(0.0F, 0.5F, -25.0F, 0.0F, 6.0F, 25.0F, new Dilation(0.0F)), ModelTransform.of(0.0F, 5.5F, 0.0F, 0.0F, 0.4363F, 0.5236F));
-
-        ModelPartData backLeg1seg3 = backLeg1seg2.addChild("backLeg1seg3", ModelPartBuilder.create().uv(4, 97).cuboid(-0.5F, 0.0F, -0.5F, 1.0F, 35.0F, 1.0F, new Dilation(0.0F)), ModelTransform.pivot(0.0F, 0.5F, -24.5F));
-
-        ModelPartData backLeg2 = mantis.addChild("backLeg2", ModelPartBuilder.create().uv(35, 0).mirrored().cuboid(-1.0F, -1.0F, -1.0F, 2.0F, 8.0F, 2.0F, new Dilation(0.0F)).mirrored(false), ModelTransform.of(3.5F, -10.0F, 20.0F, -0.7854F, 0.0F, 0.0F));
-
-        ModelPartData backLeg2seg2 = backLeg2.addChild("backLeg2seg2", ModelPartBuilder.create().uv(83, 65).mirrored().cuboid(-0.5F, -0.5F, -25.0F, 1.0F, 1.0F, 25.0F, new Dilation(0.0F)).mirrored(false)
-                .uv(31, 45).cuboid(0.0F, 0.5F, -25.0F, 0.0F, 6.0F, 25.0F, new Dilation(0.0F)), ModelTransform.of(0.0F, 5.5F, 0.0F, 0.0F, -0.4363F, -0.5236F));
-
-        ModelPartData backLeg2seg3 = backLeg2seg2.addChild("backLeg2seg3", ModelPartBuilder.create().uv(4, 97).mirrored().cuboid(-0.5F, 0.0F, -0.5F, 1.0F, 35.0F, 1.0F, new Dilation(0.0F)).mirrored(false), ModelTransform.pivot(0.0F, 0.5F, -24.5F));
-        return TexturedModelData.of(modelData, 256, 256);
-    }
-    @Override
-    public void setAngles(FrostElementalEntity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float netHeadPitch) {
-        this.getPart().traverse().forEach(ModelPart::resetTransform);
-        this.setHeadAngles(netHeadYaw, netHeadPitch);
-        this.animateMovement(FrostElementalAnimations.Walk, limbSwing, limbSwingAmount, 2F, 2.5F);
-        this.updateAnimation(entity.spawnAnimationState,   FrostElementalAnimations.Spawn,   ageInTicks, 1F);
-        this.updateAnimation(entity.despawnAnimationState, FrostElementalAnimations.Despawn, ageInTicks, 1F);
-        this.updateAnimation(entity.idleAnimationState,    FrostElementalAnimations.idle,    ageInTicks, 1F);
-        this.updateAnimation(entity.moveAnimationState,    FrostElementalAnimations.Walk,    ageInTicks, 1F);
-        this.updateAnimation(entity.attackAnimationState,  FrostElementalAnimations.Attack,  ageInTicks, 1F);
-    }
-
-    private void setHeadAngles(float headYaw, float headPitch) {
-        headYaw = MathHelper.clamp(headYaw, -60, 60);
-        headPitch = MathHelper.clamp(headPitch, -60, 60);
-        head.yaw = headYaw * 0.017453292F;
-        head.pitch = headPitch * 0.017453292F;
-    }
-
-    @Override
-    public void render(MatrixStack matrices, VertexConsumer vertexConsumer, int light, int overlay, int color) {
-        root.render(matrices, vertexConsumer, light, overlay, color);
-    }
-
-    @Override
-    public ModelPart getPart() {
-        return root;
-    }
+	@Override
+	public void render(MatrixStack matrices, VertexConsumer vertices, int light, int overlay, int color) {
+		elemental.render(matrices, vertices, light, overlay, color);
+	}
 }

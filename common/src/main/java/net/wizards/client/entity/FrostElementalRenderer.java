@@ -6,12 +6,12 @@ import net.minecraft.util.Identifier;
 import net.wizards.WizardsMod;
 import net.wizards.entity.FrostElementalEntity;
 
-public class FrostElementalRenderer extends MobEntityRenderer<FrostElementalEntity, FrostElementalModel<FrostElementalEntity>> {
+public class FrostElementalRenderer extends MobEntityRenderer<FrostElementalEntity, FrostElementalModel> {
     public static final Identifier TEXTURE =
             Identifier.of(WizardsMod.ID, "textures/entity/frost_elemental.png");
 
     public FrostElementalRenderer(EntityRendererFactory.Context context) {
-        super(context, new FrostElementalModel<>(context.getPart(FrostElementalModel.MANTIS)), 0.75f);
+        super(context, new FrostElementalModel(context.getPart(FrostElementalModel.TEXTURE)), 0.75f);
     }
 
     @Override
