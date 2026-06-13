@@ -93,7 +93,7 @@ public class SummonBehaviour {
         }
 
         public boolean is_pushable = true;
-        public CollisionMode collision = CollisionMode.NONE;
+        public CollisionMode collision = CollisionMode.ENEMIES;
         public enum CollisionMode {
             NONE, ALL, ENEMIES
         }

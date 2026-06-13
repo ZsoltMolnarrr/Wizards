@@ -81,6 +81,7 @@ public class WizardEntities {
                 // Movement: follow owner, teleport if too far
                 summonBehaviour.movement.follow = new SummonBehaviour.Movement.Follow();
                 summonBehaviour.movement.follow.teleport_after_distance = 32;
+                summonBehaviour.movement.collision = SummonBehaviour.Movement.CollisionMode.ENEMIES;
 
                 // Targeting: mirror owner's attacks and retaliate, but don't auto-aggro
                 summonBehaviour.targeting.attack_with_owner = true;
@@ -138,7 +139,13 @@ public class WizardEntities {
                 spellPowerEntry.modifiers = List.of(new SummonBehaviour.AttributeScaling.Entry.OwnerModifier(
                         SpellSchools.FROST.id.toString(), EntityAttributeModifier.Operation.ADD_VALUE, 3, 0.1F));
 
-                summonBehaviour.attribute_scaling.entries = List.of(healthEntry, armorEntry, attackEntry, spellPowerEntry, knockbackEntry, knockbackResistEntry);
+                // SCALE
+                var scaleEntry = new SummonBehaviour.AttributeScaling.Entry();
+                scaleEntry.attribute_id = EntityAttributes.GENERIC_SCALE.getIdAsString();
+                scaleEntry.modifiers = List.of(new SummonBehaviour.AttributeScaling.Entry.OwnerModifier(
+                        SpellSchools.FROST.id.toString(), EntityAttributeModifier.Operation.ADD_VALUE, 0.05F));
+
+                summonBehaviour.attribute_scaling.entries = List.of(healthEntry, armorEntry, attackEntry, spellPowerEntry, knockbackEntry, knockbackResistEntry, scaleEntry);
 
                 var world = livingEntity.getWorld();
                 if (world instanceof ServerWorld serverWorld) {
