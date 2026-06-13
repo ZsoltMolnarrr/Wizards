@@ -6,6 +6,7 @@ import net.minecraft.entity.EntityDimensions;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.SpawnGroup;
 import net.minecraft.entity.attribute.EntityAttributeModifier;
+import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.registry.entry.RegistryEntry;
@@ -86,10 +87,14 @@ public class WizardEntities {
                 summonBehaviour.targeting.automatic_targeting = true;
 
                 // Actions: frost shard spell (preferred), melee as fallback
+                var attack = new SummonBehaviour.Action.MeleeAttack();
+                attack.max_range = 3;
+                attack.speed = 2F;
+                attack.radius = 1F;
                 summonBehaviour.actions = List.of(
                     SummonBehaviour.Action.spell("wizards:frost_shard", 60),
                     SummonBehaviour.Action.spell("wizards:frost_nova", 60),
-                    SummonBehaviour.Action.attack(3, 1.5F)
+                    SummonBehaviour.Action.attack(attack)
                 );
 
                 // Attribute scaling: health and attack scale with owner's frost spell power
@@ -102,6 +107,11 @@ public class WizardEntities {
                 attackEntry.attribute_id = "minecraft:generic.attack_damage";
                 attackEntry.modifiers = List.of(new SummonBehaviour.AttributeScaling.Entry.OwnerModifier(
                     SpellSchools.FROST.id.toString(), EntityAttributeModifier.Operation.ADD_VALUE, 0.5));
+
+                var knockbackEntry = new SummonBehaviour.AttributeScaling.Entry();
+                knockbackEntry.attribute_id = EntityAttributes.GENERIC_ATTACK_KNOCKBACK.getIdAsString();
+                knockbackEntry.modifiers = List.of(new SummonBehaviour.AttributeScaling.Entry.OwnerModifier(
+                    SpellSchools.FROST.id.toString(), EntityAttributeModifier.Operation.ADD_VALUE, 0.1));
 
                 var spellPowerEntry = new SummonBehaviour.AttributeScaling.Entry();
                 spellPowerEntry.attribute_id = SpellSchools.FROST.id.toString();

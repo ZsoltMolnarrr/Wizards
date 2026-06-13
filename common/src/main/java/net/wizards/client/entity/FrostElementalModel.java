@@ -127,7 +127,8 @@ public class FrostElementalModel extends SinglePartEntityModel<FrostElementalEnt
 		if (entity.spellReleaseAnimationState.isRunning()) {
 			this.updateAnimation(entity.spellReleaseAnimationState, FrostElementalAnimations.shoot, ageInTicks, 1F);
 		} else if (entity.attackAnimationState.isRunning()) {
-			this.updateAnimation(entity.attackAnimationState,       FrostElementalAnimations.attack_2,  ageInTicks, 1F);
+			float attackSpeed = entity.getAttackAnimationSpeed(FrostElementalAnimations.attack_2.lengthInSeconds() * 20F);
+			this.updateAnimation(entity.attackAnimationState,       FrostElementalAnimations.attack_2,  ageInTicks, attackSpeed);
 		} else if (entity.spellCastAnimationState.isRunning()) {
 			this.animateShootStart(entity.spellCastAnimationState, ageInTicks);
 		} else {

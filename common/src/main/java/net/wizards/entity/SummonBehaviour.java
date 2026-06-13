@@ -119,10 +119,29 @@ public class SummonBehaviour {
             e.melee_attack = a;
             return e;
         }
+        public static Entry attack(MeleeAttack melee_attack) {
+            var e = new Entry();
+            e.type = Type.MELEE_ATTACK;
+            e.melee_attack = melee_attack;
+            return e;
+        }
         public static class MeleeAttack {
-            /// If greater than 0, the entity will perform a melee attack every attack_cooldown ticks.
+            /// If greater than 0, swing is only initiated while the target is within this range.
             public float max_range = 0;
+            /// Attack speed, in attacks per second. The cooldown between swing starts is
+            /// max(duration, 20 / speed) ticks.
             public float speed = 1.2F;
+            /// Pathfinding speed multiplier used while approaching the target.
+            public float movement_speed = 1.0F;
+            /// Total length of one swing, in ticks.
+            public int duration = 20;
+            /// Tick offset within the swing at which the impact lands (0 = on swing start).
+            public int windup = 0;
+            /// Multiplier applied to `movement_speed` while the swing is in progress (0 = stop).
+            public float movement_modifier = 0.5F;
+            /// Radius around the primary target in which additional entities are also struck.
+            /// 0 = single-target.
+            public float radius = 0;
         }
 
         public static Entry spell(String spell_id, int cooldown) {

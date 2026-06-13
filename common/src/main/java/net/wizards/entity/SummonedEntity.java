@@ -1,6 +1,7 @@
 package net.wizards.entity;
 
 import com.google.gson.Gson;
+import com.mojang.logging.LogUtils;
 import net.minecraft.entity.AnimationState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityDimensions;
@@ -36,12 +37,15 @@ import net.spell_engine.internals.target.EntityRelation;
 import net.spell_engine.internals.target.EntityRelations;
 import net.wizards.WizardsMod;
 import org.jetbrains.annotations.Nullable;
+import org.slf4j.Logger;
 
 import java.util.EnumSet;
 import java.util.Optional;
 import java.util.UUID;
 
 public abstract class SummonedEntity extends GolemEntity implements SpellSummoned, Tameable {
+
+    private static final Logger LOGGER = LogUtils.getLogger();
 
     private static final TrackedData<Optional<UUID>> OWNER_UUID =
             DataTracker.registerData(SummonedEntity.class, TrackedDataHandlerRegistry.OPTIONAL_UUID);
@@ -57,6 +61,8 @@ public abstract class SummonedEntity extends GolemEntity implements SpellSummone
             DataTracker.registerData(SummonedEntity.class, TrackedDataHandlerRegistry.INTEGER);
     private static final TrackedData<Byte> ANIMATION_ACTION =
             DataTracker.registerData(SummonedEntity.class, TrackedDataHandlerRegistry.BYTE);
+    private static final TrackedData<Integer> ATTACK_DURATION =
+            DataTracker.registerData(SummonedEntity.class, TrackedDataHandlerRegistry.INTEGER);
 
     private static final byte PHASE_SPAWNING   = 0;
     private static final byte PHASE_ACTIVE     = 1;
@@ -67,7 +73,6 @@ public abstract class SummonedEntity extends GolemEntity implements SpellSummone
     protected static final byte ACTION_SPELL_CAST    = 2;
     protected static final byte ACTION_SPELL_RELEASE = 3;
 
-    protected static final int ATTACK_DURATION_TICKS        = 40;
     protected static final int SPELL_RELEASE_DURATION_TICKS = 26;
 
     private int timeToLive = 0;
@@ -266,17 +271,10 @@ public abstract class SummonedEntity extends GolemEntity implements SpellSummone
 
         goalSelector.add(0, new SwimGoal(this));
         goalSelector.add(1, new PhaseBlockGoal());
-        int actionPriority = 3;
+        int actionPriority = 10;
         for (var action : behaviour.actions) {
             switch (action.type) {
-                case MELEE_ATTACK -> {
-                    var cfg = action.melee_attack;
-                    if (cfg.max_range > 0) {
-                        goalSelector.add(actionPriority, new RangedMeleeAttackGoal(cfg.speed, cfg.max_range));
-                    } else {
-                        goalSelector.add(actionPriority, new MeleeAttackGoal(this, cfg.speed, false));
-                    }
-                }
+                case MELEE_ATTACK -> goalSelector.add(actionPriority, new WindupMeleeAttackGoal(action.melee_attack));
                 case SPELL_CAST -> goalSelector.add(actionPriority, new SpellCastGoal(action.spell_cast));
             }
             actionPriority++;
@@ -333,6 +331,7 @@ public abstract class SummonedEntity extends GolemEntity implements SpellSummone
         builder.add(BOUNDING_BOX_HEIGHT, new SummonBehaviour.Dimensions().height);
         builder.add(END_OF_PHASE_AGE, 0);
         builder.add(ANIMATION_ACTION, ACTION_NONE);
+        builder.add(ATTACK_DURATION, 10);
     }
 
     public void setOwnerUuid(@Nullable UUID uuid) {
@@ -392,10 +391,21 @@ public abstract class SummonedEntity extends GolemEntity implements SpellSummone
         actionEndAge = age + SPELL_RELEASE_DURATION_TICKS;
     }
 
-    /** Called on a successful melee hit. */
-    protected void onAttackAnimated() {
+    /** Called when a melee swing begins. The animation plays for `durationTicks`. */
+    protected void onAttackAnimated(int durationTicks) {
+        getDataTracker().set(ATTACK_DURATION, durationTicks);
         getDataTracker().set(ANIMATION_ACTION, ACTION_MELEE);
-        actionEndAge = age + ATTACK_DURATION_TICKS;
+        actionEndAge = age + durationTicks;
+    }
+
+    /**
+     * Playback-speed multiplier the model should pass to `updateAnimation` for the swing,
+     * so a keyframed animation of `animationLengthTicks` is compressed/stretched to fit the
+     * current swing's configured duration.
+     */
+    public float getAttackAnimationSpeed(float animationLengthTicks) {
+        int duration = getDataTracker().get(ATTACK_DURATION);
+        return duration > 0 ? animationLengthTicks / duration : 1F;
     }
 
     // --- Spell cooldowns ---
@@ -425,13 +435,6 @@ public abstract class SummonedEntity extends GolemEntity implements SpellSummone
                 getDataTracker().set(ANIMATION_ACTION, ACTION_NONE);
             }
         }
-    }
-
-    @Override
-    public boolean tryAttack(Entity target) {
-        boolean success = super.tryAttack(target);
-        if (success) onAttackAnimated();
-        return success;
     }
 
     // --- NBT ---
@@ -602,22 +605,159 @@ public abstract class SummonedEntity extends GolemEntity implements SpellSummone
         }
     }
 
-    // Melee attack that only activates when the target is within a configured range.
-    // Unlike the default MeleeAttackGoal, the entity will not chase a distant target to engage.
-    private class RangedMeleeAttackGoal extends MeleeAttackGoal {
-        private final float maxRange;
+    // Windup-based melee attack. Each swing has a fixed duration; impact lands at `windup`
+    // ticks into the swing. Movement speed is multiplied by `movement_modifier` while
+    // swinging. If the target leaves attack reach before the impact tick, the swing fails
+    // silently (no damage). Optional AoE: on a successful impact, all valid hostiles within
+    // `radius` of the primary target are also struck.
+    private class WindupMeleeAttackGoal extends Goal {
+        private final SummonBehaviour.Action.MeleeAttack config;
+        private int swingTick = -1; // -1 = not swinging
+        private int navUpdateCountdown = 0;
 
-        public RangedMeleeAttackGoal(float speed, float maxRange) {
-            super(SummonedEntity.this, speed, false);
-            this.maxRange = maxRange;
+        public WindupMeleeAttackGoal(SummonBehaviour.Action.MeleeAttack config) {
+            this.config = config;
+            setControls(EnumSet.of(Control.MOVE, Control.LOOK));
+        }
+
+        // Approximation of vanilla MeleeAttackGoal's reach (entity width + target width).
+        private double squaredAttackReach(LivingEntity target) {
+            float reach = getWidth() * 2.0F + target.getWidth();
+            return reach * reach;
+        }
+
+        private boolean isTargetInRange(LivingEntity target) {
+            double sq = squaredDistanceTo(target);
+            if (sq > squaredAttackReach(target)) return false;
+            if (config.max_range > 0 && sq > config.max_range * config.max_range) return false;
+            return true;
+        }
+
+        // Cooldown between consecutive swings, in ticks (derived from attack speed alone).
+        // Overlap with an in-progress swing is prevented separately by the `swingTick < 0` gate.
+        private int swingInterval() {
+            if (config.speed <= 0) return 1;
+            return Math.max(1, Math.round(20F / config.speed));
+        }
+
+        // Mirrors PlayerEntity.getAttackCooldownProgress: 1.0F means fully recovered.
+        private float attackCooldownProgress() {
+            int interval = swingInterval();
+            int ticksSince = age - SummonedEntity.this.getLastAttackTime();
+            return Math.min(1F, ticksSince / (float) interval);
         }
 
         @Override
         public boolean canStart() {
+            if (!isActive()) return false;
             LivingEntity target = getTarget();
-            if (target == null) return false;
-            if (squaredDistanceTo(target) > maxRange * maxRange) return false;
-            return super.canStart();
+            if (target == null || !target.isAlive()) return false;
+            // If a max_range cap is set, don't engage targets outside it (no chase).
+            if (config.max_range > 0 && squaredDistanceTo(target) > config.max_range * config.max_range) {
+                return false;
+            }
+            return true;
+        }
+
+        @Override
+        public boolean shouldContinue() {
+            if (swingTick >= 0) return true; // finish in-progress swing
+            return canStart();
+        }
+
+        @Override
+        public boolean shouldRunEveryTick() { return true; }
+
+        @Override
+        public void start() {
+            swingTick = -1;
+            navUpdateCountdown = 0;
+        }
+
+        @Override
+        public void stop() {
+            swingTick = -1;
+            getNavigation().stop();
+        }
+
+        @Override
+        public void tick() {
+            LivingEntity target = getTarget();
+            if (target == null) return;
+            getLookControl().lookAt(target, 30F, 30F);
+
+            boolean inRange = isTargetInRange(target);
+
+            // Begin a new swing only when not currently swinging, in range, and fully recovered.
+            // Recovery uses vanilla LivingEntity.lastAttackTime: onAttacking(target) below sets it
+            // to the current age, mirroring how PlayerEntity.getAttackCooldownProgress works.
+            if (swingTick < 0 && inRange && attackCooldownProgress() >= 1F) {
+                swingTick = 0;
+                SummonedEntity.this.onAttacking(target); // saves vanilla lastAttackTime = age
+                onAttackAnimated(config.duration);
+                LOGGER.info("[WindupMelee] attack-start entity={} target={} duration={} windup={} radius={} interval={}",
+                        SummonedEntity.this.getId(), target.getId(),
+                        config.duration, config.windup, config.radius, swingInterval());
+            }
+
+            // Navigation:
+            //   - already in range, between swings → hold position
+            //   - otherwise → pursue, slowing to movement_modifier × movement_speed during the swing
+            double moveSpeed = (swingTick >= 0)
+                    ? config.movement_speed * config.movement_modifier
+                    : config.movement_speed;
+            navUpdateCountdown--;
+            if (swingTick < 0 && inRange) {
+                getNavigation().stop();
+            } else if (moveSpeed > 0) {
+                if (navUpdateCountdown <= 0) {
+                    getNavigation().startMovingTo(target, moveSpeed);
+                    navUpdateCountdown = 5;
+                }
+            } else {
+                getNavigation().stop();
+            }
+
+            // Drive swing progression.
+            if (swingTick >= 0) {
+                if (swingTick == config.windup) {
+                    // Re-check reach: if the target slipped out during the windup, the swing whiffs.
+                    boolean hit = isTargetInRange(target);
+                    LOGGER.info("[WindupMelee] attack-impact entity={} target={} tick={} hit={}",
+                            SummonedEntity.this.getId(), target.getId(), swingTick, hit);
+                    if (hit) {
+                        performAttackImpact(target);
+                    }
+                }
+                swingTick++;
+                if (swingTick >= config.duration) {
+                    LOGGER.info("[WindupMelee] attack-end entity={} target={}",
+                            SummonedEntity.this.getId(), target.getId());
+                    swingTick = -1;
+                    // Force a NONE tick so the next swing's MELEE transition triggers a
+                    // fresh AnimationState.start() on the client. Without this, back-to-back
+                    // swings (interval <= duration) keep ANIMATION_ACTION at MELEE forever
+                    // and only the first swing animates.
+                    getDataTracker().set(ANIMATION_ACTION, ACTION_NONE);
+                }
+            }
+        }
+
+        private void performAttackImpact(LivingEntity primary) {
+            tryAttack(primary);
+            if (config.radius <= 0) return;
+            LivingEntity owner = getOwner();
+            Box box = primary.getBoundingBox().expand(config.radius);
+            double radiusSq = (double) config.radius * config.radius;
+            for (LivingEntity nearby : getWorld().getEntitiesByClass(LivingEntity.class, box, e -> true)) {
+                if (nearby == primary) continue;
+                if (nearby == SummonedEntity.this) continue;
+                if (nearby == owner) continue;
+                if (nearby instanceof Tameable t && owner != null && owner.getUuid().equals(t.getOwnerUuid())) continue;
+                if (owner != null && !canAttackTarget(nearby, owner)) continue;
+                if (nearby.squaredDistanceTo(primary) > radiusSq) continue;
+                tryAttack(nearby);
+            }
         }
     }
 
