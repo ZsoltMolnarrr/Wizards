@@ -3,6 +3,8 @@ package net.wizards.content;
 import net.minecraft.util.Identifier;
 import net.spell_engine.api.datagen.SpellBuilder;
 import net.spell_engine.api.spell.Spell;
+import net.spell_engine.api.spell.fx.ModelEffect;
+import net.spell_engine.api.spell.fx.ModelEffectBuilder;
 import net.spell_engine.api.spell.fx.PlayerAnimation;
 import net.spell_engine.api.spell.fx.ParticleBatch;
 import net.spell_engine.api.spell.fx.Sound;
@@ -1022,16 +1024,8 @@ public class WizardSpells {
         spell.active.cast.animation = PlayerAnimation.of("spell_engine:two_handed_channeling");
         spell.active.cast.start_sound = new Sound(WizardsSounds.FIRE_BREATH_START.id());
         spell.active.cast.sound = new Sound(WizardsSounds.FIRE_BREATH_CASTING.id(), 0);
-        spell.active.cast.particles = new ParticleBatch[] {
-                new ParticleBatch(
-                        SpellEngineParticles.flame_medium_a.id().toString(),
-                        ParticleBatch.Shape.SPHERE, ParticleBatch.Origin.CENTER,
-                        4, 0.5F, 0.5F),
-                new ParticleBatch(
-                        SpellEngineParticles.flame_spark.id().toString(),
-                        ParticleBatch.Shape.SPHERE, ParticleBatch.Origin.CENTER,
-                        6, 0.4F, 0.4F)
-        };
+        spell.active.cast.particles = new ParticleBatch[] { fireCastingParticles() };
+        spell.active.cast.movement_speed = 1F;
         spell.active.cast.channeled_release_fx = true;
 
         spell.release = new Spell.Release();
@@ -1053,6 +1047,19 @@ public class WizardSpells {
                         .scale(0.8F)
                         .color(0xFF4400FFL),
         };
+        spell.release.model_fx = ModelEffectBuilder.forEach(
+                ModelEffectBuilder.Preset.orbiters(
+                        "wizards:spell_projectile/fire_wave", 3, 2.0F, -360F, 20, ModelEffect.Easing.EASE_IN_OUT_CUBIC),
+                e -> { e
+                        .initialScale(0)
+                        .scaleIn(0, 5, ModelEffect.Easing.EASE_IN_OUT_CUBIC)
+                        .translate(0, 0, 0.5F, 0, 5, ModelEffect.Easing.EASE_IN_CUBIC)
+                        .scaleOut(15, 20, ModelEffect.Easing.EASE_IN_OUT_CUBIC)
+                        .translate(0, 0,-0.5F, 15, 20, ModelEffect.Easing.EASE_IN_CUBIC)
+                    ;
+                }
+        );
+
 
         spell.target.type = Spell.Target.Type.AREA;
         spell.target.area = new Spell.Target.Area();
