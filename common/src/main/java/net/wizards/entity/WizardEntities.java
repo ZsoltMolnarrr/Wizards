@@ -90,7 +90,6 @@ public class WizardEntities {
 
                 // Actions: frost shard spell (preferred), melee as fallback
                 var attack = new SummonBehaviour.Action.MeleeAttack();
-                attack.max_range = 3;
                 attack.speed = 2F;
                 attack.radius = 1F;
                 attack.swing_sound  = WizardsSounds.FROST_ELEMENTAL_ATTACK.id().toString();
