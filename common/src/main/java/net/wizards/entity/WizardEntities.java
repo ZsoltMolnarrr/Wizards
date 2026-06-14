@@ -99,10 +99,11 @@ public class WizardEntities {
 
                 var frostNova = new SummonBehaviour.Action.SpellCast();
                 frostNova.spell_id = "wizards:frost_nova";
-                frostNova.range.min = 1.5F;
+                frostNova.range.max = 1.5F;
+                frostNova.cooldown = 60;
                 summonBehaviour.actions = List.of(
-                    SummonBehaviour.Action.spell("wizards:frost_shard", 60),
-                    SummonBehaviour.Action.spell("wizards:frost_nova", 60),
+                    SummonBehaviour.Action.spell("wizards:frost_shard", 20),
+                    SummonBehaviour.Action.spell(frostNova),
                     SummonBehaviour.Action.attack(attack)
                 );
 
@@ -111,6 +112,8 @@ public class WizardEntities {
                 summonBehaviour.sounds.despawn = WizardsSounds.FROST_ELEMENTAL_DESPAWN.id().toString();
                 summonBehaviour.sounds.hurt    = WizardsSounds.FROST_ELEMENTAL_HURT.id().toString();
                 summonBehaviour.sounds.death   = WizardsSounds.FROST_ELEMENTAL_DEATH.id().toString();
+                summonBehaviour.sounds.ambient = WizardsSounds.FROST_ELEMENTAL_IDLE.id().toString();
+                summonBehaviour.sounds.step    = WizardsSounds.FROST_ELEMENTAL_STEP.id().toString();
 
                 // Attribute scaling: health and attack scale with owner's frost spell power
                 var healthEntry = new SummonBehaviour.AttributeScaling.Entry();

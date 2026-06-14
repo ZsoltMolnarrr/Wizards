@@ -134,6 +134,13 @@
       "wizards:frost_elemental_hurt"
     ]
   },
+  "frost_elemental_idle": {
+    "sounds": [
+      "wizards:frost_elemental_idle_1",
+      "wizards:frost_elemental_idle_2",
+      "wizards:frost_elemental_idle_3"
+    ]
+  },
   "frost_elemental_impact": {
     "sounds": [
       "wizards:frost_elemental_impact"
@@ -142,6 +149,13 @@
   "frost_elemental_spawn": {
     "sounds": [
       "wizards:frost_elemental_spawn"
+    ]
+  },
+  "frost_elemental_step": {
+    "sounds": [
+      "wizards:frost_elemental_step_1",
+      "wizards:frost_elemental_step_2",
+      "wizards:frost_elemental_step_3"
     ]
   },
   "frost_nova_damage_impact": {

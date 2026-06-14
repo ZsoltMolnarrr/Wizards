@@ -455,6 +455,19 @@ public abstract class SummonedEntity extends GolemEntity implements SpellSummone
         return target != null && target.isAlive();
     }
 
+    /// Snap yaw/pitch (and bodyYaw, so the model orients with the head) directly onto
+    /// the target's eyes. Used during active engagement — spell casts and melee swings —
+    /// to keep the entity locked on without the 30°/tick smoothing lag of `lookAt`.
+    public void lockRotationTo(LivingEntity target) {
+        Vec3d toTarget = target.getEyePos().subtract(getEyePos()).normalize();
+        float yaw   = (float)  Math.toDegrees(Math.atan2(-toTarget.x, toTarget.z));
+        float pitch = (float) -Math.toDegrees(Math.asin(Math.max(-1.0, Math.min(1.0, toTarget.y))));
+        setYaw(yaw);
+        setHeadYaw(yaw);
+        setBodyYaw(yaw);
+        setPitch(pitch);
+    }
+
     @Override
     protected void initDataTracker(DataTracker.Builder builder) {
         super.initDataTracker(builder);
@@ -1045,31 +1058,16 @@ public abstract class SummonedEntity extends GolemEntity implements SpellSummone
                 getNavigation().stop();
             }
 
-            // Compute exact yaw/pitch to face the target's eyes
-            Vec3d toTargetEye = target.getEyePos().subtract(getEyePos()).normalize();
-            float faceYaw   = (float)  Math.toDegrees(Math.atan2(-toTargetEye.x, toTargetEye.z));
-            float facePitch = (float) -Math.toDegrees(Math.asin(Math.max(-1.0, Math.min(1.0, toTargetEye.y))));
+            // Lock rotation onto the target every tick for the entire goal — including the
+            // pre-cast alignment phase. Removes the old "wait for ~18° head convergence
+            // before starting" delay that hits made worse.
+            lockRotationTo(target);
 
-            boolean isFacing;
-            if (castTick > 0) {
-                // Casting in progress — lock rotation directly onto target every tick
-                setYaw(faceYaw);
-                setHeadYaw(faceYaw);
-                setBodyYaw(faceYaw);
-                setPitch(facePitch);
-                isFacing = true;
-            } else {
-                // Not yet casting — turn gradually via look control
-                getLookControl().lookAt(target, 30F, 30F);
-                setBodyYaw(getHeadYaw());
-                Vec3d lookDir = getRotationVector(getPitch(), getHeadYaw()).normalize();
-                isFacing = lookDir.dotProduct(toTargetEye) > 0.95; // ~18° threshold
-            }
-
-            // Cast progress — only while in range, target visible, and facing the target.
-            // The 0 → 1 transition is when the cast "actually starts"; latch the target so
-            // it can't be swapped out by RevengeGoal for the remainder of the cast.
-            if (distSq <= desiredRangeSq && targetSeeingTicker > 0 && isFacing) {
+            // Cast progress — only while in range and target visible. The rotation lock
+            // above guarantees facing, so it no longer gates progress. The 0 → 1 transition
+            // is when the cast "actually starts"; latch the target so it can't be swapped
+            // out by RevengeGoal for the remainder of the cast.
+            if (distSq <= desiredRangeSq && targetSeeingTicker > 0) {
                 castTick++;
                 if (castTick == 1) lockedTarget = target;
             }
@@ -1081,15 +1079,9 @@ public abstract class SummonedEntity extends GolemEntity implements SpellSummone
 
         private void releaseSpell(LivingEntity target, RegistryEntry<Spell> entry, Spell spell) {
             if (getWorld().isClient()) return;
-            // Snap rotation to face the target exactly — targetAndPerformSpell uses the caster's
+            // Snap rotation onto the target — targetAndPerformSpell uses the caster's
             // look vector for raycasting (AIM/BEAM) and projectile direction.
-            Vec3d toTarget = target.getEyePos().subtract(getEyePos()).normalize();
-            float releaseYaw   = (float)  Math.toDegrees(Math.atan2(-toTarget.x, toTarget.z));
-            float releasePitch = (float) -Math.toDegrees(Math.asin(Math.max(-1.0, Math.min(1.0, toTarget.y))));
-            setYaw(releaseYaw);
-            setHeadYaw(releaseYaw);
-            setBodyYaw(releaseYaw);
-            setPitch(releasePitch);
+            lockRotationTo(target);
             SpellHelper.targetAndPerformSpell(getWorld(), SummonedEntity.this, entry);
             onSpellCastEnded();
             onSpellReleased(pickVariant(config.release_animation_variants), config.release_animation_duration);

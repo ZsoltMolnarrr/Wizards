@@ -143,7 +143,9 @@ public class DynamicMeleeAttackGoal extends Goal {
             swingTick = -1;
             return;
         }
-        summonedEntity.getLookControl().lookAt(target, 30F, 30F);
+        // Lock onto the target — every tick the melee goal is active, the entity faces
+        // its target without the 30°/tick smoothing lag of `lookAt`.
+        summonedEntity.lockRotationTo(target);
 
         boolean inRange = isTargetInRange(target);
 

@@ -95,6 +95,8 @@ public class WizardsSounds {
 
     public static final Entry FROST_ELEMENTAL_ATTACK = add(new Entry("frost_elemental_attack"));
     public static final Entry FROST_ELEMENTAL_DEATH = add(new Entry("frost_elemental_death"));
+    public static final Entry FROST_ELEMENTAL_IDLE = add(new Entry("frost_elemental_idle")).variants(3);
+    public static final Entry FROST_ELEMENTAL_STEP = add(new Entry("frost_elemental_step")).variants(3);
     public static final Entry FROST_ELEMENTAL_HURT = add(new Entry("frost_elemental_hurt"));
     public static final Entry FROST_ELEMENTAL_IMPACT = add(new Entry("frost_elemental_impact"));
     public static final Entry FROST_ELEMENTAL_SPAWN = add(new Entry("frost_elemental_spawn"));
