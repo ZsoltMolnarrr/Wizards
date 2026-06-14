@@ -768,6 +768,24 @@ public abstract class SummonedEntity extends GolemEntity implements SpellSummone
             return (float) (config.max_range * (1 + SummonedEntity.this.getScaleFactor() * config.attack_range_scaling));
         }
 
+        // Distance at which navigation holds rather than pursuing further. Held back from full
+        // attack reach so the entity doesn't bump into the target. Directional bias mirrors
+        // SpellCastGoal:
+        //   target fleeing     → close in     (50% of reach)
+        //   target approaching → hold back    (90%)
+        //   stationary         → moderate     (70%)
+        private double squaredHoldRange(LivingEntity target) {
+            double sqMax = squaredAttackReach(target);
+            if (config.max_range > 0) {
+                float r = effectiveMaxRange();
+                sqMax = Math.min(sqMax, (double) r * r);
+            }
+            Vec3d toTarget = target.getPos().subtract(SummonedEntity.this.getPos()).normalize();
+            double dot = target.getVelocity().dotProduct(toTarget);
+            float frac = (dot > 0.01) ? 0.5f : (dot < -0.01) ? 0.9f : 0.7f;
+            return sqMax * frac * frac;
+        }
+
         // Cooldown between consecutive swings, in ticks (derived from attack speed alone).
         // Overlap with an in-progress swing is prevented separately by the `swingTick < 0` gate.
         private int swingInterval() {
@@ -850,14 +868,15 @@ public abstract class SummonedEntity extends GolemEntity implements SpellSummone
                         config.duration, config.windup, windupTick(), config.radius, swingInterval());
             }
 
-            // Navigation:
-            //   - already in range, between swings → hold position
-            //   - otherwise → pursue, slowing to movement_modifier × movement_speed during the swing
+            // Navigation: hold inside the (smaller) desired range — held back from full
+            // attack reach so the entity doesn't bump into the target. Pursue otherwise,
+            // slowed to movement_modifier × movement_speed during a swing.
+            boolean atHoldRange = squaredDistanceTo(target) <= squaredHoldRange(target);
             double moveSpeed = (swingTick >= 0)
                     ? config.movement_speed * config.movement_modifier
                     : config.movement_speed;
             navUpdateCountdown--;
-            if (swingTick < 0 && inRange) {
+            if (atHoldRange) {
                 getNavigation().stop();
             } else if (moveSpeed > 0) {
                 if (navUpdateCountdown <= 0) {
