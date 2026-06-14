@@ -865,7 +865,12 @@ public abstract class SummonedEntity extends GolemEntity implements SpellSummone
             if (!isActive()) return false;                    // not in spawn/despawn phase
             var target = getTarget();
             if (target == null || !target.isAlive()) return false;
-            return !cooldownManager.isCoolingDown(entry);
+            if (cooldownManager.isCoolingDown(entry)) return false;
+            // Don't initiate when the target is outside the spell's range. Without this gate,
+            // a short-range spell (e.g. a nova) would take MOVE control whenever it came off
+            // cooldown and drag the entity into point blank, even though the higher-priority
+            // long-range spell was the right choice.
+            return squaredDistanceTo(target) <= (double) spell.range * spell.range;
         }
 
         @Override
@@ -911,13 +916,11 @@ public abstract class SummonedEntity extends GolemEntity implements SpellSummone
             if (entry == null) return;
             var spell = entry.value();
 
-            // Desired range based on target movement direction
-            Vec3d toTarget = target.getPos().subtract(SummonedEntity.this.getPos()).normalize();
-            double dot = target.getVelocity().dotProduct(toTarget);
-            // dot > 0  → target fleeing    → close in (50% range)
-            // dot < 0  → target approaching → hold back (90% range)
-            float rangeFraction = (dot > 0.01) ? 0.5f : (dot < -0.01) ? 0.9f : 0.7f;
-            float desiredRange = spell.range * rangeFraction;
+            // Optimal cast distance: 75% of the spell's range. The navigation block below
+            // closes in until the entity is inside this range, then stops. No retreat — if
+            // the target steps closer than this, the entity holds position and casts from
+            // wherever it is.
+            float desiredRange = spell.range * 0.75F;
             double desiredRangeSq = (double) desiredRange * desiredRange;
 
             // Line-of-sight tracking
