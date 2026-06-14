@@ -95,6 +95,7 @@ public class WizardEntities {
                 attack.radius = 1F;
                 attack.swing_sound  = WizardsSounds.FROST_ELEMENTAL_ATTACK.id().toString();
                 attack.impact_sound = WizardsSounds.FROST_ELEMENTAL_IMPACT.id().toString();
+                attack.windup = 0.4F;
                 attack.animation_variants = List.of(1, 2); // alternates between `attack` and `attack_2`
                 summonBehaviour.actions = List.of(
                     SummonBehaviour.Action.spell("wizards:frost_shard", 60),

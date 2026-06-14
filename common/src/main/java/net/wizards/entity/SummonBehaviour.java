@@ -245,6 +245,8 @@ public class SummonBehaviour {
             /// Pool of release-animation variant numbers to choose from when the spell fires.
             /// Independently rolled from `cast_animation_variants`.
             public List<Integer> release_animation_variants = List.of(1);
+            /// Ticks the release animation plays for. Drives client-side auto-stop.
+            public int release_animation_duration = 15;
 
             public SpellCast() {}
 

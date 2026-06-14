@@ -93,11 +93,13 @@ public abstract class SummonedEntity extends GolemEntity implements SpellSummone
     private static int animDuration(long v) { return (int) ((v >>> 8)  & 0xFFFF); }
     private static int animStartAge(long v) { return (int)  (v >>> 24); }
 
+    // Sentinel duration meaning "runs until an explicit stop is sent" (e.g., a spell cast,
+    // whose duration isn't known up front). Max value of the 16-bit duration field.
+    private static final int DURATION_ENDLESS = 0xFFFF;
+
     private static final byte PHASE_SPAWNING   = 0;
     private static final byte PHASE_ACTIVE     = 1;
     private static final byte PHASE_DESPAWNING = 2;
-
-    protected static final int SPELL_RELEASE_DURATION_TICKS = 26;
 
     private int timeToLive = 0;
     private int spawnEndAge = 0;
@@ -522,29 +524,30 @@ public abstract class SummonedEntity extends GolemEntity implements SpellSummone
             state.stop();
             return;
         }
+        if (duration == DURATION_ENDLESS) return; // runs until an explicit stop arrives
         int startAge = animStartAge(d);
         if (age - startAge >= duration) state.stop();
     }
 
     /**
-     * Called when a spell cast begins. `durationTicks` is the expected cast length; the
-     * client auto-stops the cast animation when it elapses. Use `onSpellCastEnded()` if the
-     * cast is canceled or released earlier.
+     * Called when a spell cast begins. The cast animation runs until `onSpellCastEnded()`
+     * is invoked (no time-based auto-stop) — cast length isn't always known when the cast
+     * starts, and short, premature stops felt choppy.
      */
-    protected void onSpellCastStarted(int variant, int durationTicks) {
-        getDataTracker().set(SPELL_CAST_ANIMATION, packAnim(variant, durationTicks, age));
+    protected void onSpellCastStarted(int variant) {
+        getDataTracker().set(SPELL_CAST_ANIMATION, packAnim(variant, DURATION_ENDLESS, age));
     }
 
-    /** Stops the cast animation early (e.g., on cancel or release). */
+    /** Stops the cast animation (e.g., on cancel or release). */
     protected void onSpellCastEnded() {
         // duration=0 = inactive; age in the payload guarantees a dirty write so the client
         // gets the stop transition even when the previous value was already "stopped".
         getDataTracker().set(SPELL_CAST_ANIMATION, packAnim(0, 0, age));
     }
 
-    /** Called when a spell is released. */
-    protected void onSpellReleased(int variant) {
-        getDataTracker().set(SPELL_RELEASE_ANIMATION, packAnim(variant, SPELL_RELEASE_DURATION_TICKS, age));
+    /** Called when a spell is released. Animation plays for `durationTicks`. */
+    protected void onSpellReleased(int variant, int durationTicks) {
+        getDataTracker().set(SPELL_RELEASE_ANIMATION, packAnim(variant, durationTicks, age));
     }
 
     /** Called when a melee swing begins. The animation plays for `durationTicks`. */
@@ -569,6 +572,12 @@ public abstract class SummonedEntity extends GolemEntity implements SpellSummone
      */
     public float getAttackAnimationSpeed(float animationLengthTicks) {
         int duration = animDuration(getDataTracker().get(ATTACK_ANIMATION));
+        return duration > 0 ? animationLengthTicks / duration : 1F;
+    }
+
+    /** Same as `getAttackAnimationSpeed` but for the spell-release animation. */
+    public float getSpellReleaseAnimationSpeed(float animationLengthTicks) {
+        int duration = animDuration(getDataTracker().get(SPELL_RELEASE_ANIMATION));
         return duration > 0 ? animationLengthTicks / duration : 1F;
     }
 
@@ -872,7 +881,7 @@ public abstract class SummonedEntity extends GolemEntity implements SpellSummone
                         : SpellHelper.getCastTimeDetails(SummonedEntity.this, spell).length();
                 if (castDuration <= 0) castDuration = 1;
             }
-            onSpellCastStarted(pickVariant(config.cast_animation_variants), castDuration);
+            onSpellCastStarted(pickVariant(config.cast_animation_variants));
             setAttacking(true);
         }
 
@@ -968,7 +977,7 @@ public abstract class SummonedEntity extends GolemEntity implements SpellSummone
             setPitch(releasePitch);
             SpellHelper.targetAndPerformSpell(getWorld(), SummonedEntity.this, entry);
             onSpellCastEnded();
-            onSpellReleased(pickVariant(config.release_animation_variants));
+            onSpellReleased(pickVariant(config.release_animation_variants), config.release_animation_duration);
 
             // Cooldown: use spell's own duration if set, else fall back to config override (ticks)
             int cooldownTicks;
