@@ -109,8 +109,15 @@ public class SummonBehaviour {
     public static class Targeting {
         public boolean revenge = true;
         public boolean attack_with_owner = true;
-        public boolean automatic_targeting = false;
+        /// What kind of target the entity auto-acquires when nothing else is set.
+        ///   NONE     — no auto-targeting; relies on revenge / attack_with_owner only
+        ///   HOSTILE  — acquires nearby hostile mobs (attacker pets)
+        ///   FRIENDLY — acquires nearby wounded allies, including the owner (healer pets)
+        ///   BOTH     — installs both goals; friendly takes priority (heal first, then fight)
+        public AutoTarget automatic_targeting = AutoTarget.NONE;
         public boolean look_around = true;
+
+        public enum AutoTarget { NONE, HOSTILE, FRIENDLY, BOTH }
     }
 
     // --- Spawn / Despawn ---

@@ -390,8 +390,16 @@ public abstract class SummonedEntity extends GolemEntity implements SpellSummone
         if (behaviour.targeting.revenge) {
             targetSelector.add(2, new RevengeGoal(this));
         }
-        if (behaviour.targeting.automatic_targeting) {
-            targetSelector.add(4, new ActiveTargetGoal<>(this, MobEntity.class, 10, true, false, this::shouldTarget));
+        // Friendly goal added first (lower priority number) so wounded-ally healing takes
+        // precedence over hostile acquisition when BOTH is configured.
+        switch (behaviour.targeting.automatic_targeting) {
+            case FRIENDLY -> targetSelector.add(4, new ActiveTargetGoal<>(this, LivingEntity.class, 10, true, false, this::shouldHealTarget));
+            case HOSTILE  -> targetSelector.add(4, new ActiveTargetGoal<>(this, MobEntity.class,    10, true, false, this::shouldTarget));
+            case BOTH     -> {
+                targetSelector.add(4, new ActiveTargetGoal<>(this, LivingEntity.class, 10, true, false, this::shouldHealTarget));
+                targetSelector.add(5, new ActiveTargetGoal<>(this, MobEntity.class,    10, true, false, this::shouldTarget));
+            }
+            case NONE     -> { /* no auto-acquisition */ }
         }
     }
 
@@ -401,6 +409,18 @@ public abstract class SummonedEntity extends GolemEntity implements SpellSummone
         if (candidate == owner) return false;
         if (candidate instanceof Tameable t && owner.getUuid().equals(t.getOwnerUuid())) return false;
         return EntityRelations.getRelation(owner, candidate) == EntityRelation.HOSTILE;
+    }
+
+    private boolean shouldHealTarget(LivingEntity candidate) {
+        LivingEntity owner = getOwner();
+        if (owner == null) return false;
+        if (candidate == this) return false;
+        // Only wounded entities are heal targets — otherwise the goal would lock onto
+        // a full-health ally and the heal action would burn cooldowns on no-ops.
+        if (candidate.getHealth() >= candidate.getMaxHealth()) return false;
+        if (candidate == owner) return true;
+        if (candidate instanceof Tameable t && owner.getUuid().equals(t.getOwnerUuid())) return true;
+        return EntityRelations.getRelation(owner, candidate) == EntityRelation.FRIENDLY;
     }
 
     public boolean canAttackTarget(@Nullable LivingEntity target, LivingEntity owner) {

@@ -86,7 +86,7 @@ public class WizardEntities {
                 // Targeting: mirror owner's attacks and retaliate, but don't auto-aggro
                 summonBehaviour.targeting.attack_with_owner = true;
                 summonBehaviour.targeting.revenge = true;
-                summonBehaviour.targeting.automatic_targeting = true;
+                summonBehaviour.targeting.automatic_targeting = SummonBehaviour.Targeting.AutoTarget.HOSTILE;
 
                 // Actions: frost shard spell (preferred), melee as fallback
                 var attack = new SummonBehaviour.Action.MeleeAttack();
@@ -183,7 +183,7 @@ public class WizardEntities {
                 // Targeting: mirror owner's attacks and retaliate, but don't auto-aggro
                 summonBehaviour.targeting.attack_with_owner = true;
                 summonBehaviour.targeting.revenge = true;
-                summonBehaviour.targeting.automatic_targeting = true;
+                summonBehaviour.targeting.automatic_targeting = SummonBehaviour.Targeting.AutoTarget.HOSTILE;
                 summonBehaviour.targeting.look_around = false;
 
                 // Actions: arcane bolt only
