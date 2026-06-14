@@ -392,7 +392,7 @@ public abstract class SummonedEntity extends GolemEntity implements SpellSummone
             if (movement.follow != null) {
                 goalSelector.add(priority++, new FollowSummonerGoal());
             }
-            goalSelector.add(priority++, new WanderAroundFarGoal(this, movement.wander.speed, movement.wander.probability));
+            goalSelector.add(priority++, new WanderWhenIdleGoal(movement.wander.speed, movement.wander.probability));
         }
         if (behaviour.targeting.look_around) {
             goalSelector.add(priority++, new LookAtEntityGoal(this, PlayerEntity.class, 8.0F));
@@ -406,7 +406,7 @@ public abstract class SummonedEntity extends GolemEntity implements SpellSummone
             targetSelector.add(3, new MirrorOwnerAttackGoal());
         }
         if (behaviour.targeting.revenge) {
-            targetSelector.add(2, new RevengeGoal(this));
+            targetSelector.add(2, new ClosestAttackerRevengeGoal());
         }
         // Friendly goal added first (lower priority number) so wounded-ally healing takes
         // precedence over hostile acquisition when BOTH is configured.
@@ -445,6 +445,14 @@ public abstract class SummonedEntity extends GolemEntity implements SpellSummone
         if (target == null) return false;
         EntityRelation relation = EntityRelations.getRelation(owner, target);
         return relation == EntityRelation.HOSTILE || relation == EntityRelation.NEUTRAL;
+    }
+
+    /// True if the entity currently has a live target. Used by passive navigation goals
+    /// (wander, follow-summoner) to defer to combat behaviour the moment a target is
+    /// acquired by any route — revenge, defend-owner, mirror-owner, or auto-aggro.
+    private boolean hasLiveTarget() {
+        LivingEntity target = getTarget();
+        return target != null && target.isAlive();
     }
 
     @Override
@@ -716,6 +724,44 @@ public abstract class SummonedEntity extends GolemEntity implements SpellSummone
         }
     }
 
+    // Revenge that prefers the nearer threat. Unlike vanilla RevengeGoal — which always
+    // switches to whoever landed the last hit — this only retargets when the new attacker
+    // is closer than the current target, so the summon stays focused on whatever enemy is
+    // in its face rather than chasing a distant sniper just because it scored a hit.
+    private class ClosestAttackerRevengeGoal extends TrackTargetGoal {
+        private int lastAttackedTime;
+
+        public ClosestAttackerRevengeGoal() {
+            super(SummonedEntity.this, true);
+            setControls(EnumSet.of(Control.TARGET));
+        }
+
+        @Override
+        public boolean canStart() {
+            int time = getLastAttackedTime();
+            if (time == lastAttackedTime) return false;
+            LivingEntity attacker = getAttacker();
+            if (attacker == null) return false;
+            if (!canTrack(attacker, TargetPredicate.DEFAULT)) return false;
+            LivingEntity currentTarget = getTarget();
+            if (currentTarget != null && currentTarget.isAlive()
+                    && squaredDistanceTo(attacker) >= squaredDistanceTo(currentTarget)) {
+                // Attacker isn't closer — consume the hit so canStart doesn't re-fire on
+                // every subsequent tick until the next attack lands.
+                lastAttackedTime = time;
+                return false;
+            }
+            return true;
+        }
+
+        @Override
+        public void start() {
+            setTarget(getAttacker());
+            lastAttackedTime = getLastAttackedTime();
+            super.start();
+        }
+    }
+
     private class FollowSummonerGoal extends Goal {
         // Last horizontal velocity of the owner that was significant enough to determine orientation.
         // Null until the owner is seen moving; falls back to north when still null.
@@ -731,6 +777,7 @@ public abstract class SummonedEntity extends GolemEntity implements SpellSummone
 
         @Override
         public boolean canStart() {
+            if (hasLiveTarget()) return false;
             LivingEntity owner = getOwner();
             if (owner == null) return false;
             float start = follow().start_distance;
@@ -739,6 +786,7 @@ public abstract class SummonedEntity extends GolemEntity implements SpellSummone
 
         @Override
         public boolean shouldContinue() {
+            if (hasLiveTarget()) return false;
             LivingEntity owner = getOwner();
             if (owner == null) return false;
             float stop = follow().stop_distance;
@@ -780,6 +828,26 @@ public abstract class SummonedEntity extends GolemEntity implements SpellSummone
             // Right = forward rotated 90° clockwise (viewed from above) in Minecraft's coordinate system
             Vec3d right = new Vec3d(-forward.z, 0, forward.x);
             return owner.getPos().add(right.multiply(2.0));
+        }
+    }
+
+    // Vanilla wander, gated on target presence: the summon stops drifting the moment a
+    // target is acquired by any route, and won't restart wandering until the target is gone.
+    private class WanderWhenIdleGoal extends WanderAroundFarGoal {
+        public WanderWhenIdleGoal(double speed, float probability) {
+            super(SummonedEntity.this, speed, probability);
+        }
+
+        @Override
+        public boolean canStart() {
+            if (hasLiveTarget()) return false;
+            return super.canStart();
+        }
+
+        @Override
+        public boolean shouldContinue() {
+            if (hasLiveTarget()) return false;
+            return super.shouldContinue();
         }
     }
 
@@ -837,6 +905,11 @@ public abstract class SummonedEntity extends GolemEntity implements SpellSummone
         private int castDuration = 1;
         private boolean released = false;
         private int targetSeeingTicker = 0;
+        // Captured at the moment castTick transitions 0 → 1 (the cast actually begins).
+        // Once set, the goal ignores `getTarget()` and reads target state from this field —
+        // so a mid-cast RevengeGoal retarget (from being hit by a different mob) can't make
+        // the spell fly off at the new attacker. Cleared in start()/stop().
+        @Nullable private LivingEntity lockedTarget = null;
 
         public SpellCastGoal(SummonBehaviour.Action.SpellCast config) {
             this.config = config;
@@ -878,6 +951,7 @@ public abstract class SummonedEntity extends GolemEntity implements SpellSummone
             castTick = 0;
             released = false;
             targetSeeingTicker = 0;
+            lockedTarget = null;
             var entry = spellEntry; // already resolved by canStart()
             if (entry != null) {
                 var spell = entry.value();
@@ -894,7 +968,7 @@ public abstract class SummonedEntity extends GolemEntity implements SpellSummone
         public boolean shouldContinue() {
             if (released) return false;
             if (!isActive()) return false;
-            var target = getTarget();
+            var target = lockedTarget != null ? lockedTarget : getTarget();
             return target != null && target.isAlive();
         }
 
@@ -902,6 +976,7 @@ public abstract class SummonedEntity extends GolemEntity implements SpellSummone
         public void stop() {
             setAttacking(false);
             getNavigation().stop();
+            lockedTarget = null;
             // Covers both the natural-end path (release ran, goal then stopped next tick)
             // and early cancellation (target lost mid-cast, etc.). Idempotent.
             onSpellCastEnded();
@@ -910,7 +985,10 @@ public abstract class SummonedEntity extends GolemEntity implements SpellSummone
         @Override
         public void tick() {
             if (released) return;
-            var target = getTarget();
+            // Once the cast has actually begun (castTick > 0) we read the captured target
+            // and ignore the mob's live `getTarget()` so a hit-triggered retarget can't
+            // redirect the spell at a different enemy mid-cast.
+            var target = lockedTarget != null ? lockedTarget : getTarget();
             if (target == null) return;
             var entry = spellEntry;
             if (entry == null) return;
@@ -957,9 +1035,12 @@ public abstract class SummonedEntity extends GolemEntity implements SpellSummone
                 isFacing = lookDir.dotProduct(toTargetEye) > 0.95; // ~18° threshold
             }
 
-            // Cast progress — only while in range, target visible, and facing the target
+            // Cast progress — only while in range, target visible, and facing the target.
+            // The 0 → 1 transition is when the cast "actually starts"; latch the target so
+            // it can't be swapped out by RevengeGoal for the remainder of the cast.
             if (distSq <= desiredRangeSq && targetSeeingTicker > 0 && isFacing) {
                 castTick++;
+                if (castTick == 1) lockedTarget = target;
             }
             if (castTick >= castDuration) {
                 releaseSpell(target, entry, spell);
