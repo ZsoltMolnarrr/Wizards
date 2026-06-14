@@ -194,14 +194,11 @@ public class DynamicMeleeAttackGoal extends Goal {
             }
             swingTick++;
             if (swingTick >= config.duration) {
-//                SummonedEntity.LOGGER.info("[WindupMelee] attack-end entity={} target={}",
-//                        summonedEntity.getId(), target.getId());
                 swingTick = -1;
-                // Force a NONE tick so the next swing's MELEE transition triggers a
-                // fresh AnimationState.start() on the client. Without this, back-to-back
-                // swings (interval <= duration) keep ANIMATION_ACTION at MELEE forever
-                // and only the first swing animates.
-                summonedEntity.getDataTracker().set(SummonedEntity.ANIMATION_ACTION, SummonedEntity.ACTION_NONE);
+                // No explicit ATTACK_ANIMATION stop needed: the client auto-stops the
+                // animation when `age - startAge >= duration`. Every new swing carries a
+                // fresh monotonic startAge in the packed tracker, so back-to-back swings
+                // always re-sync even if variant and duration repeat.
             }
         }
     }

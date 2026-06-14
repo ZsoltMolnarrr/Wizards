@@ -62,28 +62,40 @@ public abstract class SummonedEntity extends GolemEntity implements SpellSummone
             DataTracker.registerData(SummonedEntity.class, TrackedDataHandlerRegistry.FLOAT);
     public static final TrackedData<Integer> END_OF_PHASE_AGE =
             DataTracker.registerData(SummonedEntity.class, TrackedDataHandlerRegistry.INTEGER);
-    public static final TrackedData<Byte> ANIMATION_ACTION =
-            DataTracker.registerData(SummonedEntity.class, TrackedDataHandlerRegistry.BYTE);
-    public static final TrackedData<Integer> ATTACK_DURATION =
-            DataTracker.registerData(SummonedEntity.class, TrackedDataHandlerRegistry.INTEGER);
-    // Variant tracker per animation action. The server picks a number from the configured pool
-    // when starting the animation; the client model reads the matching variant to pick which
-    // keyframe animation to play. Byte = unsigned 0..255 (sufficient — variants are tiny ints).
-    public static final TrackedData<Byte> ATTACK_VARIANT =
-            DataTracker.registerData(SummonedEntity.class, TrackedDataHandlerRegistry.BYTE);
-    public static final TrackedData<Byte> SPELL_CAST_VARIANT =
-            DataTracker.registerData(SummonedEntity.class, TrackedDataHandlerRegistry.BYTE);
-    public static final TrackedData<Byte> SPELL_RELEASE_VARIANT =
-            DataTracker.registerData(SummonedEntity.class, TrackedDataHandlerRegistry.BYTE);
+    // One packed tracker per action type — kept separate so a spell cast and a melee swing
+    // can animate in parallel without one stomping the other's state.
+    //
+    // Packed layout (same for all three):
+    //   bits  0..7   variant   (0..255)
+    //   bits  8..23  duration  (ticks; 0 = inactive)
+    //   bits 24..55  startAge  (entity age when the action began)
+    //
+    // Why packed (instead of three primitive trackers per descriptor): DataTracker.set()
+    // silently drops no-op writes (value equals current → not dirty → not synced → client
+    // onTrackedDataSet never fires). When swings chain (target dies mid-swing, new target
+    // acquired the same tick), a plain action/duration tracker could re-set to the same
+    // value and skip the packet, leaving the animation desynced. Including the monotonic
+    // startAge in the same long guarantees every action start changes the value, forcing
+    // a sync.
+    public static final TrackedData<Long> ATTACK_ANIMATION =
+            DataTracker.registerData(SummonedEntity.class, TrackedDataHandlerRegistry.LONG);
+    public static final TrackedData<Long> SPELL_CAST_ANIMATION =
+            DataTracker.registerData(SummonedEntity.class, TrackedDataHandlerRegistry.LONG);
+    public static final TrackedData<Long> SPELL_RELEASE_ANIMATION =
+            DataTracker.registerData(SummonedEntity.class, TrackedDataHandlerRegistry.LONG);
+
+    private static long packAnim(int variant, int duration, int startAge) {
+        return ((long)(variant  & 0xFF))
+             | (((long)(duration & 0xFFFF)) << 8)
+             | ((((long) startAge) & 0xFFFFFFFFL) << 24);
+    }
+    private static int animVariant(long v)  { return (int)  (v        & 0xFF); }
+    private static int animDuration(long v) { return (int) ((v >>> 8)  & 0xFFFF); }
+    private static int animStartAge(long v) { return (int)  (v >>> 24); }
 
     private static final byte PHASE_SPAWNING   = 0;
     private static final byte PHASE_ACTIVE     = 1;
     private static final byte PHASE_DESPAWNING = 2;
-
-    protected static final byte ACTION_NONE          = 0;
-    protected static final byte ACTION_MELEE         = 1;
-    protected static final byte ACTION_SPELL_CAST    = 2;
-    protected static final byte ACTION_SPELL_RELEASE = 3;
 
     protected static final int SPELL_RELEASE_DURATION_TICKS = 26;
 
@@ -252,16 +264,20 @@ public abstract class SummonedEntity extends GolemEntity implements SpellSummone
                 ((TwoWayCollisionChecker) this).setReverseCollisionChecker(null);
             }
         }
-        if (data.equals(ANIMATION_ACTION)) {
-            byte action = getDataTracker().get(ANIMATION_ACTION);
-            attackAnimationState.stop();
-            spellCastAnimationState.stop();
-            spellReleaseAnimationState.stop();
-            switch (action) {
-                case ACTION_MELEE         -> attackAnimationState.start(age);
-                case ACTION_SPELL_CAST    -> spellCastAnimationState.start(age);
-                case ACTION_SPELL_RELEASE -> spellReleaseAnimationState.start(age);
-            }
+        if (data.equals(ATTACK_ANIMATION)) {
+            syncActionAnimationState(attackAnimationState, ATTACK_ANIMATION);
+        } else if (data.equals(SPELL_CAST_ANIMATION)) {
+            syncActionAnimationState(spellCastAnimationState, SPELL_CAST_ANIMATION);
+        } else if (data.equals(SPELL_RELEASE_ANIMATION)) {
+            syncActionAnimationState(spellReleaseAnimationState, SPELL_RELEASE_ANIMATION);
+        }
+    }
+
+    private void syncActionAnimationState(AnimationState state, TrackedData<Long> descriptor) {
+        if (animDuration(getDataTracker().get(descriptor)) > 0) {
+            state.start(age);
+        } else {
+            state.stop();
         }
     }
 
@@ -442,11 +458,11 @@ public abstract class SummonedEntity extends GolemEntity implements SpellSummone
         builder.add(BOUNDING_BOX_WIDTH,  0F);
         builder.add(BOUNDING_BOX_HEIGHT, 0F);
         builder.add(END_OF_PHASE_AGE, 0);
-        builder.add(ANIMATION_ACTION, ACTION_NONE);
-        builder.add(ATTACK_DURATION, 10);
-        builder.add(ATTACK_VARIANT, (byte) 1);
-        builder.add(SPELL_CAST_VARIANT, (byte) 1);
-        builder.add(SPELL_RELEASE_VARIANT, (byte) 1);
+        // duration = 0 → all action animations start inactive.
+        long inactive = packAnim(0, 0, 0);
+        builder.add(ATTACK_ANIMATION, inactive);
+        builder.add(SPELL_CAST_ANIMATION, inactive);
+        builder.add(SPELL_RELEASE_ANIMATION, inactive);
     }
 
     public void setOwnerUuid(@Nullable UUID uuid) {
@@ -477,8 +493,6 @@ public abstract class SummonedEntity extends GolemEntity implements SpellSummone
     public final AnimationState spellCastAnimationState    = new AnimationState();
     public final AnimationState spellReleaseAnimationState = new AnimationState();
 
-    private int actionEndAge;
-
     /** Called each client tick. Default drives the five standard states from lifecycle phase. */
     protected void setupAnimationStates() {
         spawnAnimationState.setRunning(isSpawning(), this.age);
@@ -493,32 +507,54 @@ public abstract class SummonedEntity extends GolemEntity implements SpellSummone
         }
         idleAnimationState.setRunning(isActive(), this.age);
         moveAnimationState.setRunning(isActive() && this.getVelocity().horizontalLength() > 0.01, this.age);
+
+        // Auto-stop fixed-duration action animations once their duration has elapsed.
+        autoStopActionAnimation(attackAnimationState,       ATTACK_ANIMATION);
+        autoStopActionAnimation(spellCastAnimationState,    SPELL_CAST_ANIMATION);
+        autoStopActionAnimation(spellReleaseAnimationState, SPELL_RELEASE_ANIMATION);
     }
 
-    /** Called when a spell cast begins. */
-    protected void onSpellCastStarted(int variant) {
-        getDataTracker().set(SPELL_CAST_VARIANT, (byte) variant);
-        getDataTracker().set(ANIMATION_ACTION, ACTION_SPELL_CAST);
+    private void autoStopActionAnimation(AnimationState state, TrackedData<Long> descriptor) {
+        if (!state.isRunning()) return;
+        long d = getDataTracker().get(descriptor);
+        int duration = animDuration(d);
+        if (duration <= 0) {
+            state.stop();
+            return;
+        }
+        int startAge = animStartAge(d);
+        if (age - startAge >= duration) state.stop();
+    }
+
+    /**
+     * Called when a spell cast begins. `durationTicks` is the expected cast length; the
+     * client auto-stops the cast animation when it elapses. Use `onSpellCastEnded()` if the
+     * cast is canceled or released earlier.
+     */
+    protected void onSpellCastStarted(int variant, int durationTicks) {
+        getDataTracker().set(SPELL_CAST_ANIMATION, packAnim(variant, durationTicks, age));
+    }
+
+    /** Stops the cast animation early (e.g., on cancel or release). */
+    protected void onSpellCastEnded() {
+        // duration=0 = inactive; age in the payload guarantees a dirty write so the client
+        // gets the stop transition even when the previous value was already "stopped".
+        getDataTracker().set(SPELL_CAST_ANIMATION, packAnim(0, 0, age));
     }
 
     /** Called when a spell is released. */
     protected void onSpellReleased(int variant) {
-        getDataTracker().set(SPELL_RELEASE_VARIANT, (byte) variant);
-        getDataTracker().set(ANIMATION_ACTION, ACTION_SPELL_RELEASE);
-        actionEndAge = age + SPELL_RELEASE_DURATION_TICKS;
+        getDataTracker().set(SPELL_RELEASE_ANIMATION, packAnim(variant, SPELL_RELEASE_DURATION_TICKS, age));
     }
 
     /** Called when a melee swing begins. The animation plays for `durationTicks`. */
     protected void onAttackAnimated(int durationTicks, int variant) {
-        getDataTracker().set(ATTACK_DURATION, durationTicks);
-        getDataTracker().set(ATTACK_VARIANT, (byte) variant);
-        getDataTracker().set(ANIMATION_ACTION, ACTION_MELEE);
-        actionEndAge = age + durationTicks;
+        getDataTracker().set(ATTACK_ANIMATION, packAnim(variant, durationTicks, age));
     }
 
-    public int getAttackVariant()        { return getDataTracker().get(ATTACK_VARIANT)        & 0xFF; }
-    public int getSpellCastVariant()     { return getDataTracker().get(SPELL_CAST_VARIANT)    & 0xFF; }
-    public int getSpellReleaseVariant()  { return getDataTracker().get(SPELL_RELEASE_VARIANT) & 0xFF; }
+    public int getAttackVariant()        { return animVariant(getDataTracker().get(ATTACK_ANIMATION)); }
+    public int getSpellCastVariant()     { return animVariant(getDataTracker().get(SPELL_CAST_ANIMATION)); }
+    public int getSpellReleaseVariant()  { return animVariant(getDataTracker().get(SPELL_RELEASE_ANIMATION)); }
 
     // Empty/null pool → variant 1 (the always-present default).
     public int pickVariant(@Nullable List<Integer> pool) {
@@ -532,7 +568,7 @@ public abstract class SummonedEntity extends GolemEntity implements SpellSummone
      * current swing's configured duration.
      */
     public float getAttackAnimationSpeed(float animationLengthTicks) {
-        int duration = getDataTracker().get(ATTACK_DURATION);
+        int duration = animDuration(getDataTracker().get(ATTACK_ANIMATION));
         return duration > 0 ? animationLengthTicks / duration : 1F;
     }
 
@@ -562,12 +598,11 @@ public abstract class SummonedEntity extends GolemEntity implements SpellSummone
             } else {
                 setPhase(PHASE_ACTIVE);
             }
-            byte action = getDataTracker().get(ANIMATION_ACTION);
-            if ((action == ACTION_MELEE || action == ACTION_SPELL_RELEASE) && age >= actionEndAge) {
-                getDataTracker().set(ANIMATION_ACTION, ACTION_NONE);
-            } else if (action == ACTION_SPELL_CAST && !isAttacking()) {
-                getDataTracker().set(ANIMATION_ACTION, ACTION_NONE);
-            }
+            // Action animations are self-terminating now:
+            //   - ATTACK_ANIMATION / SPELL_RELEASE_ANIMATION carry a fixed duration; the
+            //     client stops their AnimationState once `age - startAge >= duration`.
+            //   - SPELL_CAST_ANIMATION is ended explicitly by SpellCastGoal via
+            //     onSpellCastEnded() on release or cancellation.
         }
     }
 
@@ -837,7 +872,7 @@ public abstract class SummonedEntity extends GolemEntity implements SpellSummone
                         : SpellHelper.getCastTimeDetails(SummonedEntity.this, spell).length();
                 if (castDuration <= 0) castDuration = 1;
             }
-            onSpellCastStarted(pickVariant(config.cast_animation_variants));
+            onSpellCastStarted(pickVariant(config.cast_animation_variants), castDuration);
             setAttacking(true);
         }
 
@@ -853,6 +888,9 @@ public abstract class SummonedEntity extends GolemEntity implements SpellSummone
         public void stop() {
             setAttacking(false);
             getNavigation().stop();
+            // Covers both the natural-end path (release ran, goal then stopped next tick)
+            // and early cancellation (target lost mid-cast, etc.). Idempotent.
+            onSpellCastEnded();
         }
 
         @Override
@@ -929,6 +967,7 @@ public abstract class SummonedEntity extends GolemEntity implements SpellSummone
             setBodyYaw(releaseYaw);
             setPitch(releasePitch);
             SpellHelper.targetAndPerformSpell(getWorld(), SummonedEntity.this, entry);
+            onSpellCastEnded();
             onSpellReleased(pickVariant(config.release_animation_variants));
 
             // Cooldown: use spell's own duration if set, else fall back to config override (ticks)
