@@ -89,9 +89,15 @@ public abstract class SummonedEntity extends GolemEntity implements SpellSummone
 
     @Override
     public EntityDimensions getBaseDimensions(EntityPose pose) {
-        return EntityDimensions.fixed(
-                getDataTracker().get(BOUNDING_BOX_WIDTH),
-                getDataTracker().get(BOUNDING_BOX_HEIGHT));
+        float w = getDataTracker().get(BOUNDING_BOX_WIDTH);
+        float h = getDataTracker().get(BOUNDING_BOX_HEIGHT);
+        // 0 (or anything <= 0) = "no override is configured" — defer to vanilla, which
+        // returns type.getDimensions().scaled(getScaleFactor()) (handles baby scale etc.).
+        if (w <= 0 || h <= 0) return super.getBaseDimensions(pose);
+        // `changing` (fixed=false) is required: `EntityDimensions.scaled()` short-circuits
+        // and returns `this` unchanged when `fixed=true`, which would silently swallow the
+        // GENERIC_SCALE attribute multiplier vanilla applies in LivingEntity.getDimensions.
+        return EntityDimensions.changing(w, h);
     }
 
     @Override
@@ -296,8 +302,12 @@ public abstract class SummonedEntity extends GolemEntity implements SpellSummone
             this.applyAttributeScaling(owner);
         }
         getDataTracker().set(COLLISION_MODE, (byte) behaviour.movement.collision.ordinal());
-        getDataTracker().set(BOUNDING_BOX_WIDTH,  behaviour.dimensions.width);
-        getDataTracker().set(BOUNDING_BOX_HEIGHT, behaviour.dimensions.height);
+        // Dimensions are EntityType-seeded in initDataTracker. Only override when the
+        // behaviour explicitly carries a non-null Dimensions block.
+        if (behaviour.dimensions != null) {
+            getDataTracker().set(BOUNDING_BOX_WIDTH,  behaviour.dimensions.width);
+            getDataTracker().set(BOUNDING_BOX_HEIGHT, behaviour.dimensions.height);
+        }
         calculateDimensions();
         if (!behaviour.movement.affected_by_gravity) {
             this.setNoGravity(true);
@@ -396,8 +406,12 @@ public abstract class SummonedEntity extends GolemEntity implements SpellSummone
         builder.add(OWNER_UUID, Optional.empty());
         builder.add(PHASE, PHASE_SPAWNING);
         builder.add(COLLISION_MODE, (byte) SummonBehaviour.Movement.CollisionMode.ALL.ordinal());
-        builder.add(BOUNDING_BOX_WIDTH,  new SummonBehaviour.Dimensions().width);
-        builder.add(BOUNDING_BOX_HEIGHT, new SummonBehaviour.Dimensions().height);
+        // 0 = sentinel for "no override". When the behaviour later sets a non-null
+        // Dimensions, setBehaviour replaces these with the override values and
+        // getBaseDimensions starts returning them; otherwise it falls through to
+        // super.getBaseDimensions (the EntityType-declared size).
+        builder.add(BOUNDING_BOX_WIDTH,  0F);
+        builder.add(BOUNDING_BOX_HEIGHT, 0F);
         builder.add(END_OF_PHASE_AGE, 0);
         builder.add(ANIMATION_ACTION, ACTION_NONE);
         builder.add(ATTACK_DURATION, 10);

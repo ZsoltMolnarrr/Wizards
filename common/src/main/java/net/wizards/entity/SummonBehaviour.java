@@ -61,7 +61,11 @@ public class SummonBehaviour {
 
     // --- Dimensions ---
 
-    public Dimensions dimensions = new Dimensions();
+    /// Optional override for the entity's bounding-box size. `null` (the default) means
+    /// "inherit from the EntityType" — i.e. use whatever value was passed to
+    /// `FabricEntityTypeBuilder.dimensions(...)` at registration. Assign a non-null
+    /// `Dimensions` to override per-summon.
+    @Nullable public Dimensions dimensions = null;
     public static class Dimensions {
         public float width  = 0.6F;
         public float height = 1.8F;

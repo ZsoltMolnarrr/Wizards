@@ -63,7 +63,7 @@ public class WizardEntities {
                 Registries.ENTITY_TYPE,
                 ArcaneEmitterEntity.ID,
                 FabricEntityTypeBuilder.<ArcaneEmitterEntity>create(SpawnGroup.MISC, ArcaneEmitterEntity::new)
-                        .dimensions(EntityDimensions.fixed(0.6F, 1.8F))
+                        .dimensions(EntityDimensions.fixed(0.6F, 0.6F))
                         .trackRangeBlocks(64)
                         .trackedUpdateRate(3)
                         .build()
