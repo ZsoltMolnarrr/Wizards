@@ -729,8 +729,17 @@ public abstract class SummonedEntity extends GolemEntity implements SpellSummone
             double sq = squaredDistanceTo(target);
             double tolSq = toleranceMultiplier * toleranceMultiplier;
             if (sq > squaredAttackReach(target) * tolSq) return false;
-            if (config.max_range > 0 && sq > config.max_range * config.max_range * tolSq) return false;
+            if (config.max_range > 0) {
+                float r = effectiveMaxRange();
+                if (sq > r * r * tolSq) return false;
+            }
             return true;
+        }
+
+        // max_range expanded by the entity's scale. At default scale 1.0 and default
+        // attack_range_scaling 0.5, this is 1.5 × max_range.
+        private float effectiveMaxRange() {
+            return (float) (config.max_range * (1 + SummonedEntity.this.getScaleFactor() * config.attack_range_scaling));
         }
 
         // Cooldown between consecutive swings, in ticks (derived from attack speed alone).
@@ -761,8 +770,9 @@ public abstract class SummonedEntity extends GolemEntity implements SpellSummone
             LivingEntity target = getTarget();
             if (target == null || !target.isAlive()) return false;
             // If a max_range cap is set, don't engage targets outside it (no chase).
-            if (config.max_range > 0 && squaredDistanceTo(target) > config.max_range * config.max_range) {
-                return false;
+            if (config.max_range > 0) {
+                float r = effectiveMaxRange();
+                if (squaredDistanceTo(target) > r * r) return false;
             }
             return true;
         }
@@ -791,7 +801,12 @@ public abstract class SummonedEntity extends GolemEntity implements SpellSummone
         @Override
         public void tick() {
             LivingEntity target = getTarget();
-            if (target == null) return;
+            // If the target vanished mid-swing, abort the swing so shouldContinue() returns false
+            // next tick and MOVE/LOOK get released — otherwise FollowSummonerGoal can never start.
+            if (target == null || !target.isAlive()) {
+                swingTick = -1;
+                return;
+            }
             getLookControl().lookAt(target, 30F, 30F);
 
             boolean inRange = isTargetInRange(target);

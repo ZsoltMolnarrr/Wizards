@@ -184,6 +184,9 @@ public class SummonBehaviour {
         public static class MeleeAttack {
             /// If greater than 0, swing is only initiated while the target is within this range.
             public float max_range = 0;
+            /// Coefficient controlling how much the entity's scale extends `max_range`.
+            /// Effective max_range = `max_range * (1 + entityScale * attack_range_scaling)`.
+            public float attack_range_scaling = 0.5F;
             /// Attack speed, in attacks per second. The cooldown between swing starts is
             /// max(duration, 20 / speed) ticks.
             public float speed = 1.2F;
