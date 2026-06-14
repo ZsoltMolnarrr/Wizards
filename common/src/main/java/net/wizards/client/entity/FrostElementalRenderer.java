@@ -17,6 +17,7 @@ public class FrostElementalRenderer extends MobEntityRenderer<FrostElementalEnti
 
     public FrostElementalRenderer(EntityRendererFactory.Context context) {
         super(context, new FrostElementalModel(context.getPart(FrostElementalModel.TEXTURE)), 0.75f);
+        this.addFeature(new FrostElementalGlowFeatureRenderer(this));
     }
 
     @Override
