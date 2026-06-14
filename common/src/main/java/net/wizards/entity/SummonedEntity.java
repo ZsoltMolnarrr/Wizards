@@ -925,6 +925,23 @@ public abstract class SummonedEntity extends GolemEntity implements SpellSummone
             return spellEntry;
         }
 
+        // Resolved engagement distances. The `range.{min,max,preferred}` fields are
+        // FRACTIONS of the spell's effective range (i.e. `SpellHelper.getRange`, which
+        // applies caster-level modifiers like gear and attributes — not the raw
+        // `spell.range`), so they auto-scale per caster.
+        private float spellRange(RegistryEntry<Spell> entry) {
+            return SpellHelper.getRange(SummonedEntity.this, entry);
+        }
+        private float effectiveMin(RegistryEntry<Spell> entry) {
+            return config.range.min * spellRange(entry);
+        }
+        private float effectiveMax(RegistryEntry<Spell> entry) {
+            return config.range.max * spellRange(entry);
+        }
+        private float effectivePreferred(RegistryEntry<Spell> entry) {
+            return config.range.preferred * spellRange(entry);
+        }
+
         @Override
         public boolean shouldRunEveryTick() { return true; }
 
@@ -939,11 +956,16 @@ public abstract class SummonedEntity extends GolemEntity implements SpellSummone
             var target = getTarget();
             if (target == null || !target.isAlive()) return false;
             if (cooldownManager.isCoolingDown(entry)) return false;
-            // Don't initiate when the target is outside the spell's range. Without this gate,
-            // a short-range spell (e.g. a nova) would take MOVE control whenever it came off
-            // cooldown and drag the entity into point blank, even though the higher-priority
-            // long-range spell was the right choice.
-            return squaredDistanceTo(target) <= (double) spell.range * spell.range;
+            // Engagement band: skip when the target sits outside [min, max] × effective range.
+            // Defaults preserve the prior "engage anywhere inside spell range" behaviour
+            // (`min = 0`, `max = 1`). Configure these per spell to compose layered behaviour
+            // across multiple SpellCast actions.
+            double distSq = squaredDistanceTo(target);
+            float maxR = effectiveMax(entry);
+            if (distSq > (double) maxR * maxR) return false;
+            float minR = effectiveMin(entry);
+            if (minR > 0 && distSq < (double) minR * minR) return false;
+            return true;
         }
 
         @Override
@@ -969,7 +991,16 @@ public abstract class SummonedEntity extends GolemEntity implements SpellSummone
             if (released) return false;
             if (!isActive()) return false;
             var target = lockedTarget != null ? lockedTarget : getTarget();
-            return target != null && target.isAlive();
+            if (target == null || !target.isAlive()) return false;
+            // Enforce the upper engagement edge mid-cast too — otherwise a target that
+            // walks out of `max` would leave the goal running forever, stuck waiting for
+            // the cast counter to advance (it can't, because distSq > preferred). The
+            // lower edge is intentionally NOT enforced here: once committed to a cast, a
+            // target moving inside `min` should still get hit, not abort the goal.
+            var entry = spellEntry;
+            if (entry == null) return false;
+            float maxR = effectiveMax(entry);
+            return squaredDistanceTo(target) <= (double) maxR * maxR;
         }
 
         @Override
@@ -994,11 +1025,11 @@ public abstract class SummonedEntity extends GolemEntity implements SpellSummone
             if (entry == null) return;
             var spell = entry.value();
 
-            // Optimal cast distance: 75% of the spell's range. The navigation block below
-            // closes in until the entity is inside this range, then stops. No retreat — if
-            // the target steps closer than this, the entity holds position and casts from
-            // wherever it is.
-            float desiredRange = spell.range * 0.75F;
+            // Distance the entity navigates to (and inside which the cast counter advances).
+            // `config.range.preferred` × the spell's effective range; defaults to 0.75. The
+            // navigation block below closes in until inside this range, then stops. No
+            // retreat — if the target steps closer, the entity holds position and casts.
+            float desiredRange = effectivePreferred(entry);
             double desiredRangeSq = (double) desiredRange * desiredRange;
 
             // Line-of-sight tracking

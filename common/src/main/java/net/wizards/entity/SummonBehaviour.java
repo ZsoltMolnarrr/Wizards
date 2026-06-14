@@ -227,6 +227,12 @@ public class SummonBehaviour {
             public final transient Supplier<SoundEvent> impactEvent = Suppliers.memoize(() -> parseSoundId(impact_sound));
         }
 
+        public static Entry spell(SpellCast spell_cast) {
+            var e = new Entry();
+            e.type = Type.SPELL_CAST;
+            e.spell_cast = spell_cast;
+            return e;
+        }
         public static Entry spell(String spell_id, int cooldown) {
             var s = new SpellCast();
             s.spell_id = spell_id;
@@ -239,6 +245,9 @@ public class SummonBehaviour {
         public static class SpellCast {
             public String spell_id = "";
             public int cooldown = 20;
+            /// Target-distance band the goal engages in. All-zero defaults preserve the
+            /// original behaviour (`max = spell.range`, `min = 0`, `preferred = max × 0.75`).
+            public Range range = new Range();
             /// Pool of cast-animation variant numbers to choose from when a cast begins.
             /// See `MeleeAttack.animation_variants` for selection / fallback semantics.
             public List<Integer> cast_animation_variants = List.of(1);
@@ -253,6 +262,40 @@ public class SummonBehaviour {
             public SpellCast(String spell_id, int cooldown) {
                 this.spell_id = spell_id;
                 this.cooldown = cooldown;
+            }
+
+            /// Engagement-distance configuration for a SpellCast action.
+            ///
+            /// All fields are FRACTIONS of the spell's effective range — `SpellHelper.getRange(caster, spell)`,
+            /// which folds in caster-level modifiers (gear, attributes, etc.). For a spell whose
+            /// effective range works out to 16 blocks, `min = 0.5` means "minimum 8 blocks".
+            ///
+            /// The goal only starts (and only keeps running) when the target sits inside
+            /// `[min, max] × effectiveRange`. Once running, the entity navigates to
+            /// `preferred × effectiveRange` from the target, and the cast counter only
+            /// advances while inside that radius.
+            ///
+            /// Compose these knobs across multiple SpellCast actions to express layered
+            /// behaviour — e.g. a long-range spell with `min` set, plus a short-range
+            /// spell with `max > 1` (engage from beyond its own theoretical range), makes
+            /// the entity walk in from far to use the short-range option.
+            public static class Range {
+                /// Minimum engagement distance, as a fraction of effective range. Targets
+                /// closer than `min × effectiveRange` make `canStart` fail — useful for
+                /// handing close-range fights off to a shorter-range action lower in the
+                /// priority list. Default 0 = no minimum.
+                public float min = 0F;
+                /// Maximum engagement distance, as a fraction of effective range. Targets
+                /// farther than `max × effectiveRange` make `canStart` fail. Default 1 =
+                /// full effective range. Set above 1 to "walk in from far" — the goal
+                /// becomes eligible at a distance the spell can't yet reach, and the
+                /// navigation logic closes the gap to `preferred × effectiveRange` before
+                /// the cast counter starts advancing.
+                public float max = 1F;
+                /// Preferred standoff distance, as a fraction of effective range. The
+                /// entity navigates to `preferred × effectiveRange` blocks from the target,
+                /// and the cast counter only advances while inside that radius. Default 0.75.
+                public float preferred = 0.75F;
             }
         }
     }

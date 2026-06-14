@@ -96,6 +96,10 @@ public class WizardEntities {
                 attack.impact_sound = WizardsSounds.FROST_ELEMENTAL_IMPACT.id().toString();
                 attack.windup = 0.4F;
                 attack.animation_variants = List.of(1, 2); // alternates between `attack` and `attack_2`
+
+                var frostNova = new SummonBehaviour.Action.SpellCast();
+                frostNova.spell_id = "wizards:frost_nova";
+                frostNova.range.min = 1.5F;
                 summonBehaviour.actions = List.of(
                     SummonBehaviour.Action.spell("wizards:frost_shard", 60),
                     SummonBehaviour.Action.spell("wizards:frost_nova", 60),
