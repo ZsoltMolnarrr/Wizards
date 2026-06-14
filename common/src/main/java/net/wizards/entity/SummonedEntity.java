@@ -43,6 +43,7 @@ import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 
 import java.util.EnumSet;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -66,6 +67,15 @@ public abstract class SummonedEntity extends GolemEntity implements SpellSummone
             DataTracker.registerData(SummonedEntity.class, TrackedDataHandlerRegistry.BYTE);
     private static final TrackedData<Integer> ATTACK_DURATION =
             DataTracker.registerData(SummonedEntity.class, TrackedDataHandlerRegistry.INTEGER);
+    // Variant tracker per animation action. The server picks a number from the configured pool
+    // when starting the animation; the client model reads the matching variant to pick which
+    // keyframe animation to play. Byte = unsigned 0..255 (sufficient — variants are tiny ints).
+    private static final TrackedData<Byte> ATTACK_VARIANT =
+            DataTracker.registerData(SummonedEntity.class, TrackedDataHandlerRegistry.BYTE);
+    private static final TrackedData<Byte> SPELL_CAST_VARIANT =
+            DataTracker.registerData(SummonedEntity.class, TrackedDataHandlerRegistry.BYTE);
+    private static final TrackedData<Byte> SPELL_RELEASE_VARIANT =
+            DataTracker.registerData(SummonedEntity.class, TrackedDataHandlerRegistry.BYTE);
 
     private static final byte PHASE_SPAWNING   = 0;
     private static final byte PHASE_ACTIVE     = 1;
@@ -415,6 +425,9 @@ public abstract class SummonedEntity extends GolemEntity implements SpellSummone
         builder.add(END_OF_PHASE_AGE, 0);
         builder.add(ANIMATION_ACTION, ACTION_NONE);
         builder.add(ATTACK_DURATION, 10);
+        builder.add(ATTACK_VARIANT, (byte) 1);
+        builder.add(SPELL_CAST_VARIANT, (byte) 1);
+        builder.add(SPELL_RELEASE_VARIANT, (byte) 1);
     }
 
     public void setOwnerUuid(@Nullable UUID uuid) {
@@ -464,21 +477,34 @@ public abstract class SummonedEntity extends GolemEntity implements SpellSummone
     }
 
     /** Called when a spell cast begins. */
-    protected void onSpellCastStarted() {
+    protected void onSpellCastStarted(int variant) {
+        getDataTracker().set(SPELL_CAST_VARIANT, (byte) variant);
         getDataTracker().set(ANIMATION_ACTION, ACTION_SPELL_CAST);
     }
 
     /** Called when a spell is released. */
-    protected void onSpellReleased() {
+    protected void onSpellReleased(int variant) {
+        getDataTracker().set(SPELL_RELEASE_VARIANT, (byte) variant);
         getDataTracker().set(ANIMATION_ACTION, ACTION_SPELL_RELEASE);
         actionEndAge = age + SPELL_RELEASE_DURATION_TICKS;
     }
 
     /** Called when a melee swing begins. The animation plays for `durationTicks`. */
-    protected void onAttackAnimated(int durationTicks) {
+    protected void onAttackAnimated(int durationTicks, int variant) {
         getDataTracker().set(ATTACK_DURATION, durationTicks);
+        getDataTracker().set(ATTACK_VARIANT, (byte) variant);
         getDataTracker().set(ANIMATION_ACTION, ACTION_MELEE);
         actionEndAge = age + durationTicks;
+    }
+
+    public int getAttackVariant()        { return getDataTracker().get(ATTACK_VARIANT)        & 0xFF; }
+    public int getSpellCastVariant()     { return getDataTracker().get(SPELL_CAST_VARIANT)    & 0xFF; }
+    public int getSpellReleaseVariant()  { return getDataTracker().get(SPELL_RELEASE_VARIANT) & 0xFF; }
+
+    // Empty/null pool → variant 1 (the always-present default).
+    private int pickVariant(@Nullable List<Integer> pool) {
+        if (pool == null || pool.isEmpty()) return 1;
+        return pool.get(random.nextInt(pool.size()));
     }
 
     /**
@@ -817,7 +843,7 @@ public abstract class SummonedEntity extends GolemEntity implements SpellSummone
             if (swingTick < 0 && inRange && attackCooldownProgress() >= 1F) {
                 swingTick = 0;
                 SummonedEntity.this.onAttacking(target); // saves vanilla lastAttackTime = age
-                onAttackAnimated(config.duration);
+                onAttackAnimated(config.duration, pickVariant(config.animation_variants));
                 playConfiguredSound(config.swingEvent.get());
                 LOGGER.info("[WindupMelee] attack-start entity={} target={} duration={} windup={}->tick{} radius={} interval={}",
                         SummonedEntity.this.getId(), target.getId(),
@@ -988,7 +1014,7 @@ public abstract class SummonedEntity extends GolemEntity implements SpellSummone
                         : SpellHelper.getCastTimeDetails(SummonedEntity.this, spell).length();
                 if (castDuration <= 0) castDuration = 1;
             }
-            onSpellCastStarted();
+            onSpellCastStarted(pickVariant(config.cast_animation_variants));
             setAttacking(true);
         }
 
@@ -1080,7 +1106,7 @@ public abstract class SummonedEntity extends GolemEntity implements SpellSummone
             setBodyYaw(releaseYaw);
             setPitch(releasePitch);
             SpellHelper.targetAndPerformSpell(getWorld(), SummonedEntity.this, entry);
-            onSpellReleased();
+            onSpellReleased(pickVariant(config.release_animation_variants));
 
             // Cooldown: use spell's own duration if set, else fall back to config override (ticks)
             int cooldownTicks;

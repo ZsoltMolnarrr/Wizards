@@ -2,6 +2,7 @@ package net.wizards.client.entity;
 
 import net.minecraft.client.model.*;
 import net.minecraft.client.render.VertexConsumer;
+import net.minecraft.client.render.entity.animation.Animation;
 import net.minecraft.client.render.entity.animation.AnimationHelper;
 import net.minecraft.client.render.entity.model.EntityModelLayer;
 import net.minecraft.client.render.entity.model.SinglePartEntityModel;
@@ -127,13 +128,23 @@ public class FrostElementalModel extends SinglePartEntityModel<FrostElementalEnt
 		if (entity.spellReleaseAnimationState.isRunning()) {
 			this.updateAnimation(entity.spellReleaseAnimationState, FrostElementalAnimations.shoot, ageInTicks, 1F);
 		} else if (entity.attackAnimationState.isRunning()) {
-			float attackSpeed = entity.getAttackAnimationSpeed(FrostElementalAnimations.attack_2.lengthInSeconds() * 20F);
-			this.updateAnimation(entity.attackAnimationState,       FrostElementalAnimations.attack_2,  ageInTicks, attackSpeed);
+			Animation attackAnim = attackAnimationFor(entity.getAttackVariant());
+			float attackSpeed = entity.getAttackAnimationSpeed(attackAnim.lengthInSeconds() * 20F);
+			this.updateAnimation(entity.attackAnimationState,       attackAnim,  ageInTicks, attackSpeed);
 		} else if (entity.spellCastAnimationState.isRunning()) {
 			this.animateShootStart(entity.spellCastAnimationState, ageInTicks);
 		} else {
 			this.updateAnimation(entity.idleAnimationState,         FrostElementalAnimations.idle,    ageInTicks, 1F);
 		}
+	}
+
+	// Maps a behaviour-defined attack variant number to one of this model's attack animations.
+	// Unknown variants fall back to the variant-1 default.
+	private static Animation attackAnimationFor(int variant) {
+		return switch (variant) {
+			case 2  -> FrostElementalAnimations.attack_2;
+			default -> FrostElementalAnimations.attack;
+		};
 	}
 
 	// Plays shoot_start with a full intro (0–2 s) then loops the 25%–100% portion indefinitely.

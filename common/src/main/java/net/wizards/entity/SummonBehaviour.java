@@ -210,6 +210,11 @@ public class SummonBehaviour {
             /// tick with the target still in range). AoE radius hits do not retrigger it.
             /// Empty / blank disables it.
             public String impact_sound = "";
+            /// Pool of animation variant numbers to choose from on each swing. One is picked
+            /// uniformly at random and synced to the client via the entity's variant tracker;
+            /// the model picks the matching animation (falling back to variant 1 when its
+            /// own animation set doesn't have a match).
+            public List<Integer> animation_variants = List.of(1);
 
             public final transient Supplier<SoundEvent> swingEvent  = Suppliers.memoize(() -> parseSoundId(swing_sound));
             public final transient Supplier<SoundEvent> impactEvent = Suppliers.memoize(() -> parseSoundId(impact_sound));
@@ -227,6 +232,12 @@ public class SummonBehaviour {
         public static class SpellCast {
             public String spell_id = "";
             public int cooldown = 20;
+            /// Pool of cast-animation variant numbers to choose from when a cast begins.
+            /// See `MeleeAttack.animation_variants` for selection / fallback semantics.
+            public List<Integer> cast_animation_variants = List.of(1);
+            /// Pool of release-animation variant numbers to choose from when the spell fires.
+            /// Independently rolled from `cast_animation_variants`.
+            public List<Integer> release_animation_variants = List.of(1);
 
             public SpellCast() {}
 
