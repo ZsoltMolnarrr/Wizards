@@ -42,11 +42,18 @@ public class WizardEntities {
         arcaneEntry.custom.add(new EntityConfig.CustomAttribute(SpellSchools.ARCANE.id.toString(), 1));
         c.entries.put(ArcaneEmitterEntity.ID.getPath(), arcaneEntry);
 
+        var fireHydraEntry = new EntityConfig.Entry();
+        fireHydraEntry.common = new EntityConfig.CommonAttributes(30, 0.0, 4);
+        fireHydraEntry.common.follow_range = 32;
+        fireHydraEntry.custom.add(new EntityConfig.CustomAttribute(SpellSchools.FIRE.id.toString(), 1));
+        c.entries.put(FireHydraEntity.ID.getPath(), fireHydraEntry);
+
         return c;
     }
 
     public static final Identifier summon_frost_elemental = Identifier.of("wizards", "summon_frost_elemental");
     public static final Identifier summon_arcane_emitter = Identifier.of("wizards", "summon_arcane_emitter");
+    public static final Identifier summon_fire_hydra = Identifier.of("wizards", "summon_fire_hydra");
 
     public static void register() {
         FrostElementalEntity.TYPE = Registry.register(
@@ -69,6 +76,16 @@ public class WizardEntities {
                 ArcaneEmitterEntity.ID,
                 FabricEntityTypeBuilder.<ArcaneEmitterEntity>create(SpawnGroup.MISC, ArcaneEmitterEntity::new)
                         .dimensions(EntityDimensions.fixed(0.6F, 0.6F))
+                        .trackRangeBlocks(64)
+                        .trackedUpdateRate(3)
+                        .build()
+        );
+
+        FireHydraEntity.TYPE = Registry.register(
+                Registries.ENTITY_TYPE,
+                FireHydraEntity.ID,
+                FabricEntityTypeBuilder.<FireHydraEntity>create(SpawnGroup.MISC, FireHydraEntity::new)
+                        .dimensions(EntityDimensions.fixed(1.5F, 3.0F))
                         .trackRangeBlocks(64)
                         .trackedUpdateRate(3)
                         .build()
@@ -219,6 +236,94 @@ public class WizardEntities {
                     summoned.onSummonedBySpell(new SpellSummoned.Args(livingEntity, registryEntry, summonBehaviour, impactContext));
                     Vec3d spawnPos = findSpawnPosition(livingEntity, serverWorld);
                     summoned.setPos(spawnPos.x, spawnPos.y + 1.0, spawnPos.z);
+                    serverWorld.spawnEntity(summoned);
+                }
+
+                return new SpellHandlers.ImpactResult(true, false);
+            }
+        });
+
+        SpellHandlers.registerCustomImpact(summon_fire_hydra, new SpellHandlers.CustomImpact() {
+            @Override
+            public SpellHandlers.ImpactResult onSpellImpact(RegistryEntry<Spell> registryEntry, SpellPower.Result result,
+                                                            LivingEntity livingEntity, @Nullable Entity entity,
+                                                            SpellHelper.ImpactContext impactContext) {
+                var summonBehaviour = new SummonBehaviour();
+                summonBehaviour.lifespan.active_seconds = 30;
+                summonBehaviour.lifespan.spawn_ticks = 20;
+                summonBehaviour.lifespan.despawn_ticks = 20;
+
+                // Not attackable
+                summonBehaviour.is_attackable = false;
+
+                // Movement: stationary — anchored to the spawn position, no collision
+                summonBehaviour.movement.can_move = false;
+                summonBehaviour.movement.is_pushable = false;
+                summonBehaviour.movement.affected_by_gravity = false;
+                summonBehaviour.movement.collision = SummonBehaviour.Movement.CollisionMode.NONE;
+
+                // Targeting: mirror owner's attacks and retaliate, auto-aggro hostiles
+                summonBehaviour.targeting.attack_with_owner = true;
+                summonBehaviour.targeting.revenge = true;
+                summonBehaviour.targeting.automatic_targeting = SummonBehaviour.Targeting.AutoTarget.HOSTILE;
+
+                // Actions: fireball (preferred), melee bite when close
+                var melee = new SummonBehaviour.Action.MeleeAttack();
+                melee.max_range = 4F;
+                melee.speed = 1F;
+                melee.windup = 0.4F;
+                melee.radius = 0.5F;
+                melee.animation_variants = List.of(1);
+
+                summonBehaviour.actions = List.of(
+                    SummonBehaviour.Action.spell("wizards:fireball", 20),
+                    SummonBehaviour.Action.attack(melee)
+                );
+
+                // Attribute scaling: scale with owner's fire spell power
+                var healthEntry = new SummonBehaviour.AttributeScaling.Entry();
+                healthEntry.attribute_id = EntityAttributes.GENERIC_MAX_HEALTH.getIdAsString();
+                healthEntry.modifiers = List.of(new SummonBehaviour.AttributeScaling.Entry.OwnerModifier(
+                    SpellSchools.FIRE.id.toString(), EntityAttributeModifier.Operation.ADD_VALUE, 2.0));
+
+                var armorEntry = new SummonBehaviour.AttributeScaling.Entry();
+                armorEntry.attribute_id = EntityAttributes.GENERIC_ARMOR.getIdAsString();
+                armorEntry.modifiers = List.of(new SummonBehaviour.AttributeScaling.Entry.OwnerModifier(
+                    SpellSchools.FIRE.id.toString(), EntityAttributeModifier.Operation.ADD_VALUE, 10, 0.1));
+
+                var attackEntry = new SummonBehaviour.AttributeScaling.Entry();
+                attackEntry.attribute_id = EntityAttributes.GENERIC_ATTACK_DAMAGE.getIdAsString();
+                attackEntry.modifiers = List.of(new SummonBehaviour.AttributeScaling.Entry.OwnerModifier(
+                    SpellSchools.FIRE.id.toString(), EntityAttributeModifier.Operation.ADD_VALUE, 0.5));
+
+                var knockbackEntry = new SummonBehaviour.AttributeScaling.Entry();
+                knockbackEntry.attribute_id = EntityAttributes.GENERIC_ATTACK_KNOCKBACK.getIdAsString();
+                knockbackEntry.modifiers = List.of(new SummonBehaviour.AttributeScaling.Entry.OwnerModifier(
+                    SpellSchools.FIRE.id.toString(), EntityAttributeModifier.Operation.ADD_VALUE, 0.1));
+
+                var knockbackResistEntry = new SummonBehaviour.AttributeScaling.Entry();
+                knockbackResistEntry.attribute_id = EntityAttributes.GENERIC_KNOCKBACK_RESISTANCE.getIdAsString();
+                knockbackResistEntry.modifiers = List.of(new SummonBehaviour.AttributeScaling.Entry.OwnerModifier(
+                    SpellSchools.FIRE.id.toString(), EntityAttributeModifier.Operation.ADD_VALUE, 5, 0.05));
+
+                var spellPowerEntry = new SummonBehaviour.AttributeScaling.Entry();
+                spellPowerEntry.attribute_id = SpellSchools.FIRE.id.toString();
+                spellPowerEntry.modifiers = List.of(new SummonBehaviour.AttributeScaling.Entry.OwnerModifier(
+                        SpellSchools.FIRE.id.toString(), EntityAttributeModifier.Operation.ADD_VALUE, 3, 0.1F));
+
+//                var scaleEntry = new SummonBehaviour.AttributeScaling.Entry();
+//                scaleEntry.attribute_id = EntityAttributes.GENERIC_SCALE.getIdAsString();
+//                scaleEntry.modifiers = List.of(new SummonBehaviour.AttributeScaling.Entry.OwnerModifier(
+//                        SpellSchools.FIRE.id.toString(), EntityAttributeModifier.Operation.ADD_VALUE, 0.05F));
+
+                summonBehaviour.attribute_scaling.entries = List.of(healthEntry, armorEntry, attackEntry, spellPowerEntry, knockbackEntry, knockbackResistEntry);
+
+                var world = livingEntity.getWorld();
+                if (world instanceof ServerWorld serverWorld) {
+                    var summoned = new FireHydraEntity(FireHydraEntity.TYPE, world);
+                    summoned.onSummonedBySpell(new SpellSummoned.Args(livingEntity, registryEntry, summonBehaviour, impactContext));
+                    Vec3d spawnPos = findSpawnPosition(livingEntity, serverWorld);
+                    summoned.setPos(spawnPos.x, spawnPos.y, spawnPos.z);
                     serverWorld.spawnEntity(summoned);
                 }
 

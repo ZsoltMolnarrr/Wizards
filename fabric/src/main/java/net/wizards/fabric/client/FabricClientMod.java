@@ -6,9 +6,12 @@ import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
 import net.wizards.client.WizardsClientMod;
 import net.wizards.client.entity.ArcaneEmitterModel;
 import net.wizards.client.entity.ArcaneEmitterRenderer;
+import net.wizards.client.entity.FireHydraModel;
+import net.wizards.client.entity.FireHydraRenderer;
 import net.wizards.client.entity.FrostElementalModel;
 import net.wizards.client.entity.FrostElementalRenderer;
 import net.wizards.entity.ArcaneEmitterEntity;
+import net.wizards.entity.FireHydraEntity;
 import net.wizards.entity.FrostElementalEntity;
 import net.wizards.entity.WizardEntities;
 
@@ -21,5 +24,7 @@ public final class FabricClientMod implements ClientModInitializer {
         EntityRendererRegistry.register(FrostElementalEntity.TYPE, FrostElementalRenderer::new);
         EntityModelLayerRegistry.registerModelLayer(ArcaneEmitterModel.LAYER, ArcaneEmitterModel::getTexturedModelData);
         EntityRendererRegistry.register(ArcaneEmitterEntity.TYPE, ArcaneEmitterRenderer::new);
+        EntityModelLayerRegistry.registerModelLayer(FireHydraModel.LAYER, FireHydraModel::getTexturedModelData);
+        EntityRendererRegistry.register(FireHydraEntity.TYPE, FireHydraRenderer::new);
     }
 }

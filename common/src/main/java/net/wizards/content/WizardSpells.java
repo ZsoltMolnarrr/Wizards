@@ -1170,6 +1170,27 @@ public class WizardSpells {
         return new Entry(id, spell, name, description).book(Book.FIRE);
     }
 
+    public static Entry fire_hydra = add(fire_hydra());
+    private static Entry fire_hydra() {
+        var id = Identifier.of(WizardsMod.ID, "fire_hydra");
+        var spell = SpellBuilder.createSpellActive();
+        spell.school = SpellSchools.FIRE;
+        spell.tier = 4;
+        spell.order = 2;
+        spell.range = 16;
+
+        spell.learn = new Spell.Learn();
+
+        var impact = new Spell.Impact();
+        impact.action = new Spell.Impact.Action();
+        impact.action.type = Spell.Impact.Action.Type.CUSTOM;
+        impact.action.custom = new Spell.Impact.Action.Custom();
+        impact.action.custom.handler = WizardEntities.summon_fire_hydra.toString();
+        spell.impacts = List.of(impact);
+
+        return new Entry(id, spell, "", "").book(Book.FIRE);
+    }
+
     public static Entry frost_shard = add(frost_shard());
     private static Entry frost_shard() {
         var id = Identifier.of(WizardsMod.ID, "frost_shard");

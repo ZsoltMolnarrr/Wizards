@@ -12,9 +12,12 @@ import net.wizards.WizardsMod;
 import net.wizards.client.WizardsClientMod;
 import net.wizards.client.entity.ArcaneEmitterModel;
 import net.wizards.client.entity.ArcaneEmitterRenderer;
+import net.wizards.client.entity.FireHydraModel;
+import net.wizards.client.entity.FireHydraRenderer;
 import net.wizards.client.entity.FrostElementalModel;
 import net.wizards.client.entity.FrostElementalRenderer;
 import net.wizards.entity.ArcaneEmitterEntity;
+import net.wizards.entity.FireHydraEntity;
 import net.wizards.entity.FrostElementalEntity;
 
 @EventBusSubscriber(modid = WizardsMod.ID, value = Dist.CLIENT)
@@ -29,11 +32,13 @@ public class NeoForgeClientMod {
     public static void onRegisterLayerDefinitions(EntityRenderersEvent.RegisterLayerDefinitions event) {
         event.registerLayerDefinition(FrostElementalModel.TEXTURE, FrostElementalModel::getTexturedModelData);
         event.registerLayerDefinition(ArcaneEmitterModel.LAYER, ArcaneEmitterModel::getTexturedModelData);
+        event.registerLayerDefinition(FireHydraModel.LAYER, FireHydraModel::getTexturedModelData);
     }
 
     @SubscribeEvent
     public static void onRegisterRenderers(EntityRenderersEvent.RegisterRenderers event) {
         event.registerEntityRenderer(FrostElementalEntity.TYPE, FrostElementalRenderer::new);
         event.registerEntityRenderer(ArcaneEmitterEntity.TYPE, ArcaneEmitterRenderer::new);
+        event.registerEntityRenderer(FireHydraEntity.TYPE, FireHydraRenderer::new);
     }
 }

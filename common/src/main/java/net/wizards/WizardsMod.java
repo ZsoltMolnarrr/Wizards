@@ -15,6 +15,7 @@ import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRe
 import net.wizards.effect.WizardsEffects;
 import net.wizards.entity.EntityConfig;
 import net.wizards.entity.ArcaneEmitterEntity;
+import net.wizards.entity.FireHydraEntity;
 import net.wizards.entity.FrostElementalEntity;
 import net.wizards.entity.WizardEntities;
 
@@ -80,6 +81,7 @@ public class WizardsMod {
         }
         FabricDefaultAttributeRegistry.register(FrostElementalEntity.TYPE, FrostElementalEntity.createMobAttributes().build());
         FabricDefaultAttributeRegistry.register(ArcaneEmitterEntity.TYPE, ArcaneEmitterEntity.createMobAttributes().build());
+        FabricDefaultAttributeRegistry.register(FireHydraEntity.TYPE, FireHydraEntity.createMobAttributes().build());
         entityConfig.save();
     }
 

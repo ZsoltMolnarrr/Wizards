@@ -1,10 +1,11 @@
-package net.wizards.client.entity;// Save this class in your mod and generate all required imports
-/**
- * Made with Blockbench 5.1.4
- * Exported for Minecraft version 1.19 or later with Yarn mappings
- * @author Author
- */
-public class FireHydraEntityAnimation {
+package net.wizards.client.entity;
+
+import net.minecraft.client.render.entity.animation.Animation;
+import net.minecraft.client.render.entity.animation.AnimationHelper;
+import net.minecraft.client.render.entity.animation.Keyframe;
+import net.minecraft.client.render.entity.animation.Transformation;
+
+public class FireHydraAnimations {
 	public static final Animation idle = Animation.Builder.create(2.0F).looping()
 		.addBoneAnimation("root", new Transformation(Transformation.Targets.ROTATE, 
 			new Keyframe(0.0F, AnimationHelper.createRotationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR),
