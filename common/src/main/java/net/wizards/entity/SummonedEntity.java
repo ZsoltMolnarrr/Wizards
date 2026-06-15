@@ -386,6 +386,12 @@ public abstract class SummonedEntity extends GolemEntity implements SpellSummone
 
         goalSelector.add(0, new SwimGoal(this));
         goalSelector.add(1, new PhaseBlockGoal());
+        // Teleport is intentionally ordered above action goals so it preempts an in-progress
+        // melee swing or spell cast. Walk-follow stays below them (added later, priority
+        // after FaceTargetGoal) so normal catch-up doesn't interrupt active combat.
+        if (behaviour.movement.can_move && behaviour.movement.follow != null) {
+            goalSelector.add(2, new TeleportToSummonerGoal());
+        }
         int actionPriority = 10;
         for (var action : behaviour.actions) {
             switch (action.type) {
@@ -859,6 +865,43 @@ public abstract class SummonedEntity extends GolemEntity implements SpellSummone
         }
     }
 
+    // One-shot teleport to the owner when they are farther than `teleport_after_distance`.
+    // Runs at a higher priority than action goals (priority 2 vs 10+) and claims Control.MOVE,
+    // matching what SpellCastGoal / DynamicMeleeAttackGoal claim — so this preempts any
+    // in-progress combat goal the moment it can start, rather than waiting for the summon to
+    // disengage. The target is cleared after the teleport so the summon doesn't immediately
+    // sprint back toward the same far-away enemy it was chasing.
+    private class TeleportToSummonerGoal extends Goal {
+        public TeleportToSummonerGoal() {
+            setControls(EnumSet.of(Control.MOVE));
+        }
+
+        private SummonBehaviour.Movement.Follow follow() {
+            return behaviour.movement.follow;
+        }
+
+        @Override
+        public boolean canStart() {
+            LivingEntity owner = getOwner();
+            if (owner == null) return false;
+            float teleportDist = follow().teleport_after_distance;
+            if (teleportDist <= 0) return false;
+            return squaredDistanceTo(owner) > teleportDist * teleportDist;
+        }
+
+        @Override
+        public boolean shouldContinue() { return false; }
+
+        @Override
+        public void start() {
+            LivingEntity owner = getOwner();
+            if (owner == null) return;
+            teleport(owner.getX(), owner.getY(), owner.getZ(), false);
+            setTarget(null);
+            getNavigation().stop();
+        }
+    }
+
     private class FollowSummonerGoal extends Goal {
         // Last horizontal velocity of the owner that was significant enough to determine orientation.
         // Null until the owner is seen moving; falls back to north when still null.
@@ -903,12 +946,7 @@ public abstract class SummonedEntity extends GolemEntity implements SpellSummone
             LivingEntity owner = getOwner();
             if (owner == null) return;
             Vec3d target = computeFollowTarget(owner);
-            float teleportDist = follow().teleport_after_distance;
-            if (teleportDist > 0 && squaredDistanceTo(owner) > teleportDist * teleportDist) {
-                teleport(target.x, target.y, target.z, false);
-            } else {
-                getNavigation().startMovingTo(target.x, target.y, target.z, 1.0);
-            }
+            getNavigation().startMovingTo(target.x, target.y, target.z, 1.0);
         }
 
         // Returns a position 2 blocks to the owner's right side.
