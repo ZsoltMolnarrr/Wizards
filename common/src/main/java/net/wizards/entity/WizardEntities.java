@@ -81,7 +81,9 @@ public class WizardEntities {
                                                             LivingEntity livingEntity, @Nullable Entity entity,
                                                             SpellHelper.ImpactContext impactContext) {
                 var summonBehaviour = new SummonBehaviour();
-                summonBehaviour.timeToLive = 60;
+                summonBehaviour.timeToLive = 30;
+                summonBehaviour.spawn_despawn.spawn_ticks = 20;
+                summonBehaviour.spawn_despawn.despawn_ticks = 20;
 
                 // Movement: follow owner, teleport if too far
                 summonBehaviour.movement.follow = new SummonBehaviour.Movement.Follow();

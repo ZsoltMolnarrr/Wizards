@@ -108,6 +108,15 @@ public abstract class SummonedEntity extends GolemEntity implements SpellSummone
 
     public SummonedEntity(EntityType<? extends SummonedEntity> entityType, World world) {
         super(entityType, world);
+        // Eagerly start the spawn AnimationState so the very first render frame already
+        // has the spawn animation's t=0 keyframes applied. Otherwise the renderer can
+        // run once before tick()/setupAnimationStates() — AnimationState.run() no-ops
+        // because the state isn't running yet, AnimationHelper.animate() leaves the
+        // resetTransform() defaults in place, and the model briefly flashes at full
+        // size/pose before the scale-from-0 spawn animation takes over.
+        // Safe for the loaded-from-NBT (non-spawning) case: the next setupAnimationStates()
+        // call stops the state via setRunning(isSpawning(), age) → stop().
+        spawnAnimationState.startIfNotRunning(0);
     }
 
     @Override

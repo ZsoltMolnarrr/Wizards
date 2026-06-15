@@ -120,6 +120,17 @@ public class DynamicMeleeAttackGoal extends Goal {
         return canStart();
     }
 
+    // Block preemption by higher-priority goals (spell casts) while a swing is in progress.
+    // GoalSelector replaces a running goal only when the current holder's canStop() is true
+    // (PrioritizedGoal.canBeReplacedBy). Without this override, a spell goal whose cooldown
+    // expires mid-windup steals MOVE/LOOK from this goal, stop() runs (swingTick = -1), and
+    // the impact-tick branch never fires — the windup animation plays out, but tryAttack is
+    // never called and the swing silently whiffs regardless of target distance.
+    @Override
+    public boolean canStop() {
+        return swingTick < 0;
+    }
+
     @Override
     public boolean shouldRunEveryTick() {
         return true;
