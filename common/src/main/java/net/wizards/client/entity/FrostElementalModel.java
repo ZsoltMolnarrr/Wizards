@@ -110,10 +110,10 @@ public class FrostElementalModel extends SinglePartEntityModel<FrostElementalEnt
 
 	private static final Vector3f TEMP = new Vector3f();
 
-	// shoot_start animation timing constants
-	private static final long SHOOT_START_INTRO_MS = 2000L; // full animation length
-	private static final long SHOOT_START_LOOP_MS  =  500L; // 25% = loop-back point
-	private static final long SHOOT_START_BODY_MS  = 1500L; // loop body length (75%)
+	// shoot_charge animation timing constants
+	private static final long SHOOT_CHARGE_INTRO_MS = 2000L; // full animation length
+	private static final long SHOOT_CHARGE_LOOP_MS  =  500L; // 25% = loop-back point
+	private static final long SHOOT_CHARGE_BODY_MS  = 1500L; // loop body length (75%)
 
 	public static final EntityModelLayer TEXTURE = new EntityModelLayer(Identifier.of(WizardsMod.ID, "frost_elemental"), "main");
 
@@ -122,16 +122,17 @@ public class FrostElementalModel extends SinglePartEntityModel<FrostElementalEnt
 		this.getPart().traverse().forEach(ModelPart::resetTransform);
 		this.setHeadAngles(netHeadYaw, netHeadPitch);
 		this.animateMovement(FrostElementalAnimations.walk, limbSwing, limbSwingAmount, 1F, 1F);
-		this.updateAnimation(entity.spawnAnimationState,        FrostElementalAnimations.Spawn,   ageInTicks, 1F);
-		this.updateAnimation(entity.despawnAnimationState,      FrostElementalAnimations.Despawn, ageInTicks, 1F);
+		this.updateAnimation(entity.spawnAnimationState,        FrostElementalAnimations.spawn,   ageInTicks, 1F);
+		this.updateAnimation(entity.despawnAnimationState,      FrostElementalAnimations.spawn, ageInTicks, -1F);
 
 		var anyAction = false;
 		if (entity.spellReleaseAnimationState.isRunning()) {
-			float releaseSpeed = entity.getSpellReleaseAnimationSpeed(FrostElementalAnimations.shoot.lengthInSeconds() * 20F);
-			this.updateAnimation(entity.spellReleaseAnimationState, FrostElementalAnimations.shoot, ageInTicks, releaseSpeed);
+			Animation releaseAnim = spellReleaseAnimationFor(entity.getSpellReleaseVariant());
+			float releaseSpeed = entity.getSpellReleaseAnimationSpeed(releaseAnim.lengthInSeconds() * 20F);
+			this.updateAnimation(entity.spellReleaseAnimationState, releaseAnim, ageInTicks, releaseSpeed);
 			anyAction = true;
 		} else if (entity.spellCastAnimationState.isRunning()) {
-			this.animateShootStart(entity.spellCastAnimationState, ageInTicks);
+			this.animateShootCharge(entity.spellCastAnimationState, ageInTicks);
 			anyAction = true;
 		}
 		if (entity.attackAnimationState.isRunning()) {
@@ -155,15 +156,24 @@ public class FrostElementalModel extends SinglePartEntityModel<FrostElementalEnt
 		};
 	}
 
-	// Plays shoot_start with a full intro (0–2 s) then loops the 25%–100% portion indefinitely.
-	private void animateShootStart(AnimationState state, float ageInTicks) {
+	// Maps a behaviour-defined spell-release variant to one of this model's release animations.
+	// Unknown variants fall back to the variant-1 default.
+	private static Animation spellReleaseAnimationFor(int variant) {
+		return switch (variant) {
+			case 2  -> FrostElementalAnimations.spell_release;
+			default -> FrostElementalAnimations.shoot_release;
+		};
+	}
+
+	// Plays shoot_charge with a full intro (0–2 s) then loops the 25%–100% portion indefinitely.
+	private void animateShootCharge(AnimationState state, float ageInTicks) {
 		state.update(ageInTicks, 1.0f);
 		state.run(s -> {
 			long rawMs = s.getTimeRunning();
-			long animMs = rawMs <= SHOOT_START_INTRO_MS
+			long animMs = rawMs <= SHOOT_CHARGE_INTRO_MS
 					? rawMs
-					: SHOOT_START_LOOP_MS + (rawMs - SHOOT_START_LOOP_MS) % SHOOT_START_BODY_MS;
-			AnimationHelper.animate(this, FrostElementalAnimations.shoot_start, animMs, 1.0F, TEMP);
+					: SHOOT_CHARGE_LOOP_MS + (rawMs - SHOOT_CHARGE_LOOP_MS) % SHOOT_CHARGE_BODY_MS;
+			AnimationHelper.animate(this, FrostElementalAnimations.shoot_charge, animMs, 1.0F, TEMP);
 		});
 	}
 

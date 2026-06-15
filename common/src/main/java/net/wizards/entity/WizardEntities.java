@@ -101,6 +101,7 @@ public class WizardEntities {
                 frostNova.spell_id = "wizards:frost_nova";
                 frostNova.range.max = 1.5F;
                 frostNova.cooldown = 60;
+                frostNova.release_animation_variants = List.of(2);
                 summonBehaviour.actions = List.of(
                     SummonBehaviour.Action.spell("wizards:frost_shard", 20),
                     SummonBehaviour.Action.spell(frostNova),
