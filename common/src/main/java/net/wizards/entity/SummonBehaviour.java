@@ -118,6 +118,58 @@ public class SummonBehaviour {
         public boolean look_around = true;
 
         public enum AutoTarget { NONE, HOSTILE, FRIENDLY, BOTH }
+
+        /// Ordered list of target-clear conditions evaluated at trigger time
+        /// (an action completes, or each tick once the time threshold elapses).
+        /// The first condition whose trigger fires rolls its `chance`; on success
+        /// the entity's target is nulled and the iteration stops. Subsequent
+        /// conditions are not consulted, so put more specific patterns first.
+        ///
+        /// Empty list (default) preserves the prior behaviour — actions never
+        /// clear the target on their own.
+        public List<ClearCondition> clear_conditions = List.of();
+
+        /// A `chance` paired with one trigger configuration. Exactly one of the
+        /// per-trigger sub-blocks should be non-null:
+        ///
+        ///   `on_action_completed` — fires when a goal reports an action just
+        ///                           finished; the inner `ActionMatch` narrows
+        ///                           the match by type and (for spells) spell id.
+        ///   `after_ticks`         — fires each tick once `ticks` ticks have
+        ///                           elapsed since the current target was first
+        ///                           acquired (i.e. the entity has held this same
+        ///                           target for at least that long).
+        ///
+        /// Leaving both null disables the condition. New trigger kinds slot in as
+        /// additional sub-blocks without disturbing existing fields.
+        public static class ClearCondition {
+            /// Probability in `[0..1]` rolled when the trigger fires. Default 1
+            /// always clears on a triggered match; values below 1 produce
+            /// stochastic "sometimes drop the target" behaviour. 0 is treated
+            /// as "match but never roll true" — still stops iteration, so a
+            /// `chance=0` condition acts as an exclusion before broader rules.
+            public float chance = 1F;
+            @Nullable public OnActionCompleted on_action_completed = null;
+            @Nullable public AfterTicks after_ticks = null;
+
+            /// Trigger that fires when an action ends after running to completion
+            /// (melee swing reaches its full duration; spell cast reaches release).
+            /// Both fields null = match any completed action.
+            public static class OnActionCompleted {
+                /// Action type to match. `null` = any type.
+                @Nullable public Action.Type action_type = null;
+                /// Spell id to match. `null` = any spell. Ignored when the
+                /// completed action is not a `SPELL_CAST`.
+                @Nullable public String spell_id = null;
+            }
+
+            /// Trigger that fires every tick once the entity has held its current
+            /// target for at least `ticks` ticks. Acquisition is reset whenever
+            /// `setTarget` switches to a different non-null target.
+            public static class AfterTicks {
+                public int ticks = 0;
+            }
+        }
     }
 
     // --- Spawn / Despawn ---
@@ -164,7 +216,7 @@ public class SummonBehaviour {
 
     public List<Action.Entry> actions = List.of();
     public static class Action {
-        enum Type {
+        public enum Type {
             MELEE_ATTACK, SPELL_CAST
         }
         public static class Entry {

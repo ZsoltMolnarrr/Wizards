@@ -215,6 +215,7 @@ public class DynamicMeleeAttackGoal extends Goal {
                 // animation when `age - startAge >= duration`. Every new swing carries a
                 // fresh monotonic startAge in the packed tracker, so back-to-back swings
                 // always re-sync even if variant and duration repeat.
+                summonedEntity.onActionCompleted(SummonBehaviour.Action.Type.MELEE_ATTACK, null);
             }
         }
     }

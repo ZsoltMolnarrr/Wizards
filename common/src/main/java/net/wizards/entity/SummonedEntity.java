@@ -464,6 +464,79 @@ public abstract class SummonedEntity extends GolemEntity implements SpellSummone
         return target != null && target.isAlive();
     }
 
+    // --- Target-clear policy ---
+    //
+    // Both triggers (action-completion and after-N-ticks) route through the same
+    // `evaluateClearTarget(predicate)` helper so the chance roll / first-match-wins
+    // semantics live in exactly one place. Goal callbacks call onActionCompleted();
+    // the per-tick loop in tick() calls tickTimeBasedClearTarget().
+
+    // Age at which the entity's current target was acquired. Reset by the setTarget
+    // override below; `hasAcquiredTarget` guards the time-based check so stale state
+    // (no target ever / target just cleared) doesn't fire it.
+    private int targetAcquiredAtAge = 0;
+    private boolean hasAcquiredTarget = false;
+
+    @Override
+    public void setTarget(@Nullable LivingEntity target) {
+        LivingEntity previous = getTarget();
+        super.setTarget(target);
+        if (target == null) {
+            hasAcquiredTarget = false;
+        } else if (target != previous) {
+            targetAcquiredAtAge = age;
+            hasAcquiredTarget = true;
+        }
+        // target == previous (non-null) → no-op: timer keeps counting from the
+        // original acquisition, matching the "ticks held on this target" semantic.
+    }
+
+    /// Called by action goals once an action ran to completion (melee swing
+    /// reached its full `duration`; spell cast reached release). Fires the
+    /// `OnActionCompleted` trigger. `spellId` is only consulted for `SPELL_CAST`
+    /// (callers should pass `null` for melee).
+    public void onActionCompleted(SummonBehaviour.Action.Type actionType, @Nullable String spellId) {
+        evaluateClearTarget(c -> {
+            var t = c.on_action_completed;
+            if (t == null) return false;
+            if (t.action_type != null && t.action_type != actionType) return false;
+            // spell_id only narrows SPELL_CAST matches; for melee it's a no-op match.
+            if (t.spell_id != null
+                    && actionType == SummonBehaviour.Action.Type.SPELL_CAST
+                    && !t.spell_id.equals(spellId)) return false;
+            return true;
+        });
+    }
+
+    /// Fires the `AfterTicks` trigger every server tick once the entity has held
+    /// its current target for at least `ticks` ticks. No-ops while there is no
+    /// target. Called from `tick()`.
+    private void tickTimeBasedClearTarget() {
+        if (!hasAcquiredTarget) return;
+        int ticksHeld = age - targetAcquiredAtAge;
+        evaluateClearTarget(c -> c.after_ticks != null && ticksHeld >= c.after_ticks.ticks);
+    }
+
+    /// Central evaluator: walk `targeting.clear_conditions` in order, find the
+    /// first whose trigger matches `triggerMatches`, roll its `chance`, and on
+    /// success null the target. First-match-wins regardless of the roll outcome,
+    /// so a deliberately-placed `chance=0` condition can act as an exclusion
+    /// before broader rules.
+    private void evaluateClearTarget(java.util.function.Predicate<SummonBehaviour.Targeting.ClearCondition> triggerMatches) {
+        if (behaviour == null) return;
+        var conditions = behaviour.targeting.clear_conditions;
+        if (conditions == null || conditions.isEmpty()) return;
+        for (var c : conditions) {
+            if (!triggerMatches.test(c)) continue;
+            float chance = c.chance;
+            if (chance <= 0F) return;
+            if (chance >= 1F || random.nextFloat() < chance) {
+                setTarget(null);
+            }
+            return;
+        }
+    }
+
     /// Snap yaw/pitch (and bodyYaw, so the model orients with the head) directly onto
     /// the target's eyes. Used during active engagement — spell casts and melee swings —
     /// to keep the entity locked on without the 30°/tick smoothing lag of `lookAt`.
@@ -637,6 +710,8 @@ public abstract class SummonedEntity extends GolemEntity implements SpellSummone
             } else {
                 setPhase(PHASE_ACTIVE);
             }
+            // Time-based AfterTicks triggers from targeting.clear_conditions.
+            tickTimeBasedClearTarget();
             // Action animations are self-terminating now:
             //   - ATTACK_ANIMATION / SPELL_RELEASE_ANIMATION carry a fixed duration; the
             //     client stops their AnimationState once `age - startAge >= duration`.
@@ -1033,6 +1108,11 @@ public abstract class SummonedEntity extends GolemEntity implements SpellSummone
             // Covers both the natural-end path (release ran, goal then stopped next tick)
             // and early cancellation (target lost mid-cast, etc.). Idempotent.
             onSpellCastEnded();
+            // Only consult clear_conditions when the spell actually fired this activation —
+            // cancellations (target lost, LOS broken, etc.) are not "the action completed".
+            if (released) {
+                onActionCompleted(SummonBehaviour.Action.Type.SPELL_CAST, config.spell_id);
+            }
         }
 
         @Override
