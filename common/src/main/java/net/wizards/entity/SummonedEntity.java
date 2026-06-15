@@ -312,10 +312,10 @@ public abstract class SummonedEntity extends GolemEntity implements SpellSummone
 
     @Override
     public void onSummonedBySpell(SpellSummoned.Args args) {
-        var sd = args.behaviour.spawn_despawn;
-        this.spawnEndAge     = sd.spawn_ticks;
-        this.timeToLive      = args.behaviour.timeToLive * 20 + sd.spawn_ticks + sd.despawn_ticks;
-        this.despawnStartAge = this.timeToLive - sd.despawn_ticks;
+        var ls = args.behaviour.lifespan;
+        this.spawnEndAge     = ls.spawn_ticks;
+        this.timeToLive      = ls.spawn_ticks + ls.active_seconds * 20 + ls.despawn_ticks;
+        this.despawnStartAge = this.timeToLive - ls.despawn_ticks;
         setOwnerUuid(args.owner.getUuid());
         setBehaviour(args.behaviour);
         // Defer to the first server tick: callers like WizardEntities run

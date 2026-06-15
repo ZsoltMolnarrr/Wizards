@@ -12,7 +12,6 @@ import java.util.function.Supplier;
 
 public class SummonBehaviour {
 
-    public int timeToLive = 60;
     public boolean is_attackable = true;
 
     /// Parses a sound id string into a SoundEvent. Blank / unparseable → null.
@@ -172,12 +171,15 @@ public class SummonBehaviour {
         }
     }
 
-    // --- Spawn / Despawn ---
+    // --- Lifespan ---
 
-    public SpawnDespawn spawn_despawn = new SpawnDespawn();
-    public static class SpawnDespawn {
+    public Lifespan lifespan = new Lifespan();
+    public static class Lifespan {
         /** Ticks the entity spends in the spawning phase (inactionable). */
         public int spawn_ticks = 10;
+        /** Seconds the entity spends in the active phase. Total entity lifespan in ticks is
+         *  `spawn_ticks + active_seconds * 20 + despawn_ticks`. */
+        public int active_seconds = 60;
         /** Ticks the entity spends in the despawning phase (inactionable) before being discarded. */
         public int despawn_ticks = 10;
     }
