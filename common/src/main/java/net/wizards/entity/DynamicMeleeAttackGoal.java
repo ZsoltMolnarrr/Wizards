@@ -54,8 +54,11 @@ public class DynamicMeleeAttackGoal extends Goal {
 
     // max_range expanded by the entity's scale. At default scale 1.0 and default
     // attack_range_scaling 0.5, this is 1.5 × max_range.
+    // `getScale()` is the GENERIC_SCALE attribute (what summon behaviours actually
+    // modify); `getScaleFactor()` is vanilla's baby-only multiplier (0.5/1.0) and
+    // would never grow with the configured scaling.
     private float effectiveMaxRange() {
-        return (float) (config.max_range * (1 + summonedEntity.getScaleFactor() * config.attack_range_scaling));
+        return (float) (config.max_range * (1 + summonedEntity.getScale() * config.attack_range_scaling));
     }
 
     // Distance at which navigation holds rather than pursuing further. Held back from full

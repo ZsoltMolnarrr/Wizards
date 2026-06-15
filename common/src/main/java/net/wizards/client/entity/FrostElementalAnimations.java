@@ -7,7 +7,7 @@ import net.minecraft.client.render.entity.animation.Transformation;
 
 public class FrostElementalAnimations {
         public static final Animation idle = Animation.Builder.create(3.0F).looping()
-                .addBoneAnimation("elemental", new Transformation(Transformation.Targets.ROTATE,
+                .addBoneAnimation("root", new Transformation(Transformation.Targets.ROTATE,
                         new Keyframe(0.0F, AnimationHelper.createRotationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR),
                         new Keyframe(1.4F, AnimationHelper.createRotationalVector(-1.0F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC),
                         new Keyframe(3.0F, AnimationHelper.createRotationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR)
@@ -194,7 +194,7 @@ public class FrostElementalAnimations {
                 .build();
 
         public static final Animation attack = Animation.Builder.create(2.0F)
-                .addBoneAnimation("elemental", new Transformation(Transformation.Targets.ROTATE,
+                .addBoneAnimation("root", new Transformation(Transformation.Targets.ROTATE,
                         new Keyframe(0.0F, AnimationHelper.createRotationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR),
                         new Keyframe(1.5F, AnimationHelper.createRotationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC),
                         new Keyframe(1.85F, AnimationHelper.createRotationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR)
@@ -376,7 +376,7 @@ public class FrostElementalAnimations {
                 .build();
 
         public static final Animation attack_2 = Animation.Builder.create(2.0F)
-                .addBoneAnimation("elemental", new Transformation(Transformation.Targets.ROTATE,
+                .addBoneAnimation("root", new Transformation(Transformation.Targets.ROTATE,
                         new Keyframe(0.0F, AnimationHelper.createRotationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR),
                         new Keyframe(1.7F, AnimationHelper.createRotationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC),
                         new Keyframe(2.0F, AnimationHelper.createRotationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR)
@@ -543,7 +543,7 @@ public class FrostElementalAnimations {
                 .build();
 
         public static final Animation shoot_charge = Animation.Builder.create(2.0F)
-                .addBoneAnimation("elemental", new Transformation(Transformation.Targets.ROTATE,
+                .addBoneAnimation("root", new Transformation(Transformation.Targets.ROTATE,
                         new Keyframe(0.0F, AnimationHelper.createRotationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR)
                 ))
                 .addBoneAnimation("chest", new Transformation(Transformation.Targets.ROTATE,
@@ -701,7 +701,7 @@ public class FrostElementalAnimations {
                 .build();
 
         public static final Animation shoot_release = Animation.Builder.create(1.3F)
-                .addBoneAnimation("elemental", new Transformation(Transformation.Targets.ROTATE,
+                .addBoneAnimation("root", new Transformation(Transformation.Targets.ROTATE,
                         new Keyframe(0.8F, AnimationHelper.createRotationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC),
                         new Keyframe(1.1F, AnimationHelper.createRotationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR)
                 ))
@@ -878,12 +878,12 @@ public class FrostElementalAnimations {
                 .build();
 
         public static final Animation spell_release = Animation.Builder.create(1.5F)
-                .addBoneAnimation("elemental", new Transformation(Transformation.Targets.ROTATE,
+                .addBoneAnimation("root", new Transformation(Transformation.Targets.ROTATE,
                         new Keyframe(0.0F, AnimationHelper.createRotationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR),
                         new Keyframe(1.0F, AnimationHelper.createRotationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC),
                         new Keyframe(1.45F, AnimationHelper.createRotationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR)
                 ))
-                .addBoneAnimation("elemental", new Transformation(Transformation.Targets.TRANSLATE,
+                .addBoneAnimation("root", new Transformation(Transformation.Targets.TRANSLATE,
                         new Keyframe(0.0F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR),
                         new Keyframe(0.1F, AnimationHelper.createTranslationalVector(0.0F, -1.29F, 0.0F), Transformation.Interpolations.CUBIC),
                         new Keyframe(0.25F, AnimationHelper.createTranslationalVector(0.0F, -1.29F, 0.0F), Transformation.Interpolations.LINEAR),
@@ -1127,16 +1127,16 @@ public class FrostElementalAnimations {
                 .build();
 
         public static final Animation spawn = Animation.Builder.create(0.95F)
-                .addBoneAnimation("elemental", new Transformation(Transformation.Targets.ROTATE,
+                .addBoneAnimation("root", new Transformation(Transformation.Targets.ROTATE,
                         new Keyframe(0.0F, AnimationHelper.createRotationalVector(0.0F, -360.0F, 0.0F), Transformation.Interpolations.LINEAR),
                         new Keyframe(0.25F, AnimationHelper.createRotationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC)
                 ))
-                .addBoneAnimation("elemental", new Transformation(Transformation.Targets.TRANSLATE,
+                .addBoneAnimation("root", new Transformation(Transformation.Targets.TRANSLATE,
                         new Keyframe(0.0F, AnimationHelper.createTranslationalVector(0.0F, -4.0F, 0.0F), Transformation.Interpolations.LINEAR),
                         new Keyframe(0.25F, AnimationHelper.createTranslationalVector(0.0F, 4.0F, 0.0F), Transformation.Interpolations.CUBIC),
                         new Keyframe(0.55F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR)
                 ))
-                .addBoneAnimation("elemental", new Transformation(Transformation.Targets.SCALE,
+                .addBoneAnimation("root", new Transformation(Transformation.Targets.SCALE,
                         new Keyframe(0.0F, AnimationHelper.createScalingVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC),
                         new Keyframe(0.25F, AnimationHelper.createScalingVector(1.0F, 1.0F, 1.0F), Transformation.Interpolations.CUBIC),
                         new Keyframe(0.55F, AnimationHelper.createScalingVector(1.0F, 1.0F, 1.0F), Transformation.Interpolations.LINEAR)
@@ -1284,5 +1284,4 @@ public class FrostElementalAnimations {
                         new Keyframe(0.95F, AnimationHelper.createRotationalVector(-22.5F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR)
                 ))
                 .build();
-
 }

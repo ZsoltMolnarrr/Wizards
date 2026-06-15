@@ -53,7 +53,12 @@ public class WizardEntities {
                 Registries.ENTITY_TYPE,
                 FrostElementalEntity.ID,
                 FabricEntityTypeBuilder.<FrostElementalEntity>create(SpawnGroup.MISC, FrostElementalEntity::new)
-                        .dimensions(EntityDimensions.fixed(1F, 2F))
+                        // `changing` (fixed=false) so EntityDimensions.scaled() actually applies
+                        // the GENERIC_SCALE attribute when getBaseDimensions falls through to the
+                        // type (i.e., when behaviour.dimensions is null). With `fixed`, scaled()
+                        // is a no-op and getWidth()/getHeight() stay locked at base size — which
+                        // silently shrinks the melee reach below the visible model size.
+                        .dimensions(EntityDimensions.changing(1F, 2F))
                         .trackRangeBlocks(64)
                         .trackedUpdateRate(3)
                         .build()
