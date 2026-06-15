@@ -224,9 +224,13 @@ public class DynamicMeleeAttackGoal extends Goal {
         summonedEntity.playConfiguredSound(config.impactEvent.get());
         summonedEntity.tryAttack(primary);
         if (config.radius <= 0) return;
+        // Scale the AoE radius with the entity's GENERIC_SCALE attribute so a larger
+        // summon hits a proportionally larger area — keeps the impact footprint visually
+        // consistent with the bigger model and the already-scaled melee reach.
+        float radius = config.radius * summonedEntity.getScale();
         LivingEntity owner = summonedEntity.getOwner();
-        Box box = primary.getBoundingBox().expand(config.radius);
-        double radiusSq = (double) config.radius * config.radius;
+        Box box = primary.getBoundingBox().expand(radius);
+        double radiusSq = (double) radius * radius;
         for (LivingEntity nearby : summonedEntity.getWorld().getEntitiesByClass(LivingEntity.class, box, e -> true)) {
             if (nearby == primary) continue;
             if (nearby == summonedEntity) continue;

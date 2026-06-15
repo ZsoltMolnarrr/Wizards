@@ -106,7 +106,30 @@ public class FrostElementalModel extends SinglePartEntityModel<FrostElementalEnt
 		return TexturedModelData.of(modelData, 128, 128);
 	}
 
-	// Hand-written section
+	// HAND-WRITTEN CODE
+
+	// Basic render features
+
+	public static final EntityModelLayer TEXTURE = new EntityModelLayer(Identifier.of(WizardsMod.ID, "frost_elemental"), "main");
+
+	private void setHeadAngles(float headYaw, float headPitch) {
+		headYaw = MathHelper.clamp(headYaw, -60, 60);
+		headPitch = MathHelper.clamp(headPitch, -60, 60);
+		head.yaw = headYaw * 0.017453292F;
+		head.pitch = headPitch * 0.017453292F;
+	}
+
+	@Override
+	public ModelPart getPart() {
+		return root;
+	}
+
+	@Override
+	public void render(MatrixStack matrices, VertexConsumer vertices, int light, int overlay, int color) {
+		root.render(matrices, vertices, light, overlay, color);
+	}
+
+	// Animations
 
 	private static final Vector3f TEMP = new Vector3f();
 
@@ -114,8 +137,6 @@ public class FrostElementalModel extends SinglePartEntityModel<FrostElementalEnt
 	private static final long SHOOT_CHARGE_INTRO_MS = 2000L; // full animation length
 	private static final long SHOOT_CHARGE_LOOP_MS  =  500L; // 25% = loop-back point
 	private static final long SHOOT_CHARGE_BODY_MS  = 1500L; // loop body length (75%)
-
-	public static final EntityModelLayer TEXTURE = new EntityModelLayer(Identifier.of(WizardsMod.ID, "frost_elemental"), "main");
 
 	@Override
 	public void setAngles(FrostElementalEntity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float netHeadPitch) {
@@ -126,6 +147,7 @@ public class FrostElementalModel extends SinglePartEntityModel<FrostElementalEnt
 		this.updateAnimation(entity.despawnAnimationState,      FrostElementalAnimations.spawn, ageInTicks, -1F);
 
 		var anyAction = false;
+		// Spell casting animation
 		if (entity.spellReleaseAnimationState.isRunning()) {
 			Animation releaseAnim = spellReleaseAnimationFor(entity.getSpellReleaseVariant());
 			float releaseSpeed = entity.getSpellReleaseAnimationSpeed(releaseAnim.lengthInSeconds() * 20F);
@@ -135,13 +157,14 @@ public class FrostElementalModel extends SinglePartEntityModel<FrostElementalEnt
 			this.animateShootCharge(entity.spellCastAnimationState, ageInTicks);
 			anyAction = true;
 		}
+		// Attack animation
 		if (entity.attackAnimationState.isRunning()) {
 			Animation attackAnim = attackAnimationFor(entity.getAttackVariant());
 			float attackSpeed = entity.getAttackAnimationSpeed(attackAnim.lengthInSeconds() * 20F);
 			this.updateAnimation(entity.attackAnimationState,       attackAnim,  ageInTicks, attackSpeed);
 			anyAction = true;
 		}
-
+		// Idle animation (only if not doing any other action)
 		if (!anyAction) {
 			this.updateAnimation(entity.idleAnimationState,         FrostElementalAnimations.idle,    ageInTicks, 1F);
 		}
@@ -175,22 +198,5 @@ public class FrostElementalModel extends SinglePartEntityModel<FrostElementalEnt
 					: SHOOT_CHARGE_LOOP_MS + (rawMs - SHOOT_CHARGE_LOOP_MS) % SHOOT_CHARGE_BODY_MS;
 			AnimationHelper.animate(this, FrostElementalAnimations.shoot_charge, animMs, 1.0F, TEMP);
 		});
-	}
-
-	private void setHeadAngles(float headYaw, float headPitch) {
-		headYaw = MathHelper.clamp(headYaw, -60, 60);
-		headPitch = MathHelper.clamp(headPitch, -60, 60);
-		head.yaw = headYaw * 0.017453292F;
-		head.pitch = headPitch * 0.017453292F;
-	}
-
-	@Override
-	public ModelPart getPart() {
-		return root;
-	}
-
-	@Override
-	public void render(MatrixStack matrices, VertexConsumer vertices, int light, int overlay, int color) {
-		root.render(matrices, vertices, light, overlay, color);
 	}
 }
