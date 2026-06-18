@@ -1039,12 +1039,12 @@ public abstract class SummonedEntity extends GolemEntity implements SpellSummone
         private int castTick = 0;
         private int castDuration = 1;
         private boolean released = false;
-        private int targetSeeingTicker = 0;
-        // Captured at the moment castTick transitions 0 → 1 (the cast actually begins).
-        // Once set, the goal ignores `getTarget()` and reads target state from this field —
-        // so a mid-cast RevengeGoal retarget (from being hit by a different mob) can't make
-        // the spell fly off at the new attacker. Cleared in start()/stop().
-        @Nullable private LivingEntity lockedTarget = null;
+        // How this activation aims, resolved once when the cast begins: a tracked target or
+        // a stationary fallback (forward / self). Holds all per-activation aiming state, so
+        // the lifecycle methods never branch on the configured mode. Capturing it at start()
+        // also pins the target for the whole cast, so a mid-cast RevengeGoal retarget can't
+        // redirect the spell at a different enemy. Cleared in stop().
+        @Nullable private CastAim aim = null;
 
         public SpellCastGoal(SummonBehaviour.Action.SpellCast config) {
             this.config = config;
@@ -1088,28 +1088,16 @@ public abstract class SummonedEntity extends GolemEntity implements SpellSummone
             if (spell.active == null) return false;           // ACTIVE spells only
             if (SpellHelper.isChanneled(spell)) return false; // INSTANT or CHARGE only
             if (!isActive()) return false;                    // not in spawn/despawn phase
-            var target = getTarget();
-            if (target == null || !target.isAlive()) return false;
             if (cooldownManager.isCoolingDown(entry)) return false;
-            // Engagement band: skip when the target sits outside [min, max] × effective range.
-            // Defaults preserve the prior "engage anywhere inside spell range" behaviour
-            // (`min = 0`, `max = 1`). Configure these per spell to compose layered behaviour
-            // across multiple SpellCast actions.
-            double distSq = squaredDistanceTo(target);
-            float maxR = effectiveMax(entry);
-            if (distSq > (double) maxR * maxR) return false;
-            float minR = effectiveMin(entry);
-            if (minR > 0 && distSq < (double) minR * minR) return false;
-            return true;
+            return resolveAim(entry) != null;                 // is there anything to fire at?
         }
 
         @Override
         public void start() {
             castTick = 0;
             released = false;
-            targetSeeingTicker = 0;
-            lockedTarget = null;
             var entry = spellEntry; // already resolved by canStart()
+            aim = resolveAim(entry);
             if (entry != null) {
                 var spell = entry.value();
                 castDuration = SpellHelper.isInstant(spell)
@@ -1123,26 +1111,14 @@ public abstract class SummonedEntity extends GolemEntity implements SpellSummone
 
         @Override
         public boolean shouldContinue() {
-            if (released) return false;
-            if (!isActive()) return false;
-            var target = lockedTarget != null ? lockedTarget : getTarget();
-            if (target == null || !target.isAlive()) return false;
-            // Enforce the upper engagement edge mid-cast too — otherwise a target that
-            // walks out of `max` would leave the goal running forever, stuck waiting for
-            // the cast counter to advance (it can't, because distSq > preferred). The
-            // lower edge is intentionally NOT enforced here: once committed to a cast, a
-            // target moving inside `min` should still get hit, not abort the goal.
-            var entry = spellEntry;
-            if (entry == null) return false;
-            float maxR = effectiveMax(entry);
-            return squaredDistanceTo(target) <= (double) maxR * maxR;
+            return !released && isActive() && aim != null && aim.valid();
         }
 
         @Override
         public void stop() {
             setAttacking(false);
             getNavigation().stop();
-            lockedTarget = null;
+            aim = null;
             // Covers both the natural-end path (release ran, goal then stopped next tick)
             // and early cancellation (target lost mid-cast, etc.). Idempotent.
             onSpellCastEnded();
@@ -1155,60 +1131,23 @@ public abstract class SummonedEntity extends GolemEntity implements SpellSummone
 
         @Override
         public void tick() {
-            if (released) return;
-            // Once the cast has actually begun (castTick > 0) we read the captured target
-            // and ignore the mob's live `getTarget()` so a hit-triggered retarget can't
-            // redirect the spell at a different enemy mid-cast.
-            var target = lockedTarget != null ? lockedTarget : getTarget();
-            if (target == null) return;
+            if (released || aim == null) return;
             var entry = spellEntry;
             if (entry == null) return;
-            var spell = entry.value();
-
-            // Distance the entity navigates to (and inside which the cast counter advances).
-            // `config.range.preferred` × the spell's effective range; defaults to 0.75. The
-            // navigation block below closes in until inside this range, then stops. No
-            // retreat — if the target steps closer, the entity holds position and casts.
-            float desiredRange = effectivePreferred(entry);
-            double desiredRangeSq = (double) desiredRange * desiredRange;
-
-            // Line-of-sight tracking
-            boolean canSee = getVisibilityCache().canSee(target);
-            if (canSee) { if (targetSeeingTicker < 10) targetSeeingTicker++; }
-            else         { if (targetSeeingTicker > 0)  targetSeeingTicker--; }
-
-            // Navigation
-            double distSq = squaredDistanceTo(target);
-            if (distSq > desiredRangeSq || targetSeeingTicker <= 0) {
-                getNavigation().startMovingTo(target, 1.0);
-            } else {
-                getNavigation().stop();
-            }
-
-            // Lock rotation onto the target every tick for the entire goal — including the
-            // pre-cast alignment phase. Removes the old "wait for ~18° head convergence
-            // before starting" delay that hits made worse.
-            lockRotationTo(target);
-
-            // Cast progress — only while in range and target visible. The rotation lock
-            // above guarantees facing, so it no longer gates progress. The 0 → 1 transition
-            // is when the cast "actually starts"; latch the target so it can't be swapped
-            // out by RevengeGoal for the remainder of the cast.
-            if (distSq <= desiredRangeSq && targetSeeingTicker > 0) {
-                castTick++;
-                if (castTick == 1) lockedTarget = target;
-            }
+            aim.approach();                 // chase the subject (no-op when stationary)
+            aim.orient();                   // face the way the spell must fire
+            if (aim.engaged()) castTick++;  // progress only while in range and visible
             if (castTick >= castDuration) {
-                releaseSpell(target, entry, spell);
+                releaseSpell(entry, entry.value());
                 released = true;
             }
         }
 
-        private void releaseSpell(LivingEntity target, RegistryEntry<Spell> entry, Spell spell) {
+        private void releaseSpell(RegistryEntry<Spell> entry, Spell spell) {
             if (getWorld().isClient()) return;
-            // Snap rotation onto the target — targetAndPerformSpell uses the caster's
-            // look vector for raycasting (AIM/BEAM) and projectile direction.
-            lockRotationTo(target);
+            // Final orient before the engine reads the look vector: targetAndPerformSpell
+            // raycasts (AIM/BEAM) and launches projectiles along the caster's facing.
+            aim.orient();
             SpellHelper.targetAndPerformSpell(getWorld(), SummonedEntity.this, entry);
             onSpellCastEnded();
             onSpellReleased(pickVariant(config.release_animation_variants), config.release_animation_duration);
@@ -1225,5 +1164,116 @@ public abstract class SummonedEntity extends GolemEntity implements SpellSummone
                 cooldownManager.set(entry, cooldownTicks);
             }
         }
+
+        // --- Aim resolution ---
+
+        /// Picks how this activation aims: the live target when targeting is enabled and a
+        /// usable target sits inside the engagement band, otherwise the configured fallback.
+        /// Returns null when there is nothing to fire at (fallback NONE with no target), so
+        /// the goal simply doesn't start.
+        @Nullable
+        private CastAim resolveAim(RegistryEntry<Spell> entry) {
+            if (config.aiming.accept_target && entry != null) {
+                var target = getTarget();
+                if (target != null && target.isAlive() && withinBand(entry, target)) {
+                    return new TrackedAim(target);
+                }
+            }
+            return switch (config.aiming.fallback) {
+                case NONE    -> null;
+                case FORWARD -> forwardAim;
+                case SELF    -> selfAim;
+            };
+        }
+
+        /// True when the target sits inside `[min, max] × effective range`. Defaults
+        /// (`min = 0`, `max = 1`) mean "anywhere within the spell's effective range".
+        private boolean withinBand(RegistryEntry<Spell> entry, LivingEntity target) {
+            double distSq = squaredDistanceTo(target);
+            float maxR = effectiveMax(entry);
+            if (distSq > (double) maxR * maxR) return false;
+            float minR = effectiveMin(entry);
+            return minR <= 0 || distSq >= (double) minR * minR;
+        }
+
+        /// Per-activation aiming strategy. Each method answers one question the cast
+        /// lifecycle asks, so the lifecycle code stays free of mode checks.
+        private interface CastAim {
+            /// May the goal keep running? (subject still valid, or always for stationary)
+            boolean valid();
+            /// Move toward the subject. No-op for stationary fallbacks.
+            void approach();
+            /// May the cast counter advance this tick? (in range and visible, or always)
+            boolean engaged();
+            /// Rotate the entity so the spell fires the right way.
+            void orient();
+        }
+
+        /// Tracks the entity's current target: navigates to `preferred × range`, follows
+        /// line-of-sight, and locks rotation onto it. The target is captured for the whole
+        /// cast, so a mid-cast retarget can't redirect the spell.
+        private class TrackedAim implements CastAim {
+            private final LivingEntity target;
+            private int seeingTicker = 0;
+            private boolean inPreferredRange = false;
+
+            private TrackedAim(LivingEntity target) { this.target = target; }
+
+            @Override
+            public boolean valid() {
+                if (!target.isAlive()) return false;
+                // Enforce the upper engagement edge mid-cast (a target leaving `max` aborts).
+                // The lower edge is intentionally not re-checked, so a target stepping inside
+                // `min` mid-cast still gets hit rather than cancelling the goal.
+                float maxR = effectiveMax(spellEntry);
+                return squaredDistanceTo(target) <= (double) maxR * maxR;
+            }
+
+            @Override
+            public void approach() {
+                float preferred = effectivePreferred(spellEntry);
+                double preferredSq = (double) preferred * preferred;
+                inPreferredRange = squaredDistanceTo(target) <= preferredSq;
+                boolean canSee = getVisibilityCache().canSee(target);
+                if (canSee) { if (seeingTicker < 10) seeingTicker++; }
+                else        { if (seeingTicker > 0)  seeingTicker--; }
+                // Close in until inside preferred range (or while sight is broken); then hold.
+                // No retreat — a target stepping closer just gets cast on from where we stand.
+                if (!inPreferredRange || seeingTicker <= 0) {
+                    getNavigation().startMovingTo(target, 1.0);
+                } else {
+                    getNavigation().stop();
+                }
+            }
+
+            @Override
+            public boolean engaged() { return inPreferredRange && seeingTicker > 0; }
+
+            @Override
+            public void orient() { lockRotationTo(target); }
+        }
+
+        /// Shared base for stationary fallbacks: never chases, fires on cooldown, runs to
+        /// release. Subclasses only choose where to point.
+        private abstract class StationaryAim implements CastAim {
+            @Override public boolean valid()   { return true; }
+            @Override public void approach()   { }
+            @Override public boolean engaged() { return true; }
+        }
+
+        /// Fires straight ahead along the entity's current (spawn-set) facing — turret.
+        private final CastAim forwardAim = new StationaryAim() {
+            @Override public void orient() { /* keep current facing */ }
+        };
+
+        /// Aims at the entity's own position (pitch straight down), so directional spells
+        /// resolve at its feet; self-centred AoE spells are unaffected by rotation.
+        private final CastAim selfAim = new StationaryAim() {
+            @Override public void orient() {
+                setPitch(90F);
+                setHeadYaw(getYaw());
+                setBodyYaw(getYaw());
+            }
+        };
     }
 }

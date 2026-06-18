@@ -208,19 +208,26 @@ public class WizardEntities {
                 summonBehaviour.movement.affected_by_gravity = false;
                 summonBehaviour.movement.collision = SummonBehaviour.Movement.CollisionMode.NONE;
 
-                // Bounding box: compact cube
+                // Bounding box: compact cube. `dimensions` is an optional override and
+                // defaults to null, so instantiate it before assigning.
+                summonBehaviour.dimensions = new SummonBehaviour.Dimensions();
                 summonBehaviour.dimensions.width  = 0.6F;
                 summonBehaviour.dimensions.height = 0.6F;
 
-                // Targeting: mirror owner's attacks and retaliate, but don't auto-aggro
+                // Targeting: pure turret — never acquire or track a target, so the emitter
+                // holds the spawn-set facing for its whole lifespan.
                 summonBehaviour.targeting.attack_with_owner = true;
-                summonBehaviour.targeting.revenge = true;
-                summonBehaviour.targeting.automatic_targeting = SummonBehaviour.Targeting.AutoTarget.HOSTILE;
+                summonBehaviour.targeting.revenge = false;
+                summonBehaviour.targeting.automatic_targeting = SummonBehaviour.Targeting.AutoTarget.NONE;
                 summonBehaviour.targeting.look_around = false;
 
-                // Actions: arcane bolt only
+                // Actions: arcane bolt fired straight ahead along the emitter's facing, on
+                // cooldown — pure turret, never acquires a target.
+                var arcaneBolt = new SummonBehaviour.Action.SpellCast("wizards:arcane_bolt", 5);
+                arcaneBolt.aiming.accept_target = true;
+                arcaneBolt.aiming.fallback = SummonBehaviour.Action.SpellCast.Aiming.Fallback.FORWARD;
                 summonBehaviour.actions = List.of(
-                    SummonBehaviour.Action.spell("wizards:arcane_bolt", 5)
+                    SummonBehaviour.Action.spell(arcaneBolt)
                 );
 
                 var spellPowerEntry = new SummonBehaviour.AttributeScaling.Entry();
@@ -236,6 +243,12 @@ public class WizardEntities {
                     summoned.onSummonedBySpell(new SpellSummoned.Args(livingEntity, registryEntry, summonBehaviour, impactContext));
                     Vec3d spawnPos = findSpawnPosition(livingEntity, serverWorld);
                     summoned.setPos(spawnPos.x, spawnPos.y + 1.0, spawnPos.z);
+                    // Aim the turret down the summoner's look direction — the FORWARD-fallback
+                    // cast fires along this facing for the emitter's whole lifespan.
+                    summoned.setYaw(livingEntity.getYaw());
+                    summoned.setBodyYaw(livingEntity.getYaw());
+                    summoned.setHeadYaw(livingEntity.getYaw());
+                    summoned.setPitch(livingEntity.getPitch());
                     serverWorld.spawnEntity(summoned);
                 }
 

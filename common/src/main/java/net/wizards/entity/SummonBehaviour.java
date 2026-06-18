@@ -299,6 +299,24 @@ public class SummonBehaviour {
         public static class SpellCast {
             public String spell_id = "";
             public int cooldown = 20;
+            /// Controls what the action fires at: whether it uses an acquired target, and
+            /// where it aims when it has none. Default reproduces the original targeted-only
+            /// behaviour (use the target; don't fire without one).
+            public Aiming aiming = new Aiming();
+            public static class Aiming {
+                /// When true, fire at the entity's currently acquired target (from revenge,
+                /// defend-owner, mirror-owner or auto-targeting) whenever one sits inside the
+                /// engagement band — tracking it with navigation, line-of-sight and rotation.
+                /// When false, the action ignores targets entirely and always uses `fallback`.
+                public boolean accept_target = true;
+                /// Where to aim when no usable target is available — either because targeting
+                /// is disabled, or enabled but nothing is acquired / inside the band.
+                ///   NONE    — don't fire without a target (original behaviour).
+                ///   FORWARD — fire straight ahead along the entity's current facing (turret).
+                ///   SELF    — aim at the entity's own position (e.g. self-centred AoE pulses).
+                public Fallback fallback = Fallback.NONE;
+                public enum Fallback { NONE, FORWARD, SELF }
+            }
             /// Target-distance band the goal engages in. All-zero defaults preserve the
             /// original behaviour (`max = spell.range`, `min = 0`, `preferred = max × 0.75`).
             public Range range = new Range();
