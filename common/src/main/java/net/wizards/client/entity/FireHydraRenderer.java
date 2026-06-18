@@ -7,7 +7,6 @@ import net.minecraft.util.Identifier;
 import net.spell_engine.api.render.CustomLayers;
 import net.spell_engine.api.render.LightEmission;
 import net.wizards.WizardsMod;
-import net.wizards.entity.ArcaneEmitterEntity;
 import net.wizards.entity.FireHydraEntity;
 
 public class FireHydraRenderer extends MobEntityRenderer<FireHydraEntity, FireHydraModel> {
@@ -26,7 +25,7 @@ public class FireHydraRenderer extends MobEntityRenderer<FireHydraEntity, FireHy
     }
 
 //    public static final RenderLayer renderLayer = CustomLayers.spellObject(TEXTURE, LightEmission.GLOW_TRANSLUCENT, false);
-public static final RenderLayer renderLayer = CustomLayers.spellObject(TEXTURE, LightEmission.GLOW, false);
+    public static final RenderLayer renderLayer = CustomLayers.spellObject(TEXTURE, LightEmission.GLOW, true);
     @Override
     protected RenderLayer getRenderLayer(FireHydraEntity entity, boolean showBody, boolean translucent, boolean showOutline) {
         if (showOutline) {
