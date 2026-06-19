@@ -155,7 +155,7 @@ public class WizardSummons {
         // translation (no ground snap), seeding the perpendicular per-entity line.
         var groupPlacements = List.of(compassPlacement(behind, 180F, false, false, 0));
 
-        return new Summon(ArcaneEmitterEntity.ID.toString(), b, placements, 7, groupPlacements, 1);
+        return new Summon(ArcaneEmitterEntity.ID.toString(), b, placements, 3, groupPlacements, 1);
     }
 
     /// A floating turret-emitter placement, offset `sideDistance` blocks along the caster's facing
