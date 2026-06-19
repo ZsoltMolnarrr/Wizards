@@ -2,6 +2,9 @@ package net.wizards.entity;
 
 import net.spell_engine.api.spell.Spell;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /// Declarative definition of a spell-summoned entity.
 ///
 /// Bundles everything needed to spawn and configure a summon: the entity type to spawn, its full
@@ -22,14 +25,20 @@ public class Summon {
     /// Full runtime behaviour: lifespan, movement, targeting, actions, sounds, attribute scaling.
     public SummonBehaviour behaviour = new SummonBehaviour();
 
-    /// Where and how the summon is placed, reusing SpellEngine's placement type.
-    public Spell.EntityPlacement placement = new Spell.EntityPlacement();
+    /// Spawn-location slots, reusing SpellEngine's placement type. {@link #spawn_count} entities are
+    /// spawned, cycling through this list in order and wrapping around (slot `i % placements.size()`).
+    public List<Spell.EntityPlacement> placements = new ArrayList<>();
+
+    /// How many entities to spawn. Each one takes the next placement slot, wrapping around the
+    /// {@link #placements} list. Defaults to 1.
+    public int spawn_count = 1;
 
     public Summon() {}
 
-    public Summon(String entity_type_id, SummonBehaviour behaviour, Spell.EntityPlacement placement) {
+    public Summon(String entity_type_id, SummonBehaviour behaviour, List<Spell.EntityPlacement> placements, int spawn_count) {
         this.entity_type_id = entity_type_id;
         this.behaviour = behaviour;
-        this.placement = placement;
+        this.placements = placements;
+        this.spawn_count = spawn_count;
     }
 }

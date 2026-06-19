@@ -15,6 +15,7 @@ import net.spell_engine.api.spell.Spell;
 import net.spell_engine.api.spell.event.SpellHandlers;
 import net.spell_engine.internals.SpellHelper;
 import net.spell_engine.utils.TargetHelper;
+import net.spell_engine.utils.WorldScheduler;
 import net.spell_power.api.SpellSchool;
 import net.spell_power.api.SpellSchools;
 import net.wizards.content.WizardsSounds;
@@ -96,11 +97,9 @@ public class WizardSummons {
         b.attribute_scaling.entries = scaling;
 
         // Placement: 2 blocks ahead of the caster, snapped to the ground
-        var placement = new Spell.EntityPlacement();
-        placement.location_offset_by_look = 2;
-        placement.force_onto_ground = true;
+        var placement = compassPlacement(2F, 0F, true, false, 0);
 
-        return new Summon(FrostElementalEntity.ID.toString(), b, placement);
+        return new Summon(FrostElementalEntity.ID.toString(), b, List.of(placement), 1);
     }
 
     private static Summon arcaneEmitter() {
@@ -145,7 +144,7 @@ public class WizardSummons {
         placement.apply_yaw = true;
         placement.apply_pitch = true;
 
-        return new Summon(ArcaneEmitterEntity.ID.toString(), b, placement);
+        return new Summon(ArcaneEmitterEntity.ID.toString(), b, List.of(placement), 1);
     }
 
     private static Summon fireHydra() {
@@ -185,12 +184,31 @@ public class WizardSummons {
         // Attribute scaling: standard combat stats scaling with fire spell power (no size bump)
         b.attribute_scaling.entries = schoolCombatScaling(SpellSchools.FIRE);
 
-        // Placement: 2 blocks ahead of the caster, snapped to the ground
-        var placement = new Spell.EntityPlacement();
-        placement.location_offset_by_look = 2;
-        placement.force_onto_ground = true;
+        // Placement: a tight square formation around the caster, in compass order (front, right,
+        // back, left), each 1 block out and snapped to the ground, all facing the caster's yaw.
+        // With spawn_count = 3 the loop cycles through the first three slots: front, right, back.
+        float d = 1F;
+        var placements = List.of(
+                compassPlacement(d, 0F, true, true, 0),    // front
+                compassPlacement(d, 90F, true, true, 5),   // right
+                compassPlacement(d, 270F, true, true, 10),   // left
+                compassPlacement(d, 180F, true, true, 15)  // back
+        );
 
-        return new Summon(FireHydraEntity.ID.toString(), b, placement);
+        return new Summon(FireHydraEntity.ID.toString(), b, placements, 3);
+    }
+
+    /// A placement offset `distance` blocks from the caster along the caster's facing rotated by
+    /// `yawOffset` degrees (0 = in front, 90 = to the right, 180 = behind, 270 = to the left).
+    /// `applyYaw` orients the spawned entity to the caster's yaw.
+    private static Spell.EntityPlacement compassPlacement(float distance, float yawOffset, boolean forceOntoGround, boolean applyYaw, int delay) {
+        var placement = new Spell.EntityPlacement();
+        placement.location_offset_by_look = distance;
+        placement.location_yaw_offset = yawOffset;
+        placement.force_onto_ground = forceOntoGround;
+        placement.apply_yaw = applyYaw;
+        placement.delay_ticks = delay;
+        return placement;
     }
 
     // MARK: Scaling helpers
@@ -238,34 +256,44 @@ public class WizardSummons {
                 }));
     }
 
-    /// Spawns one summon from its definition: creates the entity by id, hands it the behaviour,
-    /// positions it via SpellEngine's EntityPlacement, and falls back to a line-of-sight search if
-    /// the placed position is clipped into geometry.
+    /// Spawns the summon(s) from a definition: `spawn_count` entities, each taking the next
+    /// placement slot (cycling through `placements`). Every entity is created by id, handed the
+    /// behaviour, positioned via SpellEngine's EntityPlacement, and falls back to a line-of-sight
+    /// search if the placed position is clipped into geometry. Each placement's `delay_ticks`
+    /// defers the actual world spawn (the entity is positioned at cast time, anchored to the
+    /// caster's cast-time state, matching SpellEngine's built-in SPAWN action).
     private static void spawn(Summon def, RegistryEntry<Spell> spellEntry, LivingEntity caster, SpellHelper.ImpactContext context) {
         var world = caster.getWorld();
         if (!(world instanceof ServerWorld serverWorld)) return;
 
         var type = Registries.ENTITY_TYPE.get(Identifier.of(def.entity_type_id));
-        var created = (Entity) type.create(world);
-        if (!(created instanceof SpellSummoned summoned)) return;
+        for (int i = 0; i < def.spawn_count; i++) {
+            var created = (Entity) type.create(world);
+            if (!(created instanceof SpellSummoned summoned)) return;
 
-        summoned.onSummonedBySpell(new SpellSummoned.Args(caster, spellEntry, def.behaviour, context));
+            // Next placement slot, wrapping around the list (null when no slots are configured).
+            var placement = def.placements.isEmpty() ? null : def.placements.get(i % def.placements.size());
 
-        // Primary placement: SpellEngine's EntityPlacement (sets position, and yaw/pitch when configured).
-        SpellHelper.applyEntityPlacement(created, caster, caster.getPos(), def.placement);
-        // applyEntityPlacement only sets entity yaw; sync head/body yaw so the initial pose matches.
-        if (def.placement.apply_yaw && created instanceof LivingEntity living) {
-            living.setHeadYaw(living.getYaw());
-            living.setBodyYaw(living.getYaw());
+            summoned.onSummonedBySpell(new SpellSummoned.Args(caster, spellEntry, def.behaviour, context));
+
+            // Primary placement: SpellEngine's EntityPlacement (sets position, and yaw/pitch when configured).
+            SpellHelper.applyEntityPlacement(created, caster, caster.getPos(), placement);
+            // applyEntityPlacement only sets entity yaw; sync head/body yaw so the initial pose matches.
+            if (placement != null && placement.apply_yaw && created instanceof LivingEntity living) {
+                living.setHeadYaw(living.getYaw());
+                living.setBodyYaw(living.getYaw());
+            }
+            // Anti-clip fallback: if the placed position can't see the caster (likely inside a wall),
+            // relocate using the cardinal + line-of-sight search.
+            if (!hasLineOfSight(caster, created.getPos(), serverWorld)) {
+                var fallback = findSpawnPosition(caster, serverWorld);
+                created.setPosition(fallback.x, fallback.y, fallback.z);
+            }
+
+            // Defer the world spawn by the placement's delay (0 = spawn this tick).
+            int delay = placement != null ? placement.delay_ticks : 0;
+            ((WorldScheduler) serverWorld).schedule(delay, () -> serverWorld.spawnEntity(created));
         }
-        // Anti-clip fallback: if the placed position can't see the caster (likely inside a wall),
-        // relocate using the cardinal + line-of-sight search.
-        if (!hasLineOfSight(caster, created.getPos(), serverWorld)) {
-            var fallback = findSpawnPosition(caster, serverWorld);
-            created.setPosition(fallback.x, fallback.y, fallback.z);
-        }
-
-        serverWorld.spawnEntity(created);
     }
 
     // Tries N/E/S/W positions 2 blocks away; picks the first that has solid ground and clear LOS
