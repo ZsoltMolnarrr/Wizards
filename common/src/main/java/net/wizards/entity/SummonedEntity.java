@@ -159,6 +159,21 @@ public abstract class SummonedEntity extends GolemEntity implements SpellSummone
     }
 
     @Override
+    public boolean isInvulnerable() {
+        // Report a non-attackable summon as invulnerable so every system that gates on the
+        // getter treats it as a non-target — most importantly LivingEntity.canTakeDamage()
+        // (`!isInvulnerable()`), which vanilla and modded mob target acquisition use. This
+        // makes the whole world ignore it, not just our own shouldTarget/canAttackTarget.
+        //
+        // Safe by construction: vanilla isInvulnerableTo() and the /kill, void and despawn
+        // paths read the `invulnerable` *field* (still false), not this getter, so the
+        // entity stays removable; and NBT persists the field, so nothing round-trips. Actual
+        // damage immunity remains enforced by the damage()/isInvulnerableTo() overrides.
+        if (behaviour != null && !behaviour.is_attackable) return true;
+        return super.isInvulnerable();
+    }
+
+    @Override
     public boolean isImmuneToExplosion(Explosion explosion) {
         return (behaviour == null || !behaviour.is_attackable) && super.isImmuneToExplosion(explosion);
     }

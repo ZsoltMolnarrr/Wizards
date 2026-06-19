@@ -185,7 +185,10 @@ public class WizardEntities {
                     var summoned = new FrostElementalEntity(FrostElementalEntity.TYPE, world);
                     summoned.onSummonedBySpell(new SpellSummoned.Args(livingEntity, registryEntry, summonBehaviour, impactContext));
                     Vec3d spawnPos = findSpawnPosition(livingEntity, serverWorld);
-                    summoned.setPos(spawnPos.x, spawnPos.y, spawnPos.z);
+                    // setPosition (not setPos) so the bounding box moves with the entity:
+                    // plain setPos leaves the box at the origin for summons that never move,
+                    // breaking box-based world queries (target search, collision).
+                    summoned.setPosition(spawnPos.x, spawnPos.y, spawnPos.z);
                     serverWorld.spawnEntity(summoned);
                 }
 
@@ -242,7 +245,10 @@ public class WizardEntities {
                     var summoned = new ArcaneEmitterEntity(ArcaneEmitterEntity.TYPE, world);
                     summoned.onSummonedBySpell(new SpellSummoned.Args(livingEntity, registryEntry, summonBehaviour, impactContext));
                     Vec3d spawnPos = findSpawnPosition(livingEntity, serverWorld);
-                    summoned.setPos(spawnPos.x, spawnPos.y + 1.0, spawnPos.z);
+                    // setPosition (not setPos) so the bounding box moves with the entity:
+                    // plain setPos leaves the box at the origin for summons that never move,
+                    // breaking box-based world queries (target search, collision).
+                    summoned.setPosition(spawnPos.x, spawnPos.y + 1.0, spawnPos.z);
                     // Aim the turret down the summoner's look direction — the FORWARD-fallback
                     // cast fires along this facing for the emitter's whole lifespan.
                     summoned.setYaw(livingEntity.getYaw());
@@ -336,7 +342,10 @@ public class WizardEntities {
                     var summoned = new FireHydraEntity(FireHydraEntity.TYPE, world);
                     summoned.onSummonedBySpell(new SpellSummoned.Args(livingEntity, registryEntry, summonBehaviour, impactContext));
                     Vec3d spawnPos = findSpawnPosition(livingEntity, serverWorld);
-                    summoned.setPos(spawnPos.x, spawnPos.y, spawnPos.z);
+                    // setPosition (not setPos) so the bounding box moves with the entity:
+                    // plain setPos leaves the box at the origin for summons that never move,
+                    // breaking box-based world queries (target search, collision).
+                    summoned.setPosition(spawnPos.x, spawnPos.y, spawnPos.z);
                     serverWorld.spawnEntity(summoned);
                 }
 
