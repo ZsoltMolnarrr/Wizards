@@ -1,12 +1,10 @@
 package net.wizards.entity;
 
 import com.google.common.base.Suppliers;
-import net.minecraft.entity.attribute.EntityAttributeModifier;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Supplier;
 
@@ -26,37 +24,6 @@ public class SummonBehaviour {
     // --- Attribute Scaling ---
 
     public AttributeScaling attribute_scaling = new AttributeScaling();
-
-    public static class AttributeScaling {
-        public List<Entry> entries = new ArrayList<>();
-
-        public static class Entry {
-            public String attribute_id = "";
-            public List<OwnerModifier> modifiers = new ArrayList<>();
-
-            public static class OwnerModifier {
-                public String attribute_id = "";
-                public EntityAttributeModifier.Operation operation = EntityAttributeModifier.Operation.ADD_VALUE;
-                /// Flat amount added before the owner-scaled term. Final contribution is
-                /// `base + ownerValue * coefficient`.
-                public double base = 0.0;
-                public double coefficient = 1.0;
-
-                public OwnerModifier() {}
-
-                public OwnerModifier(String attribute_id, EntityAttributeModifier.Operation operation, double coefficient) {
-                    this(attribute_id, operation, 0.0, coefficient);
-                }
-
-                public OwnerModifier(String attribute_id, EntityAttributeModifier.Operation operation, double base, double coefficient) {
-                    this.attribute_id = attribute_id;
-                    this.operation = operation;
-                    this.base = base;
-                    this.coefficient = coefficient;
-                }
-            }
-        }
-    }
 
     // --- Dimensions ---
 

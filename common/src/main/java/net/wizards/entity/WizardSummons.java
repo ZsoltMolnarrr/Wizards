@@ -134,17 +134,44 @@ public class WizardSummons {
                 SpellSchools.ARCANE.id.toString(), 0, 1.0);
         b.attribute_scaling.entries = List.of(spellPower);
 
-        // Placement: floats ~1 block up, 2 blocks ahead, facing the caster's look direction.
-        // apply_yaw/apply_pitch reproduce the old setYaw/setPitch turret aim; the offset is applied
-        // once (after the SpellEngine double-offset fix).
+        // Placement: up to 7 emitters in a line perpendicular to the caster's yaw, the whole line
+        // pushed behind the caster via a single group offset. Slots are ordered from the center
+        // outwards (center, right 1, left 1, right 2, ...), so a smaller spawn_count yields a tighter
+        // centered line. Each placement fires 10 ticks later than the previous, so the line fills in
+        // from the middle out. Each floats ~1 block up and faces the caster's aim (apply_yaw/pitch),
+        // so the FORWARD-fallback barrage fires the way the player is looking.
+        float spread = 1.5F; // gap between adjacent emitters along the perpendicular axis
+        float behind = 2F;   // how far behind the caster the whole line sits
+        var placements = List.of(
+                emitterPlacement(0F, 0F, 0),              // center
+                emitterPlacement(spread, 90F, 10),        // right 1
+                emitterPlacement(spread, 270F, 20),       // left 1
+                emitterPlacement(2F * spread, 90F, 30),   // right 2
+                emitterPlacement(2F * spread, 270F, 40),  // left 2
+                emitterPlacement(3F * spread, 90F, 50),   // right 3
+                emitterPlacement(3F * spread, 270F, 60)   // left 3
+        );
+        // One group, offset straight behind the caster (look direction rotated 180°). Pure
+        // translation (no ground snap), seeding the perpendicular per-entity line.
+        var groupPlacements = List.of(compassPlacement(behind, 180F, false, false, 0));
+
+        return new Summon(ArcaneEmitterEntity.ID.toString(), b, placements, 7, groupPlacements, 1);
+    }
+
+    /// A floating turret-emitter placement, offset `sideDistance` blocks along the caster's facing
+    /// rotated by `yawOffset` (90 = right, 270 = left; 0 = centered on the seed position), spawned
+    /// after `delay` ticks. Floats ~1 block up and faces the caster's aim (yaw + pitch). Never
+    /// ground-snapped.
+    private static Spell.EntityPlacement emitterPlacement(float sideDistance, float yawOffset, int delay) {
         var placement = new Spell.EntityPlacement();
-        placement.location_offset_by_look = 2;
+        placement.location_offset_by_look = sideDistance;
+        placement.location_yaw_offset = yawOffset;
         placement.location_offset_y = 1.0F;
         placement.force_onto_ground = false;
         placement.apply_yaw = true;
         placement.apply_pitch = true;
-
-        return new Summon(ArcaneEmitterEntity.ID.toString(), b, List.of(placement), 1);
+        placement.delay_ticks = delay;
+        return placement;
     }
 
     private static Summon fireHydra() {
@@ -227,9 +254,9 @@ public class WizardSummons {
     /// The standard owner-scaled combat stat block shared by attacker summons: health, armor, attack
     /// damage, spell power, attack knockback and knockback resistance — all scaling off the owner's
     /// spell power in the given school. Returned mutable so callers can append school-specific extras.
-    private static List<SummonBehaviour.AttributeScaling.Entry> schoolCombatScaling(SpellSchool school) {
+    private static List<AttributeScaling.Entry> schoolCombatScaling(SpellSchool school) {
         var s = school.id.toString();
-        var entries = new ArrayList<SummonBehaviour.AttributeScaling.Entry>();
+        var entries = new ArrayList<AttributeScaling.Entry>();
         entries.add(scalingEntry(EntityAttributes.GENERIC_MAX_HEALTH.getIdAsString(), s, 0, 2.0));
         entries.add(scalingEntry(EntityAttributes.GENERIC_ARMOR.getIdAsString(), s, 10, 0.1));
         entries.add(scalingEntry(EntityAttributes.GENERIC_ATTACK_DAMAGE.getIdAsString(), s, 0, 0.5));
@@ -241,11 +268,11 @@ public class WizardSummons {
 
     /// A single attribute-scaling entry: `targetAttribute += base + ownerAttribute * coefficient`
     /// (ADD_VALUE).
-    private static SummonBehaviour.AttributeScaling.Entry scalingEntry(String targetAttribute, String ownerAttribute,
+    private static AttributeScaling.Entry scalingEntry(String targetAttribute, String ownerAttribute,
                                                                        double base, double coefficient) {
-        var entry = new SummonBehaviour.AttributeScaling.Entry();
+        var entry = new AttributeScaling.Entry();
         entry.attribute_id = targetAttribute;
-        entry.modifiers = List.of(new SummonBehaviour.AttributeScaling.Entry.OwnerModifier(
+        entry.modifiers = List.of(new AttributeScaling.Entry.OwnerModifier(
                 ownerAttribute, EntityAttributeModifier.Operation.ADD_VALUE, base, coefficient));
         return entry;
     }
