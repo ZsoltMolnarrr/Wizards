@@ -135,50 +135,33 @@ public class SummonBehaviour {
 
         public enum AutoTarget { NONE, HOSTILE, FRIENDLY, BOTH }
 
-        /// Ordered list of target-clear conditions evaluated at trigger time
-        /// (an action completes, or each tick once the time threshold elapses).
-        /// The first condition whose trigger fires rolls its `chance`; on success
-        /// the entity's target is nulled and the iteration stops. Subsequent
-        /// conditions are not consulted, so put more specific patterns first.
-        ///
-        /// Empty list (default) preserves the prior behaviour — actions never
-        /// clear the target on their own.
-        public List<ClearCondition> clear_conditions = List.of();
+        /// Optional target-clear triggers. Null (default) preserves the prior behaviour —
+        /// the summon never drops a target on its own. Each sub-block fires independently,
+        /// nulling the current target when its trigger condition is met.
+        @Nullable public ClearCondition clear_condition = null;
 
-        /// A `chance` paired with one trigger configuration. Exactly one of the
-        /// per-trigger sub-blocks should be non-null:
-        ///
-        ///   `on_action_completed` — fires when a goal reports an action just
-        ///                           finished; the inner `ActionMatch` narrows
-        ///                           the match by type and (for spells) spell id.
-        ///   `after_ticks`         — fires each tick once `ticks` ticks have
-        ///                           elapsed since the current target was first
-        ///                           acquired (i.e. the entity has held this same
-        ///                           target for at least that long).
-        ///   `out_of_detection_range` — fires each tick the target is farther than
-        ///                           `multiplier × detection range` away.
-        ///
-        /// Leaving every sub-block null disables the condition. New trigger kinds slot in
-        /// as additional sub-blocks without disturbing existing fields.
         public static class ClearCondition {
-            /// Probability in `[0..1]` rolled when the trigger fires. Default 1
-            /// always clears on a triggered match; values below 1 produce
-            /// stochastic "sometimes drop the target" behaviour. 0 is treated
-            /// as "match but never roll true" — still stops iteration, so a
-            /// `chance=0` condition acts as an exclusion before broader rules.
-            public float chance = 1F;
-            @Nullable public OnActionCompleted on_action_completed = null;
+            /// Action-completion triggers, evaluated when a goal reports an action just
+            /// finished (a melee swing reached full duration; a spell cast reached release).
+            /// Checked in order: the first entry whose filter matches rolls its own `chance`
+            /// and then evaluation stops — so a `chance=0` entry acts as an exclusion placed
+            /// ahead of broader entries. Empty (default) = no action-completion clearing.
+            public List<OnActionCompleted> on_action_completed = List.of();
+            /// Fires each tick once the target has been held long enough. Null = disabled.
             @Nullable public AfterTicks after_ticks = null;
+            /// Fires each tick the target is too far away. Null = disabled.
             @Nullable public OutOfDetectionRange out_of_detection_range = null;
 
-            /// Trigger that fires when an action ends after running to completion
-            /// (melee swing reaches its full duration; spell cast reaches release).
-            /// Both fields null = match any completed action.
+            /// One action-completion trigger: a `chance` to drop the target when a matching
+            /// action completes, narrowed by action type and (for spells) spell id.
             public static class OnActionCompleted {
+                /// Probability in `[0..1]` rolled when this entry matches. 1 always clears;
+                /// 0 never clears but still stops evaluation (acts as an exclusion).
+                public float chance = 1F;
                 /// Action type to match. `null` = any type.
                 @Nullable public Action.Type action_type = null;
-                /// Spell id to match. `null` = any spell. Ignored when the
-                /// completed action is not a `SPELL_CAST`.
+                /// Spell id to match. `null` = any spell. Ignored when the completed action
+                /// is not a `SPELL_CAST`.
                 @Nullable public String spell_id = null;
             }
 
@@ -195,7 +178,7 @@ public class SummonBehaviour {
             /// same value `automatic_targeting` uses (see `Targeting.detection_range`).
             public static class OutOfDetectionRange {
                 /// Distance threshold as a multiple of the detection range. E.g. 2 clears
-                /// the target once it is more than twice the detection range away. Default 1.
+                /// the target once it is more than twice the detection range away.
                 public float multiplier = 1.5F;
             }
         }

@@ -555,10 +555,10 @@ public abstract class SummonedEntity extends GolemEntity implements SpellSummone
 
     // --- Target-clear policy ---
     //
-    // All triggers (action-completion, after-N-ticks, out-of-detection-range) route through
-    // the same `evaluateClearTarget(predicate)` helper so the chance roll / first-match-wins
-    // semantics live in exactly one place. Goal callbacks call onActionCompleted();
-    // the per-tick loop in tick() calls tickClearConditions().
+    // Goal callbacks call onActionCompleted() (the on_action_completed list, each entry
+    // rolling its own chance, first-match-wins). The per-tick loop in tick() calls
+    // tickClearConditions() (after_ticks / out_of_detection_range, both deterministic).
+    // Both share rollClearTarget() / setTarget(null) to drop the target.
 
     // Age at which the entity's current target was acquired. Reset by the setTarget
     // override below; `hasAcquiredTarget` guards the time-based check so stale state
@@ -585,54 +585,49 @@ public abstract class SummonedEntity extends GolemEntity implements SpellSummone
     /// `OnActionCompleted` trigger. `spellId` is only consulted for `SPELL_CAST`
     /// (callers should pass `null` for melee).
     public void onActionCompleted(SummonBehaviour.Action.Type actionType, @Nullable String spellId) {
-        evaluateClearTarget(c -> {
-            var t = c.on_action_completed;
-            if (t == null) return false;
-            if (t.action_type != null && t.action_type != actionType) return false;
+        var clear = behaviour != null ? behaviour.targeting.clear_condition : null;
+        if (clear == null) return;
+        for (var t : clear.on_action_completed) {
+            if (t.action_type != null && t.action_type != actionType) continue;
             // spell_id only narrows SPELL_CAST matches; for melee it's a no-op match.
             if (t.spell_id != null
                     && actionType == SummonBehaviour.Action.Type.SPELL_CAST
-                    && !t.spell_id.equals(spellId)) return false;
-            return true;
-        });
+                    && !t.spell_id.equals(spellId)) continue;
+            // First matching entry decides: roll its chance, then stop regardless of the
+            // outcome — so a chance=0 entry acts as an exclusion ahead of broader entries.
+            rollClearTarget(t.chance);
+            return;
+        }
     }
 
     /// Evaluates the per-tick clear triggers every server tick: `after_ticks` (held the
     /// target long enough) and `out_of_detection_range` (target fled beyond a multiple of
-    /// the detection range). No-ops while there is no target. Called from `tick()`.
+    /// the detection range). Both clear deterministically. No-ops while there is no target.
+    /// Called from `tick()`.
     private void tickClearConditions() {
         if (!hasAcquiredTarget) return;
+        var clear = behaviour != null ? behaviour.targeting.clear_condition : null;
+        if (clear == null) return;
         var target = getTarget();
         if (target == null) return;
-        int ticksHeld = age - targetAcquiredAtAge;
-        double distSq = squaredDistanceTo(target);
-        evaluateClearTarget(c -> {
-            if (c.after_ticks != null && ticksHeld >= c.after_ticks.ticks) return true;
-            if (c.out_of_detection_range != null) {
-                double threshold = c.out_of_detection_range.multiplier * detectionRange();
-                return distSq > threshold * threshold;
-            }
-            return false;
-        });
-    }
-
-    /// Central evaluator: walk `targeting.clear_conditions` in order, find the
-    /// first whose trigger matches `triggerMatches`, roll its `chance`, and on
-    /// success null the target. First-match-wins regardless of the roll outcome,
-    /// so a deliberately-placed `chance=0` condition can act as an exclusion
-    /// before broader rules.
-    private void evaluateClearTarget(java.util.function.Predicate<SummonBehaviour.Targeting.ClearCondition> triggerMatches) {
-        if (behaviour == null) return;
-        var conditions = behaviour.targeting.clear_conditions;
-        if (conditions == null || conditions.isEmpty()) return;
-        for (var c : conditions) {
-            if (!triggerMatches.test(c)) continue;
-            float chance = c.chance;
-            if (chance <= 0F) return;
-            if (chance >= 1F || random.nextFloat() < chance) {
+        if (clear.after_ticks != null && age - targetAcquiredAtAge >= clear.after_ticks.ticks) {
+            setTarget(null);
+            return;
+        }
+        if (clear.out_of_detection_range != null) {
+            double threshold = clear.out_of_detection_range.multiplier * detectionRange();
+            if (squaredDistanceTo(target) > threshold * threshold) {
                 setTarget(null);
             }
-            return;
+        }
+    }
+
+    /// Rolls `chance` in `[0..1]` and nulls the target on success. <= 0 never clears;
+    /// >= 1 always clears.
+    private void rollClearTarget(float chance) {
+        if (chance <= 0F) return;
+        if (chance >= 1F || random.nextFloat() < chance) {
+            setTarget(null);
         }
     }
 
