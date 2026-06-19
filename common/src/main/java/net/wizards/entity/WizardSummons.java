@@ -195,7 +195,18 @@ public class WizardSummons {
                 compassPlacement(d, 180F, true, true, 15)  // back
         );
 
-        return new Summon(FireHydraEntity.ID.toString(), b, placements, 3);
+        // Group placement: mirror the per-entity compass formation at 3x the distance, used as a
+        // per-group offset. With group_count = 2 the loop cycles through the first two slots
+        // (front and right groups).
+        float gd = d * 3F;
+        var groupPlacements = List.of(
+                compassPlacement(gd, 90F, true, true, 0),    // front
+                compassPlacement(gd, 270F, true, true, 20),   // right
+                compassPlacement(gd, 0F, true, true, 40),   // left
+                compassPlacement(gd, 180F, true, true, 60)  // back
+        );
+
+        return new Summon(FireHydraEntity.ID.toString(), b, placements, 3, groupPlacements, 2);
     }
 
     /// A placement offset `distance` blocks from the caster along the caster's facing rotated by
@@ -256,43 +267,61 @@ public class WizardSummons {
                 }));
     }
 
-    /// Spawns the summon(s) from a definition: `spawn_count` entities, each taking the next
-    /// placement slot (cycling through `placements`). Every entity is created by id, handed the
-    /// behaviour, positioned via SpellEngine's EntityPlacement, and falls back to a line-of-sight
-    /// search if the placed position is clipped into geometry. Each placement's `delay_ticks`
-    /// defers the actual world spawn (the entity is positioned at cast time, anchored to the
-    /// caster's cast-time state, matching SpellEngine's built-in SPAWN action).
+    /// Spawns the summon(s) from a definition. `group_count` groups are spawned; each group replays
+    /// the per-entity formation (`spawn_count` entities cycling through `placements`), translated by
+    /// the next group placement (cycling through `group_placements`). Every entity is created by id,
+    /// handed the behaviour, positioned via SpellEngine's EntityPlacement (group offset first, then
+    /// the per-entity placement on top), and falls back to a line-of-sight search if the placed
+    /// position is clipped into geometry. Group and per-entity `delay_ticks` are summed and defer the
+    /// actual world spawn (entities are positioned at cast time, anchored to the caster's cast-time
+    /// state, matching SpellEngine's built-in SPAWN action).
     private static void spawn(Summon def, RegistryEntry<Spell> spellEntry, LivingEntity caster, SpellHelper.ImpactContext context) {
         var world = caster.getWorld();
         if (!(world instanceof ServerWorld serverWorld)) return;
 
         var type = Registries.ENTITY_TYPE.get(Identifier.of(def.entity_type_id));
-        for (int i = 0; i < def.spawn_count; i++) {
-            var created = (Entity) type.create(world);
-            if (!(created instanceof SpellSummoned summoned)) return;
+        for (int g = 0; g < def.group_count; g++) {
+            // Next group slot, wrapping around the list (null when no group offset is configured).
+            var groupPlacement = def.group_placements.isEmpty() ? null : def.group_placements.get(g % def.group_placements.size());
+            int groupDelay = groupPlacement != null ? groupPlacement.delay_ticks : 0;
 
-            // Next placement slot, wrapping around the list (null when no slots are configured).
-            var placement = def.placements.isEmpty() ? null : def.placements.get(i % def.placements.size());
+            for (int i = 0; i < def.spawn_count; i++) {
+                var created = (Entity) type.create(world);
+                if (!(created instanceof SpellSummoned summoned)) return;
 
-            summoned.onSummonedBySpell(new SpellSummoned.Args(caster, spellEntry, def.behaviour, context));
+                // Next per-entity slot, wrapping around the list (null when no slots are configured).
+                var placement = def.placements.isEmpty() ? null : def.placements.get(i % def.placements.size());
 
-            // Primary placement: SpellEngine's EntityPlacement (sets position, and yaw/pitch when configured).
-            SpellHelper.applyEntityPlacement(created, caster, caster.getPos(), placement);
-            // applyEntityPlacement only sets entity yaw; sync head/body yaw so the initial pose matches.
-            if (placement != null && placement.apply_yaw && created instanceof LivingEntity living) {
-                living.setHeadYaw(living.getYaw());
-                living.setBodyYaw(living.getYaw());
+                summoned.onSummonedBySpell(new SpellSummoned.Args(caster, spellEntry, def.behaviour, context));
+
+                // Compose placements: the group offset's resulting position seeds the per-entity
+                // placement (both rotate the look-offset by the caster's yaw, so the formation keeps
+                // a consistent caster-relative orientation across groups).
+                var origin = caster.getPos();
+                if (groupPlacement != null) {
+                    SpellHelper.applyEntityPlacement(created, caster, origin, groupPlacement);
+                    origin = created.getPos();
+                }
+                SpellHelper.applyEntityPlacement(created, caster, origin, placement);
+
+                // applyEntityPlacement only sets entity yaw; sync head/body yaw so the initial pose matches.
+                boolean appliedYaw = (groupPlacement != null && groupPlacement.apply_yaw)
+                        || (placement != null && placement.apply_yaw);
+                if (appliedYaw && created instanceof LivingEntity living) {
+                    living.setHeadYaw(living.getYaw());
+                    living.setBodyYaw(living.getYaw());
+                }
+                // Anti-clip fallback: if the placed position can't see the caster (likely inside a wall),
+                // relocate using the cardinal + line-of-sight search.
+                if (!hasLineOfSight(caster, created.getPos(), serverWorld)) {
+                    var fallback = findSpawnPosition(caster, serverWorld);
+                    created.setPosition(fallback.x, fallback.y, fallback.z);
+                }
+
+                // Defer the world spawn by the combined group + per-entity delay (0 = spawn this tick).
+                int entityDelay = placement != null ? placement.delay_ticks : 0;
+                ((WorldScheduler) serverWorld).schedule(groupDelay + entityDelay, () -> serverWorld.spawnEntity(created));
             }
-            // Anti-clip fallback: if the placed position can't see the caster (likely inside a wall),
-            // relocate using the cardinal + line-of-sight search.
-            if (!hasLineOfSight(caster, created.getPos(), serverWorld)) {
-                var fallback = findSpawnPosition(caster, serverWorld);
-                created.setPosition(fallback.x, fallback.y, fallback.z);
-            }
-
-            // Defer the world spawn by the placement's delay (0 = spawn this tick).
-            int delay = placement != null ? placement.delay_ticks : 0;
-            ((WorldScheduler) serverWorld).schedule(delay, () -> serverWorld.spawnEntity(created));
         }
     }
 

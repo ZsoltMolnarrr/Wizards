@@ -25,13 +25,29 @@ public class Summon {
     /// Full runtime behaviour: lifespan, movement, targeting, actions, sounds, attribute scaling.
     public SummonBehaviour behaviour = new SummonBehaviour();
 
-    /// Spawn-location slots, reusing SpellEngine's placement type. {@link #spawn_count} entities are
-    /// spawned, cycling through this list in order and wrapping around (slot `i % placements.size()`).
+    /// Per-entity spawn-location slots within a group, reusing SpellEngine's placement type.
+    /// {@link #spawn_count} entities are spawned per group, cycling through this list in order and
+    /// wrapping around (slot `i % placements.size()`).
     public List<Spell.EntityPlacement> placements = new ArrayList<>();
 
-    /// How many entities to spawn. Each one takes the next placement slot, wrapping around the
-    /// {@link #placements} list. Defaults to 1.
+    /// How many entities to spawn per group. Each one takes the next per-entity placement slot,
+    /// wrapping around the {@link #placements} list. Defaults to 1.
     public int spawn_count = 1;
+
+    /// Group-level placement slots. {@link #group_count} groups are spawned; group `g` uses
+    /// `group_placements.get(g % group_placements.size())` as a translation offset (its resulting
+    /// position seeds the per-entity placements) applied to EVERY entity in that group. Empty (the
+    /// default) means a single group anchored directly at the caster, with no group offset.
+    ///
+    /// Composition is translation only: a group offset moves where its formation is anchored, but the
+    /// in-group formation always keeps the caster-relative orientation — a group cannot rotate its
+    /// children relative to another group.
+    public List<Spell.EntityPlacement> group_placements = new ArrayList<>();
+
+    /// How many groups to spawn. Each group replays the full per-entity formation
+    /// ({@link #spawn_count} / {@link #placements}), translated by the next group placement.
+    /// Defaults to 1.
+    public int group_count = 1;
 
     public Summon() {}
 
@@ -40,5 +56,13 @@ public class Summon {
         this.behaviour = behaviour;
         this.placements = placements;
         this.spawn_count = spawn_count;
+    }
+
+    public Summon(String entity_type_id, SummonBehaviour behaviour,
+                  List<Spell.EntityPlacement> placements, int spawn_count,
+                  List<Spell.EntityPlacement> group_placements, int group_count) {
+        this(entity_type_id, behaviour, placements, spawn_count);
+        this.group_placements = group_placements;
+        this.group_count = group_count;
     }
 }
