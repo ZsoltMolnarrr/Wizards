@@ -441,11 +441,11 @@ public abstract class SummonedEntity extends GolemEntity implements SpellSummone
         // Friendly goal added first (lower priority number) so wounded-ally healing takes
         // precedence over hostile acquisition when BOTH is configured.
         switch (behaviour.targeting.automatic_targeting) {
-            case FRIENDLY -> targetSelector.add(4, new ActiveTargetGoal<>(this, LivingEntity.class, 10, true, false, this::shouldHealTarget));
-            case HOSTILE  -> targetSelector.add(4, new ActiveTargetGoal<>(this, MobEntity.class,    10, true, false, this::shouldTarget));
+            case FRIENDLY -> targetSelector.add(4, new DetectionRangeTargetGoal<>(LivingEntity.class, 10, true, false, this::shouldHealTarget));
+            case HOSTILE  -> targetSelector.add(4, new DetectionRangeTargetGoal<>(MobEntity.class,    10, true, false, this::shouldTarget));
             case BOTH     -> {
-                targetSelector.add(4, new ActiveTargetGoal<>(this, LivingEntity.class, 10, true, false, this::shouldHealTarget));
-                targetSelector.add(5, new ActiveTargetGoal<>(this, MobEntity.class,    10, true, false, this::shouldTarget));
+                targetSelector.add(4, new DetectionRangeTargetGoal<>(LivingEntity.class, 10, true, false, this::shouldHealTarget));
+                targetSelector.add(5, new DetectionRangeTargetGoal<>(MobEntity.class,    10, true, false, this::shouldTarget));
             }
             case NONE     -> { /* no auto-acquisition */ }
         }
@@ -477,6 +477,74 @@ public abstract class SummonedEntity extends GolemEntity implements SpellSummone
         return relation == EntityRelation.HOSTILE || relation == EntityRelation.NEUTRAL;
     }
 
+    /// Auto-target acquisition/retention range (blocks), resolved from the behaviour's
+    /// configured detection-range mode. Falls back to GENERIC_FOLLOW_RANGE for the
+    /// FOLLOW_RANGE mode, a null config (e.g. legacy NBT), or a MAXIMUM_ACTION_RANGE that
+    /// resolves to nothing.
+    private double detectionRange() {
+        double followRange = getAttributeValue(EntityAttributes.GENERIC_FOLLOW_RANGE);
+        var config = behaviour != null ? behaviour.targeting.detection_range : null;
+        if (config == null) return followRange;
+        return switch (config.mode) {
+            case FOLLOW_RANGE -> followRange;
+            case STATIC -> config.value;
+            case MAXIMUM_ACTION_RANGE -> {
+                double max = maximumActionRange();
+                yield max > 0 ? max : followRange;
+            }
+        };
+    }
+
+    /// Largest effective range across all configured actions: spell effective ranges
+    /// (`SpellHelper.getRange` × the action's `range.max` fraction) and melee reach
+    /// (`max_range` scaled by the entity's size). 0 when no action yields a positive range.
+    private double maximumActionRange() {
+        if (behaviour == null) return 0;
+        double max = 0;
+        for (var action : behaviour.actions) {
+            double r = switch (action.type) {
+                case MELEE_ATTACK -> meleeActionRange(action.melee_attack);
+                case SPELL_CAST   -> spellActionRange(action.spell_cast);
+            };
+            if (r > max) max = r;
+        }
+        return max;
+    }
+
+    private double meleeActionRange(SummonBehaviour.Action.MeleeAttack melee) {
+        if (melee == null || melee.max_range <= 0) return 0;
+        // Mirrors DynamicMeleeAttackGoal.effectiveMaxRange (scales reach with entity size).
+        return melee.max_range * (1 + getScale() * melee.attack_range_scaling);
+    }
+
+    private double spellActionRange(SummonBehaviour.Action.SpellCast spell) {
+        if (spell == null) return 0;
+        var entry = SpellRegistry.from(getWorld()).getEntry(Identifier.of(spell.spell_id)).orElse(null);
+        if (entry == null) return 0;
+        // Effective range folds in caster modifiers; range.max is the action's engagement edge.
+        return SpellHelper.getRange(this, entry) * spell.range.max;
+    }
+
+    /// ActiveTargetGoal whose detection range is the behaviour's `detection_range` rather
+    /// than the GENERIC_FOLLOW_RANGE attribute. getFollowRange() drives both the candidate
+    /// search box (horizontal extent) and the predicate's max-distance filter, and is also
+    /// used by TrackTargetGoal.shouldContinue for retention — so overriding it scopes the
+    /// whole acquire/keep lifecycle to detection_range. It reads detectionRange() from the
+    /// outer entity (already populated before initGoals runs), so it is safe even when the
+    /// superclass constructor calls getFollowRange() before this subclass is initialized.
+    private class DetectionRangeTargetGoal<T extends LivingEntity> extends ActiveTargetGoal<T> {
+        private DetectionRangeTargetGoal(Class<T> targetClass, int reciprocalChance,
+                                         boolean checkVisibility, boolean checkCanNavigate,
+                                         java.util.function.Predicate<LivingEntity> predicate) {
+            super(SummonedEntity.this, targetClass, reciprocalChance, checkVisibility, checkCanNavigate, predicate);
+        }
+
+        @Override
+        protected double getFollowRange() {
+            return detectionRange();
+        }
+    }
+
     /// True if the entity currently has a live target. Used by passive navigation goals
     /// (wander, follow-summoner) to defer to combat behaviour the moment a target is
     /// acquired by any route — revenge, defend-owner, mirror-owner, or auto-aggro.
@@ -487,10 +555,10 @@ public abstract class SummonedEntity extends GolemEntity implements SpellSummone
 
     // --- Target-clear policy ---
     //
-    // Both triggers (action-completion and after-N-ticks) route through the same
-    // `evaluateClearTarget(predicate)` helper so the chance roll / first-match-wins
+    // All triggers (action-completion, after-N-ticks, out-of-detection-range) route through
+    // the same `evaluateClearTarget(predicate)` helper so the chance roll / first-match-wins
     // semantics live in exactly one place. Goal callbacks call onActionCompleted();
-    // the per-tick loop in tick() calls tickTimeBasedClearTarget().
+    // the per-tick loop in tick() calls tickClearConditions().
 
     // Age at which the entity's current target was acquired. Reset by the setTarget
     // override below; `hasAcquiredTarget` guards the time-based check so stale state
@@ -529,13 +597,23 @@ public abstract class SummonedEntity extends GolemEntity implements SpellSummone
         });
     }
 
-    /// Fires the `AfterTicks` trigger every server tick once the entity has held
-    /// its current target for at least `ticks` ticks. No-ops while there is no
-    /// target. Called from `tick()`.
-    private void tickTimeBasedClearTarget() {
+    /// Evaluates the per-tick clear triggers every server tick: `after_ticks` (held the
+    /// target long enough) and `out_of_detection_range` (target fled beyond a multiple of
+    /// the detection range). No-ops while there is no target. Called from `tick()`.
+    private void tickClearConditions() {
         if (!hasAcquiredTarget) return;
+        var target = getTarget();
+        if (target == null) return;
         int ticksHeld = age - targetAcquiredAtAge;
-        evaluateClearTarget(c -> c.after_ticks != null && ticksHeld >= c.after_ticks.ticks);
+        double distSq = squaredDistanceTo(target);
+        evaluateClearTarget(c -> {
+            if (c.after_ticks != null && ticksHeld >= c.after_ticks.ticks) return true;
+            if (c.out_of_detection_range != null) {
+                double threshold = c.out_of_detection_range.multiplier * detectionRange();
+                return distSq > threshold * threshold;
+            }
+            return false;
+        });
     }
 
     /// Central evaluator: walk `targeting.clear_conditions` in order, find the
@@ -731,8 +809,8 @@ public abstract class SummonedEntity extends GolemEntity implements SpellSummone
             } else {
                 setPhase(PHASE_ACTIVE);
             }
-            // Time-based AfterTicks triggers from targeting.clear_conditions.
-            tickTimeBasedClearTarget();
+            // Per-tick clear triggers (after_ticks, out_of_detection_range) from clear_conditions.
+            tickClearConditions();
             // Action animations are self-terminating now:
             //   - ATTACK_ANIMATION / SPELL_RELEASE_ANIMATION carry a fixed duration; the
             //     client stops their AnimationState once `age - startAge >= duration`.

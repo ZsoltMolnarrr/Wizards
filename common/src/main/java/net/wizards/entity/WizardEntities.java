@@ -275,6 +275,8 @@ public class WizardEntities {
                 // Not attackable
                 summonBehaviour.is_attackable = false;
 
+                summonBehaviour.targeting.detection_range.mode = SummonBehaviour.Targeting.DetectionRange.Mode.MAXIMUM_ACTION_RANGE;
+
                 // Movement: stationary — anchored to the spawn position, no collision
                 summonBehaviour.movement.can_move = false;
                 summonBehaviour.movement.is_pushable = false;

@@ -115,6 +115,23 @@ public class SummonBehaviour {
         ///   BOTH     — installs both goals; friendly takes priority (heal first, then fight)
         public AutoTarget automatic_targeting = AutoTarget.NONE;
         public boolean look_around = true;
+        /// How far `automatic_targeting` reaches when acquiring (and keeping) a target.
+        /// Independent of follow range so a summon's detection radius can be tuned without
+        /// touching its other follow-range-driven AI.
+        public DetectionRange detection_range = new DetectionRange();
+        public static class DetectionRange {
+            /// How the detection radius is determined:
+            ///   FOLLOW_RANGE         — the GENERIC_FOLLOW_RANGE attribute (vanilla default).
+            ///   MAXIMUM_ACTION_RANGE — the largest effective range across the summon's
+            ///                          actions (spell ranges + melee reach), so it only
+            ///                          detects what it can actually act on. Falls back to
+            ///                          FOLLOW_RANGE when no action yields a positive range.
+            ///   STATIC               — a fixed `value` in blocks.
+            public Mode mode = Mode.FOLLOW_RANGE;
+            public enum Mode { FOLLOW_RANGE, MAXIMUM_ACTION_RANGE, STATIC }
+            /// Detection radius in blocks. Used only when mode == STATIC.
+            public float value = 16F;
+        }
 
         public enum AutoTarget { NONE, HOSTILE, FRIENDLY, BOTH }
 
@@ -138,9 +155,11 @@ public class SummonBehaviour {
         ///                           elapsed since the current target was first
         ///                           acquired (i.e. the entity has held this same
         ///                           target for at least that long).
+        ///   `out_of_detection_range` — fires each tick the target is farther than
+        ///                           `multiplier × detection range` away.
         ///
-        /// Leaving both null disables the condition. New trigger kinds slot in as
-        /// additional sub-blocks without disturbing existing fields.
+        /// Leaving every sub-block null disables the condition. New trigger kinds slot in
+        /// as additional sub-blocks without disturbing existing fields.
         public static class ClearCondition {
             /// Probability in `[0..1]` rolled when the trigger fires. Default 1
             /// always clears on a triggered match; values below 1 produce
@@ -150,6 +169,7 @@ public class SummonBehaviour {
             public float chance = 1F;
             @Nullable public OnActionCompleted on_action_completed = null;
             @Nullable public AfterTicks after_ticks = null;
+            @Nullable public OutOfDetectionRange out_of_detection_range = null;
 
             /// Trigger that fires when an action ends after running to completion
             /// (melee swing reaches its full duration; spell cast reaches release).
@@ -167,6 +187,16 @@ public class SummonBehaviour {
             /// `setTarget` switches to a different non-null target.
             public static class AfterTicks {
                 public int ticks = 0;
+            }
+
+            /// Trigger that fires every tick the current target is farther than
+            /// `multiplier × detection range` from the summon. Use to drop targets that
+            /// have fled well beyond what the summon can act on. The detection range is the
+            /// same value `automatic_targeting` uses (see `Targeting.detection_range`).
+            public static class OutOfDetectionRange {
+                /// Distance threshold as a multiple of the detection range. E.g. 2 clears
+                /// the target once it is more than twice the detection range away. Default 1.
+                public float multiplier = 1.5F;
             }
         }
     }
