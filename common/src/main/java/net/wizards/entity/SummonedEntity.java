@@ -566,6 +566,35 @@ public abstract class SummonedEntity extends GolemEntity implements SpellSummone
     private int targetAcquiredAtAge = 0;
     private boolean hasAcquiredTarget = false;
 
+    // Owner-hit tracking for `attack_with_owner_hits`: counts consecutive hits the owner
+    // lands on one target. Tracked on the entity (not inside MirrorOwnerAttackGoal) so the
+    // count keeps building even while that goal is already committed to a different target,
+    // letting the summon switch the moment it frees up. Reset whenever the owner's focus
+    // changes; consumed when the goal commits.
+    private int ownerLastAttackTimeSeen = 0;
+    @Nullable private LivingEntity ownerHitTarget = null;
+    private int ownerHitCount = 0;
+
+    /// Observes the owner's attacks once per server tick and tallies consecutive hits on a
+    /// single target. A new attack on the same target increments the count; switching to a
+    /// different target restarts it at 1. `MirrorOwnerAttackGoal` reads the tally.
+    private void tickOwnerAttackTracking() {
+        if (behaviour == null || !behaviour.targeting.attack_with_owner) return;
+        LivingEntity owner = getOwner();
+        if (owner == null) return;
+        int attackTime = owner.getLastAttackTime();
+        if (attackTime == ownerLastAttackTimeSeen) return; // no new attack since last tick
+        ownerLastAttackTimeSeen = attackTime;
+        LivingEntity attacked = owner.getAttacking();
+        if (attacked == null) return;
+        if (attacked == ownerHitTarget) {
+            ownerHitCount++;
+        } else {
+            ownerHitTarget = attacked;
+            ownerHitCount = 1;
+        }
+    }
+
     @Override
     public void setTarget(@Nullable LivingEntity target) {
         LivingEntity previous = getTarget();
@@ -804,6 +833,8 @@ public abstract class SummonedEntity extends GolemEntity implements SpellSummone
             } else {
                 setPhase(PHASE_ACTIVE);
             }
+            // Tally the owner's hits so MirrorOwnerAttackGoal can apply attack_with_owner_hits.
+            tickOwnerAttackTracking();
             // Per-tick clear triggers (after_ticks, out_of_detection_range) from clear_conditions.
             tickClearConditions();
             // Action animations are self-terminating now:
@@ -885,10 +916,11 @@ public abstract class SummonedEntity extends GolemEntity implements SpellSummone
         }
     }
 
-    // Joins the owner's current attack target (mirrors AttackWithOwnerGoal)
+    // Joins the owner's current attack target (mirrors AttackWithOwnerGoal) once the owner
+    // has hit it `attack_with_owner_hits` times. The hit tally lives on the entity
+    // (ownerHitTarget / ownerHitCount, updated by tickOwnerAttackTracking).
     private class MirrorOwnerAttackGoal extends TrackTargetGoal {
         private LivingEntity attacking;
-        private int lastAttackTime;
 
         public MirrorOwnerAttackGoal() {
             super(SummonedEntity.this, false);
@@ -899,18 +931,19 @@ public abstract class SummonedEntity extends GolemEntity implements SpellSummone
         public boolean canStart() {
             LivingEntity owner = getOwner();
             if (owner == null) return false;
-            attacking = owner.getAttacking();
-            int time = owner.getLastAttackTime();
-            return time != lastAttackTime
-                    && canTrack(attacking, TargetPredicate.DEFAULT)
+            int threshold = Math.max(1, behaviour != null ? behaviour.targeting.attack_with_owner_hits : 1);
+            if (ownerHitTarget == null || ownerHitCount < threshold) return false;
+            attacking = ownerHitTarget;
+            return canTrack(attacking, TargetPredicate.DEFAULT)
                     && canAttackTarget(attacking, owner);
         }
 
         @Override
         public void start() {
             SummonedEntity.this.setTarget(attacking);
-            LivingEntity owner = getOwner();
-            if (owner != null) lastAttackTime = owner.getLastAttackTime();
+            // Consume the tally so the goal doesn't immediately re-fire on the same hits —
+            // the owner must land another `threshold` hits to switch the summon again.
+            ownerHitCount = 0;
             super.start();
         }
     }

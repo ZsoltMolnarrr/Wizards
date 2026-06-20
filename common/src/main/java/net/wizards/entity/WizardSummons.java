@@ -14,7 +14,6 @@ import net.minecraft.world.RaycastContext;
 import net.spell_engine.api.spell.Spell;
 import net.spell_engine.api.spell.event.SpellHandlers;
 import net.spell_engine.internals.SpellHelper;
-import net.spell_engine.utils.TargetHelper;
 import net.spell_engine.utils.WorldScheduler;
 import net.spell_power.api.SpellSchool;
 import net.spell_power.api.SpellSchools;
@@ -338,11 +337,14 @@ public class WizardSummons {
                     living.setHeadYaw(living.getYaw());
                     living.setBodyYaw(living.getYaw());
                 }
-                // Anti-clip fallback: if the placed position can't see the caster (likely inside a wall),
-                // relocate using the cardinal + line-of-sight search.
-                if (!hasLineOfSight(caster, created.getPos(), serverWorld)) {
-                    var fallback = findSpawnPosition(caster, serverWorld);
-                    created.setPosition(fallback.x, fallback.y, fallback.z);
+                // Anti-clip: when a contributing placement opts in via `line_of_sight`, and the placed
+                // position is out of the caster's line of sight (e.g. behind a wall), pull it back
+                // along the sightline to the closest point that is still visible.
+                boolean checkLineOfSight = (placement != null && placement.line_of_sight)
+                        || (groupPlacement != null && groupPlacement.line_of_sight);
+                if (checkLineOfSight) {
+                    var visible = nearestVisiblePosition(caster, created.getPos(), serverWorld);
+                    created.setPosition(visible.x, visible.y, visible.z);
                 }
 
                 // Defer the world spawn by the combined group + per-entity delay (0 = spawn this tick).
@@ -352,28 +354,34 @@ public class WizardSummons {
         }
     }
 
-    // Tries N/E/S/W positions 2 blocks away; picks the first that has solid ground and clear LOS
-    // to the summoner. Falls back to a ground-snapped position at the summoner's feet, then to the
-    // summoner's raw position if no solid ground is found at all.
-    private static Vec3d findSpawnPosition(LivingEntity summoner, ServerWorld world) {
-        double[][] offsets = { {0, -2}, {2, 0}, {0, 2}, {-2, 0} };
-        for (double[] offset : offsets) {
-            Vec3d candidate = summoner.getPos().add(offset[0], 0, offset[1]);
-            Vec3d grounded = TargetHelper.findSolidBlockBelow(summoner, candidate, world, -5);
-            if (grounded == null) continue;
-            if (!hasLineOfSight(summoner, grounded, world)) continue;
-            return grounded;
-        }
-        Vec3d selfGrounded = TargetHelper.findSolidBlockBelow(summoner, summoner.getPos(), world, -5);
-        return selfGrounded != null ? selfGrounded : summoner.getPos();
-    }
+    /// Distance the result is pulled back from a blocking surface along the sightline, so the entity
+    /// sits just shy of the geometry rather than embedded in its face.
+    private static final double LOS_SURFACE_BACKOFF = 0.5;
 
-    private static boolean hasLineOfSight(LivingEntity summoner, Vec3d target, ServerWorld world) {
+    /// The point along the segment from the caster's eyes to `desired` that is still in line of sight:
+    /// `desired` itself when the path is unobstructed, otherwise the closest clear point just before
+    /// the blocking surface (pulled back `LOS_SURFACE_BACKOFF` blocks off the face). Never returns a
+    /// point behind the caster's eyes.
+    private static Vec3d nearestVisiblePosition(LivingEntity caster, Vec3d desired, ServerWorld world) {
+        var from = caster.getEyePos();
         var hit = world.raycast(new RaycastContext(
-                summoner.getEyePos(), target,
+                from, desired,
                 RaycastContext.ShapeType.COLLIDER,
                 RaycastContext.FluidHandling.NONE,
-                summoner));
-        return hit.getType() != HitResult.Type.BLOCK;
+                caster));
+        if (hit.getType() != HitResult.Type.BLOCK) {
+            return desired; // unobstructed line of sight
+        }
+        var ray = desired.subtract(from);
+        var length = ray.length();
+        if (length < 1.0e-4) {
+            return from;
+        }
+        var candidate = hit.getPos().subtract(ray.multiply(LOS_SURFACE_BACKOFF / length));
+        // Guard against a surface right at the caster's face pushing the point behind the eyes.
+        if (candidate.subtract(from).dotProduct(ray) < 0) {
+            return from;
+        }
+        return candidate;
     }
 }
