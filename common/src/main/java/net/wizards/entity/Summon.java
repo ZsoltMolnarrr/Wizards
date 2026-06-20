@@ -1,6 +1,7 @@
 package net.wizards.entity;
 
 import net.spell_engine.api.spell.Spell;
+import net.spell_engine.api.spell.fx.Sound;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -53,6 +54,10 @@ public class Summon {
     /// One-shot FX emitted server-side once per group, at the group's anchor position, deferred by
     /// the group placement's `delay_ticks`. Null = none.
     @Nullable public SummonFx group_spawn_fx = null;
+
+    /// Sound played once per group when it spawns, at the group's anchor position (deferred by the
+    /// group placement's `delay_ticks`). Null = none.
+    @Nullable public Sound group_spawn_sound = null;
 
     public Summon() {}
 

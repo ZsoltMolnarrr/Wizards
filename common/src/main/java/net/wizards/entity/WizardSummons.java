@@ -15,6 +15,7 @@ import net.minecraft.world.RaycastContext;
 import net.spell_engine.api.datagen.SpellBuilder.Placements;
 import net.spell_engine.api.spell.Spell;
 import net.spell_engine.api.spell.event.SpellHandlers;
+import net.spell_engine.api.spell.fx.Sound;
 import net.spell_engine.fx.ModelEffectHelper;
 import net.spell_engine.fx.ParticleHelper;
 import net.spell_engine.internals.SpellHelper;
@@ -327,29 +328,34 @@ public class WizardSummons {
                 ((WorldScheduler) serverWorld).schedule(groupDelay + entityDelay, () -> serverWorld.spawnEntity(created));
             }
 
-            // Group spawn FX: one-shot at the group anchor, deferred by the group delay.
-            if (def.group_spawn_fx != null && groupAnchor != null) {
+            // Group spawn FX + sound: one-shot at the group anchor, deferred by the group delay.
+            if (groupAnchor != null && (def.group_spawn_fx != null || def.group_spawn_sound != null)) {
                 var anchor = groupAnchor;
                 var fx = def.group_spawn_fx;
-                ((WorldScheduler) serverWorld).schedule(groupDelay, () -> emitGroupSpawnFx(serverWorld, caster, anchor, fx));
+                var sound = def.group_spawn_sound;
+                ((WorldScheduler) serverWorld).schedule(groupDelay, () -> {
+                    if (fx != null) emitGroupSpawnFx(serverWorld, caster, anchor, fx);
+                    if (sound != null) playSoundAt(serverWorld, anchor, sound);
+                });
             }
         }
     }
 
-    /// Emits a one-shot FX bundle at a fixed location (the group anchor): particles via a tracker
-    /// packet to the caster's viewers, model effects as self-syncing entities, and the sound at the
-    /// anchor position.
+    /// Emits a one-shot visual FX bundle at a fixed location (the group anchor): particles via a
+    /// tracker packet to the caster's viewers, and model effects as self-syncing entities.
     private static void emitGroupSpawnFx(ServerWorld world, LivingEntity caster, Vec3d anchor, SummonFx fx) {
         if (fx.particles != null && fx.particles.length > 0) {
             ParticleHelper.sendBatches(anchor, caster, fx.particles);
         }
         ModelEffectHelper.spawn(world, anchor, caster.getYaw(), fx.model_fx);
-        if (fx.sound != null) {
-            var soundEvent = Registries.SOUND_EVENT.get(Identifier.of(fx.sound.id()));
-            if (soundEvent != null) {
-                world.playSound(null, anchor.x, anchor.y, anchor.z, soundEvent,
-                        SoundCategory.PLAYERS, fx.sound.volume(), fx.sound.randomizedPitch());
-            }
+    }
+
+    /// Plays a sound at a fixed world position.
+    private static void playSoundAt(ServerWorld world, Vec3d pos, Sound sound) {
+        var soundEvent = Registries.SOUND_EVENT.get(Identifier.of(sound.id()));
+        if (soundEvent != null) {
+            world.playSound(null, pos.x, pos.y, pos.z, soundEvent,
+                    SoundCategory.PLAYERS, sound.volume(), sound.randomizedPitch());
         }
     }
 

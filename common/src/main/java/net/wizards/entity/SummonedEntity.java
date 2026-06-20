@@ -36,7 +36,6 @@ import net.spell_engine.api.spell.registry.SpellRegistry;
 import net.spell_engine.fx.ModelEffectHelper;
 import net.spell_engine.fx.ParticleHelper;
 import net.spell_engine.internals.SpellCooldownManager;
-import net.spell_engine.utils.SoundHelper;
 import net.spell_engine.internals.SpellHelper;
 import net.spell_engine.internals.target.EntityRelation;
 import net.spell_engine.internals.target.EntityRelations;
@@ -335,7 +334,6 @@ public abstract class SummonedEntity extends GolemEntity implements SpellSummone
             ParticleHelper.sendBatches(this, fx.particles);
         }
         ModelEffectHelper.spawn(world, getPos(), getYaw(), fx.model_fx, this);
-        SoundHelper.playSound(world, this, fx.sound);
     }
 
     /// Client-side: spawns the configured existence particles locally on their interval, during the
