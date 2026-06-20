@@ -8,9 +8,205 @@
   "impacts": [
     {
       "action": {
-        "type": "CUSTOM",
-        "custom": {
-          "handler": "wizards:summon_frost_elemental"
+        "type": "SUMMON",
+        "summon": {
+          "entity_type_id": "wizards:frost_elemental",
+          "behaviour": {
+            "is_attackable": true,
+            "attribute_scaling": {
+              "entries": [
+                {
+                  "attribute_id": "minecraft:generic.max_health",
+                  "modifiers": [
+                    {
+                      "attribute_id": "spell_power:frost",
+                      "operation": "ADD_VALUE",
+                      "base": 0.0,
+                      "coefficient": 2.0
+                    }
+                  ]
+                },
+                {
+                  "attribute_id": "minecraft:generic.armor",
+                  "modifiers": [
+                    {
+                      "attribute_id": "spell_power:frost",
+                      "operation": "ADD_VALUE",
+                      "base": 10.0,
+                      "coefficient": 0.1
+                    }
+                  ]
+                },
+                {
+                  "attribute_id": "minecraft:generic.attack_damage",
+                  "modifiers": [
+                    {
+                      "attribute_id": "spell_power:frost",
+                      "operation": "ADD_VALUE",
+                      "base": 0.0,
+                      "coefficient": 0.5
+                    }
+                  ]
+                },
+                {
+                  "attribute_id": "spell_power:frost",
+                  "modifiers": [
+                    {
+                      "attribute_id": "spell_power:frost",
+                      "operation": "ADD_VALUE",
+                      "base": 3.0,
+                      "coefficient": 0.1
+                    }
+                  ]
+                },
+                {
+                  "attribute_id": "minecraft:generic.attack_knockback",
+                  "modifiers": [
+                    {
+                      "attribute_id": "spell_power:frost",
+                      "operation": "ADD_VALUE",
+                      "base": 0.0,
+                      "coefficient": 0.1
+                    }
+                  ]
+                },
+                {
+                  "attribute_id": "minecraft:generic.knockback_resistance",
+                  "modifiers": [
+                    {
+                      "attribute_id": "spell_power:frost",
+                      "operation": "ADD_VALUE",
+                      "base": 5.0,
+                      "coefficient": 0.05
+                    }
+                  ]
+                },
+                {
+                  "attribute_id": "minecraft:generic.scale",
+                  "modifiers": [
+                    {
+                      "attribute_id": "spell_power:frost",
+                      "operation": "ADD_VALUE",
+                      "base": 0.0,
+                      "coefficient": 0.05
+                    }
+                  ]
+                }
+              ]
+            },
+            "existence_particles": [],
+            "movement": {
+              "can_move": true,
+              "affected_by_gravity": true,
+              "wander": {
+                "speed": 1.0,
+                "probability": 0.001
+              },
+              "follow": {
+                "start_distance": 10.0,
+                "stop_distance": 4.0,
+                "teleport_after_distance": 32.0
+              },
+              "is_pushable": true,
+              "collision": "ENEMIES"
+            },
+            "targeting": {
+              "revenge": true,
+              "attack_with_owner": true,
+              "attack_with_owner_hits": 1,
+              "automatic_targeting": "HOSTILE",
+              "look_around": true,
+              "detection_range": {
+                "mode": "FOLLOW_RANGE",
+                "value": 16.0
+              }
+            },
+            "lifespan": {
+              "spawn_ticks": 20,
+              "active_seconds": 30,
+              "despawn_ticks": 20
+            },
+            "sounds": {
+              "spawn": "wizards:frost_elemental_spawn",
+              "despawn": "wizards:frost_elemental_despawn",
+              "hurt": "wizards:frost_elemental_hurt",
+              "death": "wizards:frost_elemental_death",
+              "ambient": "wizards:frost_elemental_idle",
+              "step": "wizards:frost_elemental_step"
+            },
+            "actions": [
+              {
+                "type": "SPELL_CAST",
+                "spell_cast": {
+                  "spell_id": "wizards:frost_shard",
+                  "cooldown": 20,
+                  "aiming": {
+                    "accept_target": true,
+                    "fallback": "NONE"
+                  },
+                  "range": {
+                    "min": 0.0,
+                    "max": 1.0,
+                    "preferred": 0.75
+                  },
+                  "cast_animation_variants": [
+                    1
+                  ],
+                  "release_animation_variants": [
+                    1
+                  ],
+                  "release_animation_duration": 15
+                }
+              },
+              {
+                "type": "SPELL_CAST",
+                "spell_cast": {
+                  "spell_id": "wizards:frost_nova",
+                  "cooldown": 60,
+                  "aiming": {
+                    "accept_target": true,
+                    "fallback": "NONE"
+                  },
+                  "range": {
+                    "min": 0.0,
+                    "max": 1.5,
+                    "preferred": 0.75
+                  },
+                  "cast_animation_variants": [
+                    1
+                  ],
+                  "release_animation_variants": [
+                    2
+                  ],
+                  "release_animation_duration": 15
+                }
+              },
+              {
+                "type": "MELEE_ATTACK",
+                "melee_attack": {
+                  "max_range": 3.0,
+                  "attack_range_scaling": 0.5,
+                  "speed": 2.0,
+                  "movement_speed": 1.0,
+                  "duration": 20,
+                  "windup": 0.4,
+                  "movement_modifier": 0.5,
+                  "radius": 1.0,
+                  "swing_sound": "wizards:frost_elemental_attack",
+                  "impact_sound": "wizards:frost_elemental_impact",
+                  "animation_variants": [
+                    1,
+                    2
+                  ]
+                }
+              }
+            ]
+          },
+          "placements": [
+            {
+              "location_offset_by_look": 2.0
+            }
+          ]
         }
       }
     }

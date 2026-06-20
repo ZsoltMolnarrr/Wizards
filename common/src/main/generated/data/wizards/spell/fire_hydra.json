@@ -8,9 +8,192 @@
   "impacts": [
     {
       "action": {
-        "type": "CUSTOM",
-        "custom": {
-          "handler": "wizards:summon_fire_hydra"
+        "type": "SUMMON",
+        "summon": {
+          "entity_type_id": "wizards:fire_hydra",
+          "behaviour": {
+            "is_attackable": false,
+            "attribute_scaling": {
+              "entries": [
+                {
+                  "attribute_id": "minecraft:generic.max_health",
+                  "modifiers": [
+                    {
+                      "attribute_id": "spell_power:fire",
+                      "operation": "ADD_VALUE",
+                      "base": 0.0,
+                      "coefficient": 2.0
+                    }
+                  ]
+                },
+                {
+                  "attribute_id": "minecraft:generic.armor",
+                  "modifiers": [
+                    {
+                      "attribute_id": "spell_power:fire",
+                      "operation": "ADD_VALUE",
+                      "base": 10.0,
+                      "coefficient": 0.1
+                    }
+                  ]
+                },
+                {
+                  "attribute_id": "minecraft:generic.attack_damage",
+                  "modifiers": [
+                    {
+                      "attribute_id": "spell_power:fire",
+                      "operation": "ADD_VALUE",
+                      "base": 0.0,
+                      "coefficient": 0.5
+                    }
+                  ]
+                },
+                {
+                  "attribute_id": "spell_power:fire",
+                  "modifiers": [
+                    {
+                      "attribute_id": "spell_power:fire",
+                      "operation": "ADD_VALUE",
+                      "base": 3.0,
+                      "coefficient": 0.1
+                    }
+                  ]
+                },
+                {
+                  "attribute_id": "minecraft:generic.attack_knockback",
+                  "modifiers": [
+                    {
+                      "attribute_id": "spell_power:fire",
+                      "operation": "ADD_VALUE",
+                      "base": 0.0,
+                      "coefficient": 0.1
+                    }
+                  ]
+                },
+                {
+                  "attribute_id": "minecraft:generic.knockback_resistance",
+                  "modifiers": [
+                    {
+                      "attribute_id": "spell_power:fire",
+                      "operation": "ADD_VALUE",
+                      "base": 5.0,
+                      "coefficient": 0.05
+                    }
+                  ]
+                }
+              ]
+            },
+            "existence_particles": [],
+            "movement": {
+              "can_move": false,
+              "affected_by_gravity": false,
+              "wander": {
+                "speed": 1.0,
+                "probability": 0.001
+              },
+              "is_pushable": false,
+              "collision": "NONE"
+            },
+            "targeting": {
+              "revenge": true,
+              "attack_with_owner": true,
+              "attack_with_owner_hits": 1,
+              "automatic_targeting": "HOSTILE",
+              "look_around": true,
+              "detection_range": {
+                "mode": "MAXIMUM_ACTION_RANGE",
+                "value": 16.0
+              }
+            },
+            "lifespan": {
+              "spawn_ticks": 20,
+              "active_seconds": 30,
+              "despawn_ticks": 20
+            },
+            "sounds": {
+              "spawn": "",
+              "despawn": "",
+              "hurt": "",
+              "death": "",
+              "ambient": "",
+              "step": ""
+            },
+            "actions": [
+              {
+                "type": "SPELL_CAST",
+                "spell_cast": {
+                  "spell_id": "wizards:fireball",
+                  "cooldown": 20,
+                  "aiming": {
+                    "accept_target": true,
+                    "fallback": "NONE"
+                  },
+                  "range": {
+                    "min": 0.0,
+                    "max": 1.0,
+                    "preferred": 0.75
+                  },
+                  "cast_animation_variants": [
+                    1
+                  ],
+                  "release_animation_variants": [
+                    1
+                  ],
+                  "release_animation_duration": 15
+                }
+              }
+            ]
+          },
+          "placements": [
+            {
+              "location_offset_by_look": 1.0,
+              "apply_yaw": true
+            },
+            {
+              "delay_ticks": 5,
+              "location_offset_by_look": 1.0,
+              "location_yaw_offset": 90.0,
+              "apply_yaw": true
+            },
+            {
+              "delay_ticks": 10,
+              "location_offset_by_look": 1.0,
+              "location_yaw_offset": 270.0,
+              "apply_yaw": true
+            },
+            {
+              "delay_ticks": 15,
+              "location_offset_by_look": 1.0,
+              "location_yaw_offset": 180.0,
+              "apply_yaw": true
+            }
+          ],
+          "spawn_count": 3,
+          "group_placements": [
+            {
+              "location_offset_by_look": 3.0,
+              "location_yaw_offset": 90.0,
+              "apply_yaw": true
+            },
+            {
+              "delay_ticks": 20,
+              "location_offset_by_look": 3.0,
+              "location_yaw_offset": 270.0,
+              "apply_yaw": true
+            },
+            {
+              "delay_ticks": 40,
+              "location_offset_by_look": 3.0,
+              "apply_yaw": true
+            },
+            {
+              "delay_ticks": 60,
+              "location_offset_by_look": 3.0,
+              "location_yaw_offset": 180.0,
+              "apply_yaw": true
+            }
+          ],
+          "group_count": 2
         }
       }
     }

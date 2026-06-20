@@ -15,7 +15,7 @@ import net.spell_engine.fx.SpellEngineSounds;
 import net.spell_power.api.SpellSchools;
 import net.wizards.WizardsMod;
 import net.wizards.effect.WizardsEffects;
-import net.wizards.entity.WizardEntities;
+import net.wizards.entity.WizardSummons;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -504,9 +504,8 @@ public class WizardSpells {
 
         var impact = new Spell.Impact();
         impact.action = new Spell.Impact.Action();
-        impact.action.type = Spell.Impact.Action.Type.CUSTOM;
-        impact.action.custom = new Spell.Impact.Action.Custom();
-        impact.action.custom.handler = WizardEntities.summon_arcane_emitter.toString();
+        impact.action.type = Spell.Impact.Action.Type.SUMMON;
+        impact.action.summon = WizardSummons.arcaneEmitter();
         spell.impacts = List.of(impact);
 
         return new Entry(id, spell, "", "").book(Book.ARCANE);
@@ -1185,9 +1184,8 @@ public class WizardSpells {
 
         var impact = new Spell.Impact();
         impact.action = new Spell.Impact.Action();
-        impact.action.type = Spell.Impact.Action.Type.CUSTOM;
-        impact.action.custom = new Spell.Impact.Action.Custom();
-        impact.action.custom.handler = WizardEntities.summon_fire_hydra.toString();
+        impact.action.type = Spell.Impact.Action.Type.SUMMON;
+        impact.action.summon = WizardSummons.fireHydra();
         spell.impacts = List.of(impact);
 
         return new Entry(id, spell, "", "").book(Book.FIRE);
@@ -1455,9 +1453,8 @@ public class WizardSpells {
 
         var impact = new Spell.Impact();
         impact.action = new Spell.Impact.Action();
-        impact.action.type = Spell.Impact.Action.Type.CUSTOM;
-        impact.action.custom = new Spell.Impact.Action.Custom();
-        impact.action.custom.handler = WizardEntities.summon_frost_elemental.toString();
+        impact.action.type = Spell.Impact.Action.Type.SUMMON;
+        impact.action.summon = WizardSummons.frostElemental();
         spell.impacts = List.of(impact);
 
         return new Entry(id, spell, "", "").book(Book.FROST);

@@ -7,6 +7,7 @@ import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.registry.Registries;
 import net.minecraft.util.Identifier;
 import net.minecraft.world.World;
+import net.spell_engine.entity.SummonedEntity;
 import net.wizards.WizardsMod;
 
 public class FireHydraEntity extends SummonedEntity {

@@ -33,10 +33,6 @@ public class WizardEntities {
         return c;
     }
 
-    public static final Identifier summon_frost_elemental = Identifier.of("wizards", "summon_frost_elemental");
-    public static final Identifier summon_arcane_emitter = Identifier.of("wizards", "summon_arcane_emitter");
-    public static final Identifier summon_fire_hydra = Identifier.of("wizards", "summon_fire_hydra");
-
     public static void register() {
         FrostElementalEntity.TYPE = Registry.register(
                 Registries.ENTITY_TYPE,
@@ -72,8 +68,5 @@ public class WizardEntities {
                         .trackedUpdateRate(3)
                         .build()
         );
-
-
-        WizardSummons.registerHandlers();
     }
 }

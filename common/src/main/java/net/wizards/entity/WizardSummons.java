@@ -1,55 +1,26 @@
 package net.wizards.entity;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.attribute.EntityAttributeModifier;
 import net.minecraft.entity.attribute.EntityAttributes;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.sound.SoundCategory;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.hit.HitResult;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.RaycastContext;
 import net.spell_engine.api.datagen.SpellBuilder.Placements;
-import net.spell_engine.api.spell.Spell;
-import net.spell_engine.api.spell.event.SpellHandlers;
-import net.spell_engine.api.spell.fx.Sound;
-import net.spell_engine.fx.ModelEffectHelper;
-import net.spell_engine.fx.ParticleHelper;
-import net.spell_engine.internals.SpellHelper;
-import net.spell_engine.utils.WorldScheduler;
+import net.spell_engine.api.spell.Spell.Impact.Action.Summon;
+import net.spell_engine.api.spell.summon.AttributeScaling;
+import net.spell_engine.api.spell.summon.SummonBehaviour;
 import net.spell_power.api.SpellSchool;
 import net.spell_power.api.SpellSchools;
 import net.wizards.content.WizardsSounds;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
 
-/// Central definition + spawning of the Wizards summons.
-///
-/// Each summon is a declarative {@link Summon} (entity id + {@link SummonBehaviour} + placement),
-/// keyed by the custom-impact handler id that a spell's `action.custom.handler` references. A single
-/// generic handler (see {@link #registerHandlers()}) drives all of them, so adding a summon is a new
-/// {@link Summon} entry rather than another bespoke handler.
+/// Factory of the Wizards summon definitions. Each builder returns a {@link Summon}
+/// ({@code Spell.Impact.Action.Summon}) that a spell drops into a `SUMMON` impact — the engine's
+/// {@code SpellHelper} spawns and configures it.
 public class WizardSummons {
-
-    /// Builds the default summon definitions, keyed by handler id. Built fresh on demand; the
-    /// returned instances are shared per handler (entities only read the behaviour, never mutate it).
-    public static LinkedHashMap<Identifier, Summon> defaultSummons() {
-        var summons = new LinkedHashMap<Identifier, Summon>();
-        summons.put(WizardEntities.summon_frost_elemental, frostElemental());
-        summons.put(WizardEntities.summon_arcane_emitter, arcaneEmitter());
-        summons.put(WizardEntities.summon_fire_hydra, fireHydra());
-        return summons;
-    }
 
     // MARK: Summon definitions
 
-    private static Summon frostElemental() {
+    public static Summon frostElemental() {
         var b = new SummonBehaviour();
         b.lifespan.active_seconds = 30;
         b.lifespan.spawn_ticks = 20;
@@ -94,20 +65,20 @@ public class WizardSummons {
         b.sounds.ambient = WizardsSounds.FROST_ELEMENTAL_IDLE.id().toString();
         b.sounds.step = WizardsSounds.FROST_ELEMENTAL_STEP.id().toString();
 
-        // Attribute scaling: standard combat stats + a size bump, all scaling with frost spell power
-        var scaling = schoolCombatScaling(SpellSchools.FROST);
-        scaling.add(scalingEntry(EntityAttributes.GENERIC_SCALE.getIdAsString(),
-                SpellSchools.FROST.id.toString(), 0, 0.05));
-        b.attribute_scaling.entries = scaling;
-
         // Placement: 2 blocks ahead of the caster, snapped to the ground, keeping its own facing.
         var placement = Placements.byLook(2F, 0F, 0);
         placement.apply_yaw = false;
 
-        return new Summon(FrostElementalEntity.ID.toString(), b, List.of(placement), 1);
+        var summon = new Summon(FrostElementalEntity.ID.toString(), b, List.of(placement), 1);
+        // Attribute scaling: standard combat stats + a size bump, all scaling with frost spell power
+        var scaling = schoolCombatScaling(SpellSchools.FROST);
+        scaling.add(scalingEntry(EntityAttributes.GENERIC_SCALE.getIdAsString(),
+                SpellSchools.FROST.id.toString(), 0, 0.05));
+        summon.attribute_scaling.entries = scaling;
+        return summon;
     }
 
-    private static Summon arcaneEmitter() {
+    public static Summon arcaneEmitter() {
         var b = new SummonBehaviour();
         b.lifespan.active_seconds = 15;
         b.is_attackable = false;
@@ -137,7 +108,6 @@ public class WizardSummons {
 
         var spellPower = scalingEntry(SpellSchools.ARCANE.id.toString(),
                 SpellSchools.ARCANE.id.toString(), 0, 1.0);
-        b.attribute_scaling.entries = List.of(spellPower);
 
         // Placement: a perpendicular line of up to 7 floating emitters, filled from the centre
         // outwards and staggered by 10 ticks, the whole line pushed behind the caster via a single
@@ -158,10 +128,12 @@ public class WizardSummons {
         behindGroup.apply_yaw = false;
         var groupPlacements = List.of(behindGroup);
 
-        return new Summon(ArcaneEmitterEntity.ID.toString(), b, placements, 3, groupPlacements, 1);
+        var summon = new Summon(ArcaneEmitterEntity.ID.toString(), b, placements, 3, groupPlacements, 1);
+        summon.attribute_scaling.entries = List.of(spellPower);
+        return summon;
     }
 
-    private static Summon fireHydra() {
+    public static Summon fireHydra() {
         var b = new SummonBehaviour();
         b.lifespan.active_seconds = 30;
         b.lifespan.spawn_ticks = 20;
@@ -191,12 +163,10 @@ public class WizardSummons {
         melee.animation_variants = List.of(1);
 
         b.actions = List.of(
-                SummonBehaviour.Action.spell("wizards:fireball", 20),
-                SummonBehaviour.Action.attack(melee)
+                SummonBehaviour.Action.spell("wizards:fireball", 20)
+                // SummonBehaviour.Action.attack(melee)
         );
 
-        // Attribute scaling: standard combat stats scaling with fire spell power (no size bump)
-        b.attribute_scaling.entries = schoolCombatScaling(SpellSchools.FIRE);
 
         // Placement: a tight formation around the caster — front, right, left, back, each 1 block out,
         // ground-snapped and facing the caster's yaw, staggered 5 ticks apart. With spawn_count = 3
@@ -219,7 +189,10 @@ public class WizardSummons {
                 Placements.byLook(gd, 180F, 60)  // back
         );
 
-        return new Summon(FireHydraEntity.ID.toString(), b, placements, 3, groupPlacements, 2);
+        var summon = new Summon(FireHydraEntity.ID.toString(), b, placements, 3, groupPlacements, 2);
+        // Attribute scaling: standard combat stats scaling with fire spell power (no size bump)
+        summon.attribute_scaling.entries = schoolCombatScaling(SpellSchools.FIRE);
+        return summon;
     }
 
     // MARK: Scaling helpers
@@ -250,143 +223,4 @@ public class WizardSummons {
         return entry;
     }
 
-    // MARK: Handler registration + spawning
-
-    /// Registers one generic custom-impact handler per summon definition. Replaces the former
-    /// per-entity handler lambdas.
-    public static void registerHandlers() {
-        defaultSummons().forEach((id, def) ->
-                SpellHandlers.registerCustomImpact(id, new SpellHandlers.CustomImpact() {
-                    @Override
-                    public SpellHandlers.ImpactResult onSpellImpact(RegistryEntry<Spell> spellEntry, net.spell_power.api.SpellPower.Result power,
-                                                                    LivingEntity caster, @Nullable Entity target,
-                                                                    SpellHelper.ImpactContext context) {
-                        spawn(def, spellEntry, caster, context);
-                        return new SpellHandlers.ImpactResult(true, false);
-                    }
-                }));
-    }
-
-    /// Spawns the summon(s) from a definition. `group_count` groups are spawned; each group replays
-    /// the per-entity formation (`spawn_count` entities cycling through `placements`), translated by
-    /// the next group placement (cycling through `group_placements`). Every entity is created by id,
-    /// handed the behaviour, positioned via SpellEngine's EntityPlacement (group offset first, then
-    /// the per-entity placement on top), and falls back to a line-of-sight search if the placed
-    /// position is clipped into geometry. Group and per-entity `delay_ticks` are summed and defer the
-    /// actual world spawn (entities are positioned at cast time, anchored to the caster's cast-time
-    /// state, matching SpellEngine's built-in SPAWN action).
-    private static void spawn(Summon def, RegistryEntry<Spell> spellEntry, LivingEntity caster, SpellHelper.ImpactContext context) {
-        var world = caster.getWorld();
-        if (!(world instanceof ServerWorld serverWorld)) return;
-
-        var type = Registries.ENTITY_TYPE.get(Identifier.of(def.entity_type_id));
-        for (int g = 0; g < def.group_count; g++) {
-            // Next group slot, wrapping around the list (null when no group offset is configured).
-            var groupPlacement = def.group_placements.isEmpty() ? null : def.group_placements.get(g % def.group_placements.size());
-            int groupDelay = groupPlacement != null ? groupPlacement.delay_ticks : 0;
-            Vec3d groupAnchor = null; // caster position + group offset; captured from the first entity
-
-            for (int i = 0; i < def.spawn_count; i++) {
-                var created = (Entity) type.create(world);
-                if (!(created instanceof SpellSummoned summoned)) return;
-
-                // Next per-entity slot, wrapping around the list (null when no slots are configured).
-                var placement = def.placements.isEmpty() ? null : def.placements.get(i % def.placements.size());
-
-                summoned.onSummonedBySpell(new SpellSummoned.Args(caster, spellEntry, def.behaviour, context));
-
-                // Compose placements: the group offset's resulting position seeds the per-entity
-                // placement (both rotate the look-offset by the caster's yaw, so the formation keeps
-                // a consistent caster-relative orientation across groups).
-                var origin = caster.getPos();
-                if (groupPlacement != null) {
-                    SpellHelper.applyEntityPlacement(created, caster, origin, groupPlacement);
-                    origin = created.getPos();
-                }
-                if (i == 0) groupAnchor = origin; // the group's anchor (pre per-entity offset)
-                SpellHelper.applyEntityPlacement(created, caster, origin, placement);
-
-                // applyEntityPlacement only sets entity yaw; sync head/body yaw so the initial pose matches.
-                boolean appliedYaw = (groupPlacement != null && groupPlacement.apply_yaw)
-                        || (placement != null && placement.apply_yaw);
-                if (appliedYaw && created instanceof LivingEntity living) {
-                    living.setHeadYaw(living.getYaw());
-                    living.setBodyYaw(living.getYaw());
-                }
-                // Anti-clip: when a contributing placement opts in via `line_of_sight`, and the placed
-                // position is out of the caster's line of sight (e.g. behind a wall), pull it back
-                // along the sightline to the closest point that is still visible.
-                boolean checkLineOfSight = (placement != null && placement.line_of_sight)
-                        || (groupPlacement != null && groupPlacement.line_of_sight);
-                if (checkLineOfSight) {
-                    var visible = nearestVisiblePosition(caster, created.getPos(), serverWorld);
-                    created.setPosition(visible.x, visible.y, visible.z);
-                }
-
-                // Defer the world spawn by the combined group + per-entity delay (0 = spawn this tick).
-                int entityDelay = placement != null ? placement.delay_ticks : 0;
-                ((WorldScheduler) serverWorld).schedule(groupDelay + entityDelay, () -> serverWorld.spawnEntity(created));
-            }
-
-            // Group spawn FX + sound: one-shot at the group anchor, deferred by the group delay.
-            if (groupAnchor != null && (def.group_spawn_fx != null || def.group_spawn_sound != null)) {
-                var anchor = groupAnchor;
-                var fx = def.group_spawn_fx;
-                var sound = def.group_spawn_sound;
-                ((WorldScheduler) serverWorld).schedule(groupDelay, () -> {
-                    if (fx != null) emitGroupSpawnFx(serverWorld, caster, anchor, fx);
-                    if (sound != null) playSoundAt(serverWorld, anchor, sound);
-                });
-            }
-        }
-    }
-
-    /// Emits a one-shot visual FX bundle at a fixed location (the group anchor): particles via a
-    /// tracker packet to the caster's viewers, and model effects as self-syncing entities.
-    private static void emitGroupSpawnFx(ServerWorld world, LivingEntity caster, Vec3d anchor, SummonFx fx) {
-        if (fx.particles != null && fx.particles.length > 0) {
-            ParticleHelper.sendBatches(anchor, caster, fx.particles);
-        }
-        ModelEffectHelper.spawn(world, anchor, caster.getYaw(), fx.model_fx);
-    }
-
-    /// Plays a sound at a fixed world position.
-    private static void playSoundAt(ServerWorld world, Vec3d pos, Sound sound) {
-        var soundEvent = Registries.SOUND_EVENT.get(Identifier.of(sound.id()));
-        if (soundEvent != null) {
-            world.playSound(null, pos.x, pos.y, pos.z, soundEvent,
-                    SoundCategory.PLAYERS, sound.volume(), sound.randomizedPitch());
-        }
-    }
-
-    /// Distance the result is pulled back from a blocking surface along the sightline, so the entity
-    /// sits just shy of the geometry rather than embedded in its face.
-    private static final double LOS_SURFACE_BACKOFF = 0.5;
-
-    /// The point along the segment from the caster's eyes to `desired` that is still in line of sight:
-    /// `desired` itself when the path is unobstructed, otherwise the closest clear point just before
-    /// the blocking surface (pulled back `LOS_SURFACE_BACKOFF` blocks off the face). Never returns a
-    /// point behind the caster's eyes.
-    private static Vec3d nearestVisiblePosition(LivingEntity caster, Vec3d desired, ServerWorld world) {
-        var from = caster.getEyePos();
-        var hit = world.raycast(new RaycastContext(
-                from, desired,
-                RaycastContext.ShapeType.COLLIDER,
-                RaycastContext.FluidHandling.NONE,
-                caster));
-        if (hit.getType() != HitResult.Type.BLOCK) {
-            return desired; // unobstructed line of sight
-        }
-        var ray = desired.subtract(from);
-        var length = ray.length();
-        if (length < 1.0e-4) {
-            return from;
-        }
-        var candidate = hit.getPos().subtract(ray.multiply(LOS_SURFACE_BACKOFF / length));
-        // Guard against a surface right at the caster's face pushing the point behind the eyes.
-        if (candidate.subtract(from).dotProduct(ray) < 0) {
-            return from;
-        }
-        return candidate;
-    }
 }
