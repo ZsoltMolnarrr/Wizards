@@ -13,59 +13,21 @@
           "entity_type_id": "wizards:arcane_emitter",
           "behaviour": {
             "is_attackable": false,
-            "attribute_scaling": {
-              "entries": [
-                {
-                  "attribute_id": "spell_power:arcane",
-                  "modifiers": [
-                    {
-                      "attribute_id": "spell_power:arcane",
-                      "operation": "ADD_VALUE",
-                      "base": 0.0,
-                      "coefficient": 1.0
-                    }
-                  ]
-                }
-              ]
-            },
-            "existence_particles": [],
             "dimensions": {
-              "width": 0.6,
               "height": 0.6
             },
             "movement": {
               "can_move": false,
               "affected_by_gravity": false,
-              "wander": {
-                "speed": 1.0,
-                "probability": 0.001
-              },
               "is_pushable": false,
               "collision": "NONE"
             },
             "targeting": {
               "revenge": false,
-              "attack_with_owner": true,
-              "attack_with_owner_hits": 1,
-              "automatic_targeting": "NONE",
-              "look_around": false,
-              "detection_range": {
-                "mode": "FOLLOW_RANGE",
-                "value": 16.0
-              }
+              "look_around": false
             },
             "lifespan": {
-              "spawn_ticks": 10,
-              "active_seconds": 15,
-              "despawn_ticks": 10
-            },
-            "sounds": {
-              "spawn": "",
-              "despawn": "",
-              "hurt": "",
-              "death": "",
-              "ambient": "",
-              "step": ""
+              "active_seconds": 15
             },
             "actions": [
               {
@@ -74,22 +36,24 @@
                   "spell_id": "wizards:arcane_bolt",
                   "cooldown": 5,
                   "aiming": {
-                    "accept_target": true,
                     "fallback": "FORWARD"
-                  },
-                  "range": {
-                    "min": 0.0,
-                    "max": 1.0,
-                    "preferred": 0.75
-                  },
-                  "cast_animation_variants": [
-                    1
-                  ],
-                  "release_animation_variants": [
-                    1
-                  ],
-                  "release_animation_duration": 15
+                  }
                 }
+              }
+            ]
+          },
+          "attribute_scaling": {
+            "entries": [
+              {
+                "attribute_id": "spell_power:arcane",
+                "modifiers": [
+                  {
+                    "attribute_id": "spell_power:arcane",
+                    "operation": "ADD_VALUE",
+                    "base": 0.0,
+                    "coefficient": 1.0
+                  }
+                ]
               }
             ]
           },
