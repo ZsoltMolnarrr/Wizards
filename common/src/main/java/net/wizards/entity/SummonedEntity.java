@@ -33,7 +33,10 @@ import net.minecraft.world.explosion.Explosion;
 import net.spell_engine.api.entity.TwoWayCollisionChecker;
 import net.spell_engine.api.spell.Spell;
 import net.spell_engine.api.spell.registry.SpellRegistry;
+import net.spell_engine.fx.ModelEffectHelper;
+import net.spell_engine.fx.ParticleHelper;
 import net.spell_engine.internals.SpellCooldownManager;
+import net.spell_engine.utils.SoundHelper;
 import net.spell_engine.internals.SpellHelper;
 import net.spell_engine.internals.target.EntityRelation;
 import net.spell_engine.internals.target.EntityRelations;
@@ -83,6 +86,11 @@ public abstract class SummonedEntity extends GolemEntity implements SpellSummone
             DataTracker.registerData(SummonedEntity.class, TrackedDataHandlerRegistry.LONG);
     public static final TrackedData<Long> SPELL_RELEASE_ANIMATION =
             DataTracker.registerData(SummonedEntity.class, TrackedDataHandlerRegistry.LONG);
+    // Compact, one-time-synced descriptor of the behaviour's existence particles (Gson JSON). The
+    // client parses it once and spawns the particles locally each interval (see tick()), so
+    // continuous ambient particles cost no per-tick network traffic. Empty = none.
+    public static final TrackedData<String> EXISTENCE_PARTICLES =
+            DataTracker.registerData(SummonedEntity.class, TrackedDataHandlerRegistry.STRING);
 
     private static long packAnim(int variant, int duration, int startAge) {
         return ((long)(variant  & 0xFF))
@@ -296,6 +304,52 @@ public abstract class SummonedEntity extends GolemEntity implements SpellSummone
             syncActionAnimationState(spellCastAnimationState, SPELL_CAST_ANIMATION);
         } else if (data.equals(SPELL_RELEASE_ANIMATION)) {
             syncActionAnimationState(spellReleaseAnimationState, SPELL_RELEASE_ANIMATION);
+        } else if (data.equals(EXISTENCE_PARTICLES)) {
+            parseExistenceParticles();
+        }
+    }
+
+    // Client-side cache of the existence-particle config, parsed once from the synced descriptor.
+    @Nullable private SummonBehaviour.ExistenceParticles[] clientExistenceParticles = null;
+
+    private void parseExistenceParticles() {
+        var json = getDataTracker().get(EXISTENCE_PARTICLES);
+        if (json == null || json.isEmpty()) {
+            clientExistenceParticles = null;
+            return;
+        }
+        try {
+            clientExistenceParticles = GSON.fromJson(json, SummonBehaviour.ExistenceParticles[].class);
+        } catch (Exception e) {
+            clientExistenceParticles = null;
+        }
+    }
+
+    /// Server-side: emits the individual spawn FX once, when the entity enters the world. Particles
+    /// go out as a tracker packet, model effects as self-syncing entities, both at this entity.
+    private void emitSpawnFx() {
+        if (behaviour == null || behaviour.spawn_fx == null) return;
+        var fx = behaviour.spawn_fx;
+        var world = getWorld();
+        if (fx.particles != null && fx.particles.length > 0) {
+            ParticleHelper.sendBatches(this, fx.particles);
+        }
+        ModelEffectHelper.spawn(world, getPos(), getYaw(), fx.model_fx, this);
+        SoundHelper.playSound(world, this, fx.sound);
+    }
+
+    /// Client-side: spawns the configured existence particles locally on their interval, during the
+    /// ACTIVE phase. No network traffic — the config was synced once via EXISTENCE_PARTICLES.
+    private void spawnExistenceParticles() {
+        if (clientExistenceParticles == null || !isActive()) return;
+        var world = getWorld();
+        for (var ep : clientExistenceParticles) {
+            if (ep == null || ep.particles == null || ep.particles.length == 0 || ep.interval_ticks <= 0) {
+                continue;
+            }
+            if (((this.age - ep.offset_ticks) % ep.interval_ticks) == 0) {
+                ParticleHelper.play(world, this, ep.particles);
+            }
         }
     }
 
@@ -353,6 +407,11 @@ public abstract class SummonedEntity extends GolemEntity implements SpellSummone
             this.applyAttributeScaling(owner);
         }
         getDataTracker().set(COLLISION_MODE, (byte) behaviour.movement.collision.ordinal());
+        // Sync the existence-particle config once so the client can spawn them locally (no per-tick
+        // packets). Only the particle FX travels — not the whole behaviour.
+        if (!behaviour.existence_particles.isEmpty()) {
+            getDataTracker().set(EXISTENCE_PARTICLES, GSON.toJson(behaviour.existence_particles));
+        }
         // Dimensions are EntityType-seeded in initDataTracker. Only override when the
         // behaviour explicitly carries a non-null Dimensions block.
         if (behaviour.dimensions != null) {
@@ -691,6 +750,7 @@ public abstract class SummonedEntity extends GolemEntity implements SpellSummone
         builder.add(ATTACK_ANIMATION, inactive);
         builder.add(SPELL_CAST_ANIMATION, inactive);
         builder.add(SPELL_RELEASE_ANIMATION, inactive);
+        builder.add(EXISTENCE_PARTICLES, "");
     }
 
     public void setOwnerUuid(@Nullable UUID uuid) {
@@ -816,11 +876,13 @@ public abstract class SummonedEntity extends GolemEntity implements SpellSummone
         super.tick();
         if (this.getWorld().isClient()) {
             setupAnimationStates();
+            spawnExistenceParticles();
         } else {
             if (pendingSpawnSound) {
                 pendingSpawnSound = false;
                 if (behaviour != null) {
                     playConfiguredSound(behaviour.sounds.spawnEvent.get());
+                    emitSpawnFx();
                 }
             }
             cooldownManager.tickUpdate();

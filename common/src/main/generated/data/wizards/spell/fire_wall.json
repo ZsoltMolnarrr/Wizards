@@ -26,14 +26,14 @@
         "time_to_live_seconds": 8.0,
         "impact_tick_interval": 8,
         "placement": {
-          "location_offset_by_look": 4.4,
-          "location_yaw_offset": -64.0,
+          "location_offset_by_look": 4.472136,
+          "location_yaw_offset": -63.434948,
           "apply_yaw": true
         },
         "additional_placements": [
           {
             "delay_ticks": 4,
-            "location_offset_by_look": 2.8,
+            "location_offset_by_look": 2.828427,
             "location_yaw_offset": -45.0,
             "apply_yaw": true
           },
@@ -44,14 +44,14 @@
           },
           {
             "delay_ticks": 4,
-            "location_offset_by_look": 2.8,
+            "location_offset_by_look": 2.828427,
             "location_yaw_offset": 45.0,
             "apply_yaw": true
           },
           {
             "delay_ticks": 4,
-            "location_offset_by_look": 4.4,
-            "location_yaw_offset": 64.0,
+            "location_offset_by_look": 4.472136,
+            "location_yaw_offset": 63.434948,
             "apply_yaw": true
           }
         ],

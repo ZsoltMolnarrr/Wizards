@@ -3,6 +3,7 @@ package net.wizards.entity;
 import com.google.common.base.Suppliers;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.Identifier;
+import net.spell_engine.api.spell.fx.ParticleBatch;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -24,6 +25,27 @@ public class SummonBehaviour {
     // --- Attribute Scaling ---
 
     public AttributeScaling attribute_scaling = new AttributeScaling();
+
+    // --- Spawn FX ---
+
+    /// One-shot FX emitted server-side when this individual summon enters the world (on its first
+    /// tick, alongside the spawn sound). Null = none.
+    @Nullable public SummonFx spawn_fx = null;
+
+    // --- Existence FX ---
+
+    /// Particle effects emitted on a tick interval for the duration of the summon's ACTIVE phase.
+    /// These are spawned CLIENT-SIDE: the config is synced once (via a DataTracker) and the client
+    /// plays the particles locally each interval, so they generate no per-tick network traffic —
+    /// mirroring SpellCloud's `client_data` particles.
+    public List<ExistenceParticles> existence_particles = List.of();
+    public static class ExistenceParticles {
+        public ParticleBatch[] particles = new ParticleBatch[]{};
+        /// Emit every N ticks of entity age (1 = every tick). Values <= 0 disable this entry.
+        public int interval_ticks = 20;
+        /// Tick offset within the interval, so multiple entries can be phase-shifted.
+        public int offset_ticks = 0;
+    }
 
     // --- Dimensions ---
 

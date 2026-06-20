@@ -7,12 +7,16 @@ import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.sound.SoundCategory;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.RaycastContext;
+import net.spell_engine.api.datagen.SpellBuilder.Placements;
 import net.spell_engine.api.spell.Spell;
 import net.spell_engine.api.spell.event.SpellHandlers;
+import net.spell_engine.fx.ModelEffectHelper;
+import net.spell_engine.fx.ParticleHelper;
 import net.spell_engine.internals.SpellHelper;
 import net.spell_engine.utils.WorldScheduler;
 import net.spell_power.api.SpellSchool;
@@ -95,8 +99,9 @@ public class WizardSummons {
                 SpellSchools.FROST.id.toString(), 0, 0.05));
         b.attribute_scaling.entries = scaling;
 
-        // Placement: 2 blocks ahead of the caster, snapped to the ground
-        var placement = compassPlacement(2F, 0F, true, false, 0);
+        // Placement: 2 blocks ahead of the caster, snapped to the ground, keeping its own facing.
+        var placement = Placements.byLook(2F, 0F, 0);
+        placement.apply_yaw = false;
 
         return new Summon(FrostElementalEntity.ID.toString(), b, List.of(placement), 1);
     }
@@ -133,44 +138,26 @@ public class WizardSummons {
                 SpellSchools.ARCANE.id.toString(), 0, 1.0);
         b.attribute_scaling.entries = List.of(spellPower);
 
-        // Placement: up to 7 emitters in a line perpendicular to the caster's yaw, the whole line
-        // pushed behind the caster via a single group offset. Slots are ordered from the center
-        // outwards (center, right 1, left 1, right 2, ...), so a smaller spawn_count yields a tighter
-        // centered line. Each placement fires 10 ticks later than the previous, so the line fills in
-        // from the middle out. Each floats ~1 block up and faces the caster's aim (apply_yaw/pitch),
-        // so the FORWARD-fallback barrage fires the way the player is looking.
-        float spread = 1.5F; // gap between adjacent emitters along the perpendicular axis
-        float behind = 2F;   // how far behind the caster the whole line sits
-        var placements = List.of(
-                emitterPlacement(0F, 0F, 0),              // center
-                emitterPlacement(spread, 90F, 10),        // right 1
-                emitterPlacement(spread, 270F, 20),       // left 1
-                emitterPlacement(2F * spread, 90F, 30),   // right 2
-                emitterPlacement(2F * spread, 270F, 40),  // left 2
-                emitterPlacement(3F * spread, 90F, 50),   // right 3
-                emitterPlacement(3F * spread, 270F, 60)   // left 3
-        );
-        // One group, offset straight behind the caster (look direction rotated 180°). Pure
-        // translation (no ground snap), seeding the perpendicular per-entity line.
-        var groupPlacements = List.of(compassPlacement(behind, 180F, false, false, 0));
+        // Placement: a perpendicular line of up to 7 floating emitters, filled from the centre
+        // outwards and staggered by 10 ticks, the whole line pushed behind the caster via a single
+        // group offset. A smaller spawn_count yields a tighter centered line. Each floats ~1 block up
+        // and faces the caster's aim (apply_yaw/pitch), so the FORWARD-fallback barrage fires the way
+        // the player is looking.
+        var emitter = Placements.template(); // apply_yaw = true, ground-snap = true
+        emitter.force_onto_ground = false;   // floats instead of snapping to the ground
+        emitter.apply_pitch = true;          // also aim with the caster's pitch
+        emitter.location_offset_y = 1.0F;    // ~1 block up
+        var placements = Placements.staggered(
+                Placements.line(7, 1.5F, Placements.LineOrder.CENTER_OUT, emitter), 10);
+
+        // One group, offset straight behind the caster (pure translation, no ground snap), seeding
+        // the perpendicular per-entity line.
+        var behindGroup = Placements.byLook(2F, 180F, 0);
+        behindGroup.force_onto_ground = false;
+        behindGroup.apply_yaw = false;
+        var groupPlacements = List.of(behindGroup);
 
         return new Summon(ArcaneEmitterEntity.ID.toString(), b, placements, 3, groupPlacements, 1);
-    }
-
-    /// A floating turret-emitter placement, offset `sideDistance` blocks along the caster's facing
-    /// rotated by `yawOffset` (90 = right, 270 = left; 0 = centered on the seed position), spawned
-    /// after `delay` ticks. Floats ~1 block up and faces the caster's aim (yaw + pitch). Never
-    /// ground-snapped.
-    private static Spell.EntityPlacement emitterPlacement(float sideDistance, float yawOffset, int delay) {
-        var placement = new Spell.EntityPlacement();
-        placement.location_offset_by_look = sideDistance;
-        placement.location_yaw_offset = yawOffset;
-        placement.location_offset_y = 1.0F;
-        placement.force_onto_ground = false;
-        placement.apply_yaw = true;
-        placement.apply_pitch = true;
-        placement.delay_ticks = delay;
-        return placement;
     }
 
     private static Summon fireHydra() {
@@ -210,42 +197,28 @@ public class WizardSummons {
         // Attribute scaling: standard combat stats scaling with fire spell power (no size bump)
         b.attribute_scaling.entries = schoolCombatScaling(SpellSchools.FIRE);
 
-        // Placement: a tight square formation around the caster, in compass order (front, right,
-        // back, left), each 1 block out and snapped to the ground, all facing the caster's yaw.
-        // With spawn_count = 3 the loop cycles through the first three slots: front, right, back.
+        // Placement: a tight formation around the caster — front, right, left, back, each 1 block out,
+        // ground-snapped and facing the caster's yaw, staggered 5 ticks apart. With spawn_count = 3
+        // the loop cycles through the first three slots: front, right, left.
         float d = 1F;
         var placements = List.of(
-                compassPlacement(d, 0F, true, true, 0),    // front
-                compassPlacement(d, 90F, true, true, 5),   // right
-                compassPlacement(d, 270F, true, true, 10),   // left
-                compassPlacement(d, 180F, true, true, 15)  // back
+                Placements.byLook(d, 0F, 0),    // front
+                Placements.byLook(d, 90F, 5),   // right
+                Placements.byLook(d, 270F, 10), // left
+                Placements.byLook(d, 180F, 15)  // back
         );
 
-        // Group placement: mirror the per-entity compass formation at 3x the distance, used as a
-        // per-group offset. With group_count = 2 the loop cycles through the first two slots
-        // (front and right groups).
+        // Group placement: the same formation at 3x the distance, used as a per-group offset. With
+        // group_count = 2 the loop cycles through the first two slots.
         float gd = d * 3F;
         var groupPlacements = List.of(
-                compassPlacement(gd, 90F, true, true, 0),    // front
-                compassPlacement(gd, 270F, true, true, 20),   // right
-                compassPlacement(gd, 0F, true, true, 40),   // left
-                compassPlacement(gd, 180F, true, true, 60)  // back
+                Placements.byLook(gd, 90F, 0),   // right
+                Placements.byLook(gd, 270F, 20), // left
+                Placements.byLook(gd, 0F, 40),   // front
+                Placements.byLook(gd, 180F, 60)  // back
         );
 
         return new Summon(FireHydraEntity.ID.toString(), b, placements, 3, groupPlacements, 2);
-    }
-
-    /// A placement offset `distance` blocks from the caster along the caster's facing rotated by
-    /// `yawOffset` degrees (0 = in front, 90 = to the right, 180 = behind, 270 = to the left).
-    /// `applyYaw` orients the spawned entity to the caster's yaw.
-    private static Spell.EntityPlacement compassPlacement(float distance, float yawOffset, boolean forceOntoGround, boolean applyYaw, int delay) {
-        var placement = new Spell.EntityPlacement();
-        placement.location_offset_by_look = distance;
-        placement.location_yaw_offset = yawOffset;
-        placement.force_onto_ground = forceOntoGround;
-        placement.apply_yaw = applyYaw;
-        placement.delay_ticks = delay;
-        return placement;
     }
 
     // MARK: Scaling helpers
@@ -310,6 +283,7 @@ public class WizardSummons {
             // Next group slot, wrapping around the list (null when no group offset is configured).
             var groupPlacement = def.group_placements.isEmpty() ? null : def.group_placements.get(g % def.group_placements.size());
             int groupDelay = groupPlacement != null ? groupPlacement.delay_ticks : 0;
+            Vec3d groupAnchor = null; // caster position + group offset; captured from the first entity
 
             for (int i = 0; i < def.spawn_count; i++) {
                 var created = (Entity) type.create(world);
@@ -328,6 +302,7 @@ public class WizardSummons {
                     SpellHelper.applyEntityPlacement(created, caster, origin, groupPlacement);
                     origin = created.getPos();
                 }
+                if (i == 0) groupAnchor = origin; // the group's anchor (pre per-entity offset)
                 SpellHelper.applyEntityPlacement(created, caster, origin, placement);
 
                 // applyEntityPlacement only sets entity yaw; sync head/body yaw so the initial pose matches.
@@ -350,6 +325,30 @@ public class WizardSummons {
                 // Defer the world spawn by the combined group + per-entity delay (0 = spawn this tick).
                 int entityDelay = placement != null ? placement.delay_ticks : 0;
                 ((WorldScheduler) serverWorld).schedule(groupDelay + entityDelay, () -> serverWorld.spawnEntity(created));
+            }
+
+            // Group spawn FX: one-shot at the group anchor, deferred by the group delay.
+            if (def.group_spawn_fx != null && groupAnchor != null) {
+                var anchor = groupAnchor;
+                var fx = def.group_spawn_fx;
+                ((WorldScheduler) serverWorld).schedule(groupDelay, () -> emitGroupSpawnFx(serverWorld, caster, anchor, fx));
+            }
+        }
+    }
+
+    /// Emits a one-shot FX bundle at a fixed location (the group anchor): particles via a tracker
+    /// packet to the caster's viewers, model effects as self-syncing entities, and the sound at the
+    /// anchor position.
+    private static void emitGroupSpawnFx(ServerWorld world, LivingEntity caster, Vec3d anchor, SummonFx fx) {
+        if (fx.particles != null && fx.particles.length > 0) {
+            ParticleHelper.sendBatches(anchor, caster, fx.particles);
+        }
+        ModelEffectHelper.spawn(world, anchor, caster.getYaw(), fx.model_fx);
+        if (fx.sound != null) {
+            var soundEvent = Registries.SOUND_EVENT.get(Identifier.of(fx.sound.id()));
+            if (soundEvent != null) {
+                world.playSound(null, anchor.x, anchor.y, anchor.z, soundEvent,
+                        SoundCategory.PLAYERS, fx.sound.volume(), fx.sound.randomizedPitch());
             }
         }
     }

@@ -1,6 +1,7 @@
 package net.wizards.entity;
 
 import net.spell_engine.api.spell.Spell;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,6 +49,10 @@ public class Summon {
     /// ({@link #spawn_count} / {@link #placements}), translated by the next group placement.
     /// Defaults to 1.
     public int group_count = 1;
+
+    /// One-shot FX emitted server-side once per group, at the group's anchor position, deferred by
+    /// the group placement's `delay_ticks`. Null = none.
+    @Nullable public SummonFx group_spawn_fx = null;
 
     public Summon() {}
 

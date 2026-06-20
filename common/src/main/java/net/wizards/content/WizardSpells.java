@@ -1140,13 +1140,15 @@ public class WizardSpells {
                         0.1F, 0.05F, 0.1F),
         };
 
-        cloud.placement = SpellBuilder.Deliver.placementByLook(4.4f, -64, 0);
-        cloud.additional_placements = List.of(
-                SpellBuilder.Deliver.placementByLook(2.8f, -45, 4),
-                SpellBuilder.Deliver.placementByLook(2f, 0, 4),
-                SpellBuilder.Deliver.placementByLook(2.8f, 45, 4),
-                SpellBuilder.Deliver.placementByLook(4.4f, 64, 4)
-        );
+        // A row of 5 fire clouds, 2 blocks apart, 2 blocks in front of the caster, laid out left to
+        // right (matching the release animation). The leftmost ignites immediately; the rest follow
+        // 4 ticks later.
+        var wall = SpellBuilder.Placements.line(5, 2F, 2F, SpellBuilder.Placements.LineOrder.LEFT_TO_RIGHT, SpellBuilder.Placements.template());
+        for (int i = 1; i < wall.size(); i++) {
+            wall.get(i).delay_ticks = 4;
+        }
+        cloud.placement = wall.get(0);
+        cloud.additional_placements = List.copyOf(wall.subList(1, wall.size()));
 
         spell.deliver.clouds = List.of(cloud);
 
