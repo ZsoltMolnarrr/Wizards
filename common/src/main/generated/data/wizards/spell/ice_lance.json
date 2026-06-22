@@ -2,6 +2,7 @@
   "school": "spell_power:frost",
   "range": 64.0,
   "tier": 3,
+  "order": 2,
   "learn": {},
   "active": {
     "cast": {

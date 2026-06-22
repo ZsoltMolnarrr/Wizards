@@ -522,6 +522,8 @@ public class WizardSpells {
 
     public static Entry arcane_barrage = add(arcane_barrage());
     private static Entry arcane_barrage() {
+        var name = "Arcane Barrage";
+        var description = "TODO.";
         var id = Identifier.of(WizardsMod.ID, "arcane_barrage");
         var spell = SpellBuilder.createSpellActive();
         spell.school = SpellSchools.ARCANE;
@@ -537,7 +539,7 @@ public class WizardSpells {
         impact.action.summon = WizardSummons.arcaneEmitter();
         spell.impacts = List.of(impact);
 
-        return new Entry(id, spell, "", "").book(Book.ARCANE);
+        return new Entry(id, spell, name, description).book(Book.ARCANE);
     }
 
     public static Entry arcane_evocation = add(arcane_evocation());
@@ -1221,6 +1223,8 @@ public class WizardSpells {
 
     public static Entry fire_hydra = add(fire_hydra());
     private static Entry fire_hydra() {
+        var name = "Fire Hydra";
+        var description = "Conjure fire hydra heads...";
         var id = Identifier.of(WizardsMod.ID, "fire_hydra");
         var spell = SpellBuilder.createSpellActive();
         spell.school = SpellSchools.FIRE;
@@ -1236,7 +1240,7 @@ public class WizardSpells {
         impact.action.summon = WizardSummons.fireHydra();
         spell.impacts = List.of(impact);
 
-        return new Entry(id, spell, "", "").book(Book.FIRE);
+        return new Entry(id, spell, name, description).book(Book.FIRE);
     }
 
     public static Entry frost_shard = add(frost_shard());
@@ -1382,93 +1386,6 @@ public class WizardSpells {
         return new Entry(id, spell, name, description).weaponGroup(WeaponGroup.FROST_STAFF).weaponGroup(WeaponGroup.WIZARD_STAFF);
     }
 
-    public static Entry ice_lance = add(ice_lance());
-    private static Entry ice_lance() {
-        var id = Identifier.of(WizardsMod.ID, "ice_lance");
-        var spell = SpellBuilder.createWeaponSpell();
-        spell.school = SpellSchools.FROST;
-        spell.tier = 3;
-        spell.range = 64;
-
-        spell.learn = new Spell.Learn();
-
-        // Charged cast: the longer it is held, the harder it hits, the bigger/faster the lance,
-        // and the further it flies (the charge bonus is scaled by the curved release ratio).
-        var charge = SpellBuilder.Casting.charge(spell, 1.5F, Spell.Active.Cast.Charge.Curve.EASE_IN_QUART);
-        charge.min_release_ratio = 0.2F;
-        var bonus = charge.bonus;
-        bonus.power_modifier = new Spell.Impact.Modifier();
-        bonus.power_modifier.power_multiplier = 1.5F;   // up to +150% impact power at full charge
-        bonus.projectile_scale_multiply = 1.0F;         // up to 2x projectile render + hitbox size
-        bonus.projectile_launch = new Spell.LaunchProperties();
-        bonus.projectile_launch.velocity = 0.8F;        // faster projectile at full charge
-        bonus.range_add = 32F;                          // flies further at full charge
-
-        spell.active.cast.animation = PlayerAnimation.of("spell_engine:weapon_spearthrow_ready");
-        spell.active.cast.sound = new Sound(SpellEngineSounds.GENERIC_FROST_CASTING.id(), 0);
-        spell.active.cast.particles = new ParticleBatch[] { frostCastingParticles() };
-
-        spell.release = new Spell.Release();
-        spell.release.pitch_shift = 0.75F;
-        spell.release.sound = new Sound(SpellEngineSounds.GENERIC_FROST_RELEASE.id());
-        spell.release.animation = PlayerAnimation.of("spell_engine:weapon_spearthrow_toss");
-
-        spell.target.type = Spell.Target.Type.AIM;
-        spell.target.aim = new Spell.Target.Aim();
-
-        spell.deliver.type = Spell.Delivery.Type.PROJECTILE;
-        spell.deliver.projectile = new Spell.Delivery.ShootProjectile();
-        spell.deliver.projectile.launch_properties.velocity = 1.2F;
-        // spell.deliver.projectile.launch_properties.sound = new Sound(SpellEngineSounds.GENERIC_FROST_RELEASE.id());
-
-        var projectile = new Spell.ProjectileData();
-        projectile.homing_angle = 2F;
-        projectile.perks.pierce = 1; // a lance pierces (no ricochet/bounce, unlike Frostbolt)
-        projectile.client_data = new Spell.ProjectileData.Client();
-        projectile.client_data.light_level = 12;
-        projectile.client_data.travel_particles = new ParticleBatch[] {
-                new ParticleBatch(
-                        SpellEngineParticles.snowflake.id().toString(),
-                        ParticleBatch.Shape.CIRCLE, ParticleBatch.Origin.CENTER,
-                        ParticleBatch.Rotation.LOOK, 4, 0, 0.1F, 0),
-                new ParticleBatch(
-                        SpellEngineParticles.MagicParticles.get(
-                                SpellEngineParticles.MagicParticles.Shape.FROST,
-                                SpellEngineParticles.MagicParticles.Motion.BURST
-                        ).id().toString(),
-                        ParticleBatch.Shape.CIRCLE, ParticleBatch.Origin.CENTER,
-                        ParticleBatch.Rotation.LOOK, 1, 0.1F, 0.2F, 0)
-                        .color(FROST_COLOR.toRGBA())
-        };
-        projectile.client_data.model = new Spell.ProjectileModel();
-        projectile.client_data.model.model_id = "wizards:spell_projectile/frostbolt"; // same model for now
-        projectile.client_data.model.scale = 0.5F;
-        spell.deliver.projectile.projectile = projectile;
-
-        var damage = SpellBuilder.Impacts.damage(1.0F, 1.5F);
-        damage.particles = frostImpactParticles();
-        damage.sound = new Sound(SpellEngineSounds.GENERIC_FROST_IMPACT.id());
-
-        var slowness = SpellBuilder.Impacts.effectAdd(WizardsEffects.frostSlowness.id.toString(), 5, 0, 1);
-        slowness.action.status_effect.apply_limit = new Spell.Impact.Action.StatusEffect.ApplyLimit();
-        slowness.action.status_effect.apply_limit.health_base = 100;
-        slowness.action.status_effect.apply_limit.spell_power_multiplier = 4;
-        slowness.action.status_effect.show_particles = false;
-        slowness.particles = new ParticleBatch[] {
-                new ParticleBatch(
-                        SpellEngineParticles.snowflake.id().toString(),
-                        ParticleBatch.Shape.SPHERE, ParticleBatch.Origin.CENTER,
-                        25, 0.1F, 0.4F)
-        };
-
-        spell.impacts = List.of(damage, slowness);
-
-        configureFrostRuneCost(spell);
-        SpellBuilder.Cost.cooldownGroup(spell, "weapon");
-
-        return new Entry(id, spell, "", "").book(Book.FROST);
-    }
-
     public static Entry frost_nova = add(frost_nova());
     private static Entry frost_nova() {
         var id = Identifier.of(WizardsMod.ID, "frost_nova");
@@ -1583,24 +1500,94 @@ public class WizardSpells {
         return new Entry(id, spell, name, description).book(Book.FROST);
     }
 
-    public static Entry frost_elemental = add(frost_elemental());
-    private static Entry frost_elemental() {
-        var id = Identifier.of(WizardsMod.ID, "frost_elemental");
-        var spell = SpellBuilder.createSpellActive();
+    public static Entry ice_lance = add(ice_lance());
+    private static Entry ice_lance() {
+        var name = "Ice Lance";
+        var description = "Launches lance of ice...";
+        var id = Identifier.of(WizardsMod.ID, "ice_lance");
+        var spell = SpellBuilder.createWeaponSpell();
         spell.school = SpellSchools.FROST;
-        spell.tier = 4;
+        spell.tier = 3;
+        spell.range = 64;
         spell.order = 2;
-        spell.range = 16;
 
         spell.learn = new Spell.Learn();
 
-        var impact = new Spell.Impact();
-        impact.action = new Spell.Impact.Action();
-        impact.action.type = Spell.Impact.Action.Type.SUMMON;
-        impact.action.summon = WizardSummons.frostElemental();
-        spell.impacts = List.of(impact);
+        // Charged cast: the longer it is held, the harder it hits, the bigger/faster the lance,
+        // and the further it flies (the charge bonus is scaled by the curved release ratio).
+        var charge = SpellBuilder.Casting.charge(spell, 1.5F, Spell.Active.Cast.Charge.Curve.EASE_IN_QUART);
+        charge.min_release_ratio = 0.2F;
+        var bonus = charge.bonus;
+        bonus.power_modifier = new Spell.Impact.Modifier();
+        bonus.power_modifier.power_multiplier = 1.5F;   // up to +150% impact power at full charge
+        bonus.projectile_scale_multiply = 1.0F;         // up to 2x projectile render + hitbox size
+        bonus.projectile_launch = new Spell.LaunchProperties();
+        bonus.projectile_launch.velocity = 0.8F;        // faster projectile at full charge
+        bonus.range_add = 32F;                          // flies further at full charge
 
-        return new Entry(id, spell, "", "").book(Book.FROST);
+        spell.active.cast.animation = PlayerAnimation.of("spell_engine:weapon_spearthrow_ready");
+        spell.active.cast.sound = new Sound(SpellEngineSounds.GENERIC_FROST_CASTING.id(), 0);
+        spell.active.cast.particles = new ParticleBatch[] { frostCastingParticles() };
+
+        spell.release = new Spell.Release();
+        spell.release.pitch_shift = 0.75F;
+        spell.release.sound = new Sound(SpellEngineSounds.GENERIC_FROST_RELEASE.id());
+        spell.release.animation = PlayerAnimation.of("spell_engine:weapon_spearthrow_toss");
+
+        spell.target.type = Spell.Target.Type.AIM;
+        spell.target.aim = new Spell.Target.Aim();
+
+        spell.deliver.type = Spell.Delivery.Type.PROJECTILE;
+        spell.deliver.projectile = new Spell.Delivery.ShootProjectile();
+        spell.deliver.projectile.launch_properties.velocity = 1.2F;
+        // spell.deliver.projectile.launch_properties.sound = new Sound(SpellEngineSounds.GENERIC_FROST_RELEASE.id());
+
+        var projectile = new Spell.ProjectileData();
+        projectile.homing_angle = 2F;
+        projectile.perks.pierce = 1; // a lance pierces (no ricochet/bounce, unlike Frostbolt)
+        projectile.client_data = new Spell.ProjectileData.Client();
+        projectile.client_data.light_level = 12;
+        projectile.client_data.travel_particles = new ParticleBatch[] {
+                new ParticleBatch(
+                        SpellEngineParticles.snowflake.id().toString(),
+                        ParticleBatch.Shape.CIRCLE, ParticleBatch.Origin.CENTER,
+                        ParticleBatch.Rotation.LOOK, 4, 0, 0.1F, 0),
+                new ParticleBatch(
+                        SpellEngineParticles.MagicParticles.get(
+                                SpellEngineParticles.MagicParticles.Shape.FROST,
+                                SpellEngineParticles.MagicParticles.Motion.BURST
+                        ).id().toString(),
+                        ParticleBatch.Shape.CIRCLE, ParticleBatch.Origin.CENTER,
+                        ParticleBatch.Rotation.LOOK, 1, 0.1F, 0.2F, 0)
+                        .color(FROST_COLOR.toRGBA())
+        };
+        projectile.client_data.model = new Spell.ProjectileModel();
+        projectile.client_data.model.model_id = "wizards:spell_projectile/frostbolt"; // same model for now
+        projectile.client_data.model.scale = 0.5F;
+        spell.deliver.projectile.projectile = projectile;
+
+        var damage = SpellBuilder.Impacts.damage(1.0F, 1.5F);
+        damage.particles = frostImpactParticles();
+        damage.sound = new Sound(SpellEngineSounds.GENERIC_FROST_IMPACT.id());
+
+        var slowness = SpellBuilder.Impacts.effectAdd(WizardsEffects.frostSlowness.id.toString(), 5, 0, 1);
+        slowness.action.status_effect.apply_limit = new Spell.Impact.Action.StatusEffect.ApplyLimit();
+        slowness.action.status_effect.apply_limit.health_base = 100;
+        slowness.action.status_effect.apply_limit.spell_power_multiplier = 4;
+        slowness.action.status_effect.show_particles = false;
+        slowness.particles = new ParticleBatch[] {
+                new ParticleBatch(
+                        SpellEngineParticles.snowflake.id().toString(),
+                        ParticleBatch.Shape.SPHERE, ParticleBatch.Origin.CENTER,
+                        25, 0.1F, 0.4F)
+        };
+
+        spell.impacts = List.of(damage, slowness);
+
+        configureFrostRuneCost(spell);
+        SpellBuilder.Cost.cooldownGroup(spell, "weapon");
+
+        return new Entry(id, spell, name, description).book(Book.FROST);
     }
 
     public static Entry frost_blizzard = add(frost_blizzard());
@@ -1708,6 +1695,28 @@ public class WizardSpells {
         configureFrostRuneCost(spell);
         SpellBuilder.Cost.cooldown(spell, 16);
         spell.cost.cooldown.proportional = true;
+
+        return new Entry(id, spell, name, description).book(Book.FROST);
+    }
+
+    public static Entry frost_elemental = add(frost_elemental());
+    private static Entry frost_elemental() {
+        var name = "Frost Elemental";
+        var description = "Summons a frost elemental to fight for you.";
+        var id = Identifier.of(WizardsMod.ID, "frost_elemental");
+        var spell = SpellBuilder.createSpellActive();
+        spell.school = SpellSchools.FROST;
+        spell.tier = 4;
+        spell.order = 2;
+        spell.range = 16;
+
+        spell.learn = new Spell.Learn();
+
+        var impact = new Spell.Impact();
+        impact.action = new Spell.Impact.Action();
+        impact.action.type = Spell.Impact.Action.Type.SUMMON;
+        impact.action.summon = WizardSummons.frostElemental();
+        spell.impacts = List.of(impact);
 
         return new Entry(id, spell, name, description).book(Book.FROST);
     }

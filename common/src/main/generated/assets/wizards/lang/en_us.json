@@ -110,6 +110,8 @@
   "item.wizards.wizard_robe_head": "Wizard Hat",
   "item.wizards.wizard_robe_legs": "Wizard Robe Bottom",
   "itemGroup.wizards.general": "Wizards",
+  "spell.wizards.arcane_barrage.description": "TODO.",
+  "spell.wizards.arcane_barrage.name": "Arcane Barrage",
   "spell.wizards.arcane_beam.description": "Channels a beam of energy, dealing {damage} arcane damage every second. Consumes all Arcane Charges.",
   "spell.wizards.arcane_beam.name": "Arcane Beam",
   "spell.wizards.arcane_blast.description": "Blasts the target, causing {damage} arcane damage. Grants Arcane Charge, stacking up to {effect_amplifier_cap} times.",
@@ -128,6 +130,8 @@
   "spell.wizards.fire_blast.name": "Pyroblast",
   "spell.wizards.fire_breath.description": "Incinerates targets in front, dealing up to {damage} fire spell damage every second.",
   "spell.wizards.fire_breath.name": "Fire Breath",
+  "spell.wizards.fire_hydra.description": "Conjure fire hydra heads...",
+  "spell.wizards.fire_hydra.name": "Fire Hydra",
   "spell.wizards.fire_meteor.description": "Crashes a meteors on the target, each causing up to {damage} fire spell damage within {impact_range} blocks.",
   "spell.wizards.fire_meteor.name": "Meteor",
   "spell.wizards.fire_scorch.description": "Scorches the target, causing {damage} fire spell damage and setting it on fire.",
@@ -142,6 +146,8 @@
   "spell.wizards.fireball.name": "Fireball",
   "spell.wizards.frost_blizzard.description": "Channels a rain of frost shards down onto your target and nearby enemies, dealing up to {damage} frost spell damage slowing the target, in {impact_range} blocks radius.",
   "spell.wizards.frost_blizzard.name": "Blizzard",
+  "spell.wizards.frost_elemental.description": "Summons a frost elemental to fight for you.",
+  "spell.wizards.frost_elemental.name": "Frost Elemental",
   "spell.wizards.frost_nova.description": "Freezes targets around you for {effect_duration} seconds, causing {damage} frost spell damage and blocking their movement. Frozen targets are vulnerable to frost magic.",
   "spell.wizards.frost_nova.name": "Frost Nova",
   "spell.wizards.frost_shard.description": "Launches a frost shard that may bounce of walls, causing {damage} frost spell damage on impact.",
@@ -149,5 +155,7 @@
   "spell.wizards.frost_shield.description": "Protects you from attacks, projectiles and fire for {effect_duration} seconds, but also slows down your movement.",
   "spell.wizards.frost_shield.name": "Frost Shield",
   "spell.wizards.frostbolt.description": "Launches a ball of frost ricocheting to {ricochet} additional nearby targets, causing {damage} frost spell damage and slowing the target on impact.",
-  "spell.wizards.frostbolt.name": "Frostbolt"
+  "spell.wizards.frostbolt.name": "Frostbolt",
+  "spell.wizards.ice_lance.description": "Launches lance of ice...",
+  "spell.wizards.ice_lance.name": "Ice Lance"
 }
