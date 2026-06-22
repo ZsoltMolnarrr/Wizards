@@ -11,9 +11,8 @@ import net.spell_engine.api.config.ConfigFile;
 import net.tiny_config.ConfigManager;
 import net.wizards.config.Default;
 import net.wizards.config.TweaksConfig;
-import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRegistry;
+import net.spell_engine.api.spell.summon.SummonedEntities;
 import net.wizards.effect.WizardsEffects;
-import net.wizards.entity.EntityConfig;
 import net.wizards.entity.ArcaneEmitterEntity;
 import net.wizards.entity.FireHydraEntity;
 import net.wizards.entity.FrostElementalEntity;
@@ -53,13 +52,6 @@ public class WizardsMod {
             .setDirectory(ID)
             .sanitize(true)
             .build();
-    public static ConfigManager<EntityConfig> entityConfig = new ConfigManager<>
-            ("entities", WizardEntities.defaultEntityConfig())
-            .builder()
-            .setDirectory(ID)
-            .sanitize(true)
-            .build();
-
     public static void init() {
         equipmentConfig.refresh();
         effectsConfig.refresh();
@@ -68,21 +60,15 @@ public class WizardsMod {
         if (FabricLoader.getInstance().isDevelopmentEnvironment()) {
             tweaksConfig.value.ignore_items_required_mods = true;
         }
-        entityConfig.refresh();
     }
 
     public static void registerEntities() {
         WizardEntities.register();
-        var defaults = WizardEntities.defaultEntityConfig();
-        for (var entry : defaults.entries.entrySet()) {
-            if (!entityConfig.value.entries.containsKey(entry.getKey())) {
-                entityConfig.value.entries.put(entry.getKey(), entry.getValue());
-            }
-        }
-        FabricDefaultAttributeRegistry.register(FrostElementalEntity.TYPE, FrostElementalEntity.createMobAttributes().build());
-        FabricDefaultAttributeRegistry.register(ArcaneEmitterEntity.TYPE, ArcaneEmitterEntity.createMobAttributes().build());
-        FabricDefaultAttributeRegistry.register(FireHydraEntity.TYPE, FireHydraEntity.createMobAttributes().build());
-        entityConfig.save();
+        // Base attributes are sourced from SpellEngine's central summoned-entity config; pass the entity
+        // ids (always available) and the per-summon defaults. The helper resolves the type and registers.
+        SummonedEntities.registerAttributes(ArcaneEmitterEntity.ID, WizardEntities.arcaneDefaults());
+        SummonedEntities.registerAttributes(FireHydraEntity.ID, WizardEntities.fireDefaults());
+        SummonedEntities.registerAttributes(FrostElementalEntity.ID, WizardEntities.frostDefaults());
     }
 
     public static void registerSounds() {

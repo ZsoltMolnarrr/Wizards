@@ -4,32 +4,36 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SpawnGroup;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
-import net.minecraft.util.Identifier;
+import net.spell_engine.api.spell.summon.SummonedEntityConfig;
 import net.spell_power.api.SpellSchools;
 
 public class WizardEntities {
-    public static EntityConfig defaultEntityConfig() {
-        var c = new EntityConfig();
 
-        var frostEntry = new EntityConfig.Entry();
-        frostEntry.common = new EntityConfig.CommonAttributes(30, 0.25, 4);
-        frostEntry.common.follow_range = 32;
-        frostEntry.custom.add(new EntityConfig.CustomAttribute(SpellSchools.FROST.id.toString(), 1));
-        c.entries.put(FrostElementalEntity.ID.getPath(), frostEntry);
+    // Default base attributes per summon — seeded into the central SpellEngine config
+    // (config/spell_engine/summoned_entities.json) via SummonedEntities.registerAttributes.
 
-        var arcaneEntry = new EntityConfig.Entry();
-        arcaneEntry.common = new EntityConfig.CommonAttributes(20, 0.3, 3);
-        arcaneEntry.common.follow_range = 32;
-        arcaneEntry.custom.add(new EntityConfig.CustomAttribute(SpellSchools.ARCANE.id.toString(), 1));
-        c.entries.put(ArcaneEmitterEntity.ID.getPath(), arcaneEntry);
+    public static SummonedEntityConfig.Entry frostDefaults() {
+        var e = new SummonedEntityConfig.Entry();
+        e.common = new SummonedEntityConfig.CommonAttributes(30, 0.25, 4);
+        e.common.follow_range = 32;
+        e.custom.add(new SummonedEntityConfig.CustomAttribute(SpellSchools.FROST.id.toString(), 1));
+        return e;
+    }
 
-        var fireHydraEntry = new EntityConfig.Entry();
-        fireHydraEntry.common = new EntityConfig.CommonAttributes(30, 0.0, 4);
-        fireHydraEntry.common.follow_range = 32;
-        fireHydraEntry.custom.add(new EntityConfig.CustomAttribute(SpellSchools.FIRE.id.toString(), 1));
-        c.entries.put(FireHydraEntity.ID.getPath(), fireHydraEntry);
+    public static SummonedEntityConfig.Entry arcaneDefaults() {
+        var e = new SummonedEntityConfig.Entry();
+        e.common = new SummonedEntityConfig.CommonAttributes(20, 0.3, 3);
+        e.common.follow_range = 32;
+        e.custom.add(new SummonedEntityConfig.CustomAttribute(SpellSchools.ARCANE.id.toString(), 1));
+        return e;
+    }
 
-        return c;
+    public static SummonedEntityConfig.Entry fireDefaults() {
+        var e = new SummonedEntityConfig.Entry();
+        e.common = new SummonedEntityConfig.CommonAttributes(30, 0.0, 4);
+        e.common.follow_range = 32;
+        e.custom.add(new SummonedEntityConfig.CustomAttribute(SpellSchools.FIRE.id.toString(), 1));
+        return e;
     }
 
     public static void register() {

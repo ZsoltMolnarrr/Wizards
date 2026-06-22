@@ -1,6 +1,10 @@
 {
   "values": [
     {
+      "id": "wizards:ice_lance",
+      "required": false
+    },
+    {
       "id": "wizards:frost_nova",
       "required": false
     },
