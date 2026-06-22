@@ -3,6 +3,7 @@ package net.wizards.fabric.datagen;
 import net.fabricmc.fabric.api.datagen.v1.DataGeneratorEntrypoint;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
+import net.fabricmc.fabric.api.datagen.v1.provider.FabricLanguageProvider;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricRecipeProvider;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagProvider;
 import net.minecraft.data.server.recipe.RecipeExporter;
@@ -11,6 +12,8 @@ import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.Items;
 import net.minecraft.recipe.book.RecipeCategory;
 import net.minecraft.registry.RegistryWrapper;
+import net.minecraft.util.Identifier;
+import net.spell_engine.api.datagen.NamespacedLangGenerator;
 import net.spell_engine.api.datagen.SimpleSoundGeneratorV2;
 import net.spell_engine.api.datagen.SpellGenerator;
 import net.spell_engine.api.datagen.WeaponAttributeGenerator;
@@ -23,6 +26,7 @@ import net.spell_engine.rpg_series.tags.RPGSeriesItemTags;
 import net.wizards.WizardsMod;
 import net.wizards.content.WizardSpells;
 import net.wizards.content.WizardsSounds;
+import net.wizards.effect.WizardsEffects;
 import net.wizards.item.WizardArmors;
 import net.wizards.item.WizardWeapons;
 
@@ -41,6 +45,8 @@ public class WizardsDataGenerator implements DataGeneratorEntrypoint {
         pack.addProvider(UnsmeltGenerator::new);
         pack.addProvider(WizardRecipes::new);
         pack.addProvider(WeaponGen::new);
+        pack.addProvider(WizardAdvancements::new);
+        pack.addProvider(LangGen::new);
     }
 
     public static class ItemTagGenerator extends RPGSeriesDataGen.ItemTagGenerator {
@@ -207,6 +213,102 @@ public class WizardsDataGenerator implements DataGeneratorEntrypoint {
                     builder.entries.add(new Entry(entry.id(), entry.weaponAttributesPreset));
                 }
             });
+        }
+    }
+
+    /**
+     * Generates the {@code en_us.json} language file from the in-code content definitions
+     * (spells, status effects, weapons, armor, spell books) plus the advancement tree and a few
+     * ad-hoc strings (creative tab, villager) that have no dedicated content entry.
+     */
+    public static class LangGen extends NamespacedLangGenerator {
+        public LangGen(FabricDataOutput dataOutput, CompletableFuture<RegistryWrapper.WrapperLookup> registryLookup) {
+            super(dataOutput, registryLookup, WizardsMod.ID);
+        }
+
+        @Override
+        public void generateTranslations(RegistryWrapper.WrapperLookup registryLookup, FabricLanguageProvider.TranslationBuilder builder) {
+            var namespace = WizardsMod.ID;
+
+            // Creative tab
+            builder.add("itemGroup." + namespace + ".general", "Wizards");
+
+            // Spell books & scrolls (one generated item per school)
+            for (var book : WizardSpells.Book.values()) {
+                var key = book.name().toLowerCase();
+                builder.add("item." + namespace + ".spell_book/" + key, book.bookName);
+                builder.add("item." + namespace + ".spell_scroll/" + key, book.scrollName);
+                builder.add("item." + namespace + ".spell_book/" + key + ".spell_binding.description", book.bindingDescription);
+            }
+
+            // Spells (only those given a display name in code)
+            for (var entry : WizardSpells.entries) {
+                if (entry.title() == null || entry.title().isEmpty()) {
+                    continue;
+                }
+                var path = entry.id().getPath();
+                builder.add("spell." + namespace + "." + path + ".name", entry.title());
+                builder.add("spell." + namespace + "." + path + ".description", entry.description());
+            }
+
+            // Status effects
+            for (var entry : WizardsEffects.entries) {
+                var path = entry.id.getPath();
+                builder.add("effect." + namespace + "." + path, entry.title);
+                builder.add("effect." + namespace + "." + path + ".description", entry.description);
+            }
+
+            // Weapons
+            for (var entry : WizardWeapons.entries) {
+                var name = entry.translatedName();
+                if (name == null || name.isEmpty()) {
+                    continue;
+                }
+                builder.add("item." + entry.id().getNamespace() + "." + entry.id().getPath(), name);
+            }
+            // Conditional staves are only registered when their host mod is present, so they are absent
+            // from WizardWeapons.entries at data-gen time. Their names are provided directly.
+            builder.add("item." + namespace + ".staff_crystal_arcane", "Crystal Arcane Staff");
+            builder.add("item." + namespace + ".staff_ruby_fire", "Ruby Fire Staff");
+            builder.add("item." + namespace + ".staff_smaragdant_frost", "Smaragdant Frost Staff");
+            builder.add("item." + namespace + ".aether_wizard_staff", "Valkyrie Magister Staff");
+
+            // Armor sets (per piece)
+            for (var entry : WizardArmors.entries) {
+                var set = entry.armorSet();
+                addArmorPiece(builder, set.idOf(set.head), set.headTranslation);
+                addArmorPiece(builder, set.idOf(set.chest), set.chestTranslation);
+                addArmorPiece(builder, set.idOf(set.legs), set.legsTranslation);
+                addArmorPiece(builder, set.idOf(set.feet), set.feetTranslation);
+            }
+
+            // Wizard Merchant villager (several key formats are referenced across versions)
+            builder.add("entity.minecraft.villager.wizard_merchant", "Wizard Merchant");
+            builder.add("entity.minecraft.villager." + namespace + ".wizard_merchant", "Wizard Merchant");
+            builder.add("entity.minecraft.villager." + namespace + ":wizard_merchant", "Wizard Merchant");
+
+            // Advancements (generated alongside the rpg_series advancement JSONs)
+            for (var advancement : WizardAdvancements.entries()) {
+                builder.add(advancement.titleKey(), advancement.title());
+                builder.add(advancement.descriptionKey(), advancement.description());
+            }
+            // Advancements whose definitions are provided elsewhere in the RPG Series, but whose
+            // translations historically ship with Wizards.
+            builder.add("advancements.rpg_series.obtain_wand.title", "The Wand Chooses The Wizard");
+            builder.add("advancements.rpg_series.obtain_wand.description", "Obtain a Wand");
+            builder.add("advancements.rpg_series.obtain_arcane_rune.title", "Path of Arcane");
+            builder.add("advancements.rpg_series.obtain_arcane_rune.description", "Obtain an Arcane Rune");
+            builder.add("advancements.rpg_series.obtain_fire_rune.title", "Path of Fire");
+            builder.add("advancements.rpg_series.obtain_fire_rune.description", "Obtain a Fire Rune");
+            builder.add("advancements.rpg_series.obtain_frost_rune.title", "Path of Frost");
+            builder.add("advancements.rpg_series.obtain_frost_rune.description", "Obtain a Frost Rune");
+        }
+
+        private static void addArmorPiece(FabricLanguageProvider.TranslationBuilder builder, Identifier id, String name) {
+            if (name == null || name.isEmpty()) {
+                return;
+            }
+            builder.add("item." + id.getNamespace() + "." + id.getPath(), name);
         }
     }
 }

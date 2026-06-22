@@ -12,6 +12,8 @@ import net.tiny_config.ConfigManager;
 import net.wizards.config.Default;
 import net.wizards.config.TweaksConfig;
 import net.wizards.effect.WizardsEffects;
+import net.wizards.entity.WizardEntities;
+
 import net.wizards.item.WizardArmors;
 import net.wizards.item.Group;
 import net.wizards.item.WizardWeapons;
@@ -46,7 +48,6 @@ public class WizardsMod {
             .setDirectory(ID)
             .sanitize(true)
             .build();
-
     public static void init() {
         equipmentConfig.refresh();
         effectsConfig.refresh();
@@ -55,6 +56,12 @@ public class WizardsMod {
         if (FabricLoader.getInstance().isDevelopmentEnvironment()) {
             tweaksConfig.value.ignore_items_required_mods = true;
         }
+    }
+
+    public static void registerEntities() {
+        // Each entity's base attributes are registered alongside its type build inside register(),
+        // sourced from SpellEngine's central summoned-entity config.
+        WizardEntities.register();
     }
 
     public static void registerSounds() {

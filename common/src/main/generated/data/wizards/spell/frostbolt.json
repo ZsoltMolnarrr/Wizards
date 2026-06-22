@@ -1,9 +1,7 @@
 {
   "school": "spell_power:frost",
   "range": 64.0,
-  "group": "primary",
   "tier": 1,
-  "sub_tier": 2,
   "learn": {},
   "active": {
     "cast": {

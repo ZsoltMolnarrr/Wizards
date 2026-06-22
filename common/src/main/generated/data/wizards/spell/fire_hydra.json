@@ -1,0 +1,166 @@
+{
+  "school": "spell_power:fire",
+  "range": 16.0,
+  "tier": 4,
+  "order": 2,
+  "learn": {},
+  "active": {},
+  "impacts": [
+    {
+      "action": {
+        "type": "SUMMON",
+        "summon": {
+          "entity_type_id": "wizards:fire_hydra",
+          "behaviour": {
+            "is_attackable": false,
+            "movement": {
+              "can_move": false,
+              "affected_by_gravity": false,
+              "is_pushable": false,
+              "collision": "NONE"
+            },
+            "targeting": {
+              "automatic_targeting": "HOSTILE",
+              "detection_range": {
+                "mode": "MAXIMUM_ACTION_RANGE"
+              }
+            },
+            "lifespan": {
+              "spawn_ticks": 20,
+              "active_seconds": 30,
+              "despawn_ticks": 20
+            },
+            "actions": [
+              {
+                "type": "SPELL_CAST",
+                "spell_cast": {
+                  "spell_id": "wizards:fireball"
+                }
+              }
+            ]
+          },
+          "attribute_scaling": {
+            "entries": [
+              {
+                "attribute_id": "minecraft:generic.max_health",
+                "modifiers": [
+                  {
+                    "attribute_id": "spell_power:fire",
+                    "operation": "ADD_VALUE",
+                    "base": 0.0,
+                    "coefficient": 2.0
+                  }
+                ]
+              },
+              {
+                "attribute_id": "minecraft:generic.armor",
+                "modifiers": [
+                  {
+                    "attribute_id": "spell_power:fire",
+                    "operation": "ADD_VALUE",
+                    "base": 10.0,
+                    "coefficient": 0.1
+                  }
+                ]
+              },
+              {
+                "attribute_id": "minecraft:generic.attack_damage",
+                "modifiers": [
+                  {
+                    "attribute_id": "spell_power:fire",
+                    "operation": "ADD_VALUE",
+                    "base": 0.0,
+                    "coefficient": 0.5
+                  }
+                ]
+              },
+              {
+                "attribute_id": "spell_power:fire",
+                "modifiers": [
+                  {
+                    "attribute_id": "spell_power:fire",
+                    "operation": "ADD_VALUE",
+                    "base": 3.0,
+                    "coefficient": 0.1
+                  }
+                ]
+              },
+              {
+                "attribute_id": "minecraft:generic.attack_knockback",
+                "modifiers": [
+                  {
+                    "attribute_id": "spell_power:fire",
+                    "operation": "ADD_VALUE",
+                    "base": 0.0,
+                    "coefficient": 0.1
+                  }
+                ]
+              },
+              {
+                "attribute_id": "minecraft:generic.knockback_resistance",
+                "modifiers": [
+                  {
+                    "attribute_id": "spell_power:fire",
+                    "operation": "ADD_VALUE",
+                    "base": 5.0,
+                    "coefficient": 0.05
+                  }
+                ]
+              }
+            ]
+          },
+          "placements": [
+            {
+              "location_offset_by_look": 1.0,
+              "apply_yaw": true
+            },
+            {
+              "delay_ticks": 5,
+              "location_offset_by_look": 1.0,
+              "location_yaw_offset": 90.0,
+              "apply_yaw": true
+            },
+            {
+              "delay_ticks": 10,
+              "location_offset_by_look": 1.0,
+              "location_yaw_offset": 270.0,
+              "apply_yaw": true
+            },
+            {
+              "delay_ticks": 15,
+              "location_offset_by_look": 1.0,
+              "location_yaw_offset": 180.0,
+              "apply_yaw": true
+            }
+          ],
+          "spawn_count": 3,
+          "group_placements": [
+            {
+              "location_offset_by_look": 3.0,
+              "location_yaw_offset": 90.0,
+              "apply_yaw": true
+            },
+            {
+              "delay_ticks": 20,
+              "location_offset_by_look": 3.0,
+              "location_yaw_offset": 270.0,
+              "apply_yaw": true
+            },
+            {
+              "delay_ticks": 40,
+              "location_offset_by_look": 3.0,
+              "apply_yaw": true
+            },
+            {
+              "delay_ticks": 60,
+              "location_offset_by_look": 3.0,
+              "location_yaw_offset": 180.0,
+              "apply_yaw": true
+            }
+          ],
+          "group_count": 2
+        }
+      }
+    }
+  ]
+}

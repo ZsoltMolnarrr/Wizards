@@ -29,6 +29,26 @@
       "wizards:arcane_blast_release"
     ]
   },
+  "arcane_evocation_casting": {
+    "sounds": [
+      "wizards:arcane_evocation_casting"
+    ]
+  },
+  "arcane_evocation_release": {
+    "sounds": [
+      "wizards:arcane_evocation_release"
+    ]
+  },
+  "arcane_evocation_start": {
+    "sounds": [
+      "wizards:arcane_evocation_start"
+    ]
+  },
+  "arcane_explosion_release": {
+    "sounds": [
+      "wizards:arcane_explosion_release"
+    ]
+  },
   "arcane_missile_impact": {
     "sounds": [
       "wizards:arcane_missile_impact"
@@ -92,6 +112,50 @@
   "frost_blizzard_casting": {
     "sounds": [
       "wizards:frost_blizzard_casting"
+    ]
+  },
+  "frost_elemental_attack": {
+    "sounds": [
+      "wizards:frost_elemental_attack"
+    ]
+  },
+  "frost_elemental_death": {
+    "sounds": [
+      "wizards:frost_elemental_death"
+    ]
+  },
+  "frost_elemental_despawn": {
+    "sounds": [
+      "wizards:frost_elemental_despawn"
+    ]
+  },
+  "frost_elemental_hurt": {
+    "sounds": [
+      "wizards:frost_elemental_hurt"
+    ]
+  },
+  "frost_elemental_idle": {
+    "sounds": [
+      "wizards:frost_elemental_idle_1",
+      "wizards:frost_elemental_idle_2",
+      "wizards:frost_elemental_idle_3"
+    ]
+  },
+  "frost_elemental_impact": {
+    "sounds": [
+      "wizards:frost_elemental_impact"
+    ]
+  },
+  "frost_elemental_spawn": {
+    "sounds": [
+      "wizards:frost_elemental_spawn"
+    ]
+  },
+  "frost_elemental_step": {
+    "sounds": [
+      "wizards:frost_elemental_step_1",
+      "wizards:frost_elemental_step_2",
+      "wizards:frost_elemental_step_3"
     ]
   },
   "frost_nova_damage_impact": {

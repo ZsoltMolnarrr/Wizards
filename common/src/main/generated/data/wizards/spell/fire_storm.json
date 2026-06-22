@@ -1,0 +1,350 @@
+{
+  "school": "spell_power:fire",
+  "range": 4.0,
+  "tier": 3,
+  "order": 2,
+  "learn": {},
+  "active": {
+    "cast": {
+      "duration": 5.0,
+      "type": "CHANNEL",
+      "channel": {
+        "ticks": 4,
+        "release_fx": true
+      },
+      "animation": {
+        "id": "spell_engine:two_handed_channeling"
+      },
+      "movement_speed": 1.0,
+      "start_sound": {
+        "id": "wizards:fire_breath_start"
+      },
+      "sound": {
+        "id": "wizards:fire_breath_casting",
+        "randomness": 0.0
+      },
+      "particles": [
+        {
+          "particle_id": "spell_engine:flame",
+          "origin": "FEET",
+          "shape": "WIDE_PIPE",
+          "count": 1.0,
+          "min_speed": 0.05,
+          "max_speed": 0.1
+        }
+      ]
+    }
+  },
+  "release": {
+    "particles": [
+      {
+        "particle_id": "lava",
+        "origin": "GROUND",
+        "shape": "CIRCLE",
+        "count": 90.0,
+        "min_speed": 1.5,
+        "max_speed": 5.0
+      },
+      {
+        "particle_id": "spell_engine:fire_explosion",
+        "origin": "CENTER",
+        "shape": "SPHERE",
+        "count": 6.0,
+        "min_speed": 0.5,
+        "max_speed": 0.3
+      }
+    ],
+    "particles_scaled_with_ranged": [
+      {
+        "particle_id": "spell_engine:area_effect_748",
+        "origin": "CENTER",
+        "shape": "SPHERE",
+        "count": 1.0,
+        "max_speed": 0.0,
+        "color_rgba": 4282646783,
+        "scale": 0.8
+      }
+    ],
+    "sound": {
+      "id": "wizards:fireball_impact",
+      "volume": 1.2
+    },
+    "model_fx": [
+      {
+        "model_id": "wizards:spell_projectile/fire_wave",
+        "follow_entity": true,
+        "initial": [
+          {
+            "operation": "scale",
+            "x": -1.0,
+            "y": -1.0,
+            "z": -1.0
+          },
+          {
+            "operation": "rotate",
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+          }
+        ],
+        "animations": [
+          {
+            "start": 0,
+            "end": 20,
+            "easing": "EASE_IN_OUT_CUBIC",
+            "operation": "rotate",
+            "x": 0.0,
+            "y": -360.0,
+            "z": 0.0
+          },
+          {
+            "start": 0,
+            "end": 0,
+            "easing": "LINEAR",
+            "operation": "translate",
+            "x": 0.0,
+            "y": 0.0,
+            "z": -2.0
+          },
+          {
+            "start": 0,
+            "end": 5,
+            "easing": "EASE_IN_OUT_CUBIC",
+            "operation": "scale",
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+          },
+          {
+            "start": 0,
+            "end": 5,
+            "easing": "EASE_IN_CUBIC",
+            "operation": "translate",
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.5
+          },
+          {
+            "start": 15,
+            "end": 20,
+            "easing": "EASE_IN_OUT_CUBIC",
+            "operation": "scale",
+            "x": -1.0,
+            "y": -1.0,
+            "z": -1.0
+          },
+          {
+            "start": 15,
+            "end": 20,
+            "easing": "EASE_IN_CUBIC",
+            "operation": "translate",
+            "x": 0.0,
+            "y": 0.0,
+            "z": -0.5
+          }
+        ]
+      },
+      {
+        "model_id": "wizards:spell_projectile/fire_wave",
+        "follow_entity": true,
+        "initial": [
+          {
+            "operation": "scale",
+            "x": -1.0,
+            "y": -1.0,
+            "z": -1.0
+          },
+          {
+            "operation": "rotate",
+            "x": 0.0,
+            "y": 120.0,
+            "z": 0.0
+          },
+          {
+            "operation": "rotate",
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+          }
+        ],
+        "animations": [
+          {
+            "start": 0,
+            "end": 20,
+            "easing": "EASE_IN_OUT_CUBIC",
+            "operation": "rotate",
+            "x": 0.0,
+            "y": -360.0,
+            "z": 0.0
+          },
+          {
+            "start": 0,
+            "end": 0,
+            "easing": "LINEAR",
+            "operation": "translate",
+            "x": 0.0,
+            "y": 0.0,
+            "z": -2.0
+          },
+          {
+            "start": 0,
+            "end": 5,
+            "easing": "EASE_IN_OUT_CUBIC",
+            "operation": "scale",
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+          },
+          {
+            "start": 0,
+            "end": 5,
+            "easing": "EASE_IN_CUBIC",
+            "operation": "translate",
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.5
+          },
+          {
+            "start": 15,
+            "end": 20,
+            "easing": "EASE_IN_OUT_CUBIC",
+            "operation": "scale",
+            "x": -1.0,
+            "y": -1.0,
+            "z": -1.0
+          },
+          {
+            "start": 15,
+            "end": 20,
+            "easing": "EASE_IN_CUBIC",
+            "operation": "translate",
+            "x": 0.0,
+            "y": 0.0,
+            "z": -0.5
+          }
+        ]
+      },
+      {
+        "model_id": "wizards:spell_projectile/fire_wave",
+        "follow_entity": true,
+        "initial": [
+          {
+            "operation": "scale",
+            "x": -1.0,
+            "y": -1.0,
+            "z": -1.0
+          },
+          {
+            "operation": "rotate",
+            "x": 0.0,
+            "y": 240.0,
+            "z": 0.0
+          },
+          {
+            "operation": "rotate",
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+          }
+        ],
+        "animations": [
+          {
+            "start": 0,
+            "end": 20,
+            "easing": "EASE_IN_OUT_CUBIC",
+            "operation": "rotate",
+            "x": 0.0,
+            "y": -360.0,
+            "z": 0.0
+          },
+          {
+            "start": 0,
+            "end": 0,
+            "easing": "LINEAR",
+            "operation": "translate",
+            "x": 0.0,
+            "y": 0.0,
+            "z": -2.0
+          },
+          {
+            "start": 0,
+            "end": 5,
+            "easing": "EASE_IN_OUT_CUBIC",
+            "operation": "scale",
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+          },
+          {
+            "start": 0,
+            "end": 5,
+            "easing": "EASE_IN_CUBIC",
+            "operation": "translate",
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.5
+          },
+          {
+            "start": 15,
+            "end": 20,
+            "easing": "EASE_IN_OUT_CUBIC",
+            "operation": "scale",
+            "x": -1.0,
+            "y": -1.0,
+            "z": -1.0
+          },
+          {
+            "start": 15,
+            "end": 20,
+            "easing": "EASE_IN_CUBIC",
+            "operation": "translate",
+            "x": 0.0,
+            "y": 0.0,
+            "z": -0.5
+          }
+        ]
+      }
+    ]
+  },
+  "target": {
+    "type": "AREA",
+    "area": {
+      "distance_dropoff": "SQUARED",
+      "vertical_range_multiplier": 0.5
+    }
+  },
+  "impacts": [
+    {
+      "action": {
+        "type": "DAMAGE",
+        "damage": {
+          "spell_power_coefficient": 1.5,
+          "knockback": 1.2
+        }
+      },
+      "particles": [
+        {
+          "particle_id": "spell_engine:fire_explosion",
+          "origin": "CENTER",
+          "shape": "SPHERE",
+          "count": 3.0,
+          "min_speed": 0.2,
+          "max_speed": 0.3
+        }
+      ],
+      "sound": {
+        "id": "wizards:fire_breath_impact"
+      }
+    }
+  ],
+  "cost": {
+    "exhaust": 0.4,
+    "cooldown": {
+      "duration": 20.0,
+      "proportional": true
+    },
+    "item": {
+      "id": "runes:fire_stone"
+    }
+  }
+}

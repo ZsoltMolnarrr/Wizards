@@ -3,7 +3,6 @@ package net.wizards.neoforge;
 import net.minecraft.registry.RegistryKeys;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.common.Mod;
-
 import net.neoforged.neoforge.registries.RegisterEvent;
 import net.wizards.WizardsMod;
 
@@ -20,6 +19,7 @@ public final class NeoForgeMod {
             WizardsMod.registerSounds();
         });
         event.register(RegistryKeys.ITEM, reg -> {
+            WizardsMod.registerEntities();
             WizardsMod.registerItems();
         });
         event.register(RegistryKeys.STATUS_EFFECT, reg -> {

@@ -1,0 +1,67 @@
+package net.wizards.client.entity;
+
+import net.minecraft.client.model.*;
+import net.minecraft.client.render.VertexConsumer;
+import net.minecraft.client.render.entity.model.EntityModelLayer;
+import net.minecraft.client.render.entity.model.SinglePartEntityModel;
+import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.util.Identifier;
+import net.wizards.WizardsMod;
+import net.wizards.entity.ArcaneEmitterEntity;
+
+public class ArcaneEmitterModel extends SinglePartEntityModel<ArcaneEmitterEntity> {
+    public static final EntityModelLayer LAYER = new EntityModelLayer(Identifier.of(WizardsMod.ID, "arcane_emitter"), "main");
+
+	private final ModelPart arcane_missile_small_portal;
+	private final ModelPart portal_part_1;
+	private final ModelPart portal_part_2;
+	private final ModelPart portal_part_3;
+	private final ModelPart portal_part_4;
+	private final ModelPart portal_part_5;
+	private final ModelPart portal_part_6;
+	public ArcaneEmitterModel(ModelPart root) {
+		this.arcane_missile_small_portal = root.getChild("arcane_missile_small_portal");
+		var main = this.arcane_missile_small_portal;
+		this.portal_part_1 = main.getChild("portal_part_1");
+		this.portal_part_2 = main.getChild("portal_part_2");
+		this.portal_part_3 = main.getChild("portal_part_3");
+		this.portal_part_4 = main.getChild("portal_part_4");
+		this.portal_part_5 = main.getChild("portal_part_5");
+		this.portal_part_6 = main.getChild("portal_part_6");
+	}
+	public static TexturedModelData getTexturedModelData() {
+		ModelData modelData = new ModelData();
+		ModelPartData modelPartData = modelData.getRoot();
+		ModelPartData arcane_missile_small_portal = modelPartData.addChild("arcane_missile_small_portal", ModelPartBuilder.create(), ModelTransform.pivot(0.0F, 24.0F, 0.0F));
+
+		ModelPartData portal_part_1 = arcane_missile_small_portal.addChild("portal_part_1", ModelPartBuilder.create().uv(0, 0).cuboid(-14.0F, -14.0F, 0.0F, 28.0F, 28.0F, 0.0F, new Dilation(0.0F)), ModelTransform.pivot(0.0F, 0.0F, 0.0F));
+
+		ModelPartData portal_part_2 = arcane_missile_small_portal.addChild("portal_part_2", ModelPartBuilder.create().uv(0, 28).cuboid(-10.0F, -10.0F, 1.0F, 20.0F, 20.0F, 0.0F, new Dilation(0.0F)), ModelTransform.pivot(0.0F, 0.0F, 1.05F));
+
+		ModelPartData portal_part_3 = arcane_missile_small_portal.addChild("portal_part_3", ModelPartBuilder.create().uv(0, 28).cuboid(-10.0F, -10.0F, -2.0F, 20.0F, 20.0F, 0.0F, new Dilation(0.0F)), ModelTransform.of(0.0F, 0.0F, -0.05F, 0.0F, 0.0F, 0.3927F));
+
+		ModelPartData portal_part_4 = arcane_missile_small_portal.addChild("portal_part_4", ModelPartBuilder.create().uv(0, 48).cuboid(-8.0F, -8.0F, 0.0F, 16.0F, 16.0F, 0.0F, new Dilation(0.0F)), ModelTransform.pivot(0.0F, 0.0F, 0.05F));
+
+		ModelPartData portal_part_5 = arcane_missile_small_portal.addChild("portal_part_5", ModelPartBuilder.create().uv(40, 28).cuboid(-4.0F, -4.0F, -2.0F, 8.0F, 8.0F, 0.0F, new Dilation(0.0F)), ModelTransform.of(0.0F, 0.0F, -2.1F, 0.0F, 0.0F, -0.3927F));
+
+		ModelPartData portal_part_6 = arcane_missile_small_portal.addChild("portal_part_6", ModelPartBuilder.create().uv(40, 28).cuboid(-4.0F, -4.0F, 2.0F, 8.0F, 8.0F, 0.0F, new Dilation(0.0F)), ModelTransform.of(0.0F, 0.0F, 2.0F, 0.0F, 0.0F, 0.3927F));
+		return TexturedModelData.of(modelData, 64, 64);
+	}
+	@Override
+	public ModelPart getPart() {
+		return arcane_missile_small_portal;
+	}
+
+	@Override
+	public void setAngles(ArcaneEmitterEntity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
+		this.getPart().traverse().forEach(ModelPart::resetTransform);
+		this.updateAnimation(entity.spawnAnimationState,   ArcaneEmitterAnimations.spawn, ageInTicks,  1F);
+		this.updateAnimation(entity.idleAnimationState,    ArcaneEmitterAnimations.idle,  ageInTicks,  1F);
+		this.updateAnimation(entity.despawnAnimationState, ArcaneEmitterAnimations.spawn, ageInTicks, -1F);
+	}
+
+	@Override
+	public void render(MatrixStack matrices, VertexConsumer vertices, int light, int overlay, int color) {
+		arcane_missile_small_portal.render(matrices, vertices, light, overlay, color);
+	}
+}

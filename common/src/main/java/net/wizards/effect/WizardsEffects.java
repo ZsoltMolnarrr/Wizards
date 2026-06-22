@@ -27,7 +27,7 @@ public class WizardsEffects {
 
     public static Effects.Entry frozen = add(new Effects.Entry(Identifier.of(WizardsMod.ID, "frozen"),
             "Frozen",
-            "Frozen in place",
+            "Prevents movement, removed upon taking damage, vulnerable to frost magic",
             new FrozenStatusEffect(StatusEffectCategory.HARMFUL, 0x99ccff)
                     .setVulnerability(SpellSchools.FROST, new SpellPower.Vulnerability(0, 1F, 0F)),
             new EffectConfig(
@@ -48,7 +48,7 @@ public class WizardsEffects {
 
     public static Effects.Entry frostShield = add(new Effects.Entry(Identifier.of(WizardsMod.ID, "frost_shield"),
             "Frost Shield",
-            "Protected by frost",
+            "Blocks incoming attacks while active, but slows down movement",
             new FrostShieldStatusEffect(StatusEffectCategory.BENEFICIAL, 0x99ccff),
             new EffectConfig(
                     List.of(
@@ -63,7 +63,7 @@ public class WizardsEffects {
 
     public static Effects.Entry frostSlowness = add(new Effects.Entry(Identifier.of(WizardsMod.ID, "frost_slowness"),
             "Slowness",
-            "Slowed by frost magic",
+            "Reduces movement speed",
             new FrozenStatusEffect(StatusEffectCategory.HARMFUL, 0x99ccff),
             new EffectConfig(
                     List.of(
@@ -76,9 +76,34 @@ public class WizardsEffects {
             )
     ));
 
+    public static Effects.Entry evocation = add(new Effects.Entry(Identifier.of(WizardsMod.ID, "arcane_evocation"),
+            "Evocation",
+            "Increases spell critical strike and speed, but also damage you take",
+            new CustomStatusEffect(StatusEffectCategory.BENEFICIAL, 0xcc44ff),
+            new EffectConfig(
+                    List.of(
+                            new AttributeModifier(
+                                    "spell_power:critical_chance",
+                                    0.03F,
+                                    EntityAttributeModifier.Operation.ADD_MULTIPLIED_BASE
+                            ),
+                            new AttributeModifier(
+                                    "spell_power:haste",
+                                    0.03F,
+                                    EntityAttributeModifier.Operation.ADD_MULTIPLIED_BASE
+                            ),
+                            new AttributeModifier(
+                                    "spell_engine:damage_taken",
+                                    0.1F,
+                                    EntityAttributeModifier.Operation.ADD_MULTIPLIED_BASE
+                            )
+                    )
+            )
+    ));
+
     public static Effects.Entry arcaneCharge = add(new Effects.Entry(Identifier.of(WizardsMod.ID, "arcane_charge"),
             "Arcane Charge",
-            "Empowered by arcane magic",
+            "Increases Arcane spell damage done",
             new CustomStatusEffect(StatusEffectCategory.BENEFICIAL, 0xff4bdd),
             new EffectConfig(
                     List.of(
@@ -96,6 +121,7 @@ public class WizardsEffects {
         Synchronized.configure(frostSlowness.effect, true);
         Synchronized.configure(frozen.effect, true);
         Synchronized.configure(frostShield.effect, true);
+        Synchronized.configure(evocation.effect, true);
         Synchronized.configure(arcaneCharge.effect, true);
 
         Effects.register(entries, config.effects);

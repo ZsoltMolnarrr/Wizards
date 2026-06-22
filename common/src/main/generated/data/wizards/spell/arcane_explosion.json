@@ -1,0 +1,119 @@
+{
+  "school": "spell_power:arcane",
+  "range": 6.0,
+  "tier": 2,
+  "order": 2,
+  "learn": {},
+  "active": {
+    "cast": {
+      "duration": 1.5,
+      "animation": {
+        "id": "spell_engine:one_handed_area_charge"
+      },
+      "sound": {
+        "id": "spell_engine:generic_arcane_casting",
+        "randomness": 0.0
+      },
+      "particles": [
+        {
+          "particle_id": "spell_engine:magic_spell_ascend",
+          "origin": "FEET",
+          "shape": "WIDE_PIPE",
+          "count": 1.0,
+          "min_speed": 0.05,
+          "max_speed": 0.1,
+          "color_rgba": 4284940287
+        }
+      ]
+    }
+  },
+  "release": {
+    "animation": {
+      "id": "spell_engine:one_handed_area_release"
+    },
+    "particles": [
+      {
+        "particle_id": "spell_engine:magic_spark_decelerate",
+        "origin": "CENTER",
+        "shape": "SPHERE",
+        "count": 80.0,
+        "min_speed": 0.7,
+        "max_speed": 0.7,
+        "color_rgba": 4288282623
+      },
+      {
+        "particle_id": "spell_engine:magic_spark_decelerate",
+        "origin": "CENTER",
+        "shape": "SPHERE",
+        "count": 80.0,
+        "min_speed": 0.7,
+        "max_speed": 0.7,
+        "pre_spawn_travel": 2.0,
+        "color_rgba": 4284940287
+      }
+    ],
+    "particles_scaled_with_ranged": [
+      {
+        "particle_id": "spell_engine:area_effect_574",
+        "origin": "CENTER",
+        "shape": "SPHERE",
+        "count": 1.0,
+        "max_speed": 0.0,
+        "color_rgba": 4288282623,
+        "scale": 0.8
+      },
+      {
+        "particle_id": "spell_engine:aura_effect_574",
+        "origin": "CENTER",
+        "shape": "SPHERE",
+        "count": 1.0,
+        "max_speed": 0.0,
+        "color_rgba": 4288282623,
+        "scale": 0.8
+      }
+    ],
+    "sound": {
+      "id": "wizards:arcane_explosion_release"
+    }
+  },
+  "target": {
+    "type": "AREA",
+    "area": {
+      "vertical_range_multiplier": 0.5
+    }
+  },
+  "impacts": [
+    {
+      "action": {
+        "type": "DAMAGE",
+        "damage": {
+          "spell_power_coefficient": 0.9,
+          "knockback": 0.8
+        }
+      },
+      "particles": [
+        {
+          "particle_id": "spell_engine:magic_spell_burst",
+          "origin": "CENTER",
+          "shape": "SPHERE",
+          "count": 30.0,
+          "min_speed": 0.2,
+          "max_speed": 0.7,
+          "color_rgba": 4284940287
+        }
+      ],
+      "sound": {
+        "id": "wizards:arcane_blast_impact"
+      }
+    }
+  ],
+  "cost": {
+    "exhaust": 0.2,
+    "cooldown": {
+      "duration": 10.0
+    },
+    "item": {
+      "id": "runes:arcane_stone"
+    }
+  }
+}

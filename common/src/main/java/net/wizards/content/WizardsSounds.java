@@ -70,6 +70,10 @@ public class WizardsSounds {
     public static final Entry ARCANE_BEAM_CASTING = add(new Entry("arcane_beam_casting"));
     public static final Entry ARCANE_BEAM_IMPACT = add(new Entry("arcane_beam_impact"));
     public static final Entry ARCANE_BEAM_RELEASE = add(new Entry("arcane_beam_release"));
+    public static final Entry ARCANE_EXPLOSION_RELEASE = add(new Entry("arcane_explosion_release"));
+    public static final Entry ARCANE_EVOCATION_START = add(new Entry("arcane_evocation_start"));
+    public static final Entry ARCANE_EVOCATION_CASTING = add(new Entry("arcane_evocation_casting"));
+    public static final Entry ARCANE_EVOCATION_RELEASE = add(new Entry("arcane_evocation_release"));
 
     public static final Entry FIRE_SCORCH_IMPACT = add(new Entry("fire_scorch_impact"));
     public static final Entry FIREBALL_IMPACT = add(new Entry("fireball_impact"));
@@ -88,6 +92,15 @@ public class WizardsSounds {
     public static final Entry FROST_SHIELD_RELEASE = add(new Entry("frost_shield_release"));
     public static final Entry FROST_SHIELD_IMPACT = add(new Entry("frost_shield_impact"));
     public static final Entry FROST_BLIZZARD_CASTING = add(new Entry("frost_blizzard_casting"));
+
+    public static final Entry FROST_ELEMENTAL_ATTACK = add(new Entry("frost_elemental_attack"));
+    public static final Entry FROST_ELEMENTAL_DEATH = add(new Entry("frost_elemental_death"));
+    public static final Entry FROST_ELEMENTAL_IDLE = add(new Entry("frost_elemental_idle")).variants(3);
+    public static final Entry FROST_ELEMENTAL_STEP = add(new Entry("frost_elemental_step")).variants(3);
+    public static final Entry FROST_ELEMENTAL_HURT = add(new Entry("frost_elemental_hurt"));
+    public static final Entry FROST_ELEMENTAL_IMPACT = add(new Entry("frost_elemental_impact"));
+    public static final Entry FROST_ELEMENTAL_SPAWN = add(new Entry("frost_elemental_spawn"));
+    public static final Entry FROST_ELEMENTAL_DESPAWN = add(new Entry("frost_elemental_despawn"));
 
     public static final Entry WIZARD_ROBES_EQUIP = add(new Entry("wizard_robes_equip").variants(3));
 

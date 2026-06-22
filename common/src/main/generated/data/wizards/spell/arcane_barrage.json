@@ -1,0 +1,134 @@
+{
+  "school": "spell_power:arcane",
+  "range": 16.0,
+  "tier": 3,
+  "order": 2,
+  "learn": {},
+  "active": {},
+  "impacts": [
+    {
+      "action": {
+        "type": "SUMMON",
+        "summon": {
+          "entity_type_id": "wizards:arcane_emitter",
+          "behaviour": {
+            "is_attackable": false,
+            "dimensions": {
+              "height": 0.6
+            },
+            "movement": {
+              "can_move": false,
+              "affected_by_gravity": false,
+              "is_pushable": false,
+              "collision": "NONE"
+            },
+            "targeting": {
+              "revenge": false,
+              "look_around": false
+            },
+            "lifespan": {
+              "active_seconds": 15
+            },
+            "actions": [
+              {
+                "type": "SPELL_CAST",
+                "spell_cast": {
+                  "spell_id": "wizards:arcane_bolt",
+                  "cooldown": 5,
+                  "aiming": {
+                    "fallback": "FORWARD"
+                  }
+                }
+              }
+            ]
+          },
+          "attribute_scaling": {
+            "entries": [
+              {
+                "attribute_id": "spell_power:arcane",
+                "modifiers": [
+                  {
+                    "attribute_id": "spell_power:arcane",
+                    "operation": "ADD_VALUE",
+                    "base": 0.0,
+                    "coefficient": 1.0
+                  }
+                ]
+              }
+            ]
+          },
+          "placements": [
+            {
+              "force_onto_ground": false,
+              "apply_yaw": true,
+              "apply_pitch": true,
+              "location_offset_y": 1.0
+            },
+            {
+              "delay_ticks": 10,
+              "force_onto_ground": false,
+              "location_offset_by_look": 1.5,
+              "location_yaw_offset": 90.0,
+              "apply_yaw": true,
+              "apply_pitch": true,
+              "location_offset_y": 1.0
+            },
+            {
+              "delay_ticks": 20,
+              "force_onto_ground": false,
+              "location_offset_by_look": 1.5,
+              "location_yaw_offset": -90.0,
+              "apply_yaw": true,
+              "apply_pitch": true,
+              "location_offset_y": 1.0
+            },
+            {
+              "delay_ticks": 30,
+              "force_onto_ground": false,
+              "location_offset_by_look": 3.0,
+              "location_yaw_offset": 90.0,
+              "apply_yaw": true,
+              "apply_pitch": true,
+              "location_offset_y": 1.0
+            },
+            {
+              "delay_ticks": 40,
+              "force_onto_ground": false,
+              "location_offset_by_look": 3.0,
+              "location_yaw_offset": -90.0,
+              "apply_yaw": true,
+              "apply_pitch": true,
+              "location_offset_y": 1.0
+            },
+            {
+              "delay_ticks": 50,
+              "force_onto_ground": false,
+              "location_offset_by_look": 4.5,
+              "location_yaw_offset": 90.0,
+              "apply_yaw": true,
+              "apply_pitch": true,
+              "location_offset_y": 1.0
+            },
+            {
+              "delay_ticks": 60,
+              "force_onto_ground": false,
+              "location_offset_by_look": 4.5,
+              "location_yaw_offset": -90.0,
+              "apply_yaw": true,
+              "apply_pitch": true,
+              "location_offset_y": 1.0
+            }
+          ],
+          "spawn_count": 3,
+          "group_placements": [
+            {
+              "force_onto_ground": false,
+              "location_offset_by_look": 2.0,
+              "location_yaw_offset": 180.0
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

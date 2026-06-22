@@ -2,11 +2,15 @@
   "school": "spell_power:frost",
   "range": 32.0,
   "tier": 4,
+  "order": 1,
   "learn": {},
   "active": {
     "cast": {
       "duration": 8.0,
-      "channel_ticks": 12,
+      "type": "CHANNEL",
+      "channel": {
+        "ticks": 12
+      },
       "animation": {
         "id": "spell_engine:one_handed_sky_charge"
       },

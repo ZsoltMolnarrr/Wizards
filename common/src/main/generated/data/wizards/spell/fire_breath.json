@@ -2,11 +2,15 @@
   "school": "spell_power:fire",
   "range": 10.0,
   "tier": 2,
+  "order": 1,
   "learn": {},
   "active": {
     "cast": {
       "duration": 5.0,
-      "channel_ticks": 25,
+      "type": "CHANNEL",
+      "channel": {
+        "ticks": 25
+      },
       "animation": {
         "id": "spell_engine:two_handed_channeling"
       },

@@ -1,0 +1,30 @@
+{
+  "parent": "rpg_series:path_choose_frost",
+  "criteria": {
+    "cast": {
+      "conditions": {
+        "spell": "wizards:frost_shard"
+      },
+      "trigger": "spell_engine:spell_cast"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "description": {
+      "translate": "advancements.rpg_series.spell_cast_frost_wand.description"
+    },
+    "icon": {
+      "count": 1,
+      "id": "wizards:wand_frost"
+    },
+    "show_toast": false,
+    "title": {
+      "translate": "advancements.rpg_series.spell_cast_frost_wand.title"
+    }
+  },
+  "requirements": [
+    [
+      "cast"
+    ]
+  ]
+}

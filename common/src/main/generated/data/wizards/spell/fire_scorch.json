@@ -1,9 +1,7 @@
 {
   "school": "spell_power:fire",
   "range": 16.0,
-  "group": "primary",
   "tier": 0,
-  "sub_tier": 0,
   "learn": {},
   "active": {
     "cast": {

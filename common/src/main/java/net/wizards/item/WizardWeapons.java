@@ -54,24 +54,28 @@ public class WizardWeapons {
                     Equipment.Tier.TIER_0, () -> Ingredient.ofItems(Items.STICK),
                     List.of(SpellSchools.FIRE.id))
             .spellContainer(SpellContainers.forMagicWeapon().withSpellId(WizardSpells.fire_scorch.id()))
+            .translatedName("Novice Wand")
     );
     public static final Weapon.Entry arcaneWand = add(Weapons.damageWand(
             NAMESPACE, "wand_arcane",
                     Equipment.Tier.TIER_2, () -> Ingredient.ofItems(Items.GOLD_INGOT),
                     List.of(SpellSchools.ARCANE.id))
             .spellContainer(SpellContainers.forMagicWeapon().withSpellId(WizardSpells.arcane_bolt.id()))
+            .translatedName("Arcane Wand")
     );
     public static final Weapon.Entry fireWand = add(Weapons.damageWand(
             NAMESPACE, "wand_fire",
             Equipment.Tier.TIER_2, () -> Ingredient.ofItems(Items.GOLD_INGOT),
             List.of(SpellSchools.FIRE.id))
             .spellContainer(SpellContainers.forMagicWeapon().withSpellId(WizardSpells.fireball.id()))
+            .translatedName("Fire Wand")
     );
     public static final Weapon.Entry frostWand = add(Weapons.damageWand(
             NAMESPACE, "wand_frost",
             Equipment.Tier.TIER_2, () -> Ingredient.ofItems(Items.IRON_INGOT),
             List.of(SpellSchools.FROST.id))
             .spellContainer(SpellContainers.forMagicWeapon().withSpellId(WizardSpells.frost_shard.id()))
+            .translatedName("Frost Wand")
     );
 
     public static final Weapon.Entry netheriteArcaneWand = add(Weapons.damageWand(
@@ -79,18 +83,21 @@ public class WizardWeapons {
             Equipment.Tier.TIER_3, () -> Ingredient.ofItems(Items.NETHERITE_INGOT),
             List.of(SpellSchools.ARCANE.id))
             .spellContainer(SpellContainers.forMagicWeapon().withSpellId(WizardSpells.arcane_bolt.id()))
+            .translatedName("Netherite Arcane Wand")
     );
     public static final Weapon.Entry netheriteFireWand = add(Weapons.damageWand(
             NAMESPACE, "wand_netherite_fire",
             Equipment.Tier.TIER_3, () -> Ingredient.ofItems(Items.NETHERITE_INGOT),
             List.of(SpellSchools.FIRE.id))
             .spellContainer(SpellContainers.forMagicWeapon().withSpellId(WizardSpells.fireball.id()))
+            .translatedName("Netherite Fire Wand")
     );
     public static final Weapon.Entry netheriteFrostWand = add(Weapons.damageWand(
             NAMESPACE, "wand_netherite_frost",
             Equipment.Tier.TIER_3, () -> Ingredient.ofItems(Items.NETHERITE_INGOT),
             List.of(SpellSchools.FROST.id))
             .spellContainer(SpellContainers.forMagicWeapon().withSpellId(WizardSpells.frost_shard.id()))
+            .translatedName("Netherite Frost Wand")
     );
 
     // MARK: Staves
@@ -101,24 +108,28 @@ public class WizardWeapons {
                     List.of(SpellSchools.ARCANE.id, SpellSchools.FIRE.id, SpellSchools.FROST.id))
             .spellContainer(SpellContainers.forMagicWeapon())
             .withSpellChoices("wizards:weapon/wizard_staff")
+            .translatedName("Wizard Staff")
     );
     public static final Weapon.Entry arcaneStaff = add(Weapons.damageStaff(
             NAMESPACE, "staff_arcane",
             Equipment.Tier.TIER_2, () -> Ingredient.ofItems(Items.GOLD_INGOT),
             List.of(SpellSchools.ARCANE.id))
             .spellContainer(SpellContainers.forMagicWeapon().withSpellId(WizardSpells.arcane_blast.id()))
+            .translatedName("Arcane Staff")
     );
     public static final Weapon.Entry fireStaff = add(Weapons.damageStaff(
             NAMESPACE, "staff_fire",
             Equipment.Tier.TIER_2, () -> Ingredient.ofItems(Items.GOLD_INGOT),
             List.of(SpellSchools.FIRE.id))
             .spellContainer(SpellContainers.forMagicWeapon().withSpellId(WizardSpells.fire_blast.id()))
+            .translatedName("Fire Staff")
     );
     public static final Weapon.Entry frostStaff = add(Weapons.damageStaff(
             NAMESPACE, "staff_frost",
             Equipment.Tier.TIER_2, () -> Ingredient.ofItems(Items.IRON_INGOT),
             List.of(SpellSchools.FROST.id))
             .spellContainer(SpellContainers.forMagicWeapon().withSpellId(WizardSpells.frostbolt.id()))
+            .translatedName("Frost Staff")
     );
 
     public static final Weapon.Entry netheriteArcaneStaff = add(Weapons.damageStaff(
@@ -126,18 +137,21 @@ public class WizardWeapons {
             Equipment.Tier.TIER_3, () -> Ingredient.ofItems(Items.NETHERITE_INGOT),
             List.of(SpellSchools.ARCANE.id))
             .spellContainer(SpellContainers.forMagicWeapon().withSpellId(WizardSpells.arcane_blast.id()))
+            .translatedName("Netherite Arcane Staff")
     );
     public static final Weapon.Entry netheriteFireStaff = add(Weapons.damageStaff(
             NAMESPACE, "staff_netherite_fire",
             Equipment.Tier.TIER_3, () -> Ingredient.ofItems(Items.NETHERITE_INGOT),
             List.of(SpellSchools.FIRE.id))
             .spellContainer(SpellContainers.forMagicWeapon().withSpellId(WizardSpells.fire_blast.id()))
+            .translatedName("Netherite Fire Staff")
     );
     public static final Weapon.Entry netheriteFrostStaff = add(Weapons.damageStaff(
             NAMESPACE, "staff_netherite_frost",
             Equipment.Tier.TIER_3, () -> Ingredient.ofItems(Items.NETHERITE_INGOT),
             List.of(SpellSchools.FROST.id))
             .spellContainer(SpellContainers.forMagicWeapon().withSpellId(WizardSpells.frostbolt.id()))
+            .translatedName("Netherite Frost Staff")
     );
 
     // MARK: Register

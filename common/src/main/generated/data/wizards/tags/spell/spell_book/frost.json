@@ -9,7 +9,15 @@
       "required": false
     },
     {
+      "id": "wizards:ice_lance",
+      "required": false
+    },
+    {
       "id": "wizards:frost_blizzard",
+      "required": false
+    },
+    {
+      "id": "wizards:frost_elemental",
       "required": false
     }
   ]

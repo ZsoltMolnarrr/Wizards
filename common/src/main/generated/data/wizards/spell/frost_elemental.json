@@ -1,0 +1,162 @@
+{
+  "school": "spell_power:frost",
+  "range": 16.0,
+  "tier": 4,
+  "order": 2,
+  "learn": {},
+  "active": {},
+  "impacts": [
+    {
+      "action": {
+        "type": "SUMMON",
+        "summon": {
+          "entity_type_id": "wizards:frost_elemental",
+          "behaviour": {
+            "movement": {
+              "follow": {
+                "teleport_after_distance": 32.0
+              }
+            },
+            "targeting": {
+              "automatic_targeting": "HOSTILE"
+            },
+            "lifespan": {
+              "spawn_ticks": 20,
+              "active_seconds": 30,
+              "despawn_ticks": 20
+            },
+            "sounds": {
+              "spawn": "wizards:frost_elemental_spawn",
+              "despawn": "wizards:frost_elemental_despawn",
+              "hurt": "wizards:frost_elemental_hurt",
+              "death": "wizards:frost_elemental_death",
+              "ambient": "wizards:frost_elemental_idle",
+              "step": "wizards:frost_elemental_step"
+            },
+            "actions": [
+              {
+                "type": "SPELL_CAST",
+                "spell_cast": {
+                  "spell_id": "wizards:frost_shard"
+                }
+              },
+              {
+                "type": "SPELL_CAST",
+                "spell_cast": {
+                  "spell_id": "wizards:frost_nova",
+                  "cooldown": 60,
+                  "range": {
+                    "max": 1.5
+                  },
+                  "release_animation_variants": [
+                    2
+                  ]
+                }
+              },
+              {
+                "type": "MELEE_ATTACK",
+                "melee_attack": {
+                  "speed": 2.0,
+                  "windup": 0.4,
+                  "radius": 1.0,
+                  "swing_sound": "wizards:frost_elemental_attack",
+                  "impact_sound": "wizards:frost_elemental_impact",
+                  "animation_variants": [
+                    1,
+                    2
+                  ]
+                }
+              }
+            ]
+          },
+          "attribute_scaling": {
+            "entries": [
+              {
+                "attribute_id": "minecraft:generic.max_health",
+                "modifiers": [
+                  {
+                    "attribute_id": "spell_power:frost",
+                    "operation": "ADD_VALUE",
+                    "base": 0.0,
+                    "coefficient": 2.0
+                  }
+                ]
+              },
+              {
+                "attribute_id": "minecraft:generic.armor",
+                "modifiers": [
+                  {
+                    "attribute_id": "spell_power:frost",
+                    "operation": "ADD_VALUE",
+                    "base": 10.0,
+                    "coefficient": 0.1
+                  }
+                ]
+              },
+              {
+                "attribute_id": "minecraft:generic.attack_damage",
+                "modifiers": [
+                  {
+                    "attribute_id": "spell_power:frost",
+                    "operation": "ADD_VALUE",
+                    "base": 0.0,
+                    "coefficient": 0.5
+                  }
+                ]
+              },
+              {
+                "attribute_id": "spell_power:frost",
+                "modifiers": [
+                  {
+                    "attribute_id": "spell_power:frost",
+                    "operation": "ADD_VALUE",
+                    "base": 3.0,
+                    "coefficient": 0.1
+                  }
+                ]
+              },
+              {
+                "attribute_id": "minecraft:generic.attack_knockback",
+                "modifiers": [
+                  {
+                    "attribute_id": "spell_power:frost",
+                    "operation": "ADD_VALUE",
+                    "base": 0.0,
+                    "coefficient": 0.1
+                  }
+                ]
+              },
+              {
+                "attribute_id": "minecraft:generic.knockback_resistance",
+                "modifiers": [
+                  {
+                    "attribute_id": "spell_power:frost",
+                    "operation": "ADD_VALUE",
+                    "base": 5.0,
+                    "coefficient": 0.05
+                  }
+                ]
+              },
+              {
+                "attribute_id": "minecraft:generic.scale",
+                "modifiers": [
+                  {
+                    "attribute_id": "spell_power:frost",
+                    "operation": "ADD_VALUE",
+                    "base": 0.0,
+                    "coefficient": 0.05
+                  }
+                ]
+              }
+            ]
+          },
+          "placements": [
+            {
+              "location_offset_by_look": 2.0
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,29 @@
+{
+  "parent": "rpg_series:path_choose_arcane",
+  "criteria": {
+    "bind": {
+      "conditions": {
+        "complete": false,
+        "spell_pool": "wizards:spell_book/arcane"
+      },
+      "trigger": "spell_engine:spell_binding"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.rpg_series.spell_novice_arcane.description"
+    },
+    "icon": {
+      "count": 1,
+      "id": "wizards:staff_arcane"
+    },
+    "title": {
+      "translate": "advancements.rpg_series.spell_novice_arcane.title"
+    }
+  },
+  "requirements": [
+    [
+      "bind"
+    ]
+  ]
+}
