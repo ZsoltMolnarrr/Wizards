@@ -9,9 +9,9 @@
       "duration": 5.0,
       "type": "CHANNEL",
       "channel": {
-        "ticks": 4
+        "ticks": 4,
+        "release_fx": true
       },
-      "channeled_release_fx": true,
       "animation": {
         "id": "spell_engine:two_handed_channeling"
       },

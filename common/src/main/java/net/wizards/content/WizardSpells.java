@@ -1020,12 +1020,13 @@ public class WizardSpells {
         spell.learn = new Spell.Learn();
 
         SpellBuilder.Casting.channel(spell, 5, 4);
+        spell.active.cast.channel.release_fx = true;
         spell.active.cast.animation = PlayerAnimation.of("spell_engine:two_handed_channeling");
         spell.active.cast.start_sound = new Sound(WizardsSounds.FIRE_BREATH_START.id());
         spell.active.cast.sound = new Sound(WizardsSounds.FIRE_BREATH_CASTING.id(), 0);
         spell.active.cast.particles = new ParticleBatch[] { fireCastingParticles() };
         spell.active.cast.movement_speed = 1F;
-        spell.active.cast.channeled_release_fx = true;
+
 
         spell.release = new Spell.Release();
         spell.release.sound = Sound.withVolume(WizardsSounds.FIREBALL_IMPACT.id(), 1.2F);
@@ -1357,6 +1358,8 @@ public class WizardSpells {
         spell.active.cast.particles = new ParticleBatch[] { frostCastingParticles() };
 
         spell.release = new Spell.Release();
+        spell.release.pitch_shift = 0.75F;
+        spell.release.sound = new Sound(SpellEngineSounds.GENERIC_FROST_RELEASE.id());
         spell.release.animation = PlayerAnimation.of("spell_engine:weapon_spearthrow_toss");
 
         spell.target.type = Spell.Target.Type.AIM;
@@ -1365,7 +1368,7 @@ public class WizardSpells {
         spell.deliver.type = Spell.Delivery.Type.PROJECTILE;
         spell.deliver.projectile = new Spell.Delivery.ShootProjectile();
         spell.deliver.projectile.launch_properties.velocity = 1.2F;
-        spell.deliver.projectile.launch_properties.sound = new Sound(SpellEngineSounds.GENERIC_FROST_RELEASE.id());
+        // spell.deliver.projectile.launch_properties.sound = new Sound(SpellEngineSounds.GENERIC_FROST_RELEASE.id());
 
         var projectile = new Spell.ProjectileData();
         projectile.homing_angle = 2F;

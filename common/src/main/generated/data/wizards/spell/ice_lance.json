@@ -42,6 +42,10 @@
   "release": {
     "animation": {
       "id": "spell_engine:weapon_spearthrow_toss"
+    },
+    "pitch_shift": 0.75,
+    "sound": {
+      "id": "spell_engine:generic_frost_release"
     }
   },
   "target": {
@@ -52,10 +56,7 @@
     "type": "PROJECTILE",
     "projectile": {
       "launch_properties": {
-        "velocity": 1.2,
-        "sound": {
-          "id": "spell_engine:generic_frost_release"
-        }
+        "velocity": 1.2
       },
       "projectile": {
         "homing_angle": 2.0,
