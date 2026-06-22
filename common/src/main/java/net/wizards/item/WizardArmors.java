@@ -151,6 +151,7 @@ public class WizardArmors {
                             .add(AttributeModifier.multiply(SpellSchools.FIRE.id, spell_power_t1))
                             .add(AttributeModifier.multiply(SpellSchools.FROST.id, spell_power_t1))
             ), 1)
+            .translatedName("Wizard Hat", "Wizard Robe Top", "Wizard Robe Bottom", "Wizard Boots")
             .armorSet();
 
     public static final Armor.Set arcaneRobeSet = create(
@@ -180,6 +181,7 @@ public class WizardArmors {
                                     AttributeModifier.multiply(SpellPowerMechanics.HASTE.id, haste_t2)
                             ))
             ), 2)
+            .translatedName("Arcane Hat", "Arcane Robe Top", "Arcane Robe Bottom", "Arcane Boots")
             .armorSet();
 
     public static final Armor.Set fireRobeSet = create(
@@ -209,6 +211,7 @@ public class WizardArmors {
                                     AttributeModifier.multiply(SpellPowerMechanics.CRITICAL_CHANCE.id, crit_chance_t2)
                             ))
             ), 2)
+            .translatedName("Fire Hat", "Fire Robe Top", "Fire Robe Bottom", "Fire Boots")
             .armorSet();
 
     public static final Armor.Set frostRobeSet = create(
@@ -238,6 +241,7 @@ public class WizardArmors {
                                     AttributeModifier.multiply(SpellPowerMechanics.CRITICAL_DAMAGE.id, crit_damage_t2)
                             ))
             ), 2)
+            .translatedName("Frost Hat", "Frost Robe Top", "Frost Robe Bottom", "Frost Boots")
             .armorSet();
 
 
@@ -268,6 +272,7 @@ public class WizardArmors {
                                     AttributeModifier.multiply(SpellPowerMechanics.HASTE.id, haste_t3)
                             ))
             ), 3)
+            .translatedName("Netherite Arcane Hat", "Netherite Arcane Robe Top", "Netherite Arcane Robe Bottom", "Netherite Arcane Boots")
             .armorSet();
 
     public static final Armor.Set netherite_fire = create(
@@ -297,6 +302,7 @@ public class WizardArmors {
                                     AttributeModifier.multiply(SpellPowerMechanics.CRITICAL_CHANCE.id, crit_chance_t3)
                             ))
             ), 3)
+            .translatedName("Netherite Fire Hat", "Netherite Fire Robe Top", "Netherite Fire Robe Bottom", "Netherite Fire Boots")
             .armorSet();
 
     public static final Armor.Set netherite_frost = create(
@@ -326,6 +332,7 @@ public class WizardArmors {
                                     AttributeModifier.multiply(SpellPowerMechanics.CRITICAL_DAMAGE.id, crit_damage_t3)
                             ))
             ), 3)
+            .translatedName("Netherite Frost Hat", "Netherite Frost Robe Top", "Netherite Frost Robe Bottom", "Netherite Frost Boots")
             .armorSet();
 
     public static void register(Map<String, ArmorSetConfig> configs) {

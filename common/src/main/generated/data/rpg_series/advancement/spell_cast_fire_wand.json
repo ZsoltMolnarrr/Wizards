@@ -1,0 +1,30 @@
+{
+  "parent": "rpg_series:path_choose_fire",
+  "criteria": {
+    "cast": {
+      "conditions": {
+        "spell": "wizards:fireball"
+      },
+      "trigger": "spell_engine:spell_cast"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "description": {
+      "translate": "advancements.rpg_series.spell_cast_fire_wand.description"
+    },
+    "icon": {
+      "count": 1,
+      "id": "wizards:wand_fire"
+    },
+    "show_toast": false,
+    "title": {
+      "translate": "advancements.rpg_series.spell_cast_fire_wand.title"
+    }
+  },
+  "requirements": [
+    [
+      "cast"
+    ]
+  ]
+}

@@ -1,0 +1,41 @@
+{
+  "parent": "rpg_series:misc_items",
+  "criteria": {
+    "wizard_robes": {
+      "conditions": {
+        "items": [
+          {
+            "items": "wizards:wizard_robe_head"
+          },
+          {
+            "items": "wizards:wizard_robe_chest"
+          },
+          {
+            "items": "wizards:wizard_robe_legs"
+          },
+          {
+            "items": "wizards:wizard_robe_feet"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.rpg_series.obtain_wizard_robes.description"
+    },
+    "icon": {
+      "count": 1,
+      "id": "wizards:wizard_robe_chest"
+    },
+    "title": {
+      "translate": "advancements.rpg_series.obtain_wizard_robes.title"
+    }
+  },
+  "requirements": [
+    [
+      "wizard_robes"
+    ]
+  ]
+}

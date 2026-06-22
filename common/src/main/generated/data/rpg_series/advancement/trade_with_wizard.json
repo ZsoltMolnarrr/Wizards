@@ -20,19 +20,18 @@
     "description": {
       "translate": "advancements.rpg_series.trade_with_wizard.description"
     },
+    "hidden": true,
     "icon": {
       "count": 1,
       "id": "runes:fire_stone"
     },
     "title": {
       "translate": "advancements.rpg_series.trade_with_wizard.title"
-    },
-    "hidden": true
+    }
   },
   "requirements": [
     [
       "trade_with_wizard"
     ]
-  ],
-  "sends_telemetry_event": false
+  ]
 }

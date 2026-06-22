@@ -1,0 +1,30 @@
+{
+  "parent": "rpg_series:path_choose_arcane",
+  "criteria": {
+    "cast": {
+      "conditions": {
+        "spell": "wizards:arcane_bolt"
+      },
+      "trigger": "spell_engine:spell_cast"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "description": {
+      "translate": "advancements.rpg_series.spell_cast_arcane_wand.description"
+    },
+    "icon": {
+      "count": 1,
+      "id": "wizards:wand_arcane"
+    },
+    "show_toast": false,
+    "title": {
+      "translate": "advancements.rpg_series.spell_cast_arcane_wand.title"
+    }
+  },
+  "requirements": [
+    [
+      "cast"
+    ]
+  ]
+}

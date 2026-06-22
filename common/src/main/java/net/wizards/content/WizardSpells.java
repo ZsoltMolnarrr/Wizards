@@ -23,7 +23,26 @@ import java.util.List;
 
 public class WizardSpells {
     public enum WeaponGroup { WIZARD_STAFF, ARCANE_STAFF, FIRE_STAFF, FROST_STAFF }
-    public enum Book { ARCANE, FIRE, FROST }
+    public enum Book {
+        ARCANE("Tome of Arcane", "Arcane Spell Scroll",
+                "Spell Book of Arcane Wizards, using pure energy to focus powerful attacks on single targets\n- Strengths: Focused magical damage against individual enemies\n- Weaknesses: Very low defense\n- Equipment: Lightly armored"),
+        FIRE("Tome of Fire", "Fire Spell Scroll",
+                "Spell Book of Fire Wizards, using fiery magic to defeat enemies both near and far\n- Strengths: Magical damage dealt at large areas\n- Weaknesses: Low defense and mobility\n- Equipment: Lightly armored"),
+        FROST("Tome of Frost", "Frost Spell Scroll",
+                "Spell Book of Frost Wizards, using cold magic to slow enemies and control the battlefield\n- Strengths: Magical damage that slows and freezes enemies\n- Weaknesses: Low defense and mobility\n- Equipment: Lightly armored");
+
+        /** Display name of the generated spell book item. Source for {@code item.wizards.spell_book/<book>}. */
+        public final String bookName;
+        /** Display name of the generated spell scroll item. Source for {@code item.wizards.spell_scroll/<book>}. */
+        public final String scrollName;
+        /** Spell binding tooltip. Source for {@code item.wizards.spell_book/<book>.spell_binding.description}. */
+        public final String bindingDescription;
+        Book(String bookName, String scrollName, String bindingDescription) {
+            this.bookName = bookName;
+            this.scrollName = scrollName;
+            this.bindingDescription = bindingDescription;
+        }
+    }
     public record Entry(Identifier id, Spell spell, String title, String description,
                         @Nullable SpellTooltip.DescriptionMutator mutator,
                         @Nullable List<WeaponGroup> weaponGroups,
@@ -128,6 +147,8 @@ public class WizardSpells {
     public static Entry arcane_bolt = add(arcane_bolt());
     private static Entry arcane_bolt() {
         var id = Identifier.of(WizardsMod.ID, "arcane_bolt");
+        var name = "Arcane Bolt";
+        var description = "Shoots a bolt of energy, causing {damage} arcane spell damage.";
         var spell = SpellBuilder.createWeaponSpell();
         spell.school = SpellSchools.ARCANE;
         spell.tier = 0;
@@ -183,12 +204,14 @@ public class WizardSpells {
 
         SpellBuilder.Cost.item(spell, "runes:arcane_stone");
 
-        return new Entry(id, spell, "", "");
+        return new Entry(id, spell, name, description);
     }
 
     public static Entry arcane_blast = add(arcane_blast());
     private static Entry arcane_blast() {
         var id = Identifier.of(WizardsMod.ID, "arcane_blast");
+        var name = "Arcane Blast";
+        var description = "Blasts the target, causing {damage} arcane damage. Grants Arcane Charge, stacking up to {effect_amplifier_cap} times.";
         var spell = SpellBuilder.createWeaponSpell();
         spell.school = SpellSchools.ARCANE;
         spell.tier = 1;
@@ -236,12 +259,14 @@ public class WizardSpells {
 
         SpellBuilder.Cost.item(spell, "runes:arcane_stone");
 
-        return new Entry(id, spell, "", "").weaponGroup(WeaponGroup.ARCANE_STAFF).weaponGroup(WeaponGroup.WIZARD_STAFF);
+        return new Entry(id, spell, name, description).weaponGroup(WeaponGroup.ARCANE_STAFF).weaponGroup(WeaponGroup.WIZARD_STAFF);
     }
 
     public static Entry arcane_missile = add(arcane_missile());
     private static Entry arcane_missile() {
         var id = Identifier.of(WizardsMod.ID, "arcane_missile");
+        var name = "Arcane Missiles";
+        var description = "Continuously shoots bolts of energy piercing thru {pierce} targets, causing {damage} arcane damage every second.";
         var spell = SpellBuilder.createSpellActive();
         spell.school = SpellSchools.ARCANE;
         spell.tier = 2;
@@ -314,12 +339,14 @@ public class WizardSpells {
         SpellBuilder.Cost.cooldown(spell, 2);
         spell.cost.cooldown.proportional = true;
 
-        return new Entry(id, spell, "", "").book(Book.ARCANE);
+        return new Entry(id, spell, name, description).book(Book.ARCANE);
     }
 
     public static Entry arcane_explosion = add(arcane_explosion());
     private static Entry arcane_explosion() {
         var id = Identifier.of(WizardsMod.ID, "arcane_explosion");
+        var name = "Arcane Explosion";
+        var description = "Creates a magical explosion around you, causing {damage} arcane damage to nearby enemies.";
         var spell = SpellBuilder.createSpellActive();
         spell.school = SpellSchools.ARCANE;
         spell.tier = 2;
@@ -392,12 +419,14 @@ public class WizardSpells {
         SpellBuilder.Cost.item(spell, "runes:arcane_stone");
         SpellBuilder.Cost.cooldown(spell, 10);
 
-        return new Entry(id, spell, "", "").book(Book.ARCANE);
+        return new Entry(id, spell, name, description).book(Book.ARCANE);
     }
 
     public static Entry arcane_beam = add(arcane_beam());
     private static Entry arcane_beam() {
         var id = Identifier.of(WizardsMod.ID, "arcane_beam");
+        var name = "Arcane Beam";
+        var description = "Channels a beam of energy, dealing {damage} arcane damage every second. Consumes all Arcane Charges.";
         var spell = SpellBuilder.createSpellActive();
         spell.school = SpellSchools.ARCANE;
         spell.tier = 3;
@@ -488,7 +517,7 @@ public class WizardSpells {
         SpellBuilder.Cost.cooldown(spell, 10);
         spell.cost.cooldown.proportional = true;
 
-        return new Entry(id, spell, "", "").book(Book.ARCANE);
+        return new Entry(id, spell, name, description).book(Book.ARCANE);
     }
 
     public static Entry arcane_barrage = add(arcane_barrage());
@@ -514,6 +543,8 @@ public class WizardSpells {
     public static Entry arcane_evocation = add(arcane_evocation());
     private static Entry arcane_evocation() {
         var id = Identifier.of(WizardsMod.ID, "arcane_evocation");
+        var name = "Evocation";
+        var description = "Channel to gain Evocation effect, stacking up to {effect_amplifier_cap}, lasting {effect_duration} seconds. Each stack increases spell critical strike chance and spell haste by {bonus_1}, but also increases any damage you take by {bonus_3}.";
         var spell = SpellBuilder.createSpellActive();
         spell.school = SpellSchools.ARCANE;
         spell.tier = 4;
@@ -572,12 +603,14 @@ public class WizardSpells {
             ).toList();
             return SpellTooltip.replaceTokens(args.description(), "bonus", values);
         };
-        return new Entry(id, spell, "", "").book(Book.ARCANE).mutator(mutator);
+        return new Entry(id, spell, name, description).book(Book.ARCANE).mutator(mutator);
     }
 
     public static Entry arcane_blink = add(arcane_blink());
     private static Entry arcane_blink() {
         var id = Identifier.of(WizardsMod.ID, "arcane_blink");
+        var name = "Blink";
+        var description = "Teleports you forwards for {teleport_distance} blocks.";
         var spell = SpellBuilder.createSpellActive();
         spell.school = SpellSchools.ARCANE;
         spell.tier = 4;
@@ -620,12 +653,14 @@ public class WizardSpells {
         SpellBuilder.Cost.item(spell, "runes:arcane_stone");
         SpellBuilder.Cost.cooldown(spell, 12);
 
-        return new Entry(id, spell, "", "").book(Book.ARCANE);
+        return new Entry(id, spell, name, description).book(Book.ARCANE);
     }
 
     public static Entry fire_scorch = add(fire_scorch());
     private static Entry fire_scorch() {
         var id = Identifier.of(WizardsMod.ID, "fire_scorch");
+        var name = "Scorch";
+        var description = "Scorches the target, causing {damage} fire spell damage and setting it on fire.";
         var spell = SpellBuilder.createWeaponSpell();
         spell.school = SpellSchools.FIRE;
         spell.tier = 0;
@@ -656,12 +691,14 @@ public class WizardSpells {
 
         configureFireRuneCost(spell);
 
-        return new Entry(id, spell, "", "");
+        return new Entry(id, spell, name, description);
     }
 
     public static Entry fireball = add(fireball());
     private static Entry fireball() {
         var id = Identifier.of(WizardsMod.ID, "fireball");
+        var name = "Fireball";
+        var description = "Launches an ball of fire, causing up to {damage} fire spell and setting the target on fire.";
         var spell = SpellBuilder.createWeaponSpell();
         spell.school = SpellSchools.FIRE;
         spell.tier = 0;
@@ -723,12 +760,14 @@ public class WizardSpells {
 
         configureFireRuneCost(spell);
 
-        return new Entry(id, spell, "", "");
+        return new Entry(id, spell, name, description);
     }
 
     public static Entry fire_blast = add(fire_blast());
     private static Entry fire_blast() {
         var id = Identifier.of(WizardsMod.ID, "fire_blast");
+        var name = "Pyroblast";
+        var description = "Launches an explosive ball of fire, causing up to {damage} fire spell damage in {impact_range} blocks radius.";
         var spell = SpellBuilder.createWeaponSpell();
         spell.school = SpellSchools.FIRE;
         spell.tier = 1;
@@ -803,12 +842,14 @@ public class WizardSpells {
 
         SpellBuilder.Cost.cooldownGroup(spell, "weapon");
 
-        return new Entry(id, spell, "", "").weaponGroup(WeaponGroup.FIRE_STAFF).weaponGroup(WeaponGroup.WIZARD_STAFF);
+        return new Entry(id, spell, name, description).weaponGroup(WeaponGroup.FIRE_STAFF).weaponGroup(WeaponGroup.WIZARD_STAFF);
     }
 
     public static Entry fire_breath = add(fire_breath());
     private static Entry fire_breath() {
         var id = Identifier.of(WizardsMod.ID, "fire_breath");
+        var name = "Fire Breath";
+        var description = "Incinerates targets in front, dealing up to {damage} fire spell damage every second.";
         var spell = SpellBuilder.createSpellActive();
         spell.school = SpellSchools.FIRE;
         spell.tier = 2;
@@ -860,12 +901,14 @@ public class WizardSpells {
         SpellBuilder.Cost.cooldown(spell, 10);
         spell.cost.cooldown.proportional = true;
 
-        return new Entry(id, spell, "", "").book(Book.FIRE);
+        return new Entry(id, spell, name, description).book(Book.FIRE);
     }
 
     public static Entry fire_slash = add(fire_slash());
     private static Entry fire_slash() {
         var id = Identifier.of(WizardsMod.ID, "fire_slash");
+        var name = "Flame Slash";
+        var description = "Launches a wide slash of fiery wave, causing up to {damage} fire spell damage in front.";
         var spell = SpellBuilder.createSpellActive();
         spell.school = SpellSchools.FIRE;
         spell.tier = 2;
@@ -919,12 +962,14 @@ public class WizardSpells {
         configureFireRuneCost(spell);
         SpellBuilder.Cost.cooldown(spell, 8);
 
-        return new Entry(id, spell, "", "").book(Book.FIRE);
+        return new Entry(id, spell, name, description).book(Book.FIRE);
     }
 
     public static Entry fire_meteor = add(fire_meteor());
     private static Entry fire_meteor() {
         var id = Identifier.of(WizardsMod.ID, "fire_meteor");
+        var name = "Meteor";
+        var description = "Crashes a meteors on the target, each causing up to {damage} fire spell damage within {impact_range} blocks.";
         var spell = SpellBuilder.createSpellActive();
         spell.school = SpellSchools.FIRE;
         spell.tier = 3;
@@ -1005,12 +1050,14 @@ public class WizardSpells {
         configureFireRuneCost(spell);
         SpellBuilder.Cost.cooldown(spell, 10);
 
-        return new Entry(id, spell, "", "").book(Book.FIRE);
+        return new Entry(id, spell, name, description).book(Book.FIRE);
     }
 
     public static Entry firestorm = add(firestorm());
     private static Entry firestorm() {
         var id = Identifier.of(WizardsMod.ID, "fire_storm");
+        var name = "Firestorm";
+        var description = "Incinerates targets around you, dealing up to {damage} fire spell damage every second.";
         var spell = SpellBuilder.createSpellActive();
         spell.school = SpellSchools.FIRE;
         spell.tier = 3;
@@ -1081,7 +1128,7 @@ public class WizardSpells {
         SpellBuilder.Cost.cooldown(spell, 20);
         spell.cost.cooldown.proportional = true;
 
-        return new Entry(id, spell, "", "").book(Book.FIRE);
+        return new Entry(id, spell, name, description).book(Book.FIRE);
     }
 
     public static Entry fire_wall = add(fire_wall());
@@ -1195,6 +1242,8 @@ public class WizardSpells {
     public static Entry frost_shard = add(frost_shard());
     private static Entry frost_shard() {
         var id = Identifier.of(WizardsMod.ID, "frost_shard");
+        var name = "Frost Shard";
+        var description = "Launches a frost shard that may bounce of walls, causing {damage} frost spell damage on impact.";
         var spell = SpellBuilder.createWeaponSpell();
         spell.school = SpellSchools.FROST;
         spell.tier = 0;
@@ -1252,12 +1301,14 @@ public class WizardSpells {
 
         configureFrostRuneCost(spell);
 
-        return new Entry(id, spell, "", "");
+        return new Entry(id, spell, name, description);
     }
 
     public static Entry frostbolt = add(frostbolt());
     private static Entry frostbolt() {
         var id = Identifier.of(WizardsMod.ID, "frostbolt");
+        var name = "Frostbolt";
+        var description = "Launches a ball of frost ricocheting to {ricochet} additional nearby targets, causing {damage} frost spell damage and slowing the target on impact.";
         var spell = SpellBuilder.createWeaponSpell();
         spell.school = SpellSchools.FROST;
         spell.tier = 1;
@@ -1328,7 +1379,7 @@ public class WizardSpells {
 
         SpellBuilder.Cost.cooldownGroup(spell, "weapon");
 
-        return new Entry(id, spell, "", "").weaponGroup(WeaponGroup.FROST_STAFF).weaponGroup(WeaponGroup.WIZARD_STAFF);
+        return new Entry(id, spell, name, description).weaponGroup(WeaponGroup.FROST_STAFF).weaponGroup(WeaponGroup.WIZARD_STAFF);
     }
 
     public static Entry ice_lance = add(ice_lance());
@@ -1421,6 +1472,8 @@ public class WizardSpells {
     public static Entry frost_nova = add(frost_nova());
     private static Entry frost_nova() {
         var id = Identifier.of(WizardsMod.ID, "frost_nova");
+        var name = "Frost Nova";
+        var description = "Freezes targets around you for {effect_duration} seconds, causing {damage} frost spell damage and blocking their movement. Frozen targets are vulnerable to frost magic.";
         var spell = SpellBuilder.createSpellActive();
         spell.school = SpellSchools.FROST;
         spell.tier = 2;
@@ -1487,12 +1540,14 @@ public class WizardSpells {
         configureFrostRuneCost(spell);
         SpellBuilder.Cost.cooldown(spell, 10);
 
-        return new Entry(id, spell, "", "").book(Book.FROST);
+        return new Entry(id, spell, name, description).book(Book.FROST);
     }
 
     public static Entry frost_shield = add(frost_shield());
     private static Entry frost_shield() {
         var id = Identifier.of(WizardsMod.ID, "frost_shield");
+        var name = "Frost Shield";
+        var description = "Protects you from attacks, projectiles and fire for {effect_duration} seconds, but also slows down your movement.";
         var spell = SpellBuilder.createSpellActive();
         spell.school = SpellSchools.FROST;
         spell.tier = 3;
@@ -1525,7 +1580,7 @@ public class WizardSpells {
         configureFrostRuneCost(spell);
         SpellBuilder.Cost.cooldown(spell, 30);
 
-        return new Entry(id, spell, "", "").book(Book.FROST);
+        return new Entry(id, spell, name, description).book(Book.FROST);
     }
 
     public static Entry frost_elemental = add(frost_elemental());
@@ -1551,6 +1606,8 @@ public class WizardSpells {
     public static Entry frost_blizzard = add(frost_blizzard());
     private static Entry frost_blizzard() {
         var id = Identifier.of(WizardsMod.ID, "frost_blizzard");
+        var name = "Blizzard";
+        var description = "Channels a rain of frost shards down onto your target and nearby enemies, dealing up to {damage} frost spell damage slowing the target, in {impact_range} blocks radius.";
         var spell = SpellBuilder.createSpellActive();
         spell.school = SpellSchools.FROST;
         spell.tier = 4;
@@ -1652,6 +1709,6 @@ public class WizardSpells {
         SpellBuilder.Cost.cooldown(spell, 16);
         spell.cost.cooldown.proportional = true;
 
-        return new Entry(id, spell, "", "").book(Book.FROST);
+        return new Entry(id, spell, name, description).book(Book.FROST);
     }
 }
