@@ -11,11 +11,7 @@ import net.spell_engine.api.config.ConfigFile;
 import net.tiny_config.ConfigManager;
 import net.wizards.config.Default;
 import net.wizards.config.TweaksConfig;
-import net.spell_engine.api.spell.summon.SummonedEntities;
 import net.wizards.effect.WizardsEffects;
-import net.wizards.entity.ArcaneEmitterEntity;
-import net.wizards.entity.FireHydraEntity;
-import net.wizards.entity.FrostElementalEntity;
 import net.wizards.entity.WizardEntities;
 
 import net.wizards.item.WizardArmors;
@@ -63,12 +59,9 @@ public class WizardsMod {
     }
 
     public static void registerEntities() {
+        // Each entity's base attributes are registered alongside its type build inside register(),
+        // sourced from SpellEngine's central summoned-entity config.
         WizardEntities.register();
-        // Base attributes are sourced from SpellEngine's central summoned-entity config; pass the entity
-        // ids (always available) and the per-summon defaults. The helper resolves the type and registers.
-        SummonedEntities.registerAttributes(ArcaneEmitterEntity.ID, WizardEntities.arcaneDefaults());
-        SummonedEntities.registerAttributes(FireHydraEntity.ID, WizardEntities.fireDefaults());
-        SummonedEntities.registerAttributes(FrostElementalEntity.ID, WizardEntities.frostDefaults());
     }
 
     public static void registerSounds() {

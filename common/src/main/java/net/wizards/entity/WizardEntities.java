@@ -4,6 +4,7 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SpawnGroup;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
+import net.spell_engine.api.spell.summon.SummonedEntities;
 import net.spell_engine.api.spell.summon.SummonedEntityConfig;
 import net.spell_power.api.SpellSchools;
 
@@ -52,6 +53,9 @@ public class WizardEntities {
                         .trackingTickInterval(3)
                         .build()
         );
+        // Attributes are registered right here with the freshly-built type, so type and attribute
+        // registration are a single co-located step — no required ordering between them.
+        SummonedEntities.registerAttributes(FrostElementalEntity.ID, FrostElementalEntity.TYPE, frostDefaults());
 
         ArcaneEmitterEntity.TYPE = Registry.register(
                 Registries.ENTITY_TYPE,
@@ -64,6 +68,7 @@ public class WizardEntities {
                         .trackingTickInterval(3)
                         .build()
         );
+        SummonedEntities.registerAttributes(ArcaneEmitterEntity.ID, ArcaneEmitterEntity.TYPE, arcaneDefaults());
 
         FireHydraEntity.TYPE = Registry.register(
                 Registries.ENTITY_TYPE,
@@ -76,5 +81,6 @@ public class WizardEntities {
                         .trackingTickInterval(3)
                         .build()
         );
+        SummonedEntities.registerAttributes(FireHydraEntity.ID, FireHydraEntity.TYPE, fireDefaults());
     }
 }
