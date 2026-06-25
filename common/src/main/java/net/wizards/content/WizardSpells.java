@@ -1523,7 +1523,7 @@ public class WizardSpells {
         spell.deliver.clouds = List.of(cloud);
 
         // Impacts mirror Frost Nova: frost damage + freeze.
-        var damage = SpellBuilder.Impacts.damage(0.5F, 0.8F);
+        var damage = SpellBuilder.Impacts.damage(0.75F, 0F);
         damage.particles = new ParticleBatch[] {
                 new ParticleBatch(
                         SpellEngineParticles.MagicParticles.get(
@@ -1548,62 +1548,32 @@ public class WizardSpells {
 
         SpellBuilder.Cost.exhaust(spell, 0.3F);
         configureFrostRuneCost(spell);
-        SpellBuilder.Cost.cooldown(spell, 14);
+        SpellBuilder.Cost.cooldown(spell, 8);
 
         return new Entry(id, spell, name, description).book(Book.FROST);
     }
 
     /// Tick at which Frost Spikes reach full height and deal their single hit. Shared by the cloud
     /// (impact interval = this, lifetime = 2*this - 1) and the spike model FX (rise ends here).
-    private static final int SPIKE_APEX_TICK = 20;
+    private static final int SPIKE_APEX_TICK = 5;
     /// Blocks a spike model rests below ground at the start/end of its eruption, so it stays hidden.
     private static final float SPIKE_BURY_DEPTH = 1.6F;
-
-    /// Applies a "spike" eruption to an existing model builder: the model rises from below ground to
-    /// full height, holds there, then retracts back underground. Returns the same {@link ModelEffectBuilder}
-    /// (not yet built) so callers can chain further transforms — scale, rotation — before {@code build()}.
-    ///
-    /// Timeline (ticks): rise over [0, riseTime] → hold over [riseTime, riseTime + upTime] → sink
-    /// over [riseTime + upTime, 2*riseTime + upTime]. Full height is reached exactly at {@code riseTime}.
-    /// The model rests {@code buryDepth} blocks underground so it is hidden before and after.
-    /// When {@code withScale} is set, the model also scales up from nothing as it rises and back to
-    /// nothing as it sinks, on the same windows. Both the translate and scale use elastic easing.
-    ///
-    /// TODO: move to common scope so other mods can reuse it.
-    ///
-    /// @param builder   a builder with its model and light emission already configured
-    /// @param riseTime  ticks to rise to full height; the retract mirrors it
-    /// @param upTime    ticks held at full height before retracting
-    /// @param withScale also scale the model in with the rise and out with the sink
-    /// @param buryDepth blocks the model rests underground at rest, so it stays hidden
-    private static ModelEffectBuilder spikeModelFx(ModelEffectBuilder builder, int riseTime, int upTime,
-                                                   boolean withScale, float buryDepth) {
-        int sinkStart = riseTime + upTime;
-        int end = sinkStart + riseTime;
-        builder.duration(end)
-                .initialTranslate(0, -buryDepth, 0)
-                .translate(0, buryDepth, 0, 0, riseTime, ModelEffect.Easing.EASE_OUT_ELASTIC)
-                .translate(0, -buryDepth, 0, sinkStart, end, ModelEffect.Easing.EASE_IN_ELASTIC);
-        if (withScale) {
-            builder.scaleIn(0, riseTime, ModelEffect.Easing.EASE_OUT_ELASTIC)
-                    .scaleOut(sinkStart, end, ModelEffect.Easing.EASE_IN_ELASTIC);
-        }
-        return builder;
-    }
 
     /// Two interlocking ice spikes erupting from the ground: they shoot up to full height by
     /// {@link #SPIKE_APEX_TICK} (when the cloud lands its single hit), linger, then sink back
     /// underground. Spawned per cloud node via {@code cloud.spawn.model_fx}.
     private static List<ModelEffect> frostSpikeModelFx() {
-        var spikeOne = spikeModelFx(ModelEffectBuilder.create("wizards:spell_effect/frost_spike_1")
-                        .light(LightEmission.GLOW)
-                        .initialTranslateY(0.5F),
-                        SPIKE_APEX_TICK, 0, true, SPIKE_BURY_DEPTH)
+        var spikeOne = ModelEffectBuilder.Preset.spike(
+                        ModelEffectBuilder.create("wizards:spell_effect/frost_spike_1")
+                                .light(LightEmission.GLOW_TRANSLUCENT)
+                                .initialTranslateY(0.5F),
+                        20, 0, true, SPIKE_BURY_DEPTH)
                 .build();
-        var spikeTwo = spikeModelFx(ModelEffectBuilder.create("wizards:spell_effect/frost_spike_2")
-                        .light(LightEmission.GLOW)
-                        .initialTranslateY(0.5F),
-                        SPIKE_APEX_TICK, 0, true, SPIKE_BURY_DEPTH)
+        var spikeTwo = ModelEffectBuilder.Preset.spike(
+                        ModelEffectBuilder.create("wizards:spell_effect/frost_spike_2")
+                                .light(LightEmission.GLOW_TRANSLUCENT)
+                                .initialTranslateY(0.5F),
+                        20, 0, true, SPIKE_BURY_DEPTH)
                 .delayAll(8)
                 .build();
         return List.of(spikeOne, spikeTwo);

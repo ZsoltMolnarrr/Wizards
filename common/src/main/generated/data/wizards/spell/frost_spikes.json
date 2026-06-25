@@ -23,8 +23,7 @@
             "vertical_range_multiplier": 2.0
           }
         },
-        "time_to_live_seconds": 1.95,
-        "impact_tick_interval": 20,
+        "time_to_live_seconds": 0.45,
         "placement_delay_stacks": false,
         "placement": {
           "location_offset_by_look": 1.5,
@@ -102,6 +101,7 @@
           "model_fx": [
             {
               "model_id": "wizards:spell_effect/frost_spike_1",
+              "light_emission": "GLOW_TRANSLUCENT",
               "duration": 40,
               "initial": [
                 {
@@ -158,6 +158,7 @@
             },
             {
               "model_id": "wizards:spell_effect/frost_spike_2",
+              "light_emission": "GLOW_TRANSLUCENT",
               "duration": 40,
               "initial": [
                 {
@@ -222,8 +223,8 @@
       "action": {
         "type": "DAMAGE",
         "damage": {
-          "spell_power_coefficient": 0.5,
-          "knockback": 0.8
+          "spell_power_coefficient": 0.75,
+          "knockback": 0.0
         }
       },
       "particles": [
@@ -264,7 +265,7 @@
   "cost": {
     "exhaust": 0.3,
     "cooldown": {
-      "duration": 14.0
+      "duration": 8.0
     },
     "item": {
       "id": "runes:frost_stone"
