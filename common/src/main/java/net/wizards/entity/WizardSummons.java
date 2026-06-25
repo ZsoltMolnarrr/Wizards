@@ -66,7 +66,7 @@ public class WizardSummons {
         b.sounds.step = WizardsSounds.FROST_ELEMENTAL_STEP.id().toString();
 
         // Placement: 2 blocks ahead of the caster, snapped to the ground, keeping its own facing.
-        var placement = Placements.byLook(2F, 0F, 0);
+        var placement = Placements.point(2F, 0F, 0);
         placement.apply_yaw = false;
 
         var summon = new Summon(FrostElementalEntity.ID.toString(), b, List.of(placement), 1);
@@ -118,12 +118,12 @@ public class WizardSummons {
         emitter.force_onto_ground = false;   // floats instead of snapping to the ground
         emitter.apply_pitch = true;          // also aim with the caster's pitch
         emitter.location_offset_y = 1.0F;    // ~1 block up
-        var placements = Placements.staggered(
-                Placements.line(7, 1.5F, Placements.LineOrder.CENTER_OUT, emitter), 10);
+        var placements = Placements.delayCascade(
+                Placements.row(7, 1.5F, Placements.RowOrder.CENTER_OUT, emitter), 10);
 
         // One group, offset straight behind the caster (pure translation, no ground snap), seeding
         // the perpendicular per-entity line.
-        var behindGroup = Placements.byLook(2F, 180F, 0);
+        var behindGroup = Placements.point(2F, 180F, 0);
         behindGroup.force_onto_ground = false;
         behindGroup.apply_yaw = false;
         var groupPlacements = List.of(behindGroup);
@@ -173,20 +173,20 @@ public class WizardSummons {
         // the loop cycles through the first three slots: front, right, left.
         float d = 1F;
         var placements = List.of(
-                Placements.byLook(d, 0F, 0),    // front
-                Placements.byLook(d, 90F, 5),   // right
-                Placements.byLook(d, 270F, 10), // left
-                Placements.byLook(d, 180F, 15)  // back
+                Placements.point(d, 0F, 0),    // front
+                Placements.point(d, 90F, 5),   // right
+                Placements.point(d, 270F, 10), // left
+                Placements.point(d, 180F, 15)  // back
         );
 
         // Group placement: the same formation at 3x the distance, used as a per-group offset. With
         // group_count = 2 the loop cycles through the first two slots.
         float gd = d * 3F;
         var groupPlacements = List.of(
-                Placements.byLook(gd, 90F, 0),   // right
-                Placements.byLook(gd, 270F, 20), // left
-                Placements.byLook(gd, 0F, 40),   // front
-                Placements.byLook(gd, 180F, 60)  // back
+                Placements.point(gd, 90F, 0),   // right
+                Placements.point(gd, 270F, 20), // left
+                Placements.point(gd, 0F, 40),   // front
+                Placements.point(gd, 180F, 60)  // back
         );
 
         var summon = new Summon(FireHydraEntity.ID.toString(), b, placements, 3, groupPlacements, 2);

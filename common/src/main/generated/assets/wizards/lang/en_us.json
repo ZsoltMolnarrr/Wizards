@@ -154,6 +154,8 @@
   "spell.wizards.frost_shard.name": "Frost Shard",
   "spell.wizards.frost_shield.description": "Protects you from attacks, projectiles and fire for {effect_duration} seconds, but also slows down your movement.",
   "spell.wizards.frost_shield.name": "Frost Shield",
+  "spell.wizards.frost_spikes.description": "Erupts a line of frost spikes from the ground, dealing {damage} frost spell damage and freezing enemies caught in their path for {effect_duration} seconds. Frozen targets are vulnerable to frost magic.",
+  "spell.wizards.frost_spikes.name": "Frost Spikes",
   "spell.wizards.frostbolt.description": "Launches a ball of frost ricocheting to {ricochet} additional nearby targets, causing {damage} frost spell damage and slowing the target on impact.",
   "spell.wizards.frostbolt.name": "Frostbolt",
   "spell.wizards.ice_lance.description": "Launches lance of ice...",

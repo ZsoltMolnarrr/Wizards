@@ -2,6 +2,7 @@ package net.wizards.content;
 
 import net.minecraft.util.Identifier;
 import net.spell_engine.api.datagen.SpellBuilder;
+import net.spell_engine.api.render.LightEmission;
 import net.spell_engine.api.spell.Spell;
 import net.spell_engine.api.spell.fx.ModelEffect;
 import net.spell_engine.api.spell.fx.ModelEffectBuilder;
@@ -1192,7 +1193,7 @@ public class WizardSpells {
         // A row of 5 fire clouds, 2 blocks apart, 2 blocks in front of the caster, laid out left to
         // right (matching the release animation). The leftmost ignites immediately; the rest follow
         // 4 ticks later.
-        var wall = SpellBuilder.Placements.line(5, 2F, 2F, SpellBuilder.Placements.LineOrder.LEFT_TO_RIGHT, SpellBuilder.Placements.template());
+        var wall = SpellBuilder.Placements.row(5, 2F, 2F, SpellBuilder.Placements.RowOrder.LEFT_TO_RIGHT, SpellBuilder.Placements.template());
         for (int i = 1; i < wall.size(); i++) {
             wall.get(i).delay_ticks = 4;
         }
@@ -1458,6 +1459,154 @@ public class WizardSpells {
         SpellBuilder.Cost.cooldown(spell, 10);
 
         return new Entry(id, spell, name, description).book(Book.FROST);
+    }
+
+    public static Entry frost_spikes = add(frost_spikes());
+    private static Entry frost_spikes() {
+        var id = Identifier.of(WizardsMod.ID, "frost_spikes");
+        var name = "Frost Spikes";
+        var description = "Erupts a line of frost spikes from the ground, dealing {damage} frost spell damage and freezing enemies caught in their path for {effect_duration} seconds. Frozen targets are vulnerable to frost magic.";
+
+        var spell = SpellBuilder.createSpellActive();
+        spell.range = 0;
+        spell.tier = 2;
+        spell.order = 2;
+        spell.school = SpellSchools.FROST;
+
+        spell.learn = new Spell.Learn();
+
+        SpellBuilder.Casting.instant(spell);
+        SpellBuilder.Release.visuals(spell,
+                "spell_engine:dual_handed_ground_release",
+                null,
+                new Sound(WizardsSounds.FROST_NOVA_RELEASE.id()));
+
+        spell.deliver.type = Spell.Delivery.Type.CLOUD;
+
+        // Cloud node volume matches Wall of Flames so the hazard footprint is identical.
+        var cloud = new Spell.Delivery.Cloud();
+        cloud.volume.radius = 0.9F;
+        cloud.volume.area.vertical_range_multiplier = 2F;
+        cloud.delay_ticks = 0;
+        // Damage exactly once, timed to the spike's apex. The cloud's impact ticks land at
+        // age 0, TTL/2 and TTL; setting the interval to half the (nominal 40-tick) lifetime puts
+        // the first real hit at age 20, and trimming TTL to 39 ticks despawns it before the
+        // age-40 tick — so only the age-20 impact fires, exactly when the spikes reach full height.
+        cloud.impact_tick_interval = SPIKE_APEX_TICK; // 20 = 40 / 2
+        cloud.time_to_live_seconds = (SPIKE_APEX_TICK * 2 - 1) / 20F; // 39 ticks = 1.95s
+        cloud.spawn = new Spell.Delivery.Cloud.Spawn();
+        cloud.spawn.sound = new Sound(WizardsSounds.FROST_NOVA_EFFECT_IMPACT.id());
+        cloud.spawn.particles = new ParticleBatch[] {
+                new ParticleBatch(
+                        SpellEngineParticles.snowflake.id().toString(),
+                        ParticleBatch.Shape.PILLAR, ParticleBatch.Origin.FEET,
+                        20, 0.1F, 0.5F)
+        };
+        cloud.spawn.model_fx = frostSpikeModelFx();
+        cloud.client_data = new Spell.Delivery.Cloud.ClientData();
+        cloud.client_data.light_level = 6;
+        cloud.client_data.particles = new ParticleBatch[] {
+                new ParticleBatch(
+                        SpellEngineParticles.snowflake.id().toString(),
+                        ParticleBatch.Shape.PILLAR, ParticleBatch.Origin.FEET,
+                        2, 0.02F, 0.3F)
+        };
+
+        // Nine spike clouds marching straight forward away from the caster, 1.5 blocks apart, the
+        // first 1.5 blocks out; each erupts 2 ticks after the previous one (like Wall of Flames).
+        var row = SpellBuilder.Placements.ray(9, 1.5F, 1.5F);
+        SpellBuilder.Placements.delayCascade(row, 2);
+        cloud.placement = row.get(0);
+        cloud.placement_delay_stacks = false;
+        cloud.additional_placements = List.copyOf(row.subList(1, row.size()));
+
+        spell.deliver.clouds = List.of(cloud);
+
+        // Impacts mirror Frost Nova: frost damage + freeze.
+        var damage = SpellBuilder.Impacts.damage(0.5F, 0.8F);
+        damage.particles = new ParticleBatch[] {
+                new ParticleBatch(
+                        SpellEngineParticles.MagicParticles.get(
+                                SpellEngineParticles.MagicParticles.Shape.FROST,
+                                SpellEngineParticles.MagicParticles.Motion.BURST
+                        ).id().toString(),
+                        ParticleBatch.Shape.SPHERE, ParticleBatch.Origin.CENTER,
+                        30, 0.2F, 0.7F)
+                        .color(FROST_COLOR.toRGBA())
+        };
+        damage.sound = new Sound(WizardsSounds.FROST_NOVA_DAMAGE_IMPACT.id());
+
+        var frozen = SpellBuilder.Impacts.effectAdd(WizardsEffects.frozen.id.toString(), 6, 1, 9);
+        frozen.action.status_effect.apply_mode = Spell.Impact.Action.StatusEffect.ApplyMode.ADD;
+        frozen.action.status_effect.apply_limit = new Spell.Impact.Action.StatusEffect.ApplyLimit();
+        frozen.action.status_effect.apply_limit.health_base = 60;
+        frozen.action.status_effect.apply_limit.spell_power_multiplier = 4;
+        frozen.action.status_effect.show_particles = false;
+        frozen.sound = new Sound(WizardsSounds.FROST_NOVA_EFFECT_IMPACT.id());
+
+        spell.impacts = List.of(damage, frozen);
+
+        SpellBuilder.Cost.exhaust(spell, 0.3F);
+        configureFrostRuneCost(spell);
+        SpellBuilder.Cost.cooldown(spell, 14);
+
+        return new Entry(id, spell, name, description).book(Book.FROST);
+    }
+
+    /// Tick at which Frost Spikes reach full height and deal their single hit. Shared by the cloud
+    /// (impact interval = this, lifetime = 2*this - 1) and the spike model FX (rise ends here).
+    private static final int SPIKE_APEX_TICK = 20;
+    /// Blocks a spike model rests below ground at the start/end of its eruption, so it stays hidden.
+    private static final float SPIKE_BURY_DEPTH = 1.6F;
+
+    /// Applies a "spike" eruption to an existing model builder: the model rises from below ground to
+    /// full height, holds there, then retracts back underground. Returns the same {@link ModelEffectBuilder}
+    /// (not yet built) so callers can chain further transforms — scale, rotation — before {@code build()}.
+    ///
+    /// Timeline (ticks): rise over [0, riseTime] → hold over [riseTime, riseTime + upTime] → sink
+    /// over [riseTime + upTime, 2*riseTime + upTime]. Full height is reached exactly at {@code riseTime}.
+    /// The model rests {@code buryDepth} blocks underground so it is hidden before and after.
+    /// When {@code withScale} is set, the model also scales up from nothing as it rises and back to
+    /// nothing as it sinks, on the same windows. Both the translate and scale use elastic easing.
+    ///
+    /// TODO: move to common scope so other mods can reuse it.
+    ///
+    /// @param builder   a builder with its model and light emission already configured
+    /// @param riseTime  ticks to rise to full height; the retract mirrors it
+    /// @param upTime    ticks held at full height before retracting
+    /// @param withScale also scale the model in with the rise and out with the sink
+    /// @param buryDepth blocks the model rests underground at rest, so it stays hidden
+    private static ModelEffectBuilder spikeModelFx(ModelEffectBuilder builder, int riseTime, int upTime,
+                                                   boolean withScale, float buryDepth) {
+        int sinkStart = riseTime + upTime;
+        int end = sinkStart + riseTime;
+        builder.duration(end)
+                .initialTranslate(0, -buryDepth, 0)
+                .translate(0, buryDepth, 0, 0, riseTime, ModelEffect.Easing.EASE_OUT_ELASTIC)
+                .translate(0, -buryDepth, 0, sinkStart, end, ModelEffect.Easing.EASE_IN_ELASTIC);
+        if (withScale) {
+            builder.scaleIn(0, riseTime, ModelEffect.Easing.EASE_OUT_ELASTIC)
+                    .scaleOut(sinkStart, end, ModelEffect.Easing.EASE_IN_ELASTIC);
+        }
+        return builder;
+    }
+
+    /// Two interlocking ice spikes erupting from the ground: they shoot up to full height by
+    /// {@link #SPIKE_APEX_TICK} (when the cloud lands its single hit), linger, then sink back
+    /// underground. Spawned per cloud node via {@code cloud.spawn.model_fx}.
+    private static List<ModelEffect> frostSpikeModelFx() {
+        var spikeOne = spikeModelFx(ModelEffectBuilder.create("wizards:spell_effect/frost_spike_1")
+                        .light(LightEmission.GLOW)
+                        .initialTranslateY(0.5F),
+                        SPIKE_APEX_TICK, 0, true, SPIKE_BURY_DEPTH)
+                .build();
+        var spikeTwo = spikeModelFx(ModelEffectBuilder.create("wizards:spell_effect/frost_spike_2")
+                        .light(LightEmission.GLOW)
+                        .initialTranslateY(0.5F),
+                        SPIKE_APEX_TICK, 0, true, SPIKE_BURY_DEPTH)
+                .delayAll(8)
+                .build();
+        return List.of(spikeOne, spikeTwo);
     }
 
     public static Entry frost_shield = add(frost_shield());

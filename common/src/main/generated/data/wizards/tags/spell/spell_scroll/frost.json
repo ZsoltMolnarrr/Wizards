@@ -5,6 +5,10 @@
       "required": false
     },
     {
+      "id": "wizards:frost_spikes",
+      "required": false
+    },
+    {
       "id": "wizards:frost_shield",
       "required": false
     },

@@ -81,7 +81,7 @@
             "z": -1.0
           },
           {
-            "operation": "rotate",
+            "operation": "scale",
             "x": 0.0,
             "y": 0.0,
             "z": 0.0
@@ -161,7 +161,7 @@
             "z": 0.0
           },
           {
-            "operation": "rotate",
+            "operation": "scale",
             "x": 0.0,
             "y": 0.0,
             "z": 0.0
@@ -241,7 +241,7 @@
             "z": 0.0
           },
           {
-            "operation": "rotate",
+            "operation": "scale",
             "x": 0.0,
             "y": 0.0,
             "z": 0.0

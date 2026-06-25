@@ -1,0 +1,71 @@
+{
+	"format_version": "1.9.0",
+	"credit": "Made with Blockbench",
+	"textures": {
+		"2": "wizards:spell_effect/frost_spikes",
+		"particle": "wizards:spell_effect/frost_spikes"
+	},
+	"elements": [
+		{
+			"from": [8, -1, 6.5],
+			"to": [11, 10, 9.5],
+			"rotation": {"angle": -22.5, "axis": "z", "origin": [10, -1, 8.5]},
+			"faces": {
+				"north": {"uv": [4, 5, 7, 16], "texture": "#2"},
+				"east": {"uv": [4, 5, 7, 16], "texture": "#2"},
+				"south": {"uv": [4, 5, 7, 16], "texture": "#2"},
+				"west": {"uv": [4, 5, 7, 16], "texture": "#2"},
+				"up": {"uv": [8, 0, 11, 3], "rotation": 90, "texture": "#2"},
+				"down": {"uv": [11, 4, 14, 7], "rotation": 270, "texture": "#2"}
+			}
+		},
+		{
+			"from": [6.5, -1, 5],
+			"to": [9.5, 10, 8],
+			"rotation": {"angle": -22.5, "axis": "x", "origin": [8.5, -1, 6]},
+			"faces": {
+				"north": {"uv": [4, 5, 7, 16], "texture": "#2"},
+				"east": {"uv": [4, 5, 7, 16], "texture": "#2"},
+				"south": {"uv": [4, 5, 7, 16], "texture": "#2"},
+				"west": {"uv": [4, 5, 7, 16], "texture": "#2"},
+				"up": {"uv": [8, 0, 11, 3], "texture": "#2"},
+				"down": {"uv": [11, 4, 14, 7], "texture": "#2"}
+			}
+		},
+		{
+			"from": [6.5, -1, 8],
+			"to": [9.5, 10, 11],
+			"rotation": {"angle": 22.5, "axis": "x", "origin": [8.5, -1, 10]},
+			"faces": {
+				"north": {"uv": [4, 5, 7, 16], "texture": "#2"},
+				"east": {"uv": [4, 5, 7, 16], "texture": "#2"},
+				"south": {"uv": [4, 5, 7, 16], "texture": "#2"},
+				"west": {"uv": [4, 5, 7, 16], "texture": "#2"},
+				"up": {"uv": [8, 0, 11, 3], "texture": "#2"},
+				"down": {"uv": [11, 4, 14, 7], "texture": "#2"}
+			}
+		},
+		{
+			"from": [5, -1, 6.5],
+			"to": [8, 10, 9.5],
+			"rotation": {"angle": 22.5, "axis": "z", "origin": [6, -1, 8.5]},
+			"faces": {
+				"north": {"uv": [4, 5, 7, 16], "texture": "#2"},
+				"east": {"uv": [4, 5, 7, 16], "texture": "#2"},
+				"south": {"uv": [4, 5, 7, 16], "texture": "#2"},
+				"west": {"uv": [4, 5, 7, 16], "texture": "#2"},
+				"up": {"uv": [8, 0, 11, 3], "rotation": 90, "texture": "#2"},
+				"down": {"uv": [11, 4, 14, 7], "rotation": 270, "texture": "#2"}
+			}
+		}
+	],
+	"groups": [
+		{
+			"name": "spikes_mid",
+			"origin": [8, 8, 8],
+			"scope": 0,
+			"color": 0,
+			"children": [0, 1, 2, 3]
+		}
+	]
+}
