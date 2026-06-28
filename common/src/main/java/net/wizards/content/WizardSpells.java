@@ -524,7 +524,7 @@ public class WizardSpells {
     public static Entry arcane_barrage = add(arcane_barrage());
     private static Entry arcane_barrage() {
         var name = "Arcane Barrage";
-        var description = "TODO.";
+        var description = "Conjure a group of Arcane Emitters, shooting towards your direction or at your target, existing for " + SpellTooltip.placeholder(SpellTooltip.summonDurationToken) + " sec.";
         var id = Identifier.of(WizardsMod.ID, "arcane_barrage");
         var spell = SpellBuilder.createSpellActive();
         spell.school = SpellSchools.ARCANE;
@@ -539,6 +539,8 @@ public class WizardSpells {
         impact.action.type = Spell.Impact.Action.Type.SUMMON;
         impact.action.summon = WizardSummons.arcaneEmitter();
         spell.impacts = List.of(impact);
+
+        SpellBuilder.Cost.cooldown(spell, 20);
 
         return new Entry(id, spell, name, description).book(Book.ARCANE);
     }
@@ -1225,7 +1227,7 @@ public class WizardSpells {
     public static Entry fire_hydra = add(fire_hydra());
     private static Entry fire_hydra() {
         var name = "Fire Hydra";
-        var description = "Conjure fire hydra heads...";
+        var description = "Conjure a group of Fire Hydras Heads to fight for you for " + SpellTooltip.placeholder(SpellTooltip.summonDurationToken) + " sec.";
         var id = Identifier.of(WizardsMod.ID, "fire_hydra");
         var spell = SpellBuilder.createSpellActive();
         spell.school = SpellSchools.FIRE;
@@ -1240,6 +1242,8 @@ public class WizardSpells {
         impact.action.type = Spell.Impact.Action.Type.SUMMON;
         impact.action.summon = WizardSummons.fireHydra();
         spell.impacts = List.of(impact);
+
+        SpellBuilder.Cost.cooldown(spell, 30F);
 
         return new Entry(id, spell, name, description).book(Book.FIRE);
     }
@@ -1624,7 +1628,7 @@ public class WizardSpells {
         var name = "Ice Lance";
         var description = "Launches lance of ice piercing through all enemies along its path, dealing {damage} frost spell damage and slowing the target on impact. The longer the cast is held, the harder it hits, the bigger/faster the lance, and the further it flies.";
         var id = Identifier.of(WizardsMod.ID, "ice_lance");
-        var spell = SpellBuilder.createWeaponSpell();
+        var spell = SpellBuilder.createSpellActive();
         spell.school = SpellSchools.FROST;
         spell.tier = 3;
         spell.range = 32;
@@ -1821,7 +1825,7 @@ public class WizardSpells {
     public static Entry frost_elemental = add(frost_elemental());
     private static Entry frost_elemental() {
         var name = "Frost Elemental";
-        var description = "Summons a Frost Elemental to fight for you, empowered by your Frost Spell Power attribute.";
+        var description = "Summons a Frost Elemental to fight for you for "  + SpellTooltip.placeholder(SpellTooltip.summonDurationToken) + " sec, empowered by your Frost Spell Power attribute.";
         var id = Identifier.of(WizardsMod.ID, "frost_elemental");
         var spell = SpellBuilder.createSpellActive();
         spell.school = SpellSchools.FROST;

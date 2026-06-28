@@ -145,7 +145,6 @@
   ],
   "cost": {
     "cooldown": {
-      "group": "weapon",
       "duration": 8.0
     },
     "item": {
