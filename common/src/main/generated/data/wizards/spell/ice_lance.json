@@ -62,7 +62,7 @@
       "projectile": {
         "homing_angle": 2.0,
         "perks": {
-          "pierce": 1
+          "pierce": 999
         },
         "client_data": {
           "light_level": 12,

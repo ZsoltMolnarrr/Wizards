@@ -29,6 +29,10 @@
             "lifespan": {
               "active_seconds": 15
             },
+            "sounds": {
+              "spawn": "wizards:arcane_emitter_spawn",
+              "despawn": "wizards:arcane_emitter_despawn"
+            },
             "actions": [
               {
                 "type": "SPELL_CAST",

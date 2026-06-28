@@ -83,6 +83,9 @@ public class WizardSummons {
         b.lifespan.active_seconds = 15;
         b.is_attackable = false;
 
+        b.sounds.spawn = WizardsSounds.ARCANE_EMITTER_SPAWN.id().toString();
+        b.sounds.despawn = WizardsSounds.ARCANE_EMITTER_DESPAWN.id().toString();
+
         // Movement: stationary — no follow, no wander, no collision, no gravity
         b.movement.can_move = false;
         b.movement.is_pushable = false;

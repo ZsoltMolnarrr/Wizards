@@ -1073,23 +1073,20 @@ public class WizardSpells {
 
         SpellBuilder.Casting.channel(spell, 5, 4);
         spell.active.cast.channel.release_fx = true;
-        spell.active.cast.animation = PlayerAnimation.of("spell_engine:two_handed_channeling");
+        spell.active.cast.animation = PlayerAnimation.of("spell_engine:one_handed_levitate_channel");
         spell.active.cast.start_sound = new Sound(WizardsSounds.FIRE_BREATH_START.id());
         spell.active.cast.sound = new Sound(WizardsSounds.FIRE_BREATH_CASTING.id(), 0);
         spell.active.cast.particles = new ParticleBatch[] { fireCastingParticles() };
-        spell.active.cast.movement_speed = 1F;
+        spell.active.cast.movement_speed = 0;
 
 
         spell.release = new Spell.Release();
-        spell.release.sound = Sound.withVolume(WizardsSounds.FIREBALL_IMPACT.id(), 1.2F);
+        spell.release.sound = Sound.withVolume(WizardsSounds.FIRE_STORM_RELEASE.id(), 1.2F);
         spell.release.particles = new ParticleBatch[] {
                 new ParticleBatch("lava",
                         ParticleBatch.Shape.CIRCLE, ParticleBatch.Origin.GROUND,
-                        90, 1.5F, 5F),
-                new ParticleBatch(
-                        SpellEngineParticles.fire_explosion.id().toString(),
-                        ParticleBatch.Shape.SPHERE, ParticleBatch.Origin.CENTER,
-                        6, 0.5F, 0.3F)
+                        90, 2.5F, 3F)
+                        .extent(1)
         };
         spell.release.particles_scaled_with_ranged = new ParticleBatch[] {
                 new ParticleBatch(
@@ -1099,18 +1096,18 @@ public class WizardSpells {
                         .scale(0.8F)
                         .color(0xFF4400FFL),
         };
-        spell.release.model_fx = ModelEffectBuilder.forEach(
-                ModelEffectBuilder.Preset.orbiters(
-                        "wizards:spell_projectile/fire_wave", 3, 2.0F, -360F, 20, ModelEffect.Easing.EASE_IN_OUT_CUBIC),
-                e -> { e
-                        .initialScale(0)
-                        .scaleIn(0, 5, ModelEffect.Easing.EASE_IN_OUT_CUBIC)
-                        .translate(0, 0, 0.5F, 0, 5, ModelEffect.Easing.EASE_IN_CUBIC)
-                        .scaleOut(15, 20, ModelEffect.Easing.EASE_IN_OUT_CUBIC)
-                        .translate(0, 0,-0.5F, 15, 20, ModelEffect.Easing.EASE_IN_CUBIC)
-                    ;
-                }
-        );
+//        spell.release.model_fx = ModelEffectBuilder.forEach(
+//                ModelEffectBuilder.Preset.orbiters(
+//                        "wizards:spell_projectile/fire_wave", 3, 2.0F, -360F, 20, ModelEffect.Easing.EASE_IN_OUT_CUBIC),
+//                e -> { e
+//                        .initialScale(0)
+//                        .scaleIn(0, 5, ModelEffect.Easing.EASE_IN_OUT_CUBIC)
+//                        .translate(0, 0, 0.5F, 0, 5, ModelEffect.Easing.EASE_IN_CUBIC)
+//                        .scaleOut(15, 20, ModelEffect.Easing.EASE_IN_OUT_CUBIC)
+//                        .translate(0, 0,-0.5F, 15, 20, ModelEffect.Easing.EASE_IN_CUBIC)
+//                    ;
+//                }
+//        );
 
 
         spell.target.type = Spell.Target.Type.AREA;
@@ -1118,15 +1115,17 @@ public class WizardSpells {
         spell.target.area.distance_dropoff = Spell.Target.Area.DropoffCurve.SQUARED;
         spell.target.area.vertical_range_multiplier = 0.5F;
 
-        var damage = SpellBuilder.Impacts.damage(1.5F, 1.2F);
+        var damage = SpellBuilder.Impacts.damage(0.8F, 0.5F);
         damage.particles = new ParticleBatch[] {
-                new ParticleBatch(
-                        SpellEngineParticles.fire_explosion.id().toString(),
-                        ParticleBatch.Shape.SPHERE, ParticleBatch.Origin.CENTER,
-                        3, 0.2F, 0.3F)
+                new ParticleBatch("lava",
+                        ParticleBatch.Shape.CIRCLE, ParticleBatch.Origin.CENTER,
+                        3, 0.5F, 3F)
         };
         damage.sound = new Sound(WizardsSounds.FIRE_BREATH_IMPACT.id());
-        spell.impacts = List.of(damage);
+
+        var fire = SpellBuilder.Impacts.fire(2);
+        spell.impacts = List.of(damage, fire);
+
 
         SpellBuilder.Cost.exhaust(spell, 0.4F);
         configureFireRuneCost(spell);
@@ -1667,7 +1666,7 @@ public class WizardSpells {
 
         var projectile = new Spell.ProjectileData();
         projectile.homing_angle = 2F;
-        projectile.perks.pierce = 1; // a lance pierces (no ricochet/bounce, unlike Frostbolt)
+        projectile.perks.pierce = 999; // a lance pierces (no ricochet/bounce, unlike Frostbolt)
         projectile.client_data = new Spell.ProjectileData.Client();
         projectile.client_data.light_level = 12;
         projectile.client_data.travel_particles = new ParticleBatch[] {

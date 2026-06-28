@@ -29,6 +29,16 @@
       "wizards:arcane_blast_release"
     ]
   },
+  "arcane_emitter_despawn": {
+    "sounds": [
+      "wizards:arcane_emitter_despawn"
+    ]
+  },
+  "arcane_emitter_spawn": {
+    "sounds": [
+      "wizards:arcane_emitter_spawn"
+    ]
+  },
   "arcane_evocation_casting": {
     "sounds": [
       "wizards:arcane_evocation_casting"
@@ -97,6 +107,11 @@
   "fire_scorch_impact": {
     "sounds": [
       "wizards:fire_scorch_impact"
+    ]
+  },
+  "fire_storm_release": {
+    "sounds": [
+      "wizards:fire_storm_release"
     ]
   },
   "fire_wall_ignite": {

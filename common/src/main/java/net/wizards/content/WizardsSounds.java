@@ -74,6 +74,8 @@ public class WizardsSounds {
     public static final Entry ARCANE_EVOCATION_START = add(new Entry("arcane_evocation_start"));
     public static final Entry ARCANE_EVOCATION_CASTING = add(new Entry("arcane_evocation_casting"));
     public static final Entry ARCANE_EVOCATION_RELEASE = add(new Entry("arcane_evocation_release"));
+    public static final Entry ARCANE_EMITTER_SPAWN = add(new Entry("arcane_emitter_spawn"));
+    public static final Entry ARCANE_EMITTER_DESPAWN = add(new Entry("arcane_emitter_despawn"));
 
     public static final Entry FIRE_SCORCH_IMPACT = add(new Entry("fire_scorch_impact"));
     public static final Entry FIREBALL_IMPACT = add(new Entry("fireball_impact"));
@@ -84,6 +86,7 @@ public class WizardsSounds {
     public static final Entry FIRE_METEOR_RELEASE = add(new Entry("fire_meteor_release").travelDistance(48F));
     public static final Entry FIRE_METEOR_IMPACT = add(new Entry("fire_meteor_impact"));
     public static final Entry FIRE_WALL_IGNITE = add(new Entry("fire_wall_ignite"));
+    public static final Entry FIRE_STORM_RELEASE = add(new Entry("fire_storm_release"));
 
     public static final Entry FROST_SHARD_IMPACT = add(new Entry("frost_shard_impact"));
     public static final Entry FROST_NOVA_RELEASE = add(new Entry("frost_nova_release"));
