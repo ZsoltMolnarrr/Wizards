@@ -1684,8 +1684,9 @@ public class WizardSpells {
                         .color(FROST_COLOR.toRGBA())
         };
         projectile.client_data.model = new Spell.ProjectileModel();
-        projectile.client_data.model.model_id = "wizards:spell_projectile/frostbolt"; // same model for now
+        projectile.client_data.model.model_id = "wizards:spell_projectile/ice_lance"; // same model for now
         projectile.client_data.model.scale = 0.5F;
+        projectile.client_data.model.rotate_degrees_per_tick = 10;
         spell.deliver.projectile.projectile = projectile;
 
         var damage = SpellBuilder.Impacts.damage(1.0F, 1.5F);
