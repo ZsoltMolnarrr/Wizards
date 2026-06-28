@@ -146,7 +146,7 @@
   "spell.wizards.fireball.name": "Fireball",
   "spell.wizards.frost_blizzard.description": "Channels a rain of frost shards down onto your target and nearby enemies, dealing up to {damage} frost spell damage slowing the target, in {impact_range} blocks radius.",
   "spell.wizards.frost_blizzard.name": "Blizzard",
-  "spell.wizards.frost_elemental.description": "Summons a frost elemental to fight for you.",
+  "spell.wizards.frost_elemental.description": "Summons a Frost Elemental to fight for you, empowered by your Frost Spell Power attribute.",
   "spell.wizards.frost_elemental.name": "Frost Elemental",
   "spell.wizards.frost_nova.description": "Freezes targets around you for {effect_duration} seconds, causing {damage} frost spell damage and blocking their movement. Frozen targets are vulnerable to frost magic.",
   "spell.wizards.frost_nova.name": "Frost Nova",
@@ -158,6 +158,6 @@
   "spell.wizards.frost_spikes.name": "Frost Spikes",
   "spell.wizards.frostbolt.description": "Launches a ball of frost ricocheting to {ricochet} additional nearby targets, causing {damage} frost spell damage and slowing the target on impact.",
   "spell.wizards.frostbolt.name": "Frostbolt",
-  "spell.wizards.ice_lance.description": "Launches lance of ice...",
+  "spell.wizards.ice_lance.description": "Launches lance of ice piercing through all enemies along its path, dealing {damage} frost spell damage and slowing the target on impact. The longer the cast is held, the harder it hits, the bigger/faster the lance, and the further it flies.",
   "spell.wizards.ice_lance.name": "Ice Lance"
 }

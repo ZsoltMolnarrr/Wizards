@@ -1,6 +1,6 @@
 {
   "school": "spell_power:frost",
-  "range": 64.0,
+  "range": 32.0,
   "tier": 3,
   "order": 2,
   "learn": {},
@@ -145,7 +145,8 @@
   ],
   "cost": {
     "cooldown": {
-      "group": "weapon"
+      "group": "weapon",
+      "duration": 8.0
     },
     "item": {
       "id": "runes:frost_stone"
