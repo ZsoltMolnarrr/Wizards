@@ -4,6 +4,7 @@ import net.minecraft.entity.attribute.EntityAttributeModifier;
 import net.minecraft.entity.attribute.EntityAttributes;
 import net.spell_engine.api.datagen.SpellBuilder.Placements;
 import net.spell_engine.api.spell.Spell.Impact.Action.Summon;
+import net.spell_engine.api.spell.fx.Sound;
 import net.spell_engine.api.spell.summon.AttributeScaling;
 import net.spell_engine.api.spell.summon.SummonBehaviour;
 import net.spell_power.api.SpellSchool;
@@ -143,6 +144,10 @@ public class WizardSummons {
         b.lifespan.despawn_ticks = 20;
         b.is_attackable = false;
 
+        b.sounds.spawn = WizardsSounds.FIRE_HYDRA_SPAWN.id().toString();
+        b.sounds.despawn = WizardsSounds.FIRE_HYDRA_DESPAWN.id().toString();
+        b.sounds.ambient = WizardsSounds.FIRE_HYDRA_AMBIENT.id().toString();
+
         // Detection scoped to what it can actually act on
         b.targeting.detection_range.mode = SummonBehaviour.Targeting.DetectionRange.Mode.MAXIMUM_ACTION_RANGE;
 
@@ -195,6 +200,7 @@ public class WizardSummons {
         var summon = new Summon(FireHydraEntity.ID.toString(), b, placements, 3, groupPlacements, 2);
         // Attribute scaling: standard combat stats scaling with fire spell power (no size bump)
         summon.attribute_scaling.entries = schoolCombatScaling(SpellSchools.FIRE);
+        summon.group_spawn_sound = Sound.of(WizardsSounds.FIRE_HYDRA_GROUP_SPAWN.id());
         return summon;
     }
 

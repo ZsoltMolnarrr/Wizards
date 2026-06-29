@@ -94,6 +94,26 @@
       "wizards:fire_breath_start"
     ]
   },
+  "fire_hydra_ambient": {
+    "sounds": [
+      "wizards:fire_hydra_ambient"
+    ]
+  },
+  "fire_hydra_despawn": {
+    "sounds": [
+      "wizards:fire_hydra_despawn"
+    ]
+  },
+  "fire_hydra_group_spawn": {
+    "sounds": [
+      "wizards:fire_hydra_group_spawn"
+    ]
+  },
+  "fire_hydra_spawn": {
+    "sounds": [
+      "wizards:fire_hydra_spawn"
+    ]
+  },
   "fire_meteor_impact": {
     "sounds": [
       "wizards:fire_meteor_impact"

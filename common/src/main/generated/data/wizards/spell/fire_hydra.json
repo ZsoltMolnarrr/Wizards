@@ -30,6 +30,11 @@
               "active_seconds": 30,
               "despawn_ticks": 20
             },
+            "sounds": {
+              "spawn": "wizards:fire_hydra_spawn",
+              "despawn": "wizards:fire_hydra_despawn",
+              "ambient": "wizards:fire_hydra_ambient"
+            },
             "actions": [
               {
                 "type": "SPELL_CAST",
@@ -158,7 +163,10 @@
               "apply_yaw": true
             }
           ],
-          "group_count": 2
+          "group_count": 2,
+          "group_spawn_sound": {
+            "id": "wizards:fire_hydra_group_spawn"
+          }
         }
       }
     }
