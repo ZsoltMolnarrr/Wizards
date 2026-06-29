@@ -5,6 +5,11 @@
   "order": 2,
   "learn": {},
   "active": {},
+  "release": {
+    "animation": {
+      "id": "spell_engine:one_handed_healing_release"
+    }
+  },
   "impacts": [
     {
       "action": {
@@ -12,6 +17,20 @@
         "summon": {
           "entity_type_id": "wizards:frost_elemental",
           "behaviour": {
+            "spawn_fx": {
+              "particles": [
+                {
+                  "particle_id": "spell_engine:snowflake",
+                  "origin": "FEET",
+                  "shape": "PILLAR",
+                  "count": 80.0,
+                  "min_speed": 0.15,
+                  "max_speed": 0.6,
+                  "extent": 0.5
+                }
+              ],
+              "model_fx": []
+            },
             "movement": {
               "follow": {
                 "teleport_after_distance": 32.0

@@ -1236,6 +1236,8 @@ public class WizardSpells {
 
         spell.learn = new Spell.Learn();
 
+        spell.release.animation = PlayerAnimation.of("spell_engine:one_handed_healing_release");
+
         var impact = new Spell.Impact();
         impact.action = new Spell.Impact.Action();
         impact.action.type = Spell.Impact.Action.Type.SUMMON;
@@ -1834,6 +1836,8 @@ public class WizardSpells {
         spell.range = 16;
 
         spell.learn = new Spell.Learn();
+
+        spell.release.animation = PlayerAnimation.of("spell_engine:one_handed_healing_release");
 
         var impact = new Spell.Impact();
         impact.action = new Spell.Impact.Action();
