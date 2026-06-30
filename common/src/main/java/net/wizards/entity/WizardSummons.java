@@ -258,7 +258,9 @@ public class WizardSummons {
                 Placements.point(gd, 180F, 60)  // back
         );
 
-        var summon = new Summon(FireHydraEntity.ID.toString(), b, placements, 3, groupPlacements, 2);
+        var spawnCount = 3;
+        var groupCount = 1;
+        var summon = new Summon(FireHydraEntity.ID.toString(), b, placements, spawnCount, groupPlacements, groupCount);
         // Attribute scaling: standard combat stats scaling with fire spell power (no size bump)
         summon.attribute_scaling.entries = schoolCombatScaling(SpellSchools.FIRE);
         summon.group_spawn_sound = Sound.of(WizardsSounds.FIRE_HYDRA_GROUP_SPAWN.id());

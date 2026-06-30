@@ -216,7 +216,6 @@
               "apply_yaw": true
             }
           ],
-          "group_count": 2,
           "group_spawn_fx": {
             "particles": [
               {
