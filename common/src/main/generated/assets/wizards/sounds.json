@@ -129,6 +129,21 @@
       "wizards:fire_scorch_impact"
     ]
   },
+  "fire_slash_impact": {
+    "sounds": [
+      "wizards:fire_slash_impact"
+    ]
+  },
+  "fire_slash_release": {
+    "sounds": [
+      "wizards:fire_slash_release"
+    ]
+  },
+  "fire_slash_travel": {
+    "sounds": [
+      "wizards:fire_slash_travel"
+    ]
+  },
   "fire_storm_release": {
     "sounds": [
       "wizards:fire_storm_release"

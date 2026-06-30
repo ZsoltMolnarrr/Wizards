@@ -926,7 +926,7 @@ public class WizardSpells {
 
         spell.release = new Spell.Release();
         spell.release.animation = PlayerAnimation.of("spell_engine:one_handed_area_release");
-        spell.release.sound = new Sound(SpellEngineSounds.GENERIC_FIRE_RELEASE.id());
+        spell.release.sound = new Sound(WizardsSounds.FIRE_SLASH_RELEASE.id());
 
         spell.target.type = Spell.Target.Type.AIM;
         spell.target.aim = new Spell.Target.Aim();
@@ -951,6 +951,8 @@ public class WizardSpells {
                         ParticleBatch.Shape.CIRCLE, ParticleBatch.Origin.CENTER,
                         ParticleBatch.Rotation.LOOK, 3, 0.15F, 0.2F, 0)
         };
+        projectile.travel_sound = Sound.of(WizardsSounds.FIRE_SLASH_TRAVEL.id());
+        projectile.travel_sound_interval = 15;
         projectile.client_data.model = new Spell.ProjectileModel();
         projectile.client_data.model.model_id = "wizards:spell_projectile/fire_wave";
         projectile.client_data.model.rotate_degrees_per_tick = 0;
@@ -958,7 +960,7 @@ public class WizardSpells {
 
         var damage = SpellBuilder.Impacts.damage(0.8F, 0.8F);
         damage.particles = fireImpactParticles();
-        damage.sound = new Sound(WizardsSounds.FIRE_SCORCH_IMPACT.id());
+        damage.sound = new Sound(WizardsSounds.FIRE_SLASH_IMPACT.id());
 
         var fire = SpellBuilder.Impacts.fire(3);
         spell.impacts = List.of(damage, fire);

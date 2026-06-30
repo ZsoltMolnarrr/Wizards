@@ -86,6 +86,9 @@ public class WizardsSounds {
     public static final Entry FIRE_METEOR_RELEASE = add(new Entry("fire_meteor_release").travelDistance(48F));
     public static final Entry FIRE_METEOR_IMPACT = add(new Entry("fire_meteor_impact"));
     public static final Entry FIRE_WALL_IGNITE = add(new Entry("fire_wall_ignite"));
+    public static final Entry FIRE_SLASH_RELEASE = add(new Entry("fire_slash_release"));
+    public static final Entry FIRE_SLASH_TRAVEL = add(new Entry("fire_slash_travel"));
+    public static final Entry FIRE_SLASH_IMPACT = add(new Entry("fire_slash_impact"));
     public static final Entry FIRE_STORM_RELEASE = add(new Entry("fire_storm_release"));
     public static final Entry FIRE_HYDRA_GROUP_SPAWN = add(new Entry("fire_hydra_group_spawn"));
     public static final Entry FIRE_HYDRA_SPAWN = add(new Entry("fire_hydra_spawn"));

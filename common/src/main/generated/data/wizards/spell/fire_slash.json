@@ -10,7 +10,7 @@
       "id": "spell_engine:one_handed_area_release"
     },
     "sound": {
-      "id": "spell_engine:generic_fire_release"
+      "id": "wizards:fire_slash_release"
     }
   },
   "target": {
@@ -24,6 +24,10 @@
         "velocity": 0.5
       },
       "projectile": {
+        "travel_sound_interval": 15,
+        "travel_sound": {
+          "id": "wizards:fire_slash_travel"
+        },
         "perks": {
           "pierce": 9999
         },
@@ -90,7 +94,7 @@
         }
       ],
       "sound": {
-        "id": "wizards:fire_scorch_impact"
+        "id": "wizards:fire_slash_impact"
       }
     },
     {
