@@ -922,10 +922,13 @@ public class WizardSpells {
 
         spell.learn = new Spell.Learn();
 
-        SpellBuilder.Casting.instant(spell);
+        SpellBuilder.Casting.charge(spell, 1F);
+        spell.active.cast.animation = PlayerAnimation.of("spell_engine:one_handed_projectile_charge_3");
+        spell.active.cast.sound = new Sound(SpellEngineSounds.GENERIC_FIRE_CASTING.id(), 0);
+        spell.active.cast.particles = new ParticleBatch[] { fireCastingParticles() };
 
         spell.release = new Spell.Release();
-        spell.release.animation = PlayerAnimation.of("spell_engine:one_handed_area_release");
+        spell.release.animation = PlayerAnimation.of("spell_engine:one_handed_projectile_release_3");
         spell.release.sound = new Sound(WizardsSounds.FIRE_SLASH_RELEASE.id());
 
         spell.target.type = Spell.Target.Type.AIM;
