@@ -1650,7 +1650,7 @@ public class WizardSpells {
     private static Entry ice_lance() {
         var name = "Ice Lance";
         var description = "Launches lance of ice piercing through all enemies along its path, dealing {damage} frost spell damage and slowing the target on impact. The longer the cast is held, the harder it hits, the bigger/faster the lance, and the further it flies.";
-        var id = Identifier.of(WizardsMod.ID, "ice_lance");
+        var id = Identifier.of(WizardsMod.ID, "frost_lance");
         var spell = SpellBuilder.createSpellActive();
         spell.school = SpellSchools.FROST;
         spell.tier = 3;
