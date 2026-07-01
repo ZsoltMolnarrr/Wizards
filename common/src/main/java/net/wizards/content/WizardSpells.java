@@ -922,7 +922,13 @@ public class WizardSpells {
 
         spell.learn = new Spell.Learn();
 
-        SpellBuilder.Casting.charge(spell, 1F);
+        var charge = SpellBuilder.Casting.charge(spell, 1F);
+        charge.min_release_ratio = 0.2F;
+        var bonus = charge.bonus;
+        bonus.power_modifier = new Spell.Impact.Modifier();
+        bonus.power_modifier.power_multiplier = 1.5F;   // up to +150% impact power at full charge
+        bonus.projectile_scale_multiply = 1.0F;         // up to 2x projectile render + hitbox size
+
         spell.active.cast.animation = PlayerAnimation.of("spell_engine:one_handed_projectile_charge_3");
         spell.active.cast.sound = new Sound(SpellEngineSounds.GENERIC_FIRE_CASTING.id(), 0);
         spell.active.cast.particles = new ParticleBatch[] { fireCastingParticles() };
@@ -960,11 +966,20 @@ public class WizardSpells {
         projectile.client_data.model.model_id = "wizards:spell_projectile/fire_slash";
         projectile.client_data.model.light_emission = LightEmission.GLOW_TRANSLUCENT;
         projectile.client_data.model.rotate_degrees_per_tick = 0;
-        projectile.client_data.model.scale = 1.2F;
+        projectile.client_data.model.scale = 0.6F;
         spell.deliver.projectile.projectile = projectile;
 
-        var damage = SpellBuilder.Impacts.damage(0.8F, 0.8F);
-        damage.particles = fireImpactParticles();
+        var damage = SpellBuilder.Impacts.damage(0.5F, 0.5F);
+        damage.particles = new ParticleBatch[] {
+                new ParticleBatch(
+                        SpellEngineParticles.flame.id().toString(),
+                        ParticleBatch.Shape.CIRCLE, ParticleBatch.Origin.CENTER,
+                        ParticleBatch.Rotation.LOOK, 3, 0, 0.1F, 0),
+                new ParticleBatch(
+                        "smoke",
+                        ParticleBatch.Shape.CIRCLE, ParticleBatch.Origin.CENTER,
+                        ParticleBatch.Rotation.LOOK, 1, 0, 0.1F, 0)
+        };
         damage.sound = new Sound(WizardsSounds.FIRE_SLASH_IMPACT.id());
 
         var fire = SpellBuilder.Impacts.fire(3);

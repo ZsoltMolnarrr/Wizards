@@ -8,7 +8,14 @@
     "cast": {
       "duration": 1.0,
       "type": "CHARGE",
-      "charge": {},
+      "charge": {
+        "bonus": {
+          "projectile_scale_multiply": 1.0,
+          "power_modifier": {
+            "power_multiplier": 1.5
+          }
+        }
+      },
       "animation": {
         "id": "spell_engine:one_handed_projectile_charge_3"
       },
@@ -82,7 +89,7 @@
           "model": {
             "model_id": "wizards:spell_projectile/fire_slash",
             "light_emission": "GLOW_TRANSLUCENT",
-            "scale": 1.2,
+            "scale": 0.6,
             "rotate_degrees_per_tick": 0.0
           }
         }
@@ -94,25 +101,25 @@
       "action": {
         "type": "DAMAGE",
         "damage": {
-          "spell_power_coefficient": 0.8,
-          "knockback": 0.8
+          "spell_power_coefficient": 0.5,
+          "knockback": 0.5
         }
       },
       "particles": [
         {
-          "particle_id": "smoke",
+          "particle_id": "spell_engine:flame",
           "origin": "CENTER",
-          "shape": "SPHERE",
-          "count": 15.0,
-          "min_speed": 0.01,
+          "shape": "CIRCLE",
+          "rotation": "LOOK",
+          "count": 3.0,
           "max_speed": 0.1
         },
         {
-          "particle_id": "flame",
+          "particle_id": "smoke",
           "origin": "CENTER",
-          "shape": "SPHERE",
-          "count": 10.0,
-          "min_speed": 0.01,
+          "shape": "CIRCLE",
+          "rotation": "LOOK",
+          "count": 1.0,
           "max_speed": 0.1
         }
       ],
