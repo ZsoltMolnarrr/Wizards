@@ -948,17 +948,19 @@ public class WizardSpells {
                 new ParticleBatch(
                         SpellEngineParticles.flame_medium_b.id().toString(),
                         ParticleBatch.Shape.CIRCLE, ParticleBatch.Origin.CENTER,
-                        ParticleBatch.Rotation.LOOK, 6, 0.15F, 0.2F, 0),
+                        null, 6, 0.15F, 0.2F, 0),
                 new ParticleBatch(
                         "smoke",
                         ParticleBatch.Shape.CIRCLE, ParticleBatch.Origin.CENTER,
-                        ParticleBatch.Rotation.LOOK, 3, 0.15F, 0.2F, 0)
+                        null, 3, 0.15F, 0.2F, 0)
         };
         projectile.travel_sound = Sound.of(WizardsSounds.FIRE_SLASH_TRAVEL.id());
         projectile.travel_sound_interval = 15;
         projectile.client_data.model = new Spell.ProjectileModel();
-        projectile.client_data.model.model_id = "wizards:spell_projectile/fire_wave";
+        projectile.client_data.model.model_id = "wizards:spell_projectile/fire_slash";
+        projectile.client_data.model.light_emission = LightEmission.GLOW_TRANSLUCENT;
         projectile.client_data.model.rotate_degrees_per_tick = 0;
+        projectile.client_data.model.scale = 1.2F;
         spell.deliver.projectile.projectile = projectile;
 
         var damage = SpellBuilder.Impacts.damage(0.8F, 0.8F);
@@ -1487,7 +1489,7 @@ public class WizardSpells {
 
         SpellBuilder.Casting.instant(spell);
         SpellBuilder.Release.visuals(spell,
-                "spell_engine:dual_handed_ground_release",
+                "spell_engine:weapon_one_handed_slam",
                 null,
                 new Sound(WizardsSounds.FROST_NOVA_RELEASE.id()));
 

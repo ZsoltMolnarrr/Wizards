@@ -66,7 +66,6 @@
               "particle_id": "spell_engine:flame_medium_b",
               "origin": "CENTER",
               "shape": "CIRCLE",
-              "rotation": "LOOK",
               "count": 6.0,
               "min_speed": 0.15,
               "max_speed": 0.2
@@ -75,14 +74,15 @@
               "particle_id": "smoke",
               "origin": "CENTER",
               "shape": "CIRCLE",
-              "rotation": "LOOK",
               "count": 3.0,
               "min_speed": 0.15,
               "max_speed": 0.2
             }
           ],
           "model": {
-            "model_id": "wizards:spell_projectile/fire_wave",
+            "model_id": "wizards:spell_projectile/fire_slash",
+            "light_emission": "GLOW_TRANSLUCENT",
+            "scale": 1.2,
             "rotate_degrees_per_tick": 0.0
           }
         }

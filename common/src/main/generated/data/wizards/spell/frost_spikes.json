@@ -7,7 +7,7 @@
   "active": {},
   "release": {
     "animation": {
-      "id": "spell_engine:dual_handed_ground_release"
+      "id": "spell_engine:weapon_one_handed_slam"
     },
     "sound": {
       "id": "wizards:frost_nova_release"
