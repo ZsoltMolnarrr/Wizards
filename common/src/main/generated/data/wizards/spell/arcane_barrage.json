@@ -5,6 +5,14 @@
   "order": 2,
   "learn": {},
   "active": {},
+  "release": {
+    "animation": {
+      "id": "spell_engine:one_handed_area_release_air_wave"
+    },
+    "sound": {
+      "id": "wizards:arcane_barrage_release"
+    }
+  },
   "impacts": [
     {
       "action": {

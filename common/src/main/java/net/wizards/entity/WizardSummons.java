@@ -275,15 +275,20 @@ public class WizardSummons {
         var fx = new VFX();
         fx.particles = new ParticleBatch[] {
                 new ParticleBatch(SpellEngineParticles.flame_ground.id().toString(),
-                        ParticleBatch.Shape.PILLAR, ParticleBatch.Origin.FEET, 4, 0, 0),
+                        ParticleBatch.Shape.PILLAR, ParticleBatch.Origin.FEET, 4, 0, 0)
+                        .extent(1F),
                 new ParticleBatch(SpellEngineParticles.flame_medium_a.id().toString(),
-                        ParticleBatch.Shape.PILLAR, ParticleBatch.Origin.FEET, 8, 0.02F, 0.3F),
+                        ParticleBatch.Shape.PILLAR, ParticleBatch.Origin.FEET, 8, 0.02F, 0.3F)
+                        .extent(1F),
                 new ParticleBatch(SpellEngineParticles.flame_medium_b.id().toString(),
-                        ParticleBatch.Shape.PILLAR, ParticleBatch.Origin.FEET, 8, 0.01F, 0.35F),
+                        ParticleBatch.Shape.PILLAR, ParticleBatch.Origin.FEET, 8, 0.01F, 0.35F)
+                        .extent(1F),
                 new ParticleBatch(SpellEngineParticles.flame_spark.id().toString(),
-                        ParticleBatch.Shape.PILLAR, ParticleBatch.Origin.FEET, 12, 0.05F, 0.3F),
+                        ParticleBatch.Shape.PILLAR, ParticleBatch.Origin.FEET, 12, 0.05F, 0.3F)
+                        .extent(1F),
                 new ParticleBatch("campfire_cosy_smoke",
-                        ParticleBatch.Shape.PILLAR, ParticleBatch.Origin.FEET, 1F, 0.05F, 0.1F),
+                        ParticleBatch.Shape.PILLAR, ParticleBatch.Origin.FEET, 3F, 0.0125F, 0.05F)
+                        .extent(1F),
         };
         return fx;
     }

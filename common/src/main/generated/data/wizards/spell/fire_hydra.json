@@ -223,7 +223,8 @@
                 "origin": "FEET",
                 "shape": "PILLAR",
                 "count": 4.0,
-                "max_speed": 0.0
+                "max_speed": 0.0,
+                "extent": 1.0
               },
               {
                 "particle_id": "spell_engine:flame_medium_a",
@@ -231,7 +232,8 @@
                 "shape": "PILLAR",
                 "count": 8.0,
                 "min_speed": 0.02,
-                "max_speed": 0.3
+                "max_speed": 0.3,
+                "extent": 1.0
               },
               {
                 "particle_id": "spell_engine:flame_medium_b",
@@ -239,7 +241,8 @@
                 "shape": "PILLAR",
                 "count": 8.0,
                 "min_speed": 0.01,
-                "max_speed": 0.35
+                "max_speed": 0.35,
+                "extent": 1.0
               },
               {
                 "particle_id": "spell_engine:flame_spark",
@@ -247,15 +250,17 @@
                 "shape": "PILLAR",
                 "count": 12.0,
                 "min_speed": 0.05,
-                "max_speed": 0.3
+                "max_speed": 0.3,
+                "extent": 1.0
               },
               {
                 "particle_id": "campfire_cosy_smoke",
                 "origin": "FEET",
                 "shape": "PILLAR",
-                "count": 1.0,
-                "min_speed": 0.05,
-                "max_speed": 0.1
+                "count": 3.0,
+                "min_speed": 0.0125,
+                "max_speed": 0.05,
+                "extent": 1.0
               }
             ],
             "model_fx": []

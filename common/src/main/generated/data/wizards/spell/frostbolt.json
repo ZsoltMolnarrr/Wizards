@@ -75,7 +75,14 @@
             "models": [
               {
                 "fx": {
-                  "model_id": "wizards:spell_projectile/frostbolt",
+                  "model_id": "wizards:spell_projectile/frostbolt_inner",
+                  "scale": 0.5
+                }
+              },
+              {
+                "rotate_degrees_per_tick": -2.0,
+                "fx": {
+                  "model_id": "wizards:spell_projectile/frostbolt_outer",
                   "scale": 0.5
                 }
               }

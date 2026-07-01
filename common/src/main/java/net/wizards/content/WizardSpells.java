@@ -530,6 +530,9 @@ public class WizardSpells {
 
         spell.learn = new Spell.Learn();
 
+        spell.release.animation = PlayerAnimation.of("spell_engine:one_handed_area_release_air_wave");
+        spell.release.sound = new Sound(WizardsSounds.ARCANE_BARRAGE_RELEASE.id());
+
         var impact = new Spell.Impact();
         impact.action = new Spell.Impact.Action();
         impact.action.type = Spell.Impact.Action.Type.SUMMON;
@@ -954,8 +957,15 @@ public class WizardSpells {
         };
         projectile.travel_sound = Sound.of(WizardsSounds.FIRE_SLASH_TRAVEL.id());
         projectile.travel_sound_interval = 15;
-        var fireSlash = SpellBuilder.ProjectileModels.model("wizards:spell_projectile/fire_slash", 0.6F, LightEmission.GLOW_TRANSLUCENT);
+        // Grow the slash from zero to its full 0.6 scale over its first 20 ticks. In projectile
+        // context the modelFX animation clock is the projectile's age, so this plays once as it spawns.
+        var fireSlash = new Spell.ProjectileModelComposite.Model();
         fireSlash.rotate_degrees_per_tick = 0;
+        fireSlash.fx = ModelEffectBuilder.create("wizards:spell_projectile/fire_slash")
+                .scale(0.6F)
+                .light(LightEmission.GLOW_TRANSLUCENT)
+                .scaleIn(0, 20, ModelEffect.Easing.EASE_OUT_CUBIC)
+                .build();
         projectile.client_data.composite_model = SpellBuilder.ProjectileModels.composite(fireSlash);
         spell.deliver.projectile.projectile = projectile;
 
@@ -1371,7 +1381,11 @@ public class WizardSpells {
                         ParticleBatch.Rotation.LOOK, 1, 0.1F, 0.2F, 0)
                         .color(FROST_COLOR.toRGBA())
         };
-        projectile.client_data.composite_model = SpellBuilder.ProjectileModels.single("wizards:spell_projectile/frostbolt", 0.5F);
+        // Two-piece frostbolt: inner core spins one way, outer shell counter-rotates.
+        var frostboltInner = SpellBuilder.ProjectileModels.model("wizards:spell_projectile/frostbolt_inner", 0.5F);
+        var frostboltOuter = SpellBuilder.ProjectileModels.model("wizards:spell_projectile/frostbolt_outer", 0.5F);
+        frostboltOuter.rotate_degrees_per_tick = -frostboltInner.rotate_degrees_per_tick;
+        projectile.client_data.composite_model = SpellBuilder.ProjectileModels.composite(frostboltInner, frostboltOuter);
         spell.deliver.projectile.projectile = projectile;
 
         var damage = SpellBuilder.Impacts.damage(0.8F, 1F);
@@ -1699,7 +1713,23 @@ public class WizardSpells {
         spell.deliver.projectile.projectile = projectile;
 
         var damage = SpellBuilder.Impacts.damage(1.0F, 1.5F);
-        damage.particles = frostImpactParticles();
+        // A punchier impact than Frostbolt's shared frost burst: more magic particles with a wider
+        // spread, plus ice shards spraying out from the shattered lance.
+        damage.particles = new ParticleBatch[] {
+                new ParticleBatch(
+                        SpellEngineParticles.MagicParticles.get(
+                                SpellEngineParticles.MagicParticles.Shape.FROST,
+                                SpellEngineParticles.MagicParticles.Motion.BURST
+                        ).id().toString(),
+                        ParticleBatch.Shape.SPHERE, ParticleBatch.Origin.CENTER,
+                        75, 0.3F, 0.8F)
+                        .color(FROST_COLOR.toRGBA()),
+                new ParticleBatch(
+                        SpellEngineParticles.frost_shard.id().toString(),
+                        ParticleBatch.Shape.SPHERE, ParticleBatch.Origin.CENTER,
+                        30, 0.2F, 0.4F)
+                        .color(FROST_COLOR.toRGBA())
+        };
         damage.sound = new Sound(WizardsSounds.FROST_LANCE_IMPACT.id());
 
         var slowness = SpellBuilder.Impacts.effectAdd(WizardsEffects.frostSlowness.id.toString(), 5, 0, 1);

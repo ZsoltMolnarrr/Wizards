@@ -1,4 +1,9 @@
 {
+  "arcane_barrage_release": {
+    "sounds": [
+      "wizards:arcane_barrage_release"
+    ]
+  },
   "arcane_beam_casting": {
     "sounds": [
       "wizards:arcane_beam_casting"

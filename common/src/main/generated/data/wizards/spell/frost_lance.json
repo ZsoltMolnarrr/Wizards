@@ -117,9 +117,18 @@
           "particle_id": "spell_engine:magic_frost_burst",
           "origin": "CENTER",
           "shape": "SPHERE",
-          "count": 50.0,
+          "count": 75.0,
+          "min_speed": 0.3,
+          "max_speed": 0.8,
+          "color_rgba": 3439329279
+        },
+        {
+          "particle_id": "spell_engine:frost_shard",
+          "origin": "CENTER",
+          "shape": "SPHERE",
+          "count": 30.0,
           "min_speed": 0.2,
-          "max_speed": 0.7,
+          "max_speed": 0.4,
           "color_rgba": 3439329279
         }
       ],

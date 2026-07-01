@@ -93,7 +93,26 @@
                 "fx": {
                   "model_id": "wizards:spell_projectile/fire_slash",
                   "light_emission": "GLOW_TRANSLUCENT",
-                  "scale": 0.6
+                  "scale": 0.6,
+                  "initial": [
+                    {
+                      "operation": "scale",
+                      "x": -1.0,
+                      "y": -1.0,
+                      "z": -1.0
+                    }
+                  ],
+                  "animations": [
+                    {
+                      "start": 0,
+                      "end": 20,
+                      "easing": "EASE_OUT_CUBIC",
+                      "operation": "scale",
+                      "x": 1.0,
+                      "y": 1.0,
+                      "z": 1.0
+                    }
+                  ]
                 }
               }
             ]
