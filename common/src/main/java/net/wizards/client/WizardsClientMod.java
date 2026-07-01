@@ -71,7 +71,7 @@ public class WizardsClientMod {
         effect.initial = List.of(translateInitial, scaleInitial);
         effect.animations = List.of(scaleUp);
 
-        return new ModelFxEffectRenderer(List.of(effect), ModelFxEffectRenderer.Playback.LOOP)
+        return new ModelFxEffectRenderer(List.of(effect), ModelFxEffectRenderer.Playback.ONCE)
                 .entityScaling(ModelFxEffectRenderer.SizeAxis.WIDTH, 0.5F);
     }
 
