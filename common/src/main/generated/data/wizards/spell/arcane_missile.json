@@ -85,9 +85,15 @@
               "color_rgba": 4284940287
             }
           ],
-          "model": {
-            "model_id": "wizards:spell_projectile/arcane_missile",
-            "scale": 0.6
+          "composite_model": {
+            "models": [
+              {
+                "fx": {
+                  "model_id": "wizards:spell_projectile/arcane_missile",
+                  "scale": 0.6
+                }
+              }
+            ]
           }
         }
       }

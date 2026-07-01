@@ -56,9 +56,15 @@
               "color_rgba": 4284940287
             }
           ],
-          "model": {
-            "model_id": "wizards:spell_projectile/arcane_bolt",
-            "scale": 0.5
+          "composite_model": {
+            "models": [
+              {
+                "fx": {
+                  "model_id": "wizards:spell_projectile/arcane_bolt",
+                  "scale": 0.5
+                }
+              }
+            ]
           }
         }
       }

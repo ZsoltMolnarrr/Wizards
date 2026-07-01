@@ -79,8 +79,14 @@
               "max_speed": 0.05
             }
           ],
-          "model": {
-            "model_id": "wizards:spell_projectile/fire_meteor"
+          "composite_model": {
+            "models": [
+              {
+                "fx": {
+                  "model_id": "wizards:spell_projectile/fire_meteor"
+                }
+              }
+            ]
           }
         }
       }

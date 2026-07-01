@@ -238,6 +238,21 @@
       "wizards:frost_shield_release"
     ]
   },
+  "frost_spike_impact": {
+    "sounds": [
+      "wizards:frost_spike_impact"
+    ]
+  },
+  "frost_spike_release": {
+    "sounds": [
+      "wizards:frost_spike_release"
+    ]
+  },
+  "frost_spike_spawn": {
+    "sounds": [
+      "wizards:frost_spike_spawn"
+    ]
+  },
   "wizard_robes_equip": {
     "sounds": [
       "wizards:wizard_robes_equip_1",

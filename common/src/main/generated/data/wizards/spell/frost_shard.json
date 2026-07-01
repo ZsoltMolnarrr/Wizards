@@ -60,9 +60,15 @@
               "color_rgba": 3439329279
             }
           ],
-          "model": {
-            "model_id": "wizards:spell_projectile/frost_shard",
-            "scale": 0.75
+          "composite_model": {
+            "models": [
+              {
+                "fx": {
+                  "model_id": "wizards:spell_projectile/frost_shard",
+                  "scale": 0.75
+                }
+              }
+            ]
           }
         }
       }

@@ -63,9 +63,15 @@
               "max_speed": 0.1
             }
           ],
-          "model": {
-            "model_id": "wizards:spell_projectile/fireball",
-            "scale": 0.5
+          "composite_model": {
+            "models": [
+              {
+                "fx": {
+                  "model_id": "wizards:spell_projectile/fireball",
+                  "scale": 0.5
+                }
+              }
+            ]
           }
         }
       }

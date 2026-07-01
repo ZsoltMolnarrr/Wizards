@@ -86,11 +86,17 @@
               "max_speed": 0.2
             }
           ],
-          "model": {
-            "model_id": "wizards:spell_projectile/fire_slash",
-            "light_emission": "GLOW_TRANSLUCENT",
-            "scale": 0.6,
-            "rotate_degrees_per_tick": 0.0
+          "composite_model": {
+            "models": [
+              {
+                "rotate_degrees_per_tick": 0.0,
+                "fx": {
+                  "model_id": "wizards:spell_projectile/fire_slash",
+                  "light_emission": "GLOW_TRANSLUCENT",
+                  "scale": 0.6
+                }
+              }
+            ]
           }
         }
       }

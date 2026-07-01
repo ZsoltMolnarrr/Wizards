@@ -61,6 +61,9 @@
       },
       "projectile": {
         "homing_angle": 2.0,
+        "travel_sound": {
+          "id": "spell_engine:weapon_spear_travel"
+        },
         "perks": {
           "pierce": 999
         },
@@ -86,10 +89,16 @@
               "color_rgba": 3439329279
             }
           ],
-          "model": {
-            "model_id": "wizards:spell_projectile/ice_lance",
-            "scale": 0.5,
-            "rotate_degrees_per_tick": 10.0
+          "composite_model": {
+            "models": [
+              {
+                "rotate_degrees_per_tick": 10.0,
+                "fx": {
+                  "model_id": "wizards:spell_projectile/ice_lance",
+                  "scale": 0.5
+                }
+              }
+            ]
           }
         }
       }

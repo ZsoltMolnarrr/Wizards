@@ -182,9 +182,7 @@ public class WizardSpells {
                         ParticleBatch.Rotation.LOOK, 1, 0.05F, 0.1F, 0.0F, 0F)
                         .color(ARCANE_COLOR.toRGBA())
         };
-        projectile.client_data.model = new Spell.ProjectileModel();
-        projectile.client_data.model.model_id = "wizards:spell_projectile/arcane_bolt";
-        projectile.client_data.model.scale = 0.5F;
+        projectile.client_data.composite_model = SpellBuilder.ProjectileModels.single("wizards:spell_projectile/arcane_bolt", 0.5F);
         spell.deliver.projectile.projectile = projectile;
 
         var damage = SpellBuilder.Impacts.damage(0.7F, 0.6F);
@@ -317,9 +315,7 @@ public class WizardSpells {
                         ParticleBatch.Rotation.LOOK, 2, 0.05F, 0.1F, 0)
                         .color(ARCANE_COLOR.toRGBA())
         };
-        projectile.client_data.model = new Spell.ProjectileModel();
-        projectile.client_data.model.model_id = "wizards:spell_projectile/arcane_missile";
-        projectile.client_data.model.scale = 0.6F;
+        projectile.client_data.composite_model = SpellBuilder.ProjectileModels.single("wizards:spell_projectile/arcane_missile", 0.6F);
         spell.deliver.projectile.projectile = projectile;
 
         var damage = SpellBuilder.Impacts.damage(0.8F, 0.5F);
@@ -741,9 +737,7 @@ public class WizardSpells {
                         ParticleBatch.Shape.CIRCLE, ParticleBatch.Origin.CENTER,
                         ParticleBatch.Rotation.LOOK, 1, 0, 0.1F, 0)
         };
-        projectile.client_data.model = new Spell.ProjectileModel();
-        projectile.client_data.model.model_id = "wizards:spell_projectile/fireball";
-        projectile.client_data.model.scale = 0.5F;
+        projectile.client_data.composite_model = SpellBuilder.ProjectileModels.single("wizards:spell_projectile/fireball", 0.5F);
         spell.deliver.projectile.projectile = projectile;
 
         var damage = SpellBuilder.Impacts.damage(0.8F, 0.8F);
@@ -814,9 +808,7 @@ public class WizardSpells {
                         ParticleBatch.Shape.CIRCLE, ParticleBatch.Origin.CENTER,
                         ParticleBatch.Rotation.LOOK, 2, 0, 0.1F, 0)
         };
-        projectile.client_data.model = new Spell.ProjectileModel();
-        projectile.client_data.model.model_id = "wizards:spell_projectile/fire_blast";
-        projectile.client_data.model.scale = 0.9F;
+        projectile.client_data.composite_model = SpellBuilder.ProjectileModels.single("wizards:spell_projectile/fire_blast", 0.9F);
         spell.deliver.projectile.projectile = projectile;
 
         var damage = SpellBuilder.Impacts.damage(1F, 1.1F);
@@ -962,11 +954,9 @@ public class WizardSpells {
         };
         projectile.travel_sound = Sound.of(WizardsSounds.FIRE_SLASH_TRAVEL.id());
         projectile.travel_sound_interval = 15;
-        projectile.client_data.model = new Spell.ProjectileModel();
-        projectile.client_data.model.model_id = "wizards:spell_projectile/fire_slash";
-        projectile.client_data.model.light_emission = LightEmission.GLOW_TRANSLUCENT;
-        projectile.client_data.model.rotate_degrees_per_tick = 0;
-        projectile.client_data.model.scale = 0.6F;
+        var fireSlash = SpellBuilder.ProjectileModels.model("wizards:spell_projectile/fire_slash", 0.6F, LightEmission.GLOW_TRANSLUCENT);
+        fireSlash.rotate_degrees_per_tick = 0;
+        projectile.client_data.composite_model = SpellBuilder.ProjectileModels.composite(fireSlash);
         spell.deliver.projectile.projectile = projectile;
 
         var damage = SpellBuilder.Impacts.damage(0.5F, 0.5F);
@@ -1043,8 +1033,7 @@ public class WizardSpells {
                         ParticleBatch.Shape.CIRCLE, ParticleBatch.Origin.CENTER,
                         ParticleBatch.Rotation.LOOK, 6, 0, 0.05F, 0)
         };
-        projectile.client_data.model = new Spell.ProjectileModel();
-        projectile.client_data.model.model_id = "wizards:spell_projectile/fire_meteor";
+        projectile.client_data.composite_model = SpellBuilder.ProjectileModels.single("wizards:spell_projectile/fire_meteor");
         spell.deliver.meteor.projectile = projectile;
 
         var damage = SpellBuilder.Impacts.damage(1F, 2F);
@@ -1310,9 +1299,7 @@ public class WizardSpells {
                         ParticleBatch.Rotation.LOOK, 1, 0.1F, 0.2F, 0)
                         .color(FROST_COLOR.toRGBA())
         };
-        projectile.client_data.model = new Spell.ProjectileModel();
-        projectile.client_data.model.model_id = "wizards:spell_projectile/frost_shard";
-        projectile.client_data.model.scale = 0.75F;
+        projectile.client_data.composite_model = SpellBuilder.ProjectileModels.single("wizards:spell_projectile/frost_shard", 0.75F);
         spell.deliver.projectile.projectile = projectile;
 
         var damage = SpellBuilder.Impacts.damage(0.6F, 1F);
@@ -1384,9 +1371,7 @@ public class WizardSpells {
                         ParticleBatch.Rotation.LOOK, 1, 0.1F, 0.2F, 0)
                         .color(FROST_COLOR.toRGBA())
         };
-        projectile.client_data.model = new Spell.ProjectileModel();
-        projectile.client_data.model.model_id = "wizards:spell_projectile/frostbolt";
-        projectile.client_data.model.scale = 0.5F;
+        projectile.client_data.composite_model = SpellBuilder.ProjectileModels.single("wizards:spell_projectile/frostbolt", 0.5F);
         spell.deliver.projectile.projectile = projectile;
 
         var damage = SpellBuilder.Impacts.damage(0.8F, 1F);
@@ -1506,7 +1491,7 @@ public class WizardSpells {
         SpellBuilder.Release.visuals(spell,
                 "spell_engine:weapon_one_handed_slam",
                 null,
-                new Sound(WizardsSounds.FROST_NOVA_RELEASE.id()));
+                new Sound(WizardsSounds.FROST_SPIKE_RELEASE.id()));
 
         spell.deliver.type = Spell.Delivery.Type.CLOUD;
 
@@ -1522,7 +1507,7 @@ public class WizardSpells {
         cloud.impact_tick_interval = SPIKE_APEX_TICK; // 20 = 40 / 2
         cloud.time_to_live_seconds = (SPIKE_APEX_TICK * 2 - 1) / 20F; // 39 ticks = 1.95s
         cloud.spawn = new Spell.Delivery.Cloud.Spawn();
-        cloud.spawn.sound = new Sound(WizardsSounds.FROST_NOVA_EFFECT_IMPACT.id());
+        cloud.spawn.sound = new Sound(WizardsSounds.FROST_SPIKE_SPAWN.id());
         cloud.spawn.particles = new ParticleBatch[] {
                 new ParticleBatch(
                         SpellEngineParticles.snowflake.id().toString(),
@@ -1561,7 +1546,7 @@ public class WizardSpells {
                         30, 0.2F, 0.7F)
                         .color(FROST_COLOR.toRGBA())
         };
-        damage.sound = new Sound(WizardsSounds.FROST_NOVA_DAMAGE_IMPACT.id());
+        damage.sound = new Sound(WizardsSounds.FROST_SPIKE_IMPACT.id());
 
         var frozen = SpellBuilder.Impacts.effectAdd(WizardsEffects.frozen.id.toString(), 6, 1, 9);
         frozen.action.status_effect.apply_mode = Spell.Impact.Action.StatusEffect.ApplyMode.ADD;
@@ -1707,10 +1692,10 @@ public class WizardSpells {
                         ParticleBatch.Rotation.LOOK, 1, 0.1F, 0.2F, 0)
                         .color(FROST_COLOR.toRGBA())
         };
-        projectile.client_data.model = new Spell.ProjectileModel();
-        projectile.client_data.model.model_id = "wizards:spell_projectile/ice_lance"; // same model for now
-        projectile.client_data.model.scale = 0.5F;
-        projectile.client_data.model.rotate_degrees_per_tick = 10;
+        projectile.travel_sound = Sound.of(SpellEngineSounds.WEAPON_SPEAR_TRAVEL.id());
+        var iceLance = SpellBuilder.ProjectileModels.model("wizards:spell_projectile/ice_lance", 0.5F); // same model for now
+        iceLance.rotate_degrees_per_tick = 10;
+        projectile.client_data.composite_model = SpellBuilder.ProjectileModels.composite(iceLance);
         spell.deliver.projectile.projectile = projectile;
 
         var damage = SpellBuilder.Impacts.damage(1.0F, 1.5F);
@@ -1783,9 +1768,7 @@ public class WizardSpells {
                         ParticleBatch.Rotation.LOOK, 1, 0.1F, 0.2F, 0)
                         .color(FROST_COLOR.toRGBA())
         };
-        projectile.client_data.model = new Spell.ProjectileModel();
-        projectile.client_data.model.model_id = "wizards:spell_projectile/frost_shard";
-        projectile.client_data.model.scale = 0.8F;
+        projectile.client_data.composite_model = SpellBuilder.ProjectileModels.single("wizards:spell_projectile/frost_shard", 0.8F);
         spell.deliver.meteor.projectile = projectile;
 
         spell.release = new Spell.Release();

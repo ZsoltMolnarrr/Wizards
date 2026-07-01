@@ -71,9 +71,15 @@
               "color_rgba": 3439329279
             }
           ],
-          "model": {
-            "model_id": "wizards:spell_projectile/frostbolt",
-            "scale": 0.5
+          "composite_model": {
+            "models": [
+              {
+                "fx": {
+                  "model_id": "wizards:spell_projectile/frostbolt",
+                  "scale": 0.5
+                }
+              }
+            ]
           }
         }
       }
