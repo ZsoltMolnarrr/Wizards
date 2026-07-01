@@ -25,7 +25,7 @@
         "id": "spell_engine:weapon_spearthrow_ready"
       },
       "sound": {
-        "id": "spell_engine:generic_frost_casting",
+        "id": "wizards:frost_lance_casting",
         "randomness": 0.0
       },
       "particles": [
@@ -46,7 +46,7 @@
     },
     "pitch_shift": 0.75,
     "sound": {
-      "id": "spell_engine:generic_frost_release"
+      "id": "wizards:frost_lance_release"
     }
   },
   "target": {
@@ -124,7 +124,7 @@
         }
       ],
       "sound": {
-        "id": "spell_engine:generic_frost_impact"
+        "id": "wizards:frost_lance_impact"
       }
     },
     {

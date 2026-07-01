@@ -1657,12 +1657,12 @@ public class WizardSpells {
         bonus.range_add = 32F;                          // flies further at full charge
 
         spell.active.cast.animation = PlayerAnimation.of("spell_engine:weapon_spearthrow_ready");
-        spell.active.cast.sound = new Sound(SpellEngineSounds.GENERIC_FROST_CASTING.id(), 0);
+        spell.active.cast.sound = new Sound(WizardsSounds.FROST_LANCE_CASTING.id(), 0);
         spell.active.cast.particles = new ParticleBatch[] { frostCastingParticles() };
 
         spell.release = new Spell.Release();
         spell.release.pitch_shift = 0.75F;
-        spell.release.sound = new Sound(SpellEngineSounds.GENERIC_FROST_RELEASE.id());
+        spell.release.sound = new Sound(WizardsSounds.FROST_LANCE_RELEASE.id());
         spell.release.animation = PlayerAnimation.of("spell_engine:weapon_spearthrow_toss");
 
         spell.target.type = Spell.Target.Type.AIM;
@@ -1700,7 +1700,7 @@ public class WizardSpells {
 
         var damage = SpellBuilder.Impacts.damage(1.0F, 1.5F);
         damage.particles = frostImpactParticles();
-        damage.sound = new Sound(SpellEngineSounds.GENERIC_FROST_IMPACT.id());
+        damage.sound = new Sound(WizardsSounds.FROST_LANCE_IMPACT.id());
 
         var slowness = SpellBuilder.Impacts.effectAdd(WizardsEffects.frostSlowness.id.toString(), 5, 0, 1);
         slowness.action.status_effect.apply_limit = new Spell.Impact.Action.StatusEffect.ApplyLimit();

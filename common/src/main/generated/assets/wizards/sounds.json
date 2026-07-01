@@ -208,6 +208,21 @@
       "wizards:frost_elemental_step_3"
     ]
   },
+  "frost_lance_casting": {
+    "sounds": [
+      "wizards:frost_lance_casting"
+    ]
+  },
+  "frost_lance_impact": {
+    "sounds": [
+      "wizards:frost_lance_impact"
+    ]
+  },
+  "frost_lance_release": {
+    "sounds": [
+      "wizards:frost_lance_release"
+    ]
+  },
   "frost_nova_damage_impact": {
     "sounds": [
       "wizards:frost_nova_damage_impact"

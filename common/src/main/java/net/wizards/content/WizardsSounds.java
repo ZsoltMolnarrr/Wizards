@@ -105,7 +105,9 @@ public class WizardsSounds {
     public static final Entry FROST_SPIKE_SPAWN = add(new Entry("frost_spike_spawn"));
     public static final Entry FROST_SHIELD_RELEASE = add(new Entry("frost_shield_release"));
     public static final Entry FROST_SHIELD_IMPACT = add(new Entry("frost_shield_impact"));
-
+    public static final Entry FROST_LANCE_CASTING = add(new Entry("frost_lance_casting"));
+    public static final Entry FROST_LANCE_IMPACT = add(new Entry("frost_lance_impact"));
+    public static final Entry FROST_LANCE_RELEASE = add(new Entry("frost_lance_release"));
     public static final Entry FROST_BLIZZARD_CASTING = add(new Entry("frost_blizzard_casting"));
 
     public static final Entry FROST_ELEMENTAL_ATTACK = add(new Entry("frost_elemental_attack"));
