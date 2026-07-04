@@ -919,9 +919,8 @@ public class WizardSpells {
 
         var charge = SpellBuilder.Casting.charge(spell, 1F);
         charge.min_release_ratio = 0.2F;
+        charge.output_scaling = 0.5F;                // damage swings only in the top third (matches previous +50% bonus tuning)
         var bonus = charge.bonus;
-        bonus.power_modifier = new Spell.Impact.Modifier();
-        bonus.power_modifier.power_multiplier = 1.5F;   // up to +150% impact power at full charge
         bonus.projectile_scale_multiply = 1.0F;         // up to 2x projectile render + hitbox size
 
         spell.active.cast.animation = PlayerAnimation.of("spell_engine:one_handed_projectile_charge_3");
@@ -969,7 +968,7 @@ public class WizardSpells {
         projectile.client_data.composite_model = SpellBuilder.ProjectileModels.composite(fireSlash);
         spell.deliver.projectile.projectile = projectile;
 
-        var damage = SpellBuilder.Impacts.damage(0.5F, 0.5F);
+        var damage = SpellBuilder.Impacts.damage(0.75F, 0.5F); // full-charge value (charge scales down to min_output_ratio)
         damage.particles = new ParticleBatch[] {
                 new ParticleBatch(
                         SpellEngineParticles.flame.id().toString(),
@@ -1092,7 +1091,7 @@ public class WizardSpells {
 
         spell.learn = new Spell.Learn();
 
-        SpellBuilder.Casting.channel(spell, 5, 4);
+        SpellBuilder.Casting.channel(spell, 5, 10);
         spell.active.cast.channel.release_fx = true;
         spell.active.cast.animation = PlayerAnimation.of("spell_engine:one_handed_levitate_channel");
         spell.active.cast.start_sound = new Sound(WizardsSounds.FIRE_BREATH_START.id());
@@ -1136,7 +1135,7 @@ public class WizardSpells {
         spell.target.area.distance_dropoff = Spell.Target.Area.DropoffCurve.SQUARED;
         spell.target.area.vertical_range_multiplier = 0.5F;
 
-        var damage = SpellBuilder.Impacts.damage(0.8F, 0.5F);
+        var damage = SpellBuilder.Impacts.damage(0.95F, 0.5F);
         damage.particles = new ParticleBatch[] {
                 new ParticleBatch("lava",
                         ParticleBatch.Shape.CIRCLE, ParticleBatch.Origin.CENTER,
@@ -1549,7 +1548,7 @@ public class WizardSpells {
         spell.deliver.clouds = List.of(cloud);
 
         // Impacts mirror Frost Nova: frost damage + freeze.
-        var damage = SpellBuilder.Impacts.damage(0.75F, 0F);
+        var damage = SpellBuilder.Impacts.damage(0.5F, 0F);
         damage.particles = new ParticleBatch[] {
                 new ParticleBatch(
                         SpellEngineParticles.MagicParticles.get(
@@ -1658,13 +1657,13 @@ public class WizardSpells {
 
         spell.learn = new Spell.Learn();
 
-        // Charged cast: the longer it is held, the harder it hits, the bigger/faster the lance,
-        // and the further it flies (the charge bonus is scaled by the curved release ratio).
+        // Charged cast: the longer it is held, the harder it hits (innate output scaling via
+        // min_output_ratio), the bigger/faster the lance, and the further it flies (the charge
+        // bonus is scaled by the curved release ratio).
         var charge = SpellBuilder.Casting.charge(spell, 1.5F, Spell.Active.Cast.Charge.Curve.EASE_IN_QUART);
         charge.min_release_ratio = 0.2F;
+        charge.output_scaling = 0.75F;                // damage swings only in the top third (matches previous +50% bonus tuning)
         var bonus = charge.bonus;
-        bonus.power_modifier = new Spell.Impact.Modifier();
-        bonus.power_modifier.power_multiplier = 1.5F;   // up to +150% impact power at full charge
         bonus.projectile_scale_multiply = 1.0F;         // up to 2x projectile render + hitbox size
         bonus.projectile_launch = new Spell.LaunchProperties();
         bonus.projectile_launch.velocity = 0.8F;        // faster projectile at full charge
@@ -1712,7 +1711,7 @@ public class WizardSpells {
         projectile.client_data.composite_model = SpellBuilder.ProjectileModels.composite(iceLance);
         spell.deliver.projectile.projectile = projectile;
 
-        var damage = SpellBuilder.Impacts.damage(1.0F, 1.5F);
+        var damage = SpellBuilder.Impacts.damage(1.5F, 1.5F); // full-charge value (charge scales down to min_output_ratio)
         // A punchier impact than Frostbolt's shared frost burst: more magic particles with a wider
         // spread, plus ice shards spraying out from the shattered lance.
         damage.particles = new ParticleBatch[] {

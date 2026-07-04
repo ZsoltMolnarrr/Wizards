@@ -9,11 +9,9 @@
       "duration": 1.0,
       "type": "CHARGE",
       "charge": {
+        "output_scaling": 0.5,
         "bonus": {
-          "projectile_scale_multiply": 1.0,
-          "power_modifier": {
-            "power_multiplier": 1.5
-          }
+          "projectile_scale_multiply": 1.0
         }
       },
       "animation": {
@@ -126,7 +124,7 @@
       "action": {
         "type": "DAMAGE",
         "damage": {
-          "spell_power_coefficient": 0.5,
+          "spell_power_coefficient": 0.75,
           "knockback": 0.5
         }
       },

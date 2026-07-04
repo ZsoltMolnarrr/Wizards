@@ -223,7 +223,7 @@
       "action": {
         "type": "DAMAGE",
         "damage": {
-          "spell_power_coefficient": 0.75,
+          "spell_power_coefficient": 0.5,
           "knockback": 0.0
         }
       },

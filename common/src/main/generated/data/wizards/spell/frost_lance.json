@@ -9,16 +9,14 @@
       "duration": 1.5,
       "type": "CHARGE",
       "charge": {
+        "output_scaling": 0.75,
         "curve": "EASE_IN_QUART",
         "bonus": {
           "range_add": 32.0,
           "projectile_launch": {
             "velocity": 0.8
           },
-          "projectile_scale_multiply": 1.0,
-          "power_modifier": {
-            "power_multiplier": 1.5
-          }
+          "projectile_scale_multiply": 1.0
         }
       },
       "animation": {
@@ -109,6 +107,7 @@
       "action": {
         "type": "DAMAGE",
         "damage": {
+          "spell_power_coefficient": 1.5,
           "knockback": 1.5
         }
       },

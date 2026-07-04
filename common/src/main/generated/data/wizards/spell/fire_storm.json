@@ -9,7 +9,7 @@
       "duration": 5.0,
       "type": "CHANNEL",
       "channel": {
-        "ticks": 4,
+        "ticks": 10,
         "release_fx": true
       },
       "animation": {
@@ -75,7 +75,7 @@
       "action": {
         "type": "DAMAGE",
         "damage": {
-          "spell_power_coefficient": 0.8,
+          "spell_power_coefficient": 0.95,
           "knockback": 0.5
         }
       },
