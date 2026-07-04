@@ -343,7 +343,7 @@ public class WizardSpells {
     private static Entry arcane_explosion() {
         var id = Identifier.of(WizardsMod.ID, "arcane_explosion");
         var name = "Arcane Explosion";
-        var description = "Creates a magical explosion around you, causing {damage} arcane damage to nearby enemies.";
+        var description = "Creates a magical explosion around you, causing {damage} arcane spell damage to nearby enemies.";
         var spell = SpellBuilder.createSpellActive();
         spell.school = SpellSchools.ARCANE;
         spell.tier = 2;
@@ -520,7 +520,7 @@ public class WizardSpells {
     public static Entry arcane_barrage = add(arcane_barrage());
     private static Entry arcane_barrage() {
         var name = "Arcane Barrage";
-        var description = "Conjure a group of Arcane Emitters, shooting towards your direction or at your target, existing for " + SpellTooltip.placeholder(SpellTooltip.summonDurationToken) + " sec.";
+        var description = "Conjures " + SpellTooltip.placeholder(SpellTooltip.summonCountToken) + " Arcane Emitters behind you, firing at your target or where you aim. They last " + SpellTooltip.placeholder(SpellTooltip.summonDurationToken) + " sec and are empowered by your Arcane Spell Power.";
         var id = Identifier.of(WizardsMod.ID, "arcane_barrage");
         var spell = SpellBuilder.createSpellActive();
         spell.school = SpellSchools.ARCANE;
@@ -548,7 +548,7 @@ public class WizardSpells {
     private static Entry arcane_evocation() {
         var id = Identifier.of(WizardsMod.ID, "arcane_evocation");
         var name = "Evocation";
-        var description = "Channel to gain Evocation effect, stacking up to {effect_amplifier_cap}, lasting {effect_duration} seconds. Each stack increases spell critical strike chance and spell haste by {bonus_1}, but also increases any damage you take by {bonus_3}.";
+        var description = "Channel to gain Evocation, stacking up to {effect_amplifier_cap} times, lasting {effect_duration} sec. Each stack increases spell critical strike chance and spell haste by {bonus_1}, but also increases damage you take by {bonus_3}.";
         var spell = SpellBuilder.createSpellActive();
         spell.school = SpellSchools.ARCANE;
         spell.tier = 4;
@@ -908,7 +908,7 @@ public class WizardSpells {
     private static Entry fire_slash() {
         var id = Identifier.of(WizardsMod.ID, "fire_slash");
         var name = "Flame Slash";
-        var description = "Launches a wide slash of fiery wave, causing up to {damage} fire spell damage in front.";
+        var description = "Launches a wide wave of flame, dealing {damage} fire spell damage to enemies in its path. The longer the cast is held, the harder it hits and the larger it grows.";
         var spell = SpellBuilder.createSpellActive();
         spell.school = SpellSchools.FIRE;
         spell.tier = 2;
@@ -1246,7 +1246,7 @@ public class WizardSpells {
     public static Entry fire_hydra = add(fire_hydra());
     private static Entry fire_hydra() {
         var name = "Fire Hydra";
-        var description = "Conjure a group of Fire Hydras Heads to fight for you for " + SpellTooltip.placeholder(SpellTooltip.summonDurationToken) + " sec.";
+        var description = "Conjures a group of " + SpellTooltip.placeholder(SpellTooltip.summonCountToken) + " Fire Hydra heads near you, attacking nearby enemies. They last " + SpellTooltip.placeholder(SpellTooltip.summonDurationToken) + " sec and are empowered by your Fire Spell Power.";
         var id = Identifier.of(WizardsMod.ID, "fire_hydra");
         var spell = SpellBuilder.createSpellActive();
         spell.school = SpellSchools.FIRE;
@@ -1490,7 +1490,7 @@ public class WizardSpells {
     private static Entry frost_spikes() {
         var id = Identifier.of(WizardsMod.ID, "frost_spikes");
         var name = "Frost Spikes";
-        var description = "Erupts a line of frost spikes from the ground, dealing {damage} frost spell damage and freezing enemies caught in their path for {effect_duration} seconds. Frozen targets are vulnerable to frost magic.";
+        var description = "Raises a line of frost spikes from the ground, dealing {damage} frost spell damage and freezing enemies caught in their path for {effect_duration} sec. Frozen targets are vulnerable to frost magic.";
 
         var spell = SpellBuilder.createSpellActive();
         spell.range = 0;
@@ -1647,7 +1647,7 @@ public class WizardSpells {
     public static Entry ice_lance = add(ice_lance());
     private static Entry ice_lance() {
         var name = "Ice Lance";
-        var description = "Launches lance of ice piercing through all enemies along its path, dealing {damage} frost spell damage and slowing the target on impact. The longer the cast is held, the harder it hits, the bigger/faster the lance, and the further it flies.";
+        var description = "Launches a lance of ice, piercing through all enemies along its path, dealing {damage} frost spell damage and slowing targets for {effect_duration} sec. The longer the cast is held, the harder it hits, the larger and faster the lance, and the further it flies.";
         var id = Identifier.of(WizardsMod.ID, "frost_lance");
         var spell = SpellBuilder.createSpellActive();
         spell.school = SpellSchools.FROST;
@@ -1861,7 +1861,7 @@ public class WizardSpells {
     public static Entry frost_elemental = add(frost_elemental());
     private static Entry frost_elemental() {
         var name = "Frost Elemental";
-        var description = "Summons a Frost Elemental to fight for you for "  + SpellTooltip.placeholder(SpellTooltip.summonDurationToken) + " sec, empowered by your Frost Spell Power attribute.";
+        var description = "Summons a Frost Elemental to fight by your side for " + SpellTooltip.placeholder(SpellTooltip.summonDurationToken) + " sec, empowered by your Frost Spell Power.";
         var id = Identifier.of(WizardsMod.ID, "frost_elemental");
         var spell = SpellBuilder.createSpellActive();
         spell.school = SpellSchools.FROST;
