@@ -1056,7 +1056,8 @@ public class WizardSpells {
         spell.impacts = List.of(damage);
 
         spell.area_impact = new Spell.AreaImpact();
-        spell.area_impact.radius = 6;
+        var impactRadius = 6F;
+        spell.area_impact.radius = impactRadius;
         spell.area_impact.area.distance_dropoff = Spell.Target.Area.DropoffCurve.SQUARED;
         spell.area_impact.particles = new ParticleBatch[] {
                 new ParticleBatch("lava",
@@ -1067,7 +1068,10 @@ public class WizardSpells {
                         100, 0.2F, 0.4F),
                 new ParticleBatch("smoke",
                         ParticleBatch.Shape.SPHERE, ParticleBatch.Origin.CENTER,
-                        90, 0.1F, 0.3F)
+                        90, 0.1F, 0.3F),
+                SpellBuilder.Particles.area(SpellEngineParticles.area_effect_473.id())
+                        .scale(impactRadius * 0.5F)
+                        .color(FIRE_COLOR.toRGBA())
         };
         spell.area_impact.sound = Sound.withVolume(WizardsSounds.FIRE_METEOR_IMPACT.id(), 1.5F);
 
@@ -1829,7 +1833,8 @@ public class WizardSpells {
         spell.impacts = List.of(damage, slowness);
 
         spell.area_impact = new Spell.AreaImpact();
-        spell.area_impact.radius = 3;
+        var impactRadius = 3;
+        spell.area_impact.radius = impactRadius;
         spell.area_impact.area.distance_dropoff = Spell.Target.Area.DropoffCurve.SQUARED;
         spell.area_impact.particles = new ParticleBatch[] {
                 new ParticleBatch(SpellEngineParticles.snowflake.id().toString(),
@@ -1846,7 +1851,10 @@ public class WizardSpells {
                 new ParticleBatch(
                         SpellEngineParticles.frost_shard.id().toString(),
                         ParticleBatch.Shape.SPHERE, ParticleBatch.Origin.CENTER,
-                        15, 0.2F, 0.4F)
+                        15, 0.2F, 0.4F),
+                SpellBuilder.Particles.area(SpellEngineParticles.area_effect_474.id())
+                        .scale(impactRadius)
+                        .color(FROST_COLOR.toRGBA())
         };
         spell.area_impact.sound = Sound.withVolume(WizardsSounds.FROST_SHARD_IMPACT.id(), 1.5F);
 
