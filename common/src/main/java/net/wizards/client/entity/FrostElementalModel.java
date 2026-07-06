@@ -11,6 +11,7 @@ import net.minecraft.entity.AnimationState;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
 import net.wizards.WizardsMod;
+import net.spell_engine.entity.ModelAnimations;
 import net.wizards.entity.FrostElementalEntity;
 import org.joml.Vector3f;
 
@@ -142,7 +143,12 @@ public class FrostElementalModel extends SinglePartEntityModel<FrostElementalEnt
 	public void setAngles(FrostElementalEntity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float netHeadPitch) {
 		this.getPart().traverse().forEach(ModelPart::resetTransform);
 		this.setHeadAngles(netHeadYaw, netHeadPitch);
-		this.animateMovement(FrostElementalAnimations.walk, limbSwing, limbSwingAmount, 1F, 1F);
+		// Same time/amplitude mapping as animateMovement (limbSwing → time, limbSwingAmount → scale),
+		// but routed through LoopingAnimationHelper so the walk clip's loop seam is interpolated with
+		// wrapped catmull-rom neighbours instead of vanilla's clamped ones — removing the per-cycle hitch.
+		long walkTime = (long) (limbSwing * 50F);
+		float walkAmount = Math.min(limbSwingAmount, 1F);
+		ModelAnimations.seamlessLoop(this, FrostElementalAnimations.walk, walkTime, walkAmount, TEMP);
 		this.updateAnimation(entity.spawnAnimationState,        FrostElementalAnimations.spawn,   ageInTicks, 1F);
 		this.updateAnimation(entity.despawnAnimationState,      FrostElementalAnimations.spawn, ageInTicks, -1F);
 
