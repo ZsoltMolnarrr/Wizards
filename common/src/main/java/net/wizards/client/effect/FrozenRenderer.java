@@ -19,7 +19,7 @@ public class FrozenRenderer implements CustomModelStatusEffect.Renderer {
 
     public static final Identifier modelId = Identifier.of(WizardsMod.ID, "spell_effect/frost_trap");
     @Override
-    public void renderEffect(int amplifier, LivingEntity livingEntity, float delta, MatrixStack matrixStack, VertexConsumerProvider vertexConsumers, int light) {
+    public void renderEffect(int appliedAtAge, int amplifier, LivingEntity livingEntity, float delta, MatrixStack matrixStack, VertexConsumerProvider vertexConsumers, int light) {
         matrixStack.push();
         matrixStack.translate(0, 0.5, 0);
         CustomModels.render(RENDER_LAYER, MinecraftClient.getInstance().getItemRenderer(), modelId,

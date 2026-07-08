@@ -23,7 +23,7 @@ public class FrostShieldRenderer implements CustomModelStatusEffect.Renderer {
     private static final RenderLayer OVERLAY_RENDER_LAYER = CustomLayers.spellEffect(LightEmission.RADIATE, false);
 
     @Override
-    public void renderEffect(int amplifier, LivingEntity livingEntity, float delta, MatrixStack matrixStack, VertexConsumerProvider vertexConsumers, int light) {
+    public void renderEffect(int appliedAtAge, int amplifier, LivingEntity livingEntity, float delta, MatrixStack matrixStack, VertexConsumerProvider vertexConsumers, int light) {
         float yOffset = 1.15F; // y + 0.01 to avoid Y fighting
         matrixStack.push();
         matrixStack.translate(0, yOffset, 0); // y + 0.01 to avoid Y fighting

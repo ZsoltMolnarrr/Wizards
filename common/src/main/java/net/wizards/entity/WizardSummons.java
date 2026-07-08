@@ -80,11 +80,18 @@ public class WizardSummons {
                         .extent(0.5F)
         };
 
-        // Placement: 2 blocks ahead of the caster, snapped to the ground, keeping its own facing.
-        var placement = Placements.point(2F, 0F, 0);
-        placement.apply_yaw = false;
+        // Placement: a diamond around the caster — right, left, front, rear — each 2 blocks out and
+        // snapped to the ground. `spawn_count` is 1, so only the first slot (right) is filled; the
+        // rest are cycled into, in this order, when a spell modifier raises the count.
+        float d = 2F;
+        var placements = List.of(
+                Placements.pointAtAngle(d, 90F),  // right
+                Placements.pointAtAngle(d, 270F), // left
+                Placements.pointAtAngle(d, 0F),   // front
+                Placements.pointAtAngle(d, 180F)  // rear
+        );
 
-        var summon = new Summon(FrostElementalEntity.ID.toString(), b, List.of(placement), 1);
+        var summon = new Summon(FrostElementalEntity.ID.toString(), b, placements, 1);
         // Attribute scaling: standard combat stats + a size bump, all scaling with frost spell power
         var scaling = schoolCombatScaling(SpellSchools.FROST);
         scaling.add(scalingEntry(EntityAttributes.GENERIC_SCALE.getIdAsString(),
@@ -159,7 +166,7 @@ public class WizardSummons {
 
         // One group, offset straight behind the caster (pure translation, no ground snap), seeding
         // the perpendicular per-entity line.
-        var behindGroup = Placements.point(2F, 180F, 0);
+        var behindGroup = Placements.pointAtAngle(2F, 180F, 0);
         behindGroup.force_onto_ground = false;
         behindGroup.apply_yaw = false;
         var groupPlacements = List.of(behindGroup);
@@ -242,20 +249,20 @@ public class WizardSummons {
         // the loop cycles through the first three slots: front, right, left.
         float d = 1F;
         var placements = List.of(
-                Placements.point(d, 0F, 0),    // front
-                Placements.point(d, 90F, 5),   // right
-                Placements.point(d, 270F, 10), // left
-                Placements.point(d, 180F, 15)  // back
+                Placements.pointAtAngle(d, 0F, 0),    // front
+                Placements.pointAtAngle(d, 90F, 5),   // right
+                Placements.pointAtAngle(d, 270F, 10), // left
+                Placements.pointAtAngle(d, 180F, 15)  // back
         );
 
         // Group placement: the same formation at 3x the distance, used as a per-group offset. With
         // group_count = 2 the loop cycles through the first two slots.
         float gd = d * 3F;
         var groupPlacements = List.of(
-                Placements.point(gd, 90F, 0),   // right
-                Placements.point(gd, 270F, 20), // left
-                Placements.point(gd, 0F, 40),   // front
-                Placements.point(gd, 180F, 60)  // back
+                Placements.pointAtAngle(gd, 90F, 0),   // right
+                Placements.pointAtAngle(gd, 270F, 20), // left
+                Placements.pointAtAngle(gd, 0F, 40),   // front
+                Placements.pointAtAngle(gd, 180F, 60)  // back
         );
 
         var spawnCount = 3;

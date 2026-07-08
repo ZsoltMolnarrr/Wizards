@@ -171,7 +171,23 @@
           },
           "placements": [
             {
-              "location_offset_by_look": 2.0
+              "location_offset_by_look": 2.0,
+              "location_yaw_offset": 90.0,
+              "apply_yaw": true
+            },
+            {
+              "location_offset_by_look": 2.0,
+              "location_yaw_offset": 270.0,
+              "apply_yaw": true
+            },
+            {
+              "location_offset_by_look": 2.0,
+              "apply_yaw": true
+            },
+            {
+              "location_offset_by_look": 2.0,
+              "location_yaw_offset": 180.0,
+              "apply_yaw": true
             }
           ]
         }
