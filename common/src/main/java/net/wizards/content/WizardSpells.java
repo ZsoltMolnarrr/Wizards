@@ -1095,7 +1095,7 @@ public class WizardSpells {
 
         spell.learn = new Spell.Learn();
 
-        SpellBuilder.Casting.channel(spell, 5, 10);
+        SpellBuilder.Casting.channel(spell, 5, 8);
         spell.active.cast.channel.release_fx = true;
         spell.active.cast.animation = PlayerAnimation.of("spell_engine:one_handed_levitate_channel");
         spell.active.cast.start_sound = new Sound(WizardsSounds.FIRE_BREATH_START.id());
@@ -1136,10 +1136,10 @@ public class WizardSpells {
 
         spell.target.type = Spell.Target.Type.AREA;
         spell.target.area = new Spell.Target.Area();
-        spell.target.area.distance_dropoff = Spell.Target.Area.DropoffCurve.SQUARED;
+        spell.target.area.distance_dropoff = Spell.Target.Area.DropoffCurve.NONE;
         spell.target.area.vertical_range_multiplier = 0.5F;
 
-        var damage = SpellBuilder.Impacts.damage(0.95F, 0.5F);
+        var damage = SpellBuilder.Impacts.damage(0.8F, 0.5F);
         damage.particles = new ParticleBatch[] {
                 new ParticleBatch("lava",
                         ParticleBatch.Shape.CIRCLE, ParticleBatch.Origin.CENTER,

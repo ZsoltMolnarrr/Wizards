@@ -9,7 +9,7 @@
       "duration": 5.0,
       "type": "CHANNEL",
       "channel": {
-        "ticks": 10,
+        "ticks": 8,
         "release_fx": true
       },
       "animation": {
@@ -66,7 +66,6 @@
   "target": {
     "type": "AREA",
     "area": {
-      "distance_dropoff": "SQUARED",
       "vertical_range_multiplier": 0.5
     }
   },
@@ -75,7 +74,7 @@
       "action": {
         "type": "DAMAGE",
         "damage": {
-          "spell_power_coefficient": 0.95,
+          "spell_power_coefficient": 0.8,
           "knockback": 0.5
         }
       },
