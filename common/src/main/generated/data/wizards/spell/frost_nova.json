@@ -2,7 +2,7 @@
   "school": "spell_power:frost",
   "range": 6.0,
   "tier": 2,
-  "order": 1,
+  "group": "frost_hoar",
   "learn": {},
   "active": {
     "cast": {

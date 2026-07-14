@@ -2,7 +2,7 @@
   "school": "spell_power:frost",
   "range": 32.0,
   "tier": 3,
-  "order": 2,
+  "group": "frost_rime",
   "learn": {},
   "active": {
     "cast": {

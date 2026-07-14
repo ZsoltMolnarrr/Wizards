@@ -2,7 +2,7 @@
   "school": "spell_power:fire",
   "range": 0.0,
   "tier": 4,
-  "order": 1,
+  "group": "fire_conflagration",
   "learn": {},
   "active": {},
   "release": {

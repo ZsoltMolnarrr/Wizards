@@ -2,7 +2,7 @@
   "school": "spell_power:fire",
   "range": 4.0,
   "tier": 3,
-  "order": 2,
+  "group": "fire_destruction",
   "learn": {},
   "active": {
     "cast": {

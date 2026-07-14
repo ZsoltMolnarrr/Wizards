@@ -70,7 +70,23 @@ public class WizardSpells {
         return entry;
     }
 
-    private static final String PRIMARY_GROUP = "primary";
+    // MARK: Spell groups
+    // Prefixed by the book they belong to, since a group is only ever read alongside the groups of
+    // other mods, where a bare `evocation` would say nothing about whose evocation it is.
+
+    /// Wand and staff spells, granted by the weapon rather than a book
+    public static final String ARCANE_WEAPON = "arcane_weapon";
+    public static final String FIRE_WEAPON = "fire_weapon";
+    public static final String FROST_WEAPON = "frost_weapon";
+
+    /// Book spells: two lines per book, one choice from each at every tier
+    public static final String SORCERY =  "arcane_sorcery";
+    public static final String CONJURATION = "arcane_conjuration";
+    public static final String CONFLAGRATION = "fire_conflagration";
+    public static final String DESTRUCTION = "fire_destruction";
+    public static final String HOAR = "frost_hoar";
+    public static final String RIME = "frost_rime";
+
     private static final float BASIC_PROJECTILE_RANGE = 48F;
     private static final Color ARCANE_COLOR = Color.from(SpellSchools.ARCANE.color);
     private static final Color ARCANE_COLOR_LIGHT = Color.from(0xFF99FF);
@@ -153,6 +169,7 @@ public class WizardSpells {
         var spell = SpellBuilder.createWeaponSpell();
         spell.school = SpellSchools.ARCANE;
         spell.tier = 0;
+        spell.group = ARCANE_WEAPON;
         spell.range = BASIC_PROJECTILE_RANGE;
         spell.active.cast.duration = 1;
         spell.active.cast.animation = PlayerAnimation.of("spell_engine:one_handed_projectile_charge");
@@ -214,6 +231,7 @@ public class WizardSpells {
         var spell = SpellBuilder.createWeaponSpell();
         spell.school = SpellSchools.ARCANE;
         spell.tier = 1;
+        spell.group = ARCANE_WEAPON;
         spell.range = 16;
 
         spell.learn = new Spell.Learn();
@@ -269,7 +287,7 @@ public class WizardSpells {
         var spell = SpellBuilder.createSpellActive();
         spell.school = SpellSchools.ARCANE;
         spell.tier = 2;
-        spell.order = 1;
+        spell.group = SORCERY;
         spell.range = 64;
 
         spell.learn = new Spell.Learn();
@@ -347,7 +365,7 @@ public class WizardSpells {
         var spell = SpellBuilder.createSpellActive();
         spell.school = SpellSchools.ARCANE;
         spell.tier = 2;
-        spell.order = 2;
+        spell.group = CONJURATION;
         spell.range = 6;
 
         spell.learn = new Spell.Learn();
@@ -427,7 +445,7 @@ public class WizardSpells {
         var spell = SpellBuilder.createSpellActive();
         spell.school = SpellSchools.ARCANE;
         spell.tier = 3;
-        spell.order = 1;
+        spell.group = SORCERY;
         spell.range = 32;
 
         spell.learn = new Spell.Learn();
@@ -525,7 +543,7 @@ public class WizardSpells {
         var spell = SpellBuilder.createSpellActive();
         spell.school = SpellSchools.ARCANE;
         spell.tier = 3;
-        spell.order = 2;
+        spell.group = CONJURATION;
         spell.range = 16;
 
         spell.learn = new Spell.Learn();
@@ -544,6 +562,56 @@ public class WizardSpells {
         return new Entry(id, spell, name, description).book(Book.ARCANE);
     }
 
+    public static Entry arcane_blink = add(arcane_blink());
+    private static Entry arcane_blink() {
+        var id = Identifier.of(WizardsMod.ID, "arcane_blink");
+        var name = "Blink";
+        var description = "Teleports you forwards for {teleport_distance} blocks.";
+        var spell = SpellBuilder.createSpellActive();
+        spell.school = SpellSchools.ARCANE;
+        spell.tier = 4;
+        spell.group = SORCERY;
+        spell.range = 0;
+
+        spell.learn = new Spell.Learn();
+
+        SpellBuilder.Casting.instant(spell);
+
+        spell.release = new Spell.Release();
+        spell.release.animation = PlayerAnimation.of("spell_engine:one_handed_area_release");
+        spell.release.sound = new Sound(Identifier.of("minecraft", "entity.enderman.teleport"));
+
+        var teleport = new Spell.Impact();
+        teleport.action = new Spell.Impact.Action();
+        teleport.action.type = Spell.Impact.Action.Type.TELEPORT;
+        teleport.action.teleport = new Spell.Impact.Action.Teleport();
+        teleport.action.teleport.mode = Spell.Impact.Action.Teleport.Mode.FORWARD;
+        teleport.action.teleport.forward = new Spell.Impact.Action.Teleport.Forward();
+        teleport.action.teleport.forward.distance = 15F;
+        teleport.action.teleport.depart_particles = new ParticleBatch[] {
+                new ParticleBatch(
+                        "minecraft:portal",
+                        ParticleBatch.Shape.SPHERE, ParticleBatch.Origin.CENTER,
+                        40, 0.1F, 0.3F)
+                        .preSpawnTravel(1)
+        };
+        teleport.particles = new ParticleBatch[] {
+                new ParticleBatch(
+                        "minecraft:portal",
+                        ParticleBatch.Shape.SPHERE, ParticleBatch.Origin.CENTER,
+                        40, 0.1F, 0.3F)
+                        .invert()
+                        .preSpawnTravel(4)
+        };
+        spell.impacts = List.of(teleport);
+
+        SpellBuilder.Cost.exhaust(spell, 0.4F);
+        SpellBuilder.Cost.item(spell, "runes:arcane_stone");
+        SpellBuilder.Cost.cooldown(spell, 12);
+
+        return new Entry(id, spell, name, description).book(Book.ARCANE);
+    }
+
     public static Entry arcane_evocation = add(arcane_evocation());
     private static Entry arcane_evocation() {
         var id = Identifier.of(WizardsMod.ID, "arcane_evocation");
@@ -552,7 +620,7 @@ public class WizardSpells {
         var spell = SpellBuilder.createSpellActive();
         spell.school = SpellSchools.ARCANE;
         spell.tier = 4;
-        spell.order = 2;
+        spell.group = CONJURATION;
         spell.range = 0;
 
         spell.learn = new Spell.Learn();
@@ -610,56 +678,6 @@ public class WizardSpells {
         return new Entry(id, spell, name, description).book(Book.ARCANE).mutator(mutator);
     }
 
-    public static Entry arcane_blink = add(arcane_blink());
-    private static Entry arcane_blink() {
-        var id = Identifier.of(WizardsMod.ID, "arcane_blink");
-        var name = "Blink";
-        var description = "Teleports you forwards for {teleport_distance} blocks.";
-        var spell = SpellBuilder.createSpellActive();
-        spell.school = SpellSchools.ARCANE;
-        spell.tier = 4;
-        spell.order = 1;
-        spell.range = 0;
-
-        spell.learn = new Spell.Learn();
-
-        SpellBuilder.Casting.instant(spell);
-
-        spell.release = new Spell.Release();
-        spell.release.animation = PlayerAnimation.of("spell_engine:one_handed_area_release");
-        spell.release.sound = new Sound(Identifier.of("minecraft", "entity.enderman.teleport"));
-
-        var teleport = new Spell.Impact();
-        teleport.action = new Spell.Impact.Action();
-        teleport.action.type = Spell.Impact.Action.Type.TELEPORT;
-        teleport.action.teleport = new Spell.Impact.Action.Teleport();
-        teleport.action.teleport.mode = Spell.Impact.Action.Teleport.Mode.FORWARD;
-        teleport.action.teleport.forward = new Spell.Impact.Action.Teleport.Forward();
-        teleport.action.teleport.forward.distance = 15F;
-        teleport.action.teleport.depart_particles = new ParticleBatch[] {
-                new ParticleBatch(
-                        "minecraft:portal",
-                        ParticleBatch.Shape.SPHERE, ParticleBatch.Origin.CENTER,
-                        40, 0.1F, 0.3F)
-                        .preSpawnTravel(1)
-        };
-        teleport.particles = new ParticleBatch[] {
-                new ParticleBatch(
-                        "minecraft:portal",
-                        ParticleBatch.Shape.SPHERE, ParticleBatch.Origin.CENTER,
-                        40, 0.1F, 0.3F)
-                        .invert()
-                        .preSpawnTravel(4)
-        };
-        spell.impacts = List.of(teleport);
-
-        SpellBuilder.Cost.exhaust(spell, 0.4F);
-        SpellBuilder.Cost.item(spell, "runes:arcane_stone");
-        SpellBuilder.Cost.cooldown(spell, 12);
-
-        return new Entry(id, spell, name, description).book(Book.ARCANE);
-    }
-
     public static Entry fire_scorch = add(fire_scorch());
     private static Entry fire_scorch() {
         var id = Identifier.of(WizardsMod.ID, "fire_scorch");
@@ -668,6 +686,7 @@ public class WizardSpells {
         var spell = SpellBuilder.createWeaponSpell();
         spell.school = SpellSchools.FIRE;
         spell.tier = 0;
+        spell.group = FIRE_WEAPON;
         spell.range = 16;
 
         spell.active.cast.duration = 1.2F;
@@ -706,6 +725,7 @@ public class WizardSpells {
         var spell = SpellBuilder.createWeaponSpell();
         spell.school = SpellSchools.FIRE;
         spell.tier = 0;
+        spell.group = FIRE_WEAPON;
         spell.range = 64;
 
         spell.learn = new Spell.Learn();
@@ -773,6 +793,7 @@ public class WizardSpells {
         var spell = SpellBuilder.createWeaponSpell();
         spell.school = SpellSchools.FIRE;
         spell.tier = 1;
+        spell.group = FIRE_WEAPON;
         spell.range = 64;
 
         spell.learn = new Spell.Learn();
@@ -853,7 +874,7 @@ public class WizardSpells {
         var spell = SpellBuilder.createSpellActive();
         spell.school = SpellSchools.FIRE;
         spell.tier = 2;
-        spell.order = 1;
+        spell.group = CONFLAGRATION;
         spell.range = 10;
 
         spell.learn = new Spell.Learn();
@@ -912,7 +933,7 @@ public class WizardSpells {
         var spell = SpellBuilder.createSpellActive();
         spell.school = SpellSchools.FIRE;
         spell.tier = 2;
-        spell.order = 2;
+        spell.group = DESTRUCTION;
         spell.range = 16;
 
         spell.learn = new Spell.Learn();
@@ -999,7 +1020,7 @@ public class WizardSpells {
         var spell = SpellBuilder.createSpellActive();
         spell.school = SpellSchools.FIRE;
         spell.tier = 3;
-        spell.order = 1;
+        spell.group = CONFLAGRATION;
         spell.range = 32;
 
         spell.learn = new Spell.Learn();
@@ -1090,7 +1111,7 @@ public class WizardSpells {
         var spell = SpellBuilder.createSpellActive();
         spell.school = SpellSchools.FIRE;
         spell.tier = 3;
-        spell.order = 2;
+        spell.group = DESTRUCTION;
         spell.range = 4;
 
         spell.learn = new Spell.Learn();
@@ -1168,7 +1189,7 @@ public class WizardSpells {
         var spell = SpellBuilder.createSpellActive();
         spell.range = 0;
         spell.tier = 4;
-        spell.order = 1;
+        spell.group = CONFLAGRATION;
         spell.school = SpellSchools.FIRE;
 
         spell.learn = new Spell.Learn();
@@ -1255,7 +1276,7 @@ public class WizardSpells {
         var spell = SpellBuilder.createSpellActive();
         spell.school = SpellSchools.FIRE;
         spell.tier = 4;
-        spell.order = 2;
+        spell.group = DESTRUCTION;
         spell.range = 16;
 
         spell.learn = new Spell.Learn();
@@ -1281,6 +1302,7 @@ public class WizardSpells {
         var spell = SpellBuilder.createWeaponSpell();
         spell.school = SpellSchools.FROST;
         spell.tier = 0;
+        spell.group = FROST_WEAPON;
         spell.range = 48;
 
         spell.active.cast.duration = 1F;
@@ -1344,6 +1366,7 @@ public class WizardSpells {
         var spell = SpellBuilder.createWeaponSpell();
         spell.school = SpellSchools.FROST;
         spell.tier = 1;
+        spell.group = FROST_WEAPON;
         spell.range = 64;
 
         spell.learn = new Spell.Learn();
@@ -1424,7 +1447,7 @@ public class WizardSpells {
         var spell = SpellBuilder.createSpellActive();
         spell.school = SpellSchools.FROST;
         spell.tier = 2;
-        spell.order = 1;
+        spell.group = HOAR;
         spell.range = 6;
 
         spell.learn = new Spell.Learn();
@@ -1499,7 +1522,7 @@ public class WizardSpells {
         var spell = SpellBuilder.createSpellActive();
         spell.range = 0;
         spell.tier = 2;
-        spell.order = 2;
+        spell.group = RIME;
         spell.school = SpellSchools.FROST;
 
         spell.learn = new Spell.Learn();
@@ -1616,7 +1639,7 @@ public class WizardSpells {
         var spell = SpellBuilder.createSpellActive();
         spell.school = SpellSchools.FROST;
         spell.tier = 3;
-        spell.order = 1;
+        spell.group = HOAR;
         spell.range = 0;
 
         spell.learn = new Spell.Learn();
@@ -1656,8 +1679,8 @@ public class WizardSpells {
         var spell = SpellBuilder.createSpellActive();
         spell.school = SpellSchools.FROST;
         spell.tier = 3;
+        spell.group = RIME;
         spell.range = 32;
-        spell.order = 2;
 
         spell.learn = new Spell.Learn();
 
@@ -1763,7 +1786,7 @@ public class WizardSpells {
         var spell = SpellBuilder.createSpellActive();
         spell.school = SpellSchools.FROST;
         spell.tier = 4;
-        spell.order = 1;
+        spell.group = HOAR;
         spell.range = 32;
 
         spell.learn = new Spell.Learn();
@@ -1874,7 +1897,7 @@ public class WizardSpells {
         var spell = SpellBuilder.createSpellActive();
         spell.school = SpellSchools.FROST;
         spell.tier = 4;
-        spell.order = 2;
+        spell.group = RIME;
         spell.range = 16;
 
         spell.learn = new Spell.Learn();

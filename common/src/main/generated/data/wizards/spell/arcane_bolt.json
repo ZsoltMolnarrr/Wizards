@@ -2,6 +2,7 @@
   "school": "spell_power:arcane",
   "range": 48.0,
   "tier": 0,
+  "group": "arcane_weapon",
   "learn": {},
   "active": {
     "cast": {
