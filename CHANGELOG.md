@@ -1,3 +1,17 @@
+# 3.0.0
+
+Spell books now offer 6 spells (2 choices across 3 tiers).
+
+- New Arcane spells: Arcane Explosion, Arcane Barrage, Evocation
+- New Fire spells: Flame Slash, Firestorm, Fire Hydra
+- New Frost spells: Frost Spikes, Frost Shield, Frost Elemental
+
+Updated some of the existing spell visuals:
+
+- Frost Trap effect has new model
+- Frost Shield has new model
+- Frostbolt projectile has 2 counter-rotating parts  
+
 # 2.7.1
 
 - Fix Wizard Staff being classified as a wand
