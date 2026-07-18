@@ -92,10 +92,17 @@ public class WizardSummons {
         );
 
         var summon = new Summon(FrostElementalEntity.ID.toString(), b, placements, 1);
-        // Attribute scaling: standard combat stats + a size bump, all scaling with frost spell power
-        var scaling = schoolCombatScaling(SpellSchools.FROST);
-        scaling.add(scalingEntry(EntityAttributes.GENERIC_SCALE.getIdAsString(),
-                SpellSchools.FROST.id.toString(), 0, 0.05));
+        // Attribute scaling: the standard combat stat block, but with the defensive inheritance
+        // (health, armor, knockback resistance) halved and no size scaling — the SkillTree
+        // "big elemental" node restores the other half along with the size bump.
+        var s = SpellSchools.FROST.id.toString();
+        var scaling = new ArrayList<AttributeScaling.Entry>();
+        scaling.add(scalingEntry(EntityAttributes.GENERIC_MAX_HEALTH.getIdAsString(), s, 0, 1.0));
+        scaling.add(scalingEntry(EntityAttributes.GENERIC_ARMOR.getIdAsString(), s, 5, 0.05));
+        scaling.add(scalingEntry(EntityAttributes.GENERIC_ATTACK_DAMAGE.getIdAsString(), s, 0, 0.5));
+        scaling.add(scalingEntry(s, s, 3, 0.1)); // spell power feeds back into the school attribute
+        scaling.add(scalingEntry(EntityAttributes.GENERIC_ATTACK_KNOCKBACK.getIdAsString(), s, 0, 0.1));
+        scaling.add(scalingEntry(EntityAttributes.GENERIC_KNOCKBACK_RESISTANCE.getIdAsString(), s, 2.5, 0.025));
         summon.attribute_scaling.entries = scaling;
         return summon;
     }

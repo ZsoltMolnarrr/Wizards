@@ -97,7 +97,7 @@
                     "attribute_id": "spell_power:frost",
                     "operation": "ADD_VALUE",
                     "base": 0.0,
-                    "coefficient": 2.0
+                    "coefficient": 1.0
                   }
                 ]
               },
@@ -107,8 +107,8 @@
                   {
                     "attribute_id": "spell_power:frost",
                     "operation": "ADD_VALUE",
-                    "base": 10.0,
-                    "coefficient": 0.1
+                    "base": 5.0,
+                    "coefficient": 0.05
                   }
                 ]
               },
@@ -151,19 +151,8 @@
                   {
                     "attribute_id": "spell_power:frost",
                     "operation": "ADD_VALUE",
-                    "base": 5.0,
-                    "coefficient": 0.05
-                  }
-                ]
-              },
-              {
-                "attribute_id": "minecraft:generic.scale",
-                "modifiers": [
-                  {
-                    "attribute_id": "spell_power:frost",
-                    "operation": "ADD_VALUE",
-                    "base": 0.0,
-                    "coefficient": 0.05
+                    "base": 2.5,
+                    "coefficient": 0.025
                   }
                 ]
               }
