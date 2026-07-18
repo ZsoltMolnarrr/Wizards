@@ -49,26 +49,6 @@
             "delay_ticks": 8,
             "location_offset_by_look": 7.5,
             "apply_yaw": true
-          },
-          {
-            "delay_ticks": 10,
-            "location_offset_by_look": 9.0,
-            "apply_yaw": true
-          },
-          {
-            "delay_ticks": 12,
-            "location_offset_by_look": 10.5,
-            "apply_yaw": true
-          },
-          {
-            "delay_ticks": 14,
-            "location_offset_by_look": 12.0,
-            "apply_yaw": true
-          },
-          {
-            "delay_ticks": 16,
-            "location_offset_by_look": 13.5,
-            "apply_yaw": true
           }
         ],
         "client_data": {

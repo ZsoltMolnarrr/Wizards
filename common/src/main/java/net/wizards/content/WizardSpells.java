@@ -1566,7 +1566,7 @@ public class WizardSpells {
 
         // Nine spike clouds marching straight forward away from the caster, 1.5 blocks apart, the
         // first 1.5 blocks out; each erupts 2 ticks after the previous one (like Wall of Flames).
-        var row = SpellBuilder.Placements.ray(9, 1.5F, 1.5F);
+        var row = SpellBuilder.Placements.ray(5, 1.5F, 1.5F);
         SpellBuilder.Placements.delayCascade(row, 2);
         cloud.placement = row.get(0);
         cloud.placement_delay_stacks = false;
