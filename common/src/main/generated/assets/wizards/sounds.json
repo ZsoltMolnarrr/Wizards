@@ -260,7 +260,9 @@
   },
   "frost_spike_impact": {
     "sounds": [
-      "wizards:frost_spike_impact"
+      "wizards:frost_spike_impact_1",
+      "wizards:frost_spike_impact_2",
+      "wizards:frost_spike_impact_3"
     ]
   },
   "frost_spike_release": {

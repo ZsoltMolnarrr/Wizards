@@ -102,7 +102,7 @@ public class WizardsSounds {
     public static final Entry FROST_NOVA_RELEASE = add(new Entry("frost_nova_release"));
     public static final Entry FROST_NOVA_DAMAGE_IMPACT = add(new Entry("frost_nova_damage_impact"));
     public static final Entry FROST_NOVA_EFFECT_IMPACT = add(new Entry("frost_nova_effect_impact"));
-    public static final Entry FROST_SPIKE_IMPACT = add(new Entry("frost_spike_impact"));
+    public static final Entry FROST_SPIKE_IMPACT = add(new Entry("frost_spike_impact").variants(3));
     public static final Entry FROST_SPIKE_RELEASE = add(new Entry("frost_spike_release"));
     public static final Entry FROST_SPIKE_SPAWN = add(new Entry("frost_spike_spawn"));
     public static final Entry FROST_SHIELD_RELEASE = add(new Entry("frost_shield_release"));
