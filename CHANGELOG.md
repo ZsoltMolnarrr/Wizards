@@ -1,5 +1,6 @@
 # 3.0.1
 
+- Summon cooldowns (Fire Hydra, Frost Elemental, Arcane Barrage) are no longer reduced by spell haste
 - Fixed invalid `parent` reference in Fire Slash projectile, Ice Block and Frost Trap effect models (exporter artifact)
 
 # 3.0.0

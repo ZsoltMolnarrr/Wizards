@@ -538,7 +538,7 @@ public class WizardSpells {
     public static Entry arcane_barrage = add(arcane_barrage());
     private static Entry arcane_barrage() {
         var name = "Arcane Barrage";
-        var description = "Conjures " + SpellTooltip.placeholder(SpellTooltip.summonCountToken) + " Arcane Emitters behind you, firing at your target or where you aim. They last " + SpellTooltip.placeholder(SpellTooltip.summonDurationToken) + " sec and are empowered by your Arcane Spell Power.";
+        var description = "Conjures {summon_count} Arcane Emitters behind you, firing at your target or where you aim. They last {summon_duration} sec and are empowered by your Arcane Spell Power.";
         var id = Identifier.of(WizardsMod.ID, "arcane_barrage");
         var spell = SpellBuilder.createSpellActive();
         spell.school = SpellSchools.ARCANE;
@@ -1272,7 +1272,7 @@ public class WizardSpells {
     public static Entry fire_hydra = add(fire_hydra());
     private static Entry fire_hydra() {
         var name = "Fire Hydra";
-        var description = "Conjures a group of " + SpellTooltip.placeholder(SpellTooltip.summonCountToken) + " Fire Hydra heads near you, attacking nearby enemies. They last " + SpellTooltip.placeholder(SpellTooltip.summonDurationToken) + " sec and are empowered by your Fire Spell Power.";
+        var description = "Conjures a group of {summon_count} Fire Hydra heads near you, attacking nearby enemies. They last {summon_duration} sec and are empowered by your Fire Spell Power.";
         var id = Identifier.of(WizardsMod.ID, "fire_hydra");
         var spell = SpellBuilder.createSpellActive();
         spell.school = SpellSchools.FIRE;
@@ -1894,7 +1894,7 @@ public class WizardSpells {
     public static Entry frost_elemental = add(frost_elemental());
     private static Entry frost_elemental() {
         var name = "Frost Elemental";
-        var description = "Summons a Frost Elemental to fight by your side for " + SpellTooltip.placeholder(SpellTooltip.summonDurationToken) + " sec, empowered by your Frost Spell Power.";
+        var description = "Summons a Frost Elemental to fight by your side for {summon_duration} sec, empowered by your Frost Spell Power.";
         var id = Identifier.of(WizardsMod.ID, "frost_elemental");
         var spell = SpellBuilder.createSpellActive();
         spell.school = SpellSchools.FROST;
