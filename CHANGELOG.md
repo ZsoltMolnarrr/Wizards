@@ -1,6 +1,6 @@
 # 3.0.0
 
-Spell books now offer 6 spells (2 choices across 3 tiers).
+SPELL EXPANSION! - Spell books now offer 6 spells (2 choices across 3 tiers).
 
 - New Arcane spells: Arcane Explosion, Arcane Barrage, Evocation
 - New Fire spells: Flame Slash, Firestorm, Fire Hydra
