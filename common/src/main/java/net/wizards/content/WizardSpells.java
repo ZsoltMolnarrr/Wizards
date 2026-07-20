@@ -1483,7 +1483,7 @@ public class WizardSpells {
                         .color(0x99E6FFFFL)
         };
 
-        var damage = SpellBuilder.Impacts.damage(0.5F, 0.8F);
+        var damage = SpellBuilder.Impacts.damage(0.2F, 0.8F);
         damage.particles = new ParticleBatch[] {
                 new ParticleBatch(
                         SpellEngineParticles.MagicParticles.get(
