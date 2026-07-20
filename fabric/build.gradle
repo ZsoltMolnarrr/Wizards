@@ -72,7 +72,14 @@ dependencies {
     modImplementation("maven.modrinth:tiny-config:${project.tiny_config_version}-${platform}")
 
     // Trinkets
-    modCompileOnly("dev.emi:trinkets:${project.trinkets_version}")
+    // Trinkets: Modrinth Maven serves minimal POMs (no transitive deps) and
+    // TerraformersMC has been unreliable in CI. Use Modrinth on CI; use dev.emi
+    // locally so runClient gets Trinkets' full transitive graph.
+    if (System.getenv("CI")) {
+        modCompileOnly("maven.modrinth:trinkets:${project.trinkets_version}")
+    } else {
+        modCompileOnly("dev.emi:trinkets:${project.trinkets_version}")
+    }
 
     modImplementation("maven.modrinth:structure-pool-api:${project.structure_pool_api_version}-${platform}")
 //    modImplementation("net.foundation:structure_pool_api-${platform}:${project.structure_pool_api_version}")
