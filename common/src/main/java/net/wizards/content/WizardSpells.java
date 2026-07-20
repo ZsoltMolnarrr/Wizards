@@ -1689,7 +1689,7 @@ public class WizardSpells {
         // bonus is scaled by the curved release ratio).
         var charge = SpellBuilder.Casting.charge(spell, 1.5F, Spell.Active.Cast.Charge.Curve.EASE_IN_QUART);
         charge.min_release_ratio = 0.2F;
-        charge.output_scaling = 0.75F;                // damage swings only in the top third (matches previous +50% bonus tuning)
+        charge.output_scaling = 0.6F;                 // floor 0.4x -> ceiling 1.0x: a 2.5x charge swing, softer than the old 4x spike
         var bonus = charge.bonus;
         bonus.projectile_scale_multiply = 1.0F;         // up to 2x projectile render + hitbox size
         bonus.projectile_launch = new Spell.LaunchProperties();
@@ -1738,7 +1738,7 @@ public class WizardSpells {
         projectile.client_data.composite_model = SpellBuilder.ProjectileModels.composite(iceLance);
         spell.deliver.projectile.projectile = projectile;
 
-        var damage = SpellBuilder.Impacts.damage(1.5F, 1.5F); // full-charge value (charge scales down to min_output_ratio)
+        var damage = SpellBuilder.Impacts.damage(1.0F, 1.5F); // full-charge value (charge scales down to min_output_ratio)
         // A punchier impact than Frostbolt's shared frost burst: more magic particles with a wider
         // spread, plus ice shards spraying out from the shattered lance.
         damage.particles = new ParticleBatch[] {

@@ -9,7 +9,7 @@
       "duration": 1.5,
       "type": "CHARGE",
       "charge": {
-        "output_scaling": 0.75,
+        "output_scaling": 0.6,
         "curve": "EASE_IN_QUART",
         "bonus": {
           "range_add": 32.0,
@@ -107,7 +107,6 @@
       "action": {
         "type": "DAMAGE",
         "damage": {
-          "spell_power_coefficient": 1.5,
           "knockback": 1.5
         }
       },
