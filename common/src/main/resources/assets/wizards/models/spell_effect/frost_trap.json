@@ -1,7 +1,6 @@
 {
 	"format_version": "1.9.0",
 	"credit": "Made with Blockbench",
-	"parent": "ice_trap_spell",
 	"textures": {
 		"2": "wizards:spell_effect/frost_trap",
 		"particle": "wizards:spell_effect/frost_trap"

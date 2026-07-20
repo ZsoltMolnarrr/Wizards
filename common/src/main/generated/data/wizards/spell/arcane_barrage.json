@@ -167,7 +167,8 @@
   ],
   "cost": {
     "cooldown": {
-      "duration": 20.0
+      "duration": 20.0,
+      "haste_affected": false
     }
   }
 }

@@ -1,3 +1,7 @@
+# 3.0.1
+
+- Fixed invalid `parent` reference in Fire Slash projectile, Ice Block and Frost Trap effect models (exporter artifact)
+
 # 3.0.0
 
 SPELL EXPANSION! - Spell books now offer 6 spells (2 choices across 3 tiers).

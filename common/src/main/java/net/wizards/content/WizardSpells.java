@@ -558,6 +558,7 @@ public class WizardSpells {
         spell.impacts = List.of(impact);
 
         SpellBuilder.Cost.cooldown(spell, 20);
+        spell.cost.cooldown.haste_affected = false; // summon uptime shouldn't scale with haste
 
         return new Entry(id, spell, name, description).book(Book.ARCANE);
     }
@@ -1290,6 +1291,7 @@ public class WizardSpells {
         spell.impacts = List.of(impact);
 
         SpellBuilder.Cost.cooldown(spell, 30F);
+        spell.cost.cooldown.haste_affected = false; // summon uptime shouldn't scale with haste
 
         return new Entry(id, spell, name, description).book(Book.FIRE);
     }
@@ -1911,6 +1913,7 @@ public class WizardSpells {
         spell.impacts = List.of(impact);
 
         SpellBuilder.Cost.cooldown(spell, 30F);
+        spell.cost.cooldown.haste_affected = false; // summon uptime shouldn't scale with haste
 
         return new Entry(id, spell, name, description).book(Book.FROST);
     }

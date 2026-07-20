@@ -1,7 +1,6 @@
 {
 	"format_version": "1.9.0",
 	"credit": "Made with Blockbench",
-	"parent": "fire_slash",
 	"texture_size": [48, 48],
 	"textures": {
 		"0": "wizards:spell_projectile/fire_slash_3",

@@ -1,7 +1,6 @@
 {
 	"format_version": "1.9.0",
 	"credit": "Made with Blockbench",
-	"parent": "ice_block",
 	"texture_size": [128, 128],
 	"textures": {
 		"1": "wizards:spell_effect/ice_block",
