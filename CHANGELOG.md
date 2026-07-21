@@ -1,6 +1,7 @@
 # 3.0.2
 
 - Fix entity name translations
+- Reduce range of Ice Lance
 
 # 3.0.1
 

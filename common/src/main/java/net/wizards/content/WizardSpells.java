@@ -1682,7 +1682,7 @@ public class WizardSpells {
         spell.school = SpellSchools.FROST;
         spell.tier = 3;
         spell.group = RIME;
-        spell.range = 32;
+        spell.range = 16;
 
         spell.learn = new Spell.Learn();
 
@@ -1696,7 +1696,7 @@ public class WizardSpells {
         bonus.projectile_scale_multiply = 1.0F;         // up to 2x projectile render + hitbox size
         bonus.projectile_launch = new Spell.LaunchProperties();
         bonus.projectile_launch.velocity = 0.8F;        // faster projectile at full charge
-        bonus.range_add = 32F;                          // flies further at full charge
+        bonus.range_add = 16;                          // flies further at full charge
 
         spell.active.cast.animation = PlayerAnimation.of("spell_engine:weapon_spearthrow_ready");
         spell.active.cast.sound = new Sound(WizardsSounds.FROST_LANCE_CASTING.id(), 0);

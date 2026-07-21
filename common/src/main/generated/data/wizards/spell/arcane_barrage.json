@@ -60,8 +60,12 @@
               "active_seconds": 15
             },
             "sounds": {
-              "spawn": "wizards:arcane_emitter_spawn",
-              "despawn": "wizards:arcane_emitter_despawn"
+              "spawn": {
+                "id": "wizards:arcane_emitter_spawn"
+              },
+              "despawn": {
+                "id": "wizards:arcane_emitter_despawn"
+              }
             },
             "actions": [
               {

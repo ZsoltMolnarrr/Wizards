@@ -84,9 +84,15 @@
               "despawn_ticks": 20
             },
             "sounds": {
-              "spawn": "wizards:fire_hydra_spawn",
-              "despawn": "wizards:fire_hydra_despawn",
-              "ambient": "wizards:fire_hydra_ambient"
+              "spawn": {
+                "id": "wizards:fire_hydra_spawn"
+              },
+              "despawn": {
+                "id": "wizards:fire_hydra_despawn"
+              },
+              "ambient": {
+                "id": "wizards:fire_hydra_ambient"
+              }
             },
             "actions": [
               {

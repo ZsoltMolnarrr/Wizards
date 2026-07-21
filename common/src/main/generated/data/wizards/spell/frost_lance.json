@@ -1,6 +1,6 @@
 {
   "school": "spell_power:frost",
-  "range": 32.0,
+  "range": 16.0,
   "tier": 3,
   "group": "frost_rime",
   "learn": {},
@@ -12,7 +12,7 @@
         "output_scaling": 0.6,
         "curve": "EASE_IN_QUART",
         "bonus": {
-          "range_add": 32.0,
+          "range_add": 16.0,
           "projectile_launch": {
             "velocity": 0.8
           },

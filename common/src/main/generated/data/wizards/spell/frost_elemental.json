@@ -45,12 +45,24 @@
               "despawn_ticks": 20
             },
             "sounds": {
-              "spawn": "wizards:frost_elemental_spawn",
-              "despawn": "wizards:frost_elemental_despawn",
-              "hurt": "wizards:frost_elemental_hurt",
-              "death": "wizards:frost_elemental_death",
-              "ambient": "wizards:frost_elemental_idle",
-              "step": "wizards:frost_elemental_step"
+              "spawn": {
+                "id": "wizards:frost_elemental_spawn"
+              },
+              "despawn": {
+                "id": "wizards:frost_elemental_despawn"
+              },
+              "hurt": {
+                "id": "wizards:frost_elemental_hurt"
+              },
+              "death": {
+                "id": "wizards:frost_elemental_death"
+              },
+              "ambient": {
+                "id": "wizards:frost_elemental_idle"
+              },
+              "step": {
+                "id": "wizards:frost_elemental_step"
+              }
             },
             "actions": [
               {
@@ -78,8 +90,12 @@
                   "speed": 2.0,
                   "windup": 0.4,
                   "radius": 1.0,
-                  "swing_sound": "wizards:frost_elemental_attack",
-                  "impact_sound": "wizards:frost_elemental_impact",
+                  "swing_sound": {
+                    "id": "wizards:frost_elemental_attack"
+                  },
+                  "impact_sound": {
+                    "id": "wizards:frost_elemental_impact"
+                  },
                   "animation_variants": [
                     1,
                     2

@@ -45,8 +45,8 @@ public class WizardSummons {
         var attack = new SummonBehaviour.Action.MeleeAttack();
         attack.speed = 2F;
         attack.radius = 1F;
-        attack.swing_sound = WizardsSounds.FROST_ELEMENTAL_ATTACK.id().toString();
-        attack.impact_sound = WizardsSounds.FROST_ELEMENTAL_IMPACT.id().toString();
+        attack.swing_sound = new Sound(WizardsSounds.FROST_ELEMENTAL_ATTACK.id());
+        attack.impact_sound = new Sound(WizardsSounds.FROST_ELEMENTAL_IMPACT.id());
         attack.windup = 0.4F;
         attack.animation_variants = List.of(1, 2); // alternates between `attack` and `attack_2`
 
@@ -63,12 +63,12 @@ public class WizardSummons {
         );
 
         // Lifecycle sounds
-        b.sounds.spawn = WizardsSounds.FROST_ELEMENTAL_SPAWN.id().toString();
-        b.sounds.despawn = WizardsSounds.FROST_ELEMENTAL_DESPAWN.id().toString();
-        b.sounds.hurt = WizardsSounds.FROST_ELEMENTAL_HURT.id().toString();
-        b.sounds.death = WizardsSounds.FROST_ELEMENTAL_DEATH.id().toString();
-        b.sounds.ambient = WizardsSounds.FROST_ELEMENTAL_IDLE.id().toString();
-        b.sounds.step = WizardsSounds.FROST_ELEMENTAL_STEP.id().toString();
+        b.sounds.spawn = new Sound(WizardsSounds.FROST_ELEMENTAL_SPAWN.id());
+        b.sounds.despawn = new Sound(WizardsSounds.FROST_ELEMENTAL_DESPAWN.id());
+        b.sounds.hurt = new Sound(WizardsSounds.FROST_ELEMENTAL_HURT.id());
+        b.sounds.death = new Sound(WizardsSounds.FROST_ELEMENTAL_DEATH.id());
+        b.sounds.ambient = new Sound(WizardsSounds.FROST_ELEMENTAL_IDLE.id());
+        b.sounds.step = new Sound(WizardsSounds.FROST_ELEMENTAL_STEP.id());
 
         // Spawn FX: a rising column of snowflakes bursting from the ground as the elemental forms.
         b.spawn_fx = new VFX();
@@ -112,8 +112,8 @@ public class WizardSummons {
         b.lifespan.active_seconds = 15;
         b.is_attackable = false;
 
-        b.sounds.spawn = WizardsSounds.ARCANE_EMITTER_SPAWN.id().toString();
-        b.sounds.despawn = WizardsSounds.ARCANE_EMITTER_DESPAWN.id().toString();
+        b.sounds.spawn = new Sound(WizardsSounds.ARCANE_EMITTER_SPAWN.id());
+        b.sounds.despawn = new Sound(WizardsSounds.ARCANE_EMITTER_DESPAWN.id());
 
         // Spawn FX: an arcane explosion as the emitter materialises — the same burst as Arcane Blast's
         // impact, but with DECELERATE motion so the particles rush outward and settle rather than scatter.
@@ -190,9 +190,9 @@ public class WizardSummons {
         b.lifespan.despawn_ticks = 20;
         b.is_attackable = false;
 
-        b.sounds.spawn = WizardsSounds.FIRE_HYDRA_SPAWN.id().toString();
-        b.sounds.despawn = WizardsSounds.FIRE_HYDRA_DESPAWN.id().toString();
-        b.sounds.ambient = WizardsSounds.FIRE_HYDRA_AMBIENT.id().toString();
+        b.sounds.spawn = new Sound(WizardsSounds.FIRE_HYDRA_SPAWN.id());
+        b.sounds.despawn = new Sound(WizardsSounds.FIRE_HYDRA_DESPAWN.id());
+        b.sounds.ambient = new Sound(WizardsSounds.FIRE_HYDRA_AMBIENT.id());
 
         // Existence FX: a fiery ground ring looping under the hydra for its whole active phase. The
         // area_effect_715 ring animates over 22 ticks, so it re-emits every 22 ticks to loop seamlessly.
