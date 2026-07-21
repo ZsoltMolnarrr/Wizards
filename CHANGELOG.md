@@ -1,3 +1,7 @@
+# 3.0.2
+
+- Fix entity name translations
+
 # 3.0.1
 
 - Summon cooldowns (Fire Hydra, Frost Elemental, Arcane Barrage) are no longer reduced by spell haste

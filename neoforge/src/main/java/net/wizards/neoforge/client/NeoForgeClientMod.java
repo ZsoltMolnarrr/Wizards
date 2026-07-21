@@ -16,9 +16,7 @@ import net.wizards.client.entity.FireHydraModel;
 import net.wizards.client.entity.FireHydraRenderer;
 import net.wizards.client.entity.FrostElementalModel;
 import net.wizards.client.entity.FrostElementalRenderer;
-import net.wizards.entity.ArcaneEmitterEntity;
-import net.wizards.entity.FireHydraEntity;
-import net.wizards.entity.FrostElementalEntity;
+import net.wizards.entity.WizardEntities;
 
 @EventBusSubscriber(modid = WizardsMod.ID, value = Dist.CLIENT)
 public class NeoForgeClientMod {
@@ -37,8 +35,8 @@ public class NeoForgeClientMod {
 
     @SubscribeEvent
     public static void onRegisterRenderers(EntityRenderersEvent.RegisterRenderers event) {
-        event.registerEntityRenderer(FrostElementalEntity.TYPE, FrostElementalRenderer::new);
-        event.registerEntityRenderer(ArcaneEmitterEntity.TYPE, ArcaneEmitterRenderer::new);
-        event.registerEntityRenderer(FireHydraEntity.TYPE, FireHydraRenderer::new);
+        event.registerEntityRenderer(WizardEntities.FROST_ELEMENTAL.type, FrostElementalRenderer::new);
+        event.registerEntityRenderer(WizardEntities.ARCANE_EMITTER.type, ArcaneEmitterRenderer::new);
+        event.registerEntityRenderer(WizardEntities.FIRE_HYDRA.type, FireHydraRenderer::new);
     }
 }

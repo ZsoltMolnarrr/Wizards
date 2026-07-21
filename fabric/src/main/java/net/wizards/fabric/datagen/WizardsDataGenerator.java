@@ -27,6 +27,7 @@ import net.wizards.WizardsMod;
 import net.wizards.content.WizardSpells;
 import net.wizards.content.WizardsSounds;
 import net.wizards.effect.WizardsEffects;
+import net.wizards.entity.WizardEntities;
 import net.wizards.item.WizardArmors;
 import net.wizards.item.WizardWeapons;
 
@@ -280,6 +281,11 @@ public class WizardsDataGenerator implements DataGeneratorEntrypoint {
                 addArmorPiece(builder, set.idOf(set.chest), set.chestTranslation);
                 addArmorPiece(builder, set.idOf(set.legs), set.legsTranslation);
                 addArmorPiece(builder, set.idOf(set.feet), set.feetTranslation);
+            }
+
+            // Custom entities — code-sourced display names (paired with the type in WizardEntities.Entry)
+            for (var entry : WizardEntities.entries) {
+                builder.add("entity." + namespace + "." + entry.id.getPath(), entry.name);
             }
 
             // Wizard Merchant villager (several key formats are referenced across versions)

@@ -91,7 +91,7 @@ public class WizardSummons {
                 Placements.pointAtAngle(d, 180F)  // rear
         );
 
-        var summon = new Summon(FrostElementalEntity.ID.toString(), b, placements, 1);
+        var summon = new Summon(WizardEntities.FROST_ELEMENTAL.id.toString(), b, placements, 1);
         // Attribute scaling: the standard combat stat block, but with the defensive inheritance
         // (health, armor, knockback resistance) halved and no size scaling — the SkillTree
         // "big elemental" node restores the other half along with the size bump.
@@ -178,7 +178,7 @@ public class WizardSummons {
         behindGroup.apply_yaw = false;
         var groupPlacements = List.of(behindGroup);
 
-        var summon = new Summon(ArcaneEmitterEntity.ID.toString(), b, placements, 3, groupPlacements, 1);
+        var summon = new Summon(WizardEntities.ARCANE_EMITTER.id.toString(), b, placements, 3, groupPlacements, 1);
         summon.attribute_scaling.entries = List.of(spellPower);
         return summon;
     }
@@ -274,7 +274,7 @@ public class WizardSummons {
 
         var spawnCount = 3;
         var groupCount = 1;
-        var summon = new Summon(FireHydraEntity.ID.toString(), b, placements, spawnCount, groupPlacements, groupCount);
+        var summon = new Summon(WizardEntities.FIRE_HYDRA.id.toString(), b, placements, spawnCount, groupPlacements, groupCount);
         // Attribute scaling: standard combat stats scaling with fire spell power (no size bump)
         summon.attribute_scaling.entries = schoolCombatScaling(SpellSchools.FIRE);
         summon.group_spawn_sound = Sound.of(WizardsSounds.FIRE_HYDRA_GROUP_SPAWN.id());

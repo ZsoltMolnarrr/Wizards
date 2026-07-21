@@ -10,9 +10,6 @@ import net.wizards.client.entity.FireHydraModel;
 import net.wizards.client.entity.FireHydraRenderer;
 import net.wizards.client.entity.FrostElementalModel;
 import net.wizards.client.entity.FrostElementalRenderer;
-import net.wizards.entity.ArcaneEmitterEntity;
-import net.wizards.entity.FireHydraEntity;
-import net.wizards.entity.FrostElementalEntity;
 import net.wizards.entity.WizardEntities;
 
 public final class FabricClientMod implements ClientModInitializer {
@@ -21,10 +18,10 @@ public final class FabricClientMod implements ClientModInitializer {
         WizardsClientMod.init();
 
         EntityModelLayerRegistry.registerModelLayer(FrostElementalModel.TEXTURE, FrostElementalModel::getTexturedModelData);
-        EntityRendererRegistry.register(FrostElementalEntity.TYPE, FrostElementalRenderer::new);
+        EntityRendererRegistry.register(WizardEntities.FROST_ELEMENTAL.type, FrostElementalRenderer::new);
         EntityModelLayerRegistry.registerModelLayer(ArcaneEmitterModel.LAYER, ArcaneEmitterModel::getTexturedModelData);
-        EntityRendererRegistry.register(ArcaneEmitterEntity.TYPE, ArcaneEmitterRenderer::new);
+        EntityRendererRegistry.register(WizardEntities.ARCANE_EMITTER.type, ArcaneEmitterRenderer::new);
         EntityModelLayerRegistry.registerModelLayer(FireHydraModel.LAYER, FireHydraModel::getTexturedModelData);
-        EntityRendererRegistry.register(FireHydraEntity.TYPE, FireHydraRenderer::new);
+        EntityRendererRegistry.register(WizardEntities.FIRE_HYDRA.type, FireHydraRenderer::new);
     }
 }

@@ -1,14 +1,91 @@
 package net.wizards.entity;
 
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.SpawnGroup;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
+import net.minecraft.util.Identifier;
 import net.spell_engine.api.spell.summon.SummonedEntities;
 import net.spell_engine.api.spell.summon.SummonedEntityConfig;
 import net.spell_power.api.SpellSchools;
+import net.wizards.WizardsMod;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class WizardEntities {
+
+    /// Pairs a custom entity's type with its display name (for lang datagen) and, optionally, its
+    /// summoned-entity attribute defaults. Mirrors the {@code Effects.Entry} pattern: the name lives
+    /// next to the registration so it can't drift or be forgotten.
+    public static class Entry<T extends Entity> {
+        public final Identifier id;
+        /// English display name, emitted as {@code entity.<namespace>.<path>} by lang datagen.
+        public final String name;
+        public final EntityType<T> type;
+        /// Attribute defaults for summoned entities (seeded into config/spell_engine/summoned_entities.json).
+        /// Null for entities that aren't spell-power-scaled summons.
+        @Nullable public final SummonedEntityConfig.Entry summonConfig;
+
+        public Entry(Identifier id, String name, EntityType<T> type) {
+            this(id, name, type, null);
+        }
+        public Entry(Identifier id, String name, EntityType<T> type, @Nullable SummonedEntityConfig.Entry summonConfig) {
+            this.id = id;
+            this.name = name;
+            this.type = type;
+            this.summonConfig = summonConfig;
+        }
+    }
+
+    public static final List<Entry<?>> entries = new ArrayList<>();
+    private static <T extends Entity> Entry<T> add(Entry<T> entry) {
+        entries.add(entry);
+        return entry;
+    }
+
+    public static final Entry<FrostElementalEntity> FROST_ELEMENTAL = add(new Entry<>(
+            Identifier.of(WizardsMod.ID, "frost_elemental"),
+            "Frost Elemental",
+            EntityType.Builder.<FrostElementalEntity>create(FrostElementalEntity::new, SpawnGroup.MISC)
+                    // dimensions(float, float) yields `changing` (fixed=false) so
+                    // EntityDimensions.scaled() actually applies the GENERIC_SCALE attribute
+                    // when getBaseDimensions falls through to the type (i.e., when
+                    // behaviour.dimensions is null). With `fixed`, scaled() is a no-op and
+                    // getWidth()/getHeight() stay locked at base size — which silently shrinks
+                    // the melee reach below the visible model size.
+                    .dimensions(1F, 2F)
+                    .maxTrackingRange(64)
+                    .trackingTickInterval(3)
+                    .build(),
+            frostDefaults()));
+
+    public static final Entry<ArcaneEmitterEntity> ARCANE_EMITTER = add(new Entry<>(
+            Identifier.of(WizardsMod.ID, "arcane_emitter"),
+            "Arcane Emitter",
+            EntityType.Builder.<ArcaneEmitterEntity>create(ArcaneEmitterEntity::new, SpawnGroup.MISC)
+                    // was fixed(); vanilla builder only yields `changing`, which is equivalent
+                    // here since this entity carries no GENERIC_SCALE attribute.
+                    .dimensions(0.6F, 0.6F)
+                    .maxTrackingRange(64)
+                    .trackingTickInterval(3)
+                    .build(),
+            arcaneDefaults()));
+
+    public static final Entry<FireHydraEntity> FIRE_HYDRA = add(new Entry<>(
+            Identifier.of(WizardsMod.ID, "fire_hydra"),
+            "Fire Hydra",
+            EntityType.Builder.<FireHydraEntity>create(FireHydraEntity::new, SpawnGroup.MISC)
+                    // was fixed(); vanilla builder only yields `changing`, which is equivalent
+                    // here since this entity carries no GENERIC_SCALE attribute.
+                    .dimensions(1.5F, 3.0F)
+                    .maxTrackingRange(64)
+                    .trackingTickInterval(3)
+                    .build(),
+            fireDefaults()));
 
     // Default base attributes per summon — seeded into the central SpellEngine config
     // (config/spell_engine/summoned_entities.json) via SummonedEntities.registerAttributes.
@@ -38,49 +115,16 @@ public class WizardEntities {
     }
 
     public static void register() {
-        FrostElementalEntity.TYPE = Registry.register(
-                Registries.ENTITY_TYPE,
-                FrostElementalEntity.ID,
-                EntityType.Builder.<FrostElementalEntity>create(FrostElementalEntity::new, SpawnGroup.MISC)
-                        // dimensions(float, float) yields `changing` (fixed=false) so
-                        // EntityDimensions.scaled() actually applies the GENERIC_SCALE attribute
-                        // when getBaseDimensions falls through to the type (i.e., when
-                        // behaviour.dimensions is null). With `fixed`, scaled() is a no-op and
-                        // getWidth()/getHeight() stay locked at base size — which silently shrinks
-                        // the melee reach below the visible model size.
-                        .dimensions(1F, 2F)
-                        .maxTrackingRange(64)
-                        .trackingTickInterval(3)
-                        .build()
-        );
-        // Attributes are registered right here with the freshly-built type, so type and attribute
-        // registration are a single co-located step — no required ordering between them.
-        SummonedEntities.registerAttributes(FrostElementalEntity.ID, FrostElementalEntity.TYPE, frostDefaults());
-
-        ArcaneEmitterEntity.TYPE = Registry.register(
-                Registries.ENTITY_TYPE,
-                ArcaneEmitterEntity.ID,
-                EntityType.Builder.<ArcaneEmitterEntity>create(ArcaneEmitterEntity::new, SpawnGroup.MISC)
-                        // was fixed(); vanilla builder only yields `changing`, which is equivalent
-                        // here since this entity carries no GENERIC_SCALE attribute.
-                        .dimensions(0.6F, 0.6F)
-                        .maxTrackingRange(64)
-                        .trackingTickInterval(3)
-                        .build()
-        );
-        SummonedEntities.registerAttributes(ArcaneEmitterEntity.ID, ArcaneEmitterEntity.TYPE, arcaneDefaults());
-
-        FireHydraEntity.TYPE = Registry.register(
-                Registries.ENTITY_TYPE,
-                FireHydraEntity.ID,
-                EntityType.Builder.<FireHydraEntity>create(FireHydraEntity::new, SpawnGroup.MISC)
-                        // was fixed(); vanilla builder only yields `changing`, which is equivalent
-                        // here since this entity carries no GENERIC_SCALE attribute.
-                        .dimensions(1.5F, 3.0F)
-                        .maxTrackingRange(64)
-                        .trackingTickInterval(3)
-                        .build()
-        );
-        SummonedEntities.registerAttributes(FireHydraEntity.ID, FireHydraEntity.TYPE, fireDefaults());
+        for (var entry : entries) {
+            // Attributes are registered right here with the freshly-built type, so type and attribute
+            // registration are a single co-located step — no required ordering between them.
+            Registry.register(Registries.ENTITY_TYPE, entry.id, entry.type);
+            if (entry.summonConfig != null) {
+                // Only summoned (living) entities carry a config; safe by construction.
+                @SuppressWarnings("unchecked")
+                var livingType = (EntityType<? extends LivingEntity>) entry.type;
+                SummonedEntities.registerAttributes(entry.id, livingType, entry.summonConfig);
+            }
+        }
     }
 }
