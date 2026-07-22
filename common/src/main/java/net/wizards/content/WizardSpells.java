@@ -589,6 +589,17 @@ public class WizardSpells {
         teleport.action.teleport.mode = Spell.Impact.Action.Teleport.Mode.FORWARD;
         teleport.action.teleport.forward = new Spell.Impact.Action.Teleport.Forward();
         teleport.action.teleport.forward.distance = 15F;
+        // If a wall would cut the blink short (less than 3 blocks of travel), fizzle instead of
+        // wasting the rune + cooldown — the teleport is aborted and no cost is paid.
+        teleport.action.teleport.minimum_distance = 3F;
+        teleport.action.teleport.fizzle = new Spell.Impact.Action.Teleport.Fizzle();
+        teleport.action.teleport.fizzle.sound = Sound.withRandomness(SpellEngineSounds.NEGATIVE_FEEDBACK.id(), 0);
+        teleport.action.teleport.fizzle.particles = new ParticleBatch[] {
+                new ParticleBatch(
+                        "minecraft:smoke",
+                        ParticleBatch.Shape.SPHERE, ParticleBatch.Origin.FEET,
+                        12, 0.05F, 0.15F)
+        };
         teleport.action.teleport.depart_particles = new ParticleBatch[] {
                 new ParticleBatch(
                         "minecraft:portal",

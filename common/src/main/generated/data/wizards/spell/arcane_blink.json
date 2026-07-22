@@ -19,6 +19,23 @@
         "type": "TELEPORT",
         "teleport": {
           "mode": "FORWARD",
+          "minimum_distance": 3.0,
+          "fizzle": {
+            "sound": {
+              "id": "spell_engine:negative_feedback",
+              "randomness": 0.0
+            },
+            "particles": [
+              {
+                "particle_id": "minecraft:smoke",
+                "origin": "FEET",
+                "shape": "SPHERE",
+                "count": 12.0,
+                "min_speed": 0.05,
+                "max_speed": 0.15
+              }
+            ]
+          },
           "forward": {
             "distance": 15.0
           },

@@ -3,6 +3,7 @@
 - Fix entity name translations
 - Reduce range of Ice Lance
 - Added generic umbrella spell tags to include spell book + staff spells for each school: `wizards:arcane`, `wizards:fire`, `wizards:frost`
+- Blink spell will fizzle if destination is closer than 3 blocks
 
 # 3.0.1
 
