@@ -60,7 +60,7 @@ public class WizardsMod {
 
     public static void registerEntities() {
         // Each entity's base attributes are registered alongside its type build inside register(),
-        // sourced from SpellEngine's central summoned-entity config.
+        // sourced from Wizards' own summoned-entity config (WizardEntities.summonConfig).
         WizardEntities.register();
     }
 

@@ -10,6 +10,7 @@ import net.minecraft.util.Identifier;
 import net.spell_engine.api.spell.summon.SummonedEntities;
 import net.spell_engine.api.spell.summon.SummonedEntityConfig;
 import net.spell_power.api.SpellSchools;
+import net.tiny_config.ConfigManager;
 import net.wizards.WizardsMod;
 import org.jetbrains.annotations.Nullable;
 
@@ -26,7 +27,7 @@ public class WizardEntities {
         /// English display name, emitted as {@code entity.<namespace>.<path>} by lang datagen.
         public final String name;
         public final EntityType<T> type;
-        /// Attribute defaults for summoned entities (seeded into config/spell_engine/summoned_entities.json).
+        /// Attribute defaults for summoned entities (seeded into Wizards' own config/wizards/summoned_entities.json).
         /// Null for entities that aren't spell-power-scaled summons.
         @Nullable public final SummonedEntityConfig.Entry summonConfig;
 
@@ -87,8 +88,9 @@ public class WizardEntities {
                     .build(),
             fireDefaults()));
 
-    // Default base attributes per summon — seeded into the central SpellEngine config
-    // (config/spell_engine/summoned_entities.json) via SummonedEntities.registerAttributes.
+    // Default base attributes per summon — seeded into Wizards' OWN config file
+    // (config/wizards/summoned_entities.json), which Wizards versions independently of SpellEngine and
+    // the other class mods. The live values are read back through summonConfig at registration time.
 
     public static SummonedEntityConfig.Entry frostDefaults() {
         var e = new SummonedEntityConfig.Entry();
@@ -114,7 +116,29 @@ public class WizardEntities {
         return e;
     }
 
+    /// Wizards' own summoned-entity config file, seeded from the per-entity defaults above and versioned
+    /// independently (bump `schemaVersion` to reset users' files after a defaults change). Declared after
+    /// the entity constants so {@link #entries} is fully populated when the defaults are collected.
+    public static final ConfigManager<SummonedEntityConfig> summonConfig = new ConfigManager<>
+            ("summoned_entities", seededDefaults())
+            .builder()
+            .setDirectory(WizardsMod.ID)
+            .schemaVersion(1)
+            .sanitize(true)
+            .build();
+
+    private static SummonedEntityConfig seededDefaults() {
+        var config = new SummonedEntityConfig();
+        for (var entry : entries) {
+            if (entry.summonConfig != null) {
+                config.entries.put(entry.id.toString(), entry.summonConfig);
+            }
+        }
+        return config;
+    }
+
     public static void register() {
+        summonConfig.refresh(); // load (or write) Wizards' own config file before reading values from it
         for (var entry : entries) {
             // Attributes are registered right here with the freshly-built type, so type and attribute
             // registration are a single co-located step — no required ordering between them.
@@ -123,7 +147,8 @@ public class WizardEntities {
                 // Only summoned (living) entities carry a config; safe by construction.
                 @SuppressWarnings("unchecked")
                 var livingType = (EntityType<? extends LivingEntity>) entry.type;
-                SummonedEntities.registerAttributes(entry.id, livingType, entry.summonConfig);
+                // Inject Wizards' config as the attribute source — a plain Function<Identifier, Entry>.
+                SummonedEntities.registerAttributes(entry.id, livingType, summonConfig.value::entryFor);
             }
         }
     }
