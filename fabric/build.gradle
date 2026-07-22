@@ -48,14 +48,15 @@ repositories {
         }
     }
     maven {
-        name = "TerraformersMC"
-        url = "https://maven.terraformersmc.com/"
-    }
-    maven {
         name = "Ladysnake Libs"
         url = 'https://maven.ladysnake.org/releases'
     }
     maven { url 'https://maven.wispforest.io/releases' }
+    maven {
+        name = "TerraformersMC"
+        url = "https://maven.terraformersmc.com/"
+        content { includeGroup 'dev.emi' }
+    }
 
     mavenLocal()
 }
@@ -78,7 +79,7 @@ dependencies {
     if (System.getenv("CI")) {
         modCompileOnly("maven.modrinth:trinkets:${project.trinkets_version}")
     } else {
-        modCompileOnly("dev.emi:trinkets:${project.trinkets_version}")
+        modImplementation("dev.emi:trinkets:${project.trinkets_version}")
     }
 
     modImplementation("maven.modrinth:structure-pool-api:${project.structure_pool_api_version}-${platform}")
@@ -88,7 +89,7 @@ dependencies {
     modImplementation("maven.modrinth:spell-power:${project.spell_power_version}-${platform}")
 //    modImplementation("net.spell_power:spell_power-${platform}:${project.spell_power_version}")
     modImplementation("maven.modrinth:spell-engine:${project.spell_engine_version}-${platform}")
-    // modImplementation("net.spell_engine:spell_engine-${platform}:${project.spell_engine_version}")
+//    modImplementation("net.spell_engine:spell_engine-${platform}:${project.spell_engine_version}")
 }
 
 processResources {

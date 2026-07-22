@@ -10,10 +10,6 @@ repositories {
     maven { url 'https://maven.shedaniel.me/' }
     maven { url 'https://maven.azuredoom.com/mods' }
     maven {
-        name = "TerraformersMC"
-        url = "https://maven.terraformersmc.com/"
-    }
-    maven {
         name = 'Modrinth'
         url = 'https://api.modrinth.com/maven'
         content {
@@ -52,7 +48,7 @@ dependencies {
     modImplementation("maven.modrinth:spell-power:${project.spell_power_version}-${platform}")
 //    modImplementation("net.spell_power:spell_power-${platform}:${project.spell_power_version}")
     modImplementation("maven.modrinth:spell-engine:${project.spell_engine_version}-${platform}")
-    // modImplementation("net.spell_engine:spell_engine-${platform}:${project.spell_engine_version}")
+//    modImplementation("net.spell_engine:spell_engine-${platform}:${project.spell_engine_version}")
 
     // Compatibility
     // Fabric specific
