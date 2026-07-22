@@ -2,6 +2,7 @@
 
 - Fix entity name translations
 - Reduce range of Ice Lance
+- Added generic umbrella spell tags to include spell book + staff spells for each school: `wizards:arcane`, `wizards:fire`, `wizards:frost`
 
 # 3.0.1
 

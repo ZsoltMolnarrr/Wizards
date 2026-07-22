@@ -1,0 +1,12 @@
+{
+  "values": [
+    {
+      "id": "#wizards:spell_book/arcane",
+      "required": false
+    },
+    {
+      "id": "#wizards:weapon/arcane_staff",
+      "required": false
+    }
+  ]
+}

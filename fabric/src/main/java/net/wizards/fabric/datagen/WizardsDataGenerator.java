@@ -12,6 +12,7 @@ import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.Items;
 import net.minecraft.recipe.book.RecipeCategory;
 import net.minecraft.registry.RegistryWrapper;
+import net.minecraft.registry.tag.TagKey;
 import net.minecraft.util.Identifier;
 import net.spell_engine.api.datagen.NamespacedLangGenerator;
 import net.spell_engine.api.datagen.SimpleSoundGeneratorV2;
@@ -103,6 +104,18 @@ public class WizardsDataGenerator implements DataGeneratorEntrypoint {
                     weaponGroupTag.addOptional(entry.id());
                 }
             });
+
+            // Umbrella per-school spell tags (wizards:<school>), aggregating that school's book spells
+            // and its dedicated staff spell. Used by systems keyed on "all spells of a school" — e.g.
+            // SkillTree's Presence of Mind / Arctic Reflex instant-cast — so both book- and
+            // weapon-granted spells (like Arcane Blast from the Arcane Staff) are covered. Note the
+            // school-specific staff group only, NOT wizard_staff (which spans every school).
+            for (var book : WizardSpells.Book.values()) {
+                var school = book.name().toLowerCase();
+                var umbrella = getOrCreateTagBuilder(TagKey.of(SpellRegistry.KEY, Identifier.of(namespace, school)));
+                umbrella.addOptionalTag(SpellTags.spellBook(namespace, school));
+                umbrella.addOptionalTag(SpellTags.weapon(namespace, school + "_staff"));
+            }
         }
     }
 

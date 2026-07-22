@@ -1,0 +1,12 @@
+{
+  "values": [
+    {
+      "id": "#wizards:spell_book/fire",
+      "required": false
+    },
+    {
+      "id": "#wizards:weapon/fire_staff",
+      "required": false
+    }
+  ]
+}
