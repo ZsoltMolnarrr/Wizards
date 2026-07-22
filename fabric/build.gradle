@@ -52,11 +52,11 @@ repositories {
         url = 'https://maven.ladysnake.org/releases'
     }
     maven { url 'https://maven.wispforest.io/releases' }
-    maven {
-        name = "TerraformersMC"
-        url = "https://maven.terraformersmc.com/"
-        content { includeGroup 'dev.emi' }
-    }
+//    maven {
+//        name = "TerraformersMC"
+//        url = "https://maven.terraformersmc.com/"
+//        content { includeGroup 'dev.emi' }
+//    }
 
     mavenLocal()
 }
@@ -72,15 +72,18 @@ dependencies {
     modImplementation("mod.azure.azurelibarmor:azurelibarmor-fabric-${project.azure_mc_version}:${project.azure_lib_version}")
     modImplementation("maven.modrinth:tiny-config:${project.tiny_config_version}-${platform}")
 
-    // Trinkets
-    // Trinkets: Modrinth Maven serves minimal POMs (no transitive deps) and
-    // TerraformersMC has been unreliable in CI. Use Modrinth on CI; use dev.emi
-    // locally so runClient gets Trinkets' full transitive graph.
-    if (System.getenv("CI")) {
-        modCompileOnly("maven.modrinth:trinkets:${project.trinkets_version}")
-    } else {
-        modImplementation("dev.emi:trinkets:${project.trinkets_version}")
-    }
+//    // Trinkets
+//    // Trinkets: Modrinth Maven serves minimal POMs (no transitive deps) and
+//    // TerraformersMC has been unreliable in CI. Use Modrinth on CI; use dev.emi
+//    // locally so runClient gets Trinkets' full transitive graph.
+//    if (System.getenv("CI")) {
+//        modCompileOnly("maven.modrinth:trinkets:${project.trinkets_version}")
+//    } else {
+//        modImplementation("dev.emi:trinkets:${project.trinkets_version}")
+//    }
+    modImplementation("maven.modrinth:trinkets:${project.trinkets_version}")
+    modImplementation("org.ladysnake.cardinal-components-api:cardinal-components-base:6.1.3")
+    modImplementation("org.ladysnake.cardinal-components-api:cardinal-components-entity:6.1.3")
 
     modImplementation("maven.modrinth:structure-pool-api:${project.structure_pool_api_version}-${platform}")
 //    modImplementation("net.foundation:structure_pool_api-${platform}:${project.structure_pool_api_version}")
