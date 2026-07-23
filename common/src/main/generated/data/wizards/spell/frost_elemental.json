@@ -203,6 +203,9 @@
     "cooldown": {
       "duration": 30.0,
       "haste_affected": false
+    },
+    "item": {
+      "id": "runes:frost_stone"
     }
   }
 }

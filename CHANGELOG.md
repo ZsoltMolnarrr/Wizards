@@ -1,3 +1,7 @@
+# 3.0.3
+
+- Summon spells now require a rune to cast
+
 # 3.0.2
 
 - Fix entity name translations

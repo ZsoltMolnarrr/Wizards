@@ -559,6 +559,7 @@ public class WizardSpells {
 
         SpellBuilder.Cost.cooldown(spell, 20);
         spell.cost.cooldown.haste_affected = false; // summon uptime shouldn't scale with haste
+        SpellBuilder.Cost.item(spell, "runes:arcane_stone");
 
         return new Entry(id, spell, name, description).book(Book.ARCANE);
     }
@@ -1303,6 +1304,7 @@ public class WizardSpells {
 
         SpellBuilder.Cost.cooldown(spell, 30F);
         spell.cost.cooldown.haste_affected = false; // summon uptime shouldn't scale with haste
+        configureFireRuneCost(spell);
 
         return new Entry(id, spell, name, description).book(Book.FIRE);
     }
@@ -1925,6 +1927,7 @@ public class WizardSpells {
 
         SpellBuilder.Cost.cooldown(spell, 30F);
         spell.cost.cooldown.haste_affected = false; // summon uptime shouldn't scale with haste
+        configureFrostRuneCost(spell);
 
         return new Entry(id, spell, name, description).book(Book.FROST);
     }
