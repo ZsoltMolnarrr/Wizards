@@ -83,13 +83,35 @@
           "attribute_scaling": {
             "entries": [
               {
-                "attribute_id": "spell_power:arcane",
+                "attribute_id": "minecraft:generic.attack_damage",
                 "modifiers": [
                   {
                     "attribute_id": "spell_power:arcane",
                     "operation": "ADD_VALUE",
                     "base": 0.0,
-                    "coefficient": 1.0
+                    "coefficient": 0.5
+                  }
+                ]
+              },
+              {
+                "attribute_id": "spell_power:arcane",
+                "modifiers": [
+                  {
+                    "attribute_id": "spell_power:arcane",
+                    "operation": "ADD_VALUE",
+                    "base": 1.5,
+                    "coefficient": 0.25
+                  }
+                ]
+              },
+              {
+                "attribute_id": "minecraft:generic.attack_knockback",
+                "modifiers": [
+                  {
+                    "attribute_id": "spell_power:arcane",
+                    "operation": "ADD_VALUE",
+                    "base": 0.0,
+                    "coefficient": 0.1
                   }
                 ]
               }

@@ -1,5 +1,6 @@
 # 3.0.3
 
+- Rebalanced spell power (hence damage) of summoned enities
 - Summon spells now require a rune to cast
 
 # 3.0.2

@@ -144,8 +144,8 @@
                   {
                     "attribute_id": "spell_power:fire",
                     "operation": "ADD_VALUE",
-                    "base": 3.0,
-                    "coefficient": 0.1
+                    "base": 1.5,
+                    "coefficient": 0.35
                   }
                 ]
               },

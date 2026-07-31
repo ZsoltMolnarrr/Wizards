@@ -94,16 +94,10 @@ public class WizardSummons {
         var summon = new Summon(WizardEntities.FROST_ELEMENTAL.id.toString(), b, placements, 1);
         // Attribute scaling: the standard combat stat block, but with the defensive inheritance
         // (health, armor, knockback resistance) halved and no size scaling — the SkillTree
-        // "big elemental" node restores the other half along with the size bump.
-        var s = SpellSchools.FROST.id.toString();
-        var scaling = new ArrayList<AttributeScaling.Entry>();
-        scaling.add(scalingEntry(EntityAttributes.GENERIC_MAX_HEALTH.getIdAsString(), s, 0, 1.0));
-        scaling.add(scalingEntry(EntityAttributes.GENERIC_ARMOR.getIdAsString(), s, 5, 0.05));
-        scaling.add(scalingEntry(EntityAttributes.GENERIC_ATTACK_DAMAGE.getIdAsString(), s, 0, 0.5));
-        scaling.add(scalingEntry(s, s, 3, 0.1)); // spell power feeds back into the school attribute
-        scaling.add(scalingEntry(EntityAttributes.GENERIC_ATTACK_KNOCKBACK.getIdAsString(), s, 0, 0.1));
-        scaling.add(scalingEntry(EntityAttributes.GENERIC_KNOCKBACK_RESISTANCE.getIdAsString(), s, 2.5, 0.025));
-        summon.attribute_scaling.entries = scaling;
+        // "big elemental" node restores the other half along with the size bump. The highest spell
+        // power coefficient of the three summons: the elemental only lands a shard every 2 seconds,
+        // and most of its output comes from the melee swing.
+        summon.attribute_scaling.entries = schoolCombatScaling(SpellSchools.FROST, 0.45, 0.5);
         return summon;
     }
 
@@ -156,9 +150,6 @@ public class WizardSummons {
         arcaneBolt.aiming.fallback = SummonBehaviour.Action.SpellCast.Aiming.Fallback.FORWARD;
         b.actions = List.of(SummonBehaviour.Action.spell(arcaneBolt));
 
-        var spellPower = scalingEntry(SpellSchools.ARCANE.id.toString(),
-                SpellSchools.ARCANE.id.toString(), 0, 1.0);
-
         // Placement: a perpendicular line of up to 7 floating emitters, filled from the centre
         // outwards and staggered by 10 ticks, the whole line pushed behind the caster via a single
         // group offset. A smaller spawn_count yields a tighter centered line. Each floats ~1 block up
@@ -179,7 +170,11 @@ public class WizardSummons {
         var groupPlacements = List.of(behindGroup);
 
         var summon = new Summon(WizardEntities.ARCANE_EMITTER.id.toString(), b, placements, 3, groupPlacements, 1);
-        summon.attribute_scaling.entries = List.of(spellPower);
+        // Emitters inherit the same shape as the other attacker summons (small flat base + a quarter of
+        // the owner's power) rather than the owner's full spell power: at 3 units firing every 1.25s, a
+        // 1.0 coefficient made a tier-3 spell out-damage the wizard's own casting several times over.
+        // No defensive inheritance — the emitter is unattackable, so survivability stats are moot.
+        summon.attribute_scaling.entries = schoolCombatScaling(SpellSchools.ARCANE, 0.25, 0);
         return summon;
     }
 
@@ -276,7 +271,7 @@ public class WizardSummons {
         var groupCount = 1;
         var summon = new Summon(WizardEntities.FIRE_HYDRA.id.toString(), b, placements, spawnCount, groupPlacements, groupCount);
         // Attribute scaling: standard combat stats scaling with fire spell power (no size bump)
-        summon.attribute_scaling.entries = schoolCombatScaling(SpellSchools.FIRE);
+        summon.attribute_scaling.entries = schoolCombatScaling(SpellSchools.FIRE, 0.35, 1.0);
         summon.group_spawn_sound = Sound.of(WizardsSounds.FIRE_HYDRA_GROUP_SPAWN.id());
         summon.group_spawn_fx = fireHydraGroupSpawnFx();
         return summon;
@@ -309,18 +304,37 @@ public class WizardSummons {
 
     // MARK: Scaling helpers
 
+    /// Flat spell power every Wizard summon starts from, before the owner-scaled portion and on top of
+    /// the entity's own innate base attribute. Uniform across the three summons by design — what varies
+    /// per summon is the coefficient each one passes to {@link #schoolCombatScaling}.
+    private static final double SPELL_POWER_BASE = 1.5;
+
     /// The standard owner-scaled combat stat block shared by attacker summons: health, armor, attack
     /// damage, spell power, attack knockback and knockback resistance — all scaling off the owner's
     /// spell power in the given school. Returned mutable so callers can append school-specific extras.
-    private static List<AttributeScaling.Entry> schoolCombatScaling(SpellSchool school) {
+    ///
+    /// `spellPowerCoefficient` is the share of the owner's spell power the summon inherits into its own
+    /// school attribute. It is the single knob governing how hard the summon's spells hit, so it is
+    /// deliberately required rather than defaulted — every summon states its own value at the call site.
+    ///
+    /// `defensiveMultiplier` scales the survivability inheritance (health, armor, knockback resistance):
+    /// 1 is the full block, 0.5 halves it, and 0 omits those entries entirely for summons that cannot be
+    /// attacked. Offensive inheritance (attack damage, attack knockback) is never scaled by it.
+    private static List<AttributeScaling.Entry> schoolCombatScaling(SpellSchool school,
+                                                                    double spellPowerCoefficient,
+                                                                    double defensiveMultiplier) {
         var s = school.id.toString();
         var entries = new ArrayList<AttributeScaling.Entry>();
-        entries.add(scalingEntry(EntityAttributes.GENERIC_MAX_HEALTH.getIdAsString(), s, 0, 2.0));
-        entries.add(scalingEntry(EntityAttributes.GENERIC_ARMOR.getIdAsString(), s, 10, 0.1));
+        if (defensiveMultiplier > 0) {
+            entries.add(scalingEntry(EntityAttributes.GENERIC_MAX_HEALTH.getIdAsString(), s, 0, 2.0 * defensiveMultiplier));
+            entries.add(scalingEntry(EntityAttributes.GENERIC_ARMOR.getIdAsString(), s, 10 * defensiveMultiplier, 0.1 * defensiveMultiplier));
+        }
         entries.add(scalingEntry(EntityAttributes.GENERIC_ATTACK_DAMAGE.getIdAsString(), s, 0, 0.5));
-        entries.add(scalingEntry(s, s, 3, 0.1)); // spell power feeds back into the school attribute
+        entries.add(scalingEntry(s, s, SPELL_POWER_BASE, spellPowerCoefficient)); // spell power feeds back into the school attribute
         entries.add(scalingEntry(EntityAttributes.GENERIC_ATTACK_KNOCKBACK.getIdAsString(), s, 0, 0.1));
-        entries.add(scalingEntry(EntityAttributes.GENERIC_KNOCKBACK_RESISTANCE.getIdAsString(), s, 5, 0.05));
+        if (defensiveMultiplier > 0) {
+            entries.add(scalingEntry(EntityAttributes.GENERIC_KNOCKBACK_RESISTANCE.getIdAsString(), s, 5 * defensiveMultiplier, 0.05 * defensiveMultiplier));
+        }
         return entries;
     }
 
