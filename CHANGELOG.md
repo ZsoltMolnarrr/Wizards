@@ -1,3 +1,7 @@
+# 3.0.4
+
+- Increased spacing of Arcane Barrage emitters
+
 # 3.0.3
 
 - Rebalanced spell power (hence damage) of summoned enities
