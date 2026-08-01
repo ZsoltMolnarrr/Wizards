@@ -160,7 +160,7 @@ public class WizardSummons {
         emitter.apply_pitch = true;          // also aim with the caster's pitch
         emitter.location_offset_y = 1.0F;    // ~1 block up
         var placements = Placements.delayCascade(
-                Placements.row(7, 1.5F, Placements.RowOrder.CENTER_OUT, emitter), 10);
+                Placements.row(7, 2.0F, Placements.RowOrder.CENTER_OUT, emitter), 10);
 
         // One group, offset straight behind the caster (pure translation, no ground snap), seeding
         // the perpendicular per-entity line.

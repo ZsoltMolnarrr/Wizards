@@ -127,7 +127,7 @@
             {
               "delay_ticks": 10,
               "force_onto_ground": false,
-              "location_offset_by_look": 1.5,
+              "location_offset_by_look": 2.0,
               "location_yaw_offset": 90.0,
               "apply_yaw": true,
               "apply_pitch": true,
@@ -136,7 +136,7 @@
             {
               "delay_ticks": 20,
               "force_onto_ground": false,
-              "location_offset_by_look": 1.5,
+              "location_offset_by_look": 2.0,
               "location_yaw_offset": -90.0,
               "apply_yaw": true,
               "apply_pitch": true,
@@ -145,7 +145,7 @@
             {
               "delay_ticks": 30,
               "force_onto_ground": false,
-              "location_offset_by_look": 3.0,
+              "location_offset_by_look": 4.0,
               "location_yaw_offset": 90.0,
               "apply_yaw": true,
               "apply_pitch": true,
@@ -154,7 +154,7 @@
             {
               "delay_ticks": 40,
               "force_onto_ground": false,
-              "location_offset_by_look": 3.0,
+              "location_offset_by_look": 4.0,
               "location_yaw_offset": -90.0,
               "apply_yaw": true,
               "apply_pitch": true,
@@ -163,7 +163,7 @@
             {
               "delay_ticks": 50,
               "force_onto_ground": false,
-              "location_offset_by_look": 4.5,
+              "location_offset_by_look": 6.0,
               "location_yaw_offset": 90.0,
               "apply_yaw": true,
               "apply_pitch": true,
@@ -172,7 +172,7 @@
             {
               "delay_ticks": 60,
               "force_onto_ground": false,
-              "location_offset_by_look": 4.5,
+              "location_offset_by_look": 6.0,
               "location_yaw_offset": -90.0,
               "apply_yaw": true,
               "apply_pitch": true,
