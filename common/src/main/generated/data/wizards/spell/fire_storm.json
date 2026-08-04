@@ -25,39 +25,50 @@
       },
       "particles": [
         {
-          "particle_id": "spell_engine:flame",
-          "origin": "FEET",
-          "shape": "WIDE_PIPE",
-          "count": 1.0,
-          "min_speed": 0.05,
-          "max_speed": 0.1
+          "id": "spell_engine:flame",
+          "appearance": {},
+          "batch": {
+            "count": 1.0,
+            "shape": "PIPE",
+            "anchor": "ENTITY",
+            "vertical_origin": 0.1,
+            "min_speed": 0.05,
+            "max_speed": 0.1,
+            "width_factor": 2.0
+          }
         }
       ]
     }
   },
   "release": {
-    "particles": [
-      {
-        "particle_id": "lava",
-        "origin": "GROUND",
-        "shape": "CIRCLE",
-        "count": 90.0,
-        "min_speed": 2.5,
-        "max_speed": 3.0,
-        "extent": 1.0
-      }
-    ],
-    "particles_scaled_with_ranged": [
-      {
-        "particle_id": "spell_engine:area_effect_748",
-        "origin": "CENTER",
-        "shape": "SPHERE",
-        "count": 1.0,
-        "max_speed": 0.0,
-        "color_rgba": 4282646783,
-        "scale": 0.8
-      }
-    ],
+    "visuals": {
+      "particles": [
+        {
+          "id": "lava",
+          "appearance": {},
+          "batch": {
+            "count": 90.0,
+            "shape": "CIRCLE",
+            "anchor": "GROUND",
+            "min_speed": 2.5,
+            "max_speed": 3.0,
+            "extent": 1.0
+          }
+        },
+        {
+          "id": "spell_engine:area_effect_748",
+          "appearance": {
+            "color": 4282646783,
+            "scale_with": "RANGE"
+          },
+          "batch": {
+            "count": 1.0,
+            "shape": "NONE",
+            "anchor": "ENTITY"
+          }
+        }
+      ]
+    },
     "sound": {
       "id": "wizards:fire_storm_release",
       "volume": 1.2
@@ -78,16 +89,21 @@
           "knockback": 0.5
         }
       },
-      "particles": [
-        {
-          "particle_id": "lava",
-          "origin": "CENTER",
-          "shape": "CIRCLE",
-          "count": 3.0,
-          "min_speed": 0.5,
-          "max_speed": 3.0
-        }
-      ],
+      "visuals": {
+        "particles": [
+          {
+            "id": "lava",
+            "appearance": {},
+            "batch": {
+              "count": 3.0,
+              "shape": "CIRCLE",
+              "anchor": "ENTITY",
+              "min_speed": 0.5,
+              "max_speed": 3.0
+            }
+          }
+        ]
+      },
       "sound": {
         "id": "wizards:fire_breath_impact"
       }

@@ -24,24 +24,31 @@
             "spawn_fx": {
               "particles": [
                 {
-                  "particle_id": "spell_engine:magic_arcane_decelerate",
-                  "origin": "CENTER",
-                  "shape": "SPHERE",
-                  "count": 15.0,
-                  "min_speed": 0.3,
-                  "max_speed": 0.5,
-                  "color_rgba": 4284940287
+                  "id": "spell_engine:magic_arcane",
+                  "appearance": {
+                    "color": 4284940287,
+                    "motion": "DECELERATE"
+                  },
+                  "batch": {
+                    "count": 15.0,
+                    "shape": "SPHERE",
+                    "anchor": "ENTITY",
+                    "min_speed": 0.3,
+                    "max_speed": 0.5
+                  }
                 },
                 {
-                  "particle_id": "firework",
-                  "origin": "CENTER",
-                  "shape": "SPHERE",
-                  "count": 10.0,
-                  "min_speed": 0.05,
-                  "max_speed": 0.15
+                  "id": "firework",
+                  "appearance": {},
+                  "batch": {
+                    "count": 10.0,
+                    "shape": "SPHERE",
+                    "anchor": "ENTITY",
+                    "min_speed": 0.05,
+                    "max_speed": 0.15
+                  }
                 }
-              ],
-              "model_fx": []
+              ]
             },
             "dimensions": {
               "height": 0.6

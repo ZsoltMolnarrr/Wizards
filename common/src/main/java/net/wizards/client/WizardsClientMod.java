@@ -7,6 +7,7 @@ import net.spell_engine.api.effect.CustomModelStatusEffect;
 import net.spell_engine.api.effect.CustomParticleStatusEffect;
 import net.spell_engine.api.render.LightEmission;
 import net.spell_engine.api.render.ModelFxEffectRenderer;
+import net.spell_engine.api.spell.fx.Easing;
 import net.spell_engine.api.spell.fx.ModelEffect;
 import net.spell_engine.client.gui.SpellTooltip;
 import net.spell_engine.rpg_series.item.Armor;
@@ -62,7 +63,7 @@ public class WizardsClientMod {
         scaleUp.operation = "scale";
         scaleUp.start = 0; scaleUp.end = 40;
         scaleUp.x = 1F; scaleUp.y = 1F; scaleUp.z = 1F;
-        scaleUp.easing = ModelEffect.Easing.EASE_OUT_BACK;
+        scaleUp.easing = Easing.EASE_OUT_BACK;
 
         var effect = new ModelEffect();
         effect.model_id = Identifier.of(WizardsMod.ID, "spell_effect/frost_trap").toString();

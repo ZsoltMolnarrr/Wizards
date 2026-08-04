@@ -28,12 +28,16 @@
       },
       "particles": [
         {
-          "particle_id": "spell_engine:snowflake",
-          "origin": "CENTER",
-          "shape": "WIDE_PIPE",
-          "count": 0.5,
-          "min_speed": 0.1,
-          "max_speed": 0.2
+          "id": "spell_engine:snowflake",
+          "appearance": {},
+          "batch": {
+            "count": 0.5,
+            "shape": "PIPE",
+            "anchor": "ENTITY",
+            "min_speed": 0.1,
+            "max_speed": 0.2,
+            "width_factor": 2.0
+          }
         }
       ]
     }
@@ -69,22 +73,30 @@
           "light_level": 12,
           "travel_particles": [
             {
-              "particle_id": "spell_engine:snowflake",
-              "origin": "CENTER",
-              "shape": "CIRCLE",
-              "rotation": "LOOK",
-              "count": 4.0,
-              "max_speed": 0.1
+              "id": "spell_engine:snowflake",
+              "appearance": {},
+              "batch": {
+                "count": 4.0,
+                "shape": "CIRCLE",
+                "anchor": "ENTITY",
+                "alignment": "LOOK",
+                "max_speed": 0.1
+              }
             },
             {
-              "particle_id": "spell_engine:magic_frost_burst",
-              "origin": "CENTER",
-              "shape": "CIRCLE",
-              "rotation": "LOOK",
-              "count": 1.0,
-              "min_speed": 0.1,
-              "max_speed": 0.2,
-              "color_rgba": 3439329279
+              "id": "spell_engine:magic_frost",
+              "appearance": {
+                "color": 3439329279,
+                "motion": "BURST"
+              },
+              "batch": {
+                "count": 1.0,
+                "shape": "CIRCLE",
+                "anchor": "ENTITY",
+                "alignment": "LOOK",
+                "min_speed": 0.1,
+                "max_speed": 0.2
+              }
             }
           ],
           "composite_model": {
@@ -110,26 +122,37 @@
           "knockback": 1.5
         }
       },
-      "particles": [
-        {
-          "particle_id": "spell_engine:magic_frost_burst",
-          "origin": "CENTER",
-          "shape": "SPHERE",
-          "count": 75.0,
-          "min_speed": 0.3,
-          "max_speed": 0.8,
-          "color_rgba": 3439329279
-        },
-        {
-          "particle_id": "spell_engine:frost_shard",
-          "origin": "CENTER",
-          "shape": "SPHERE",
-          "count": 30.0,
-          "min_speed": 0.2,
-          "max_speed": 0.4,
-          "color_rgba": 3439329279
-        }
-      ],
+      "visuals": {
+        "particles": [
+          {
+            "id": "spell_engine:magic_frost",
+            "appearance": {
+              "color": 3439329279,
+              "motion": "BURST"
+            },
+            "batch": {
+              "count": 75.0,
+              "shape": "SPHERE",
+              "anchor": "ENTITY",
+              "min_speed": 0.3,
+              "max_speed": 0.8
+            }
+          },
+          {
+            "id": "spell_engine:frost_shard",
+            "appearance": {
+              "color": 3439329279
+            },
+            "batch": {
+              "count": 30.0,
+              "shape": "SPHERE",
+              "anchor": "ENTITY",
+              "min_speed": 0.2,
+              "max_speed": 0.4
+            }
+          }
+        ]
+      },
       "sound": {
         "id": "wizards:frost_lance_impact"
       }
@@ -148,16 +171,21 @@
           }
         }
       },
-      "particles": [
-        {
-          "particle_id": "spell_engine:snowflake",
-          "origin": "CENTER",
-          "shape": "SPHERE",
-          "count": 25.0,
-          "min_speed": 0.1,
-          "max_speed": 0.4
-        }
-      ]
+      "visuals": {
+        "particles": [
+          {
+            "id": "spell_engine:snowflake",
+            "appearance": {},
+            "batch": {
+              "count": 25.0,
+              "shape": "SPHERE",
+              "anchor": "ENTITY",
+              "min_speed": 0.1,
+              "max_speed": 0.4
+            }
+          }
+        ]
+      }
     }
   ],
   "cost": {

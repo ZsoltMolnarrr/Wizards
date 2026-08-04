@@ -16,12 +16,17 @@
       },
       "particles": [
         {
-          "particle_id": "spell_engine:flame",
-          "origin": "FEET",
-          "shape": "WIDE_PIPE",
-          "count": 1.0,
-          "min_speed": 0.05,
-          "max_speed": 0.1
+          "id": "spell_engine:flame",
+          "appearance": {},
+          "batch": {
+            "count": 1.0,
+            "shape": "PIPE",
+            "anchor": "ENTITY",
+            "vertical_origin": 0.1,
+            "min_speed": 0.05,
+            "max_speed": 0.1,
+            "width_factor": 2.0
+          }
         }
       ]
     }
@@ -54,29 +59,38 @@
           "light_level": 12,
           "travel_particles": [
             {
-              "particle_id": "spell_engine:flame",
-              "origin": "CENTER",
-              "shape": "CIRCLE",
-              "rotation": "LOOK",
-              "count": 3.0,
-              "max_speed": 0.1
+              "id": "spell_engine:flame",
+              "appearance": {},
+              "batch": {
+                "count": 3.0,
+                "shape": "CIRCLE",
+                "anchor": "ENTITY",
+                "alignment": "LOOK",
+                "max_speed": 0.1
+              }
             },
             {
-              "particle_id": "smoke",
-              "origin": "CENTER",
-              "shape": "CIRCLE",
-              "rotation": "LOOK",
-              "count": 5.0,
-              "min_speed": 0.1,
-              "max_speed": 0.3
+              "id": "smoke",
+              "appearance": {},
+              "batch": {
+                "count": 5.0,
+                "shape": "CIRCLE",
+                "anchor": "ENTITY",
+                "alignment": "LOOK",
+                "min_speed": 0.1,
+                "max_speed": 0.3
+              }
             },
             {
-              "particle_id": "campfire_cosy_smoke",
-              "origin": "CENTER",
-              "shape": "CIRCLE",
-              "rotation": "LOOK",
-              "count": 6.0,
-              "max_speed": 0.05
+              "id": "campfire_cosy_smoke",
+              "appearance": {},
+              "batch": {
+                "count": 6.0,
+                "shape": "CIRCLE",
+                "anchor": "ENTITY",
+                "alignment": "LOOK",
+                "max_speed": 0.05
+              }
             }
           ],
           "composite_model": {
@@ -100,16 +114,21 @@
           "knockback": 2.0
         }
       },
-      "particles": [
-        {
-          "particle_id": "lava",
-          "origin": "CENTER",
-          "shape": "CIRCLE",
-          "count": 3.0,
-          "min_speed": 0.5,
-          "max_speed": 3.0
-        }
-      ],
+      "visuals": {
+        "particles": [
+          {
+            "id": "lava",
+            "appearance": {},
+            "batch": {
+              "count": 3.0,
+              "shape": "CIRCLE",
+              "anchor": "ENTITY",
+              "min_speed": 0.5,
+              "max_speed": 3.0
+            }
+          }
+        ]
+      },
       "sound": {
         "id": "wizards:fire_breath_impact"
       }
@@ -120,41 +139,56 @@
     "area": {
       "distance_dropoff": "SQUARED"
     },
-    "particles": [
-      {
-        "particle_id": "lava",
-        "origin": "CENTER",
-        "shape": "CIRCLE",
-        "count": 90.0,
-        "min_speed": 1.5,
-        "max_speed": 6.0
-      },
-      {
-        "particle_id": "flame",
-        "origin": "CENTER",
-        "shape": "SPHERE",
-        "count": 100.0,
-        "min_speed": 0.2,
-        "max_speed": 0.4
-      },
-      {
-        "particle_id": "smoke",
-        "origin": "CENTER",
-        "shape": "SPHERE",
-        "count": 90.0,
-        "min_speed": 0.1,
-        "max_speed": 0.3
-      },
-      {
-        "particle_id": "spell_engine:area_effect_473",
-        "origin": "GROUND",
-        "shape": "SPHERE",
-        "count": 1.0,
-        "max_speed": 0.0,
-        "color_rgba": 4281532671,
-        "scale": 3.0
-      }
-    ],
+    "visuals": {
+      "particles": [
+        {
+          "id": "lava",
+          "appearance": {},
+          "batch": {
+            "count": 90.0,
+            "shape": "CIRCLE",
+            "anchor": "ENTITY",
+            "min_speed": 1.5,
+            "max_speed": 6.0
+          }
+        },
+        {
+          "id": "flame",
+          "appearance": {},
+          "batch": {
+            "count": 100.0,
+            "shape": "SPHERE",
+            "anchor": "ENTITY",
+            "min_speed": 0.2,
+            "max_speed": 0.4
+          }
+        },
+        {
+          "id": "smoke",
+          "appearance": {},
+          "batch": {
+            "count": 90.0,
+            "shape": "SPHERE",
+            "anchor": "ENTITY",
+            "min_speed": 0.1,
+            "max_speed": 0.3
+          }
+        },
+        {
+          "id": "spell_engine:area_effect_473",
+          "appearance": {
+            "color": 4281532671,
+            "scale": 3.0,
+            "facing": "GROUND"
+          },
+          "batch": {
+            "count": 1.0,
+            "shape": "NONE",
+            "anchor": "GROUND"
+          }
+        }
+      ]
+    },
     "sound": {
       "id": "wizards:fire_meteor_impact",
       "volume": 1.5

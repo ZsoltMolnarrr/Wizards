@@ -4,10 +4,13 @@ import net.minecraft.util.Identifier;
 import net.spell_engine.api.datagen.SpellBuilder;
 import net.spell_engine.api.render.LightEmission;
 import net.spell_engine.api.spell.Spell;
+import net.spell_engine.api.spell.fx.Easing;
+import net.spell_engine.api.spell.fx.Fx;
 import net.spell_engine.api.spell.fx.ModelEffect;
 import net.spell_engine.api.spell.fx.ModelEffectBuilder;
 import net.spell_engine.api.spell.fx.PlayerAnimation;
-import net.spell_engine.api.spell.fx.ParticleBatch;
+import net.spell_engine.api.spell.fx.ParticleGroupBuilder;
+import net.spell_engine.api.spell.fx.ParticleGroup;
 import net.spell_engine.api.spell.fx.Sound;
 import net.spell_engine.client.gui.SpellTooltip;
 import net.spell_engine.client.util.Color;
@@ -94,23 +97,20 @@ public class WizardSpells {
     private static final Color FIRE_COLOR = Color.from(SpellSchools.FIRE.color);
     private static final Color FROST_COLOR = Color.from(SpellSchools.FROST.color);
 
-    private static ParticleBatch arcaneCastingParticles() {
-        return new ParticleBatch(
-                SpellEngineParticles.MagicParticles.get(
-                        SpellEngineParticles.MagicParticles.Shape.SPELL,
-                        SpellEngineParticles.MagicParticles.Motion.ASCEND
-                ).id().toString(),
-                ParticleBatch.Shape.WIDE_PIPE, ParticleBatch.Origin.FEET,
-                1, 0.05F, 0.1F)
-                .color(ARCANE_COLOR.toRGBA());
+    private static ParticleGroup arcaneCastingParticles() {
+        return ParticleGroupBuilder.magic(SpellEngineParticles.magic_spell, ParticleGroup.Motion.ASCEND)
+                       .color(ARCANE_COLOR.toRGBA())
+                       .batch(b -> b.shape(ParticleGroup.Shape.PIPE)
+                               .widthFactor(2F).verticalOrigin(ParticleGroupBuilder.Batches.FEET)
+                               .count(1).speed(0.05F, 0.1F));
     }
 
     // Fire spell helpers
-    private static ParticleBatch fireCastingParticles() {
-        return new ParticleBatch(
-                SpellEngineParticles.flame.id().toString(),
-                ParticleBatch.Shape.WIDE_PIPE, ParticleBatch.Origin.FEET,
-                1, 0.05F, 0.1F);
+    private static ParticleGroup fireCastingParticles() {
+        return ParticleGroupBuilder.of(SpellEngineParticles.flame)
+                       .batch(b -> b.shape(ParticleGroup.Shape.PIPE)
+                               .widthFactor(2F).verticalOrigin(ParticleGroupBuilder.Batches.FEET)
+                               .count(1).speed(0.05F, 0.1F));
     }
 
     private static void configureFireRuneCost(Spell spell) {
@@ -121,23 +121,20 @@ public class WizardSpells {
         spell.cost.item.id = "runes:fire_stone";
     }
 
-    private static ParticleBatch[] fireImpactParticles() {
-        return new ParticleBatch[] {
-                new ParticleBatch("smoke",
-                        ParticleBatch.Shape.SPHERE, ParticleBatch.Origin.CENTER,
-                        15, 0.01F, 0.1F),
-                new ParticleBatch("flame",
-                        ParticleBatch.Shape.SPHERE, ParticleBatch.Origin.CENTER,
-                        10, 0.01F, 0.1F)
-        };
+    private static Fx.Visuals fireImpactVisuals() {
+        return Fx.Visuals.of(
+                ParticleGroupBuilder.of("smoke")
+                        .batch(b -> b.shape(ParticleGroup.Shape.SPHERE).count(15).speed(0.01F, 0.1F)),
+                ParticleGroupBuilder.of("flame")
+                        .batch(b -> b.shape(ParticleGroup.Shape.SPHERE).count(10).speed(0.01F, 0.1F))
+        );
     }
 
     // Frost spell helpers
-    private static ParticleBatch frostCastingParticles() {
-        return new ParticleBatch(
-                SpellEngineParticles.snowflake.id().toString(),
-                ParticleBatch.Shape.WIDE_PIPE, ParticleBatch.Origin.CENTER,
-                0.5F, 0.1F, 0.2F);
+    private static ParticleGroup frostCastingParticles() {
+        return ParticleGroupBuilder.of(SpellEngineParticles.snowflake)
+                       .batch(b -> b.shape(ParticleGroup.Shape.PIPE)
+                               .widthFactor(2F).count(0.5F).speed(0.1F, 0.2F));
     }
 
     private static void configureFrostRuneCost(Spell spell) {
@@ -148,17 +145,12 @@ public class WizardSpells {
         spell.cost.item.id = "runes:frost_stone";
     }
 
-    private static ParticleBatch[] frostImpactParticles() {
-        return new ParticleBatch[] {
-                new ParticleBatch(
-                        SpellEngineParticles.MagicParticles.get(
-                                SpellEngineParticles.MagicParticles.Shape.FROST,
-                                SpellEngineParticles.MagicParticles.Motion.BURST
-                        ).id().toString(),
-                        ParticleBatch.Shape.SPHERE, ParticleBatch.Origin.CENTER,
-                        50, 0.2F, 0.7F)
+    private static Fx.Visuals frostImpactVisuals() {
+        return Fx.Visuals.of(
+                ParticleGroupBuilder.magic(SpellEngineParticles.magic_frost, ParticleGroup.Motion.BURST)
                         .color(FROST_COLOR.toRGBA())
-        };
+                        .batch(b -> b.shape(ParticleGroup.Shape.SPHERE).count(50).speed(0.2F, 0.7F))
+        );
     }
 
     public static Entry arcane_bolt = add(arcane_bolt());
@@ -174,7 +166,7 @@ public class WizardSpells {
         spell.active.cast.duration = 1;
         spell.active.cast.animation = PlayerAnimation.of("spell_engine:one_handed_projectile_charge");
         spell.active.cast.sound = new Sound(SpellEngineSounds.GENERIC_ARCANE_CASTING.id(), 0);
-        spell.active.cast.particles = new ParticleBatch[] { arcaneCastingParticles() };
+        spell.active.cast.particles = List.of( arcaneCastingParticles() );
 
         spell.release = new Spell.Release();
         spell.release.animation = PlayerAnimation.of("spell_engine:one_handed_projectile_release");
@@ -189,30 +181,22 @@ public class WizardSpells {
         projectile.homing_angle = 1F;
         projectile.client_data = new Spell.ProjectileData.Client();
         projectile.client_data.light_level = 10;
-        projectile.client_data.travel_particles = new ParticleBatch[] {
-                new ParticleBatch(
-                        SpellEngineParticles.MagicParticles.get(
-                                SpellEngineParticles.MagicParticles.Shape.SPELL,
-                                SpellEngineParticles.MagicParticles.Motion.ASCEND
-                        ).id().toString(),
-                        ParticleBatch.Shape.CIRCLE, ParticleBatch.Origin.CENTER,
-                        ParticleBatch.Rotation.LOOK, 1, 0.05F, 0.1F, 0.0F, 0F)
+        projectile.client_data.travel_particles = List.of(
+                ParticleGroupBuilder.magic(SpellEngineParticles.magic_spell, ParticleGroup.Motion.ASCEND)
                         .color(ARCANE_COLOR.toRGBA())
-        };
+                        .batch(b -> b.shape(ParticleGroup.Shape.CIRCLE)
+                                .alignment(ParticleGroup.Alignment.LOOK).count(1)
+                                .speed(0.05F, 0.1F))
+        );
         projectile.client_data.composite_model = SpellBuilder.ProjectileModels.single("wizards:spell_projectile/arcane_bolt", 0.5F);
         spell.deliver.projectile.projectile = projectile;
 
         var damage = SpellBuilder.Impacts.damage(0.7F, 0.6F);
-        damage.particles = new ParticleBatch[] {
-                new ParticleBatch(
-                        SpellEngineParticles.MagicParticles.get(
-                                SpellEngineParticles.MagicParticles.Shape.ARCANE,
-                                SpellEngineParticles.MagicParticles.Motion.BURST
-                        ).id().toString(),
-                        ParticleBatch.Shape.SPHERE, ParticleBatch.Origin.CENTER,
-                        null, 20, 0.2F, 0.7F, 0.0F, 0F)
+        damage.visuals = Fx.Visuals.of(
+                ParticleGroupBuilder.magic(SpellEngineParticles.magic_arcane, ParticleGroup.Motion.BURST)
                         .color(ARCANE_COLOR.toRGBA())
-        };
+                        .batch(b -> b.shape(ParticleGroup.Shape.SPHERE).count(20).speed(0.2F, 0.7F))
+        );
         damage.sound = new Sound(WizardsSounds.ARCANE_MISSILE_IMPACT.id());
         spell.impacts = List.of(damage);
 
@@ -239,7 +223,7 @@ public class WizardSpells {
         spell.active.cast.duration = 1.5F;
         spell.active.cast.animation = PlayerAnimation.of("spell_engine:one_handed_projectile_charge");
         spell.active.cast.sound = new Sound(SpellEngineSounds.GENERIC_ARCANE_CASTING.id(), 0);
-        spell.active.cast.particles = new ParticleBatch[] { arcaneCastingParticles() };
+        spell.active.cast.particles = List.of( arcaneCastingParticles() );
 
         spell.release = new Spell.Release();
         spell.release.animation = PlayerAnimation.of("spell_engine:one_handed_projectile_release");
@@ -250,20 +234,13 @@ public class WizardSpells {
         spell.target.aim.sticky = true;
 
         var damage = SpellBuilder.Impacts.damage(0.8F, 0.5F);
-        damage.particles = new ParticleBatch[] {
-                new ParticleBatch(
-                        SpellEngineParticles.MagicParticles.get(
-                                SpellEngineParticles.MagicParticles.Shape.ARCANE,
-                                SpellEngineParticles.MagicParticles.Motion.BURST
-                        ).id().toString(),
-                        ParticleBatch.Shape.SPHERE, ParticleBatch.Origin.CENTER,
-                        30, 0.2F, 0.7F)
-                        .color(ARCANE_COLOR.toRGBA()),
-                new ParticleBatch(
-                        "firework",
-                        ParticleBatch.Shape.SPHERE, ParticleBatch.Origin.CENTER,
-                        20, 0.05F, 0.2F)
-        };
+        damage.visuals = Fx.Visuals.of(
+                ParticleGroupBuilder.magic(SpellEngineParticles.magic_arcane, ParticleGroup.Motion.BURST)
+                        .color(ARCANE_COLOR.toRGBA())
+                        .batch(b -> b.shape(ParticleGroup.Shape.SPHERE).count(30).speed(0.2F, 0.7F)),
+                ParticleGroupBuilder.of("firework")
+                        .batch(b -> b.shape(ParticleGroup.Shape.SPHERE).count(20).speed(0.05F, 0.2F))
+        );
         damage.sound = new Sound(WizardsSounds.ARCANE_BLAST_IMPACT.id());
 
         var arcaneCharge = SpellBuilder.Impacts.effectAdd(WizardsEffects.arcaneCharge.id.toString(), 10, 1, 2);
@@ -295,7 +272,7 @@ public class WizardSpells {
         SpellBuilder.Casting.channel(spell, 4, 12);
         spell.active.cast.animation = PlayerAnimation.of("spell_engine:two_handed_channeling");
         spell.active.cast.sound = new Sound(SpellEngineSounds.GENERIC_ARCANE_CASTING.id(), 0);
-        spell.active.cast.particles = new ParticleBatch[] { arcaneCastingParticles() };
+        spell.active.cast.particles = List.of( arcaneCastingParticles() );
 
         spell.release = new Spell.Release();
 
@@ -323,30 +300,22 @@ public class WizardSpells {
         projectile.perks.bounce = 1;
         projectile.client_data = new Spell.ProjectileData.Client();
         projectile.client_data.light_level = 12;
-        projectile.client_data.travel_particles = new ParticleBatch[] {
-                new ParticleBatch(
-                        SpellEngineParticles.MagicParticles.get(
-                                SpellEngineParticles.MagicParticles.Shape.SPELL,
-                                SpellEngineParticles.MagicParticles.Motion.ASCEND
-                        ).id().toString(),
-                        ParticleBatch.Shape.CIRCLE, ParticleBatch.Origin.CENTER,
-                        ParticleBatch.Rotation.LOOK, 2, 0.05F, 0.1F, 0)
+        projectile.client_data.travel_particles = List.of(
+                ParticleGroupBuilder.magic(SpellEngineParticles.magic_spell, ParticleGroup.Motion.ASCEND)
                         .color(ARCANE_COLOR.toRGBA())
-        };
+                        .batch(b -> b.shape(ParticleGroup.Shape.CIRCLE)
+                                .alignment(ParticleGroup.Alignment.LOOK).count(2)
+                                .speed(0.05F, 0.1F))
+        );
         projectile.client_data.composite_model = SpellBuilder.ProjectileModels.single("wizards:spell_projectile/arcane_missile", 0.6F);
         spell.deliver.projectile.projectile = projectile;
 
         var damage = SpellBuilder.Impacts.damage(0.8F, 0.5F);
-        damage.particles = new ParticleBatch[] {
-                new ParticleBatch(
-                        SpellEngineParticles.MagicParticles.get(
-                                SpellEngineParticles.MagicParticles.Shape.ARCANE,
-                                SpellEngineParticles.MagicParticles.Motion.BURST
-                        ).id().toString(),
-                        ParticleBatch.Shape.SPHERE, ParticleBatch.Origin.CENTER,
-                        40, 0.2F, 0.7F)
+        damage.visuals = Fx.Visuals.of(
+                ParticleGroupBuilder.magic(SpellEngineParticles.magic_arcane, ParticleGroup.Motion.BURST)
                         .color(ARCANE_COLOR.toRGBA())
-        };
+                        .batch(b -> b.shape(ParticleGroup.Shape.SPHERE).count(40).speed(0.2F, 0.7F))
+        );
         damage.sound = new Sound(WizardsSounds.ARCANE_MISSILE_IMPACT.id());
         spell.impacts = List.of(damage);
 
@@ -373,7 +342,7 @@ public class WizardSpells {
         spell.active.cast.duration = 1.5F;
         spell.active.cast.animation = PlayerAnimation.of("spell_engine:one_handed_area_charge");
         spell.active.cast.sound = new Sound(SpellEngineSounds.GENERIC_ARCANE_CASTING.id(), 0);
-        spell.active.cast.particles = new ParticleBatch[] { arcaneCastingParticles() };
+        spell.active.cast.particles = List.of( arcaneCastingParticles() );
 
         spell.target.type = Spell.Target.Type.AREA;
         spell.target.area = new Spell.Target.Area();
@@ -382,50 +351,32 @@ public class WizardSpells {
         spell.release = new Spell.Release();
         spell.release.animation = PlayerAnimation.of("spell_engine:one_handed_area_release");
         spell.release.sound = new Sound(WizardsSounds.ARCANE_EXPLOSION_RELEASE.id());
-        spell.release.particles = new ParticleBatch[] {
-                new ParticleBatch(
-                        SpellEngineParticles.MagicParticles.get(
-                                SpellEngineParticles.MagicParticles.Shape.SPARK,
-                                SpellEngineParticles.MagicParticles.Motion.DECELERATE
-                        ).id().toString(),
-                        ParticleBatch.Shape.SPHERE, ParticleBatch.Origin.CENTER,
-                        80, 0.7F, 0.7F)
-                        .color(ARCANE_COLOR_LIGHT.toRGBA()),
-                new ParticleBatch(
-                        SpellEngineParticles.MagicParticles.get(
-                                SpellEngineParticles.MagicParticles.Shape.SPARK,
-                                SpellEngineParticles.MagicParticles.Motion.DECELERATE
-                        ).id().toString(),
-                        ParticleBatch.Shape.SPHERE, ParticleBatch.Origin.CENTER,
-                        80, 0.7F, 0.7F)
-                        .color(ARCANE_COLOR.toRGBA()).preSpawnTravel(2)
-        };
-        spell.release.particles_scaled_with_ranged = new ParticleBatch[] {
-                new ParticleBatch(
-                        SpellEngineParticles.area_effect_574.id().toString(),
-                        ParticleBatch.Shape.SPHERE, ParticleBatch.Origin.CENTER,
-                        1, 0, 0)
-                        .scale(0.8F)
-                        .color(ARCANE_COLOR_LIGHT.toRGBA()),
-                new ParticleBatch(
-                        SpellEngineParticles.aura_effect_574.id().toString(),
-                        ParticleBatch.Shape.SPHERE, ParticleBatch.Origin.CENTER,
-                        1, 0, 0)
-                        .scale(0.8F)
+        spell.release.visuals = Fx.Visuals.of(
+                ParticleGroupBuilder.magic(SpellEngineParticles.magic_spark, ParticleGroup.Motion.DECELERATE)
                         .color(ARCANE_COLOR_LIGHT.toRGBA())
-        };
+                        .batch(b -> b.shape(ParticleGroup.Shape.SPHERE).count(80).speed(0.7F)),
+                ParticleGroupBuilder.magic(SpellEngineParticles.magic_spark, ParticleGroup.Motion.DECELERATE)
+                        .color(ARCANE_COLOR.toRGBA())
+                        .batch(b -> b.shape(ParticleGroup.Shape.SPHERE).count(80).speed(0.7F).preTravel(2))
+                ,
+                // Sized to the spell's reach. `scale` stays at its default 1: `scale_with`
+                // multiplies, where the old `scaled_with_ranged` replaced.
+                ParticleGroupBuilder.of(SpellEngineParticles.area_effect_574)
+                        .scaleWith(Fx.ScaleWith.RANGE)
+                        .color(ARCANE_COLOR_LIGHT.toRGBA())
+                        .batch(ParticleGroupBuilder.Batches.placed(1)),
+                ParticleGroupBuilder.aura(SpellEngineParticles.area_effect_574)
+                        .scaleWith(Fx.ScaleWith.RANGE)
+                        .color(ARCANE_COLOR_LIGHT.toRGBA())
+                        .batch(ParticleGroupBuilder.Batches.placed(1))
+        );
 
         var damage = SpellBuilder.Impacts.damage(0.9F, 0.8F);
-        damage.particles = new ParticleBatch[] {
-                new ParticleBatch(
-                        SpellEngineParticles.MagicParticles.get(
-                                SpellEngineParticles.MagicParticles.Shape.SPELL,
-                                SpellEngineParticles.MagicParticles.Motion.BURST
-                        ).id().toString(),
-                        ParticleBatch.Shape.SPHERE, ParticleBatch.Origin.CENTER,
-                        30, 0.2F, 0.7F)
+        damage.visuals = Fx.Visuals.of(
+                ParticleGroupBuilder.magic(SpellEngineParticles.magic_spell, ParticleGroup.Motion.BURST)
                         .color(ARCANE_COLOR.toRGBA())
-        };
+                        .batch(b -> b.shape(ParticleGroup.Shape.SPHERE).count(30).speed(0.2F, 0.7F))
+        );
         damage.sound = new Sound(WizardsSounds.ARCANE_BLAST_IMPACT.id());
 
         spell.impacts = List.of(damage);
@@ -454,20 +405,19 @@ public class WizardSpells {
         spell.active.cast.animation = PlayerAnimation.of("spell_engine:two_handed_channeling");
         spell.active.cast.sound = new Sound(WizardsSounds.ARCANE_BEAM_CASTING.id(), 0);
         spell.active.cast.start_sound = new Sound(WizardsSounds.ARCANE_BEAM_START.id());
-        spell.active.cast.particles = new ParticleBatch[] {
-                new ParticleBatch(
-                        SpellEngineParticles.MagicParticles.get(
-                                SpellEngineParticles.MagicParticles.Shape.SPELL,
-                                SpellEngineParticles.MagicParticles.Motion.ASCEND
-                        ).id().toString(),
-                        ParticleBatch.Shape.PIPE, ParticleBatch.Origin.LAUNCH_POINT,
-                        ParticleBatch.Rotation.LOOK, 0.5F, 0.1F, 0.2F, 0)
-                        .color(ARCANE_COLOR.toRGBA()),
-                new ParticleBatch(
-                        "firework",
-                        ParticleBatch.Shape.WIDE_PIPE, ParticleBatch.Origin.LAUNCH_POINT,
-                        ParticleBatch.Rotation.LOOK, 0.5F, 0.1F, 0.2F, 0)
-        };
+        spell.active.cast.particles = List.of(
+                ParticleGroupBuilder.magic(SpellEngineParticles.magic_spell, ParticleGroup.Motion.ASCEND)
+                        .color(ARCANE_COLOR.toRGBA())
+                        .batch(b -> b.shape(ParticleGroup.Shape.PIPE)
+                                .anchor(ParticleGroup.Anchor.LAUNCH_POINT)
+                                .alignment(ParticleGroup.Alignment.LOOK).count(0.5F)
+                                .speed(0.1F, 0.2F)),
+                ParticleGroupBuilder.of("firework")
+                        .batch(b -> b.shape(ParticleGroup.Shape.PIPE)
+                                .widthFactor(2F).anchor(ParticleGroup.Anchor.LAUNCH_POINT)
+                                .alignment(ParticleGroup.Alignment.LOOK).count(0.5F)
+                                .speed(0.1F, 0.2F))
+        );
 
         spell.release = new Spell.Release();
         spell.release.sound = new Sound(WizardsSounds.ARCANE_BEAM_RELEASE.id());
@@ -477,52 +427,32 @@ public class WizardSpells {
         spell.target.beam.color_rgba = 0xFF66FFFFL;
         spell.target.beam.width = 0.08F;
         spell.target.beam.flow = 1.5F;
-        spell.target.beam.block_hit_particles = new ParticleBatch[] {
-                new ParticleBatch(
-                        SpellEngineParticles.MagicParticles.get(
-                                SpellEngineParticles.MagicParticles.Shape.SPELL,
-                                SpellEngineParticles.MagicParticles.Motion.ASCEND
-                        ).id().toString(),
-                        ParticleBatch.Shape.CIRCLE, ParticleBatch.Origin.CENTER,
-                        ParticleBatch.Rotation.LOOK, 1, 0.1F, 0.2F, 0)
-                        .color(ARCANE_COLOR.toRGBA()),
-                new ParticleBatch(
-                        "firework",
-                        ParticleBatch.Shape.CIRCLE, ParticleBatch.Origin.CENTER,
-                        ParticleBatch.Rotation.LOOK, 1, 0.1F, 0.2F, 0),
-                new ParticleBatch(
-                        SpellEngineParticles.MagicParticles.get(
-                                SpellEngineParticles.MagicParticles.Shape.ARCANE,
-                                SpellEngineParticles.MagicParticles.Motion.BURST
-                        ).id().toString(),
-                        ParticleBatch.Shape.SPHERE, ParticleBatch.Origin.CENTER,
-                        3, 0.3F, 0.4F)
+        spell.target.beam.block_hit = Fx.Visuals.of(
+                ParticleGroupBuilder.magic(SpellEngineParticles.magic_spell, ParticleGroup.Motion.ASCEND)
                         .color(ARCANE_COLOR.toRGBA())
-        };
+                        .batch(b -> b.shape(ParticleGroup.Shape.CIRCLE)
+                                .alignment(ParticleGroup.Alignment.LOOK).count(1)
+                                .speed(0.1F, 0.2F)),
+                ParticleGroupBuilder.of("firework")
+                        .batch(b -> b.shape(ParticleGroup.Shape.CIRCLE)
+                                .alignment(ParticleGroup.Alignment.LOOK).count(1)
+                                .speed(0.1F, 0.2F)),
+                ParticleGroupBuilder.magic(SpellEngineParticles.magic_arcane, ParticleGroup.Motion.BURST)
+                        .color(ARCANE_COLOR.toRGBA())
+                        .batch(b -> b.shape(ParticleGroup.Shape.SPHERE).count(3).speed(0.3F, 0.4F))
+        );
 
         var damage = SpellBuilder.Impacts.damage(1F, 1F);
-        damage.particles = new ParticleBatch[] {
-                new ParticleBatch(
-                        SpellEngineParticles.MagicParticles.get(
-                                SpellEngineParticles.MagicParticles.Shape.ARCANE,
-                                SpellEngineParticles.MagicParticles.Motion.BURST
-                        ).id().toString(),
-                        ParticleBatch.Shape.SPHERE, ParticleBatch.Origin.CENTER,
-                        4, 0.2F, 0.7F)
-                        .color(ARCANE_COLOR.toRGBA()),
-                new ParticleBatch(
-                        SpellEngineParticles.MagicParticles.get(
-                                SpellEngineParticles.MagicParticles.Shape.SPELL,
-                                SpellEngineParticles.MagicParticles.Motion.ASCEND
-                        ).id().toString(),
-                        ParticleBatch.Shape.SPHERE, ParticleBatch.Origin.CENTER,
-                        2, 0.1F, 0.2F)
-                        .color(ARCANE_COLOR.toRGBA()),
-                new ParticleBatch(
-                        "firework",
-                        ParticleBatch.Shape.SPHERE, ParticleBatch.Origin.CENTER,
-                        3, 0.1F, 0.2F)
-        };
+        damage.visuals = Fx.Visuals.of(
+                ParticleGroupBuilder.magic(SpellEngineParticles.magic_arcane, ParticleGroup.Motion.BURST)
+                        .color(ARCANE_COLOR.toRGBA())
+                        .batch(b -> b.shape(ParticleGroup.Shape.SPHERE).count(4).speed(0.2F, 0.7F)),
+                ParticleGroupBuilder.magic(SpellEngineParticles.magic_spell, ParticleGroup.Motion.ASCEND)
+                        .color(ARCANE_COLOR.toRGBA())
+                        .batch(b -> b.shape(ParticleGroup.Shape.SPHERE).count(2).speed(0.1F, 0.2F)),
+                ParticleGroupBuilder.of("firework")
+                        .batch(b -> b.shape(ParticleGroup.Shape.SPHERE).count(3).speed(0.1F, 0.2F))
+        );
         damage.sound = new Sound(WizardsSounds.ARCANE_BEAM_IMPACT.id());
         spell.impacts = List.of(damage);
 
@@ -595,27 +525,22 @@ public class WizardSpells {
         teleport.action.teleport.minimum_distance = 3F;
         teleport.action.teleport.fizzle = new Spell.Impact.Action.Teleport.Fizzle();
         teleport.action.teleport.fizzle.sound = Sound.withRandomness(SpellEngineSounds.NEGATIVE_FEEDBACK.id(), 0);
-        teleport.action.teleport.fizzle.particles = new ParticleBatch[] {
-                new ParticleBatch(
-                        "minecraft:smoke",
-                        ParticleBatch.Shape.SPHERE, ParticleBatch.Origin.FEET,
-                        12, 0.05F, 0.15F)
-        };
-        teleport.action.teleport.depart_particles = new ParticleBatch[] {
-                new ParticleBatch(
-                        "minecraft:portal",
-                        ParticleBatch.Shape.SPHERE, ParticleBatch.Origin.CENTER,
-                        40, 0.1F, 0.3F)
-                        .preSpawnTravel(1)
-        };
-        teleport.particles = new ParticleBatch[] {
-                new ParticleBatch(
-                        "minecraft:portal",
-                        ParticleBatch.Shape.SPHERE, ParticleBatch.Origin.CENTER,
-                        40, 0.1F, 0.3F)
-                        .invert()
-                        .preSpawnTravel(4)
-        };
+        teleport.action.teleport.fizzle.visuals = Fx.Visuals.of(
+                ParticleGroupBuilder.of("minecraft:smoke")
+                        .batch(b -> b.shape(ParticleGroup.Shape.SPHERE)
+                                .verticalOrigin(ParticleGroupBuilder.Batches.FEET).count(12)
+                                .speed(0.05F, 0.15F))
+        );
+        teleport.action.teleport.depart = Fx.Visuals.of(
+                ParticleGroupBuilder.of("minecraft:portal")
+                        .batch(b -> b.shape(ParticleGroup.Shape.SPHERE)
+                                .count(40).speed(0.1F, 0.3F).preTravel(1))
+        );
+        teleport.visuals = Fx.Visuals.of(
+                ParticleGroupBuilder.of("minecraft:portal")
+                        .batch(b -> b.shape(ParticleGroup.Shape.SPHERE)
+                                .count(40).speed(0.1F, 0.3F).invert(true).preTravel(4))
+        );
         spell.impacts = List.of(teleport);
 
         SpellBuilder.Cost.exhaust(spell, 0.4F);
@@ -646,28 +571,16 @@ public class WizardSpells {
         spell.active.cast.movement_speed = 0F;
         spell.active.cast.start_sound = new Sound(WizardsSounds.ARCANE_EVOCATION_START.id());
         spell.active.cast.sound = new Sound(WizardsSounds.ARCANE_EVOCATION_CASTING.id(), 0);
-        spell.active.cast.particles = new ParticleBatch[] {
-                new ParticleBatch(
-                        SpellEngineParticles.MagicParticles.get(
-                                SpellEngineParticles.MagicParticles.Shape.SPARK,
-                                SpellEngineParticles.MagicParticles.Motion.DECELERATE
-                        ).id().toString(),
-                        ParticleBatch.Shape.SPHERE, ParticleBatch.Origin.CENTER,
-                        8, 0.2F, 0.3F)
-                        .preSpawnTravel(6)
-                        .invert()
-                        .color(ARCANE_COLOR_LIGHT.toRGBA()),
-                new ParticleBatch(
-                        SpellEngineParticles.MagicParticles.get(
-                                SpellEngineParticles.MagicParticles.Shape.SPARK,
-                                SpellEngineParticles.MagicParticles.Motion.DECELERATE
-                        ).id().toString(),
-                        ParticleBatch.Shape.SPHERE, ParticleBatch.Origin.CENTER,
-                        8, 0.2F, 0.3F)
-                        .preSpawnTravel(6)
-                        .invert()
+        spell.active.cast.particles = List.of(
+                ParticleGroupBuilder.magic(SpellEngineParticles.magic_spark, ParticleGroup.Motion.DECELERATE)
+                        .color(ARCANE_COLOR_LIGHT.toRGBA())
+                        .batch(b -> b.shape(ParticleGroup.Shape.SPHERE)
+                                .count(8).speed(0.2F, 0.3F).preTravel(6).invert(true)),
+                ParticleGroupBuilder.magic(SpellEngineParticles.magic_spark, ParticleGroup.Motion.DECELERATE)
                         .color(ARCANE_COLOR.toRGBA())
-        };
+                        .batch(b -> b.shape(ParticleGroup.Shape.SPHERE)
+                                .count(8).speed(0.2F, 0.3F).preTravel(6).invert(true))
+        );
 
         spell.release = new Spell.Release();
         spell.release.sound = new Sound(WizardsSounds.ARCANE_EVOCATION_RELEASE.id());
@@ -705,7 +618,7 @@ public class WizardSpells {
         spell.active.cast.duration = 1.2F;
         spell.active.cast.animation = PlayerAnimation.of("spell_engine:one_handed_projectile_charge");
         spell.active.cast.sound = new Sound(SpellEngineSounds.GENERIC_FIRE_CASTING.id(), 0);
-        spell.active.cast.particles = new ParticleBatch[] { fireCastingParticles() };
+        spell.active.cast.particles = List.of( fireCastingParticles() );
 
         spell.release = new Spell.Release();
         spell.release.animation = PlayerAnimation.of("spell_engine:one_handed_projectile_release");
@@ -717,7 +630,7 @@ public class WizardSpells {
         spell.target.aim.sticky = true;
 
         var damage = SpellBuilder.Impacts.damage(0.6F, 0.6F);
-        damage.particles = fireImpactParticles();
+        damage.visuals = fireImpactVisuals();
         damage.sound = new Sound(WizardsSounds.FIRE_SCORCH_IMPACT.id());
 
         var fire = SpellBuilder.Impacts.fire(3);
@@ -746,7 +659,7 @@ public class WizardSpells {
         spell.active.cast.duration = 1.5F;
         spell.active.cast.animation = PlayerAnimation.of("spell_engine:one_handed_projectile_charge");
         spell.active.cast.sound = new Sound(SpellEngineSounds.GENERIC_FIRE_CASTING.id(), 0);
-        spell.active.cast.particles = new ParticleBatch[] { fireCastingParticles() };
+        spell.active.cast.particles = List.of( fireCastingParticles() );
 
         spell.release = new Spell.Release();
         spell.release.animation = PlayerAnimation.of("spell_engine:one_handed_projectile_release");
@@ -763,29 +676,24 @@ public class WizardSpells {
         projectile.homing_angle = 1F;
         projectile.client_data = new Spell.ProjectileData.Client();
         projectile.client_data.light_level = 12;
-        projectile.client_data.travel_particles = new ParticleBatch[] {
-                new ParticleBatch(
-                        SpellEngineParticles.flame.id().toString(),
-                        ParticleBatch.Shape.CIRCLE, ParticleBatch.Origin.CENTER,
-                        ParticleBatch.Rotation.LOOK, 3, 0, 0.1F, 0),
-                new ParticleBatch(
-                        "smoke",
-                        ParticleBatch.Shape.CIRCLE, ParticleBatch.Origin.CENTER,
-                        ParticleBatch.Rotation.LOOK, 1, 0, 0.1F, 0)
-        };
+        projectile.client_data.travel_particles = List.of(
+                ParticleGroupBuilder.of(SpellEngineParticles.flame)
+                        .batch(b -> b.shape(ParticleGroup.Shape.CIRCLE)
+                                .alignment(ParticleGroup.Alignment.LOOK).count(3).speed(0, 0.1F)),
+                ParticleGroupBuilder.of("smoke")
+                        .batch(b -> b.shape(ParticleGroup.Shape.CIRCLE)
+                                .alignment(ParticleGroup.Alignment.LOOK).count(1).speed(0, 0.1F))
+        );
         projectile.client_data.composite_model = SpellBuilder.ProjectileModels.single("wizards:spell_projectile/fireball", 0.5F);
         spell.deliver.projectile.projectile = projectile;
 
         var damage = SpellBuilder.Impacts.damage(0.8F, 0.8F);
-        damage.particles = new ParticleBatch[] {
-                new ParticleBatch("smoke",
-                        ParticleBatch.Shape.SPHERE, ParticleBatch.Origin.CENTER,
-                        15, 0.01F, 0.1F),
-                new ParticleBatch(
-                        SpellEngineParticles.flame_medium_b.id().toString(),
-                        ParticleBatch.Shape.CIRCLE, ParticleBatch.Origin.CENTER,
-                        15, 0.1F, 0.2F)
-        };
+        damage.visuals = Fx.Visuals.of(
+                ParticleGroupBuilder.of("smoke")
+                        .batch(b -> b.shape(ParticleGroup.Shape.SPHERE).count(15).speed(0.01F, 0.1F)),
+                ParticleGroupBuilder.of(SpellEngineParticles.flame_medium_b)
+                        .batch(b -> b.shape(ParticleGroup.Shape.CIRCLE).count(15).speed(0.1F, 0.2F))
+        );
         damage.sound = new Sound(WizardsSounds.FIRE_SCORCH_IMPACT.id());
 
         var fire = SpellBuilder.Impacts.fire(4);
@@ -814,7 +722,7 @@ public class WizardSpells {
         spell.active.cast.duration = 1.5F;
         spell.active.cast.animation = PlayerAnimation.of("spell_engine:one_handed_projectile_charge");
         spell.active.cast.sound = new Sound(SpellEngineSounds.GENERIC_FIRE_CASTING.id(), 0);
-        spell.active.cast.particles = new ParticleBatch[] { fireCastingParticles() };
+        spell.active.cast.particles = List.of( fireCastingParticles() );
 
         spell.release = new Spell.Release();
         spell.release.animation = PlayerAnimation.of("spell_engine:one_handed_projectile_release");
@@ -831,45 +739,37 @@ public class WizardSpells {
         projectile.homing_angle = 1F;
         projectile.client_data = new Spell.ProjectileData.Client();
         projectile.client_data.light_level = 12;
-        projectile.client_data.travel_particles = new ParticleBatch[] {
-                new ParticleBatch(
-                        SpellEngineParticles.flame_spark.id().toString(),
-                        ParticleBatch.Shape.CIRCLE, ParticleBatch.Origin.CENTER,
-                        ParticleBatch.Rotation.LOOK, 4, 0, 0.1F, 0),
-                new ParticleBatch(
-                        SpellEngineParticles.flame_medium_b.id().toString(),
-                        ParticleBatch.Shape.CIRCLE, ParticleBatch.Origin.CENTER,
-                        ParticleBatch.Rotation.LOOK, 3, 0, 0.1F, 0),
-                new ParticleBatch(
-                        "smoke",
-                        ParticleBatch.Shape.CIRCLE, ParticleBatch.Origin.CENTER,
-                        ParticleBatch.Rotation.LOOK, 2, 0, 0.1F, 0)
-        };
+        projectile.client_data.travel_particles = List.of(
+                ParticleGroupBuilder.of(SpellEngineParticles.flame_spark)
+                        .batch(b -> b.shape(ParticleGroup.Shape.CIRCLE)
+                                .alignment(ParticleGroup.Alignment.LOOK).count(4).speed(0, 0.1F)),
+                ParticleGroupBuilder.of(SpellEngineParticles.flame_medium_b)
+                        .batch(b -> b.shape(ParticleGroup.Shape.CIRCLE)
+                                .alignment(ParticleGroup.Alignment.LOOK).count(3).speed(0, 0.1F)),
+                ParticleGroupBuilder.of("smoke")
+                        .batch(b -> b.shape(ParticleGroup.Shape.CIRCLE)
+                                .alignment(ParticleGroup.Alignment.LOOK).count(2).speed(0, 0.1F))
+        );
         projectile.client_data.composite_model = SpellBuilder.ProjectileModels.single("wizards:spell_projectile/fire_blast", 0.9F);
         spell.deliver.projectile.projectile = projectile;
 
         var damage = SpellBuilder.Impacts.damage(1F, 1.1F);
-        damage.particles = new ParticleBatch[] {
-                new ParticleBatch("lava",
-                        ParticleBatch.Shape.CIRCLE, ParticleBatch.Origin.CENTER,
-                        15, 0.5F, 3F),
-                new ParticleBatch(
-                        SpellEngineParticles.flame_medium_b.id().toString(),
-                        ParticleBatch.Shape.CIRCLE, ParticleBatch.Origin.CENTER,
-                        10, 0.1F, 0.2F)
-        };
+        damage.visuals = Fx.Visuals.of(
+                ParticleGroupBuilder.of("lava")
+                        .batch(b -> b.shape(ParticleGroup.Shape.CIRCLE).count(15).speed(0.5F, 3F)),
+                ParticleGroupBuilder.of(SpellEngineParticles.flame_medium_b)
+                        .batch(b -> b.shape(ParticleGroup.Shape.CIRCLE).count(10).speed(0.1F, 0.2F))
+        );
 
         spell.impacts = List.of(damage);
 
         spell.area_impact = new Spell.AreaImpact();
         spell.area_impact.radius = 2.5F;
         spell.area_impact.area.distance_dropoff = Spell.Target.Area.DropoffCurve.SQUARED;
-        spell.area_impact.particles = new ParticleBatch[] {
-                new ParticleBatch(
-                        SpellEngineParticles.fire_explosion.id().toString(),
-                        ParticleBatch.Shape.SPHERE, ParticleBatch.Origin.CENTER,
-                        2, 0.2F, 0.5F)
-        };
+        spell.area_impact.visuals = Fx.Visuals.of(
+                ParticleGroupBuilder.of(SpellEngineParticles.fire_explosion)
+                        .batch(ParticleGroupBuilder.Batches.placed(2))
+        );
         spell.area_impact.sound = new Sound(WizardsSounds.FIREBALL_IMPACT.id());
 
         configureFireRuneCost(spell);
@@ -896,20 +796,23 @@ public class WizardSpells {
         spell.active.cast.animation = PlayerAnimation.of("spell_engine:two_handed_channeling");
         spell.active.cast.sound = new Sound(WizardsSounds.FIRE_BREATH_CASTING.id(), 0);
         spell.active.cast.start_sound = new Sound(WizardsSounds.FIRE_BREATH_START.id());
-        spell.active.cast.particles = new ParticleBatch[] {
-                new ParticleBatch(
-                        SpellEngineParticles.flame.id().toString(),
-                        ParticleBatch.Shape.CONE, ParticleBatch.Origin.LAUNCH_POINT,
-                        ParticleBatch.Rotation.LOOK, 8, 1, 1, 30),
-                new ParticleBatch(
-                        SpellEngineParticles.flame_medium_a.id().toString(),
-                        ParticleBatch.Shape.CONE, ParticleBatch.Origin.LAUNCH_POINT,
-                        ParticleBatch.Rotation.LOOK, 4, 1, 1, 30),
-                new ParticleBatch(
-                        SpellEngineParticles.flame_medium_b.id().toString(),
-                        ParticleBatch.Shape.CONE, ParticleBatch.Origin.LAUNCH_POINT,
-                        ParticleBatch.Rotation.LOOK, 4, 1, 1, 30)
-        };
+        spell.active.cast.particles = List.of(
+                ParticleGroupBuilder.of(SpellEngineParticles.flame)
+                        .batch(b -> b.shape(ParticleGroup.Shape.CONE)
+                                .anchor(ParticleGroup.Anchor.LAUNCH_POINT)
+                                .alignment(ParticleGroup.Alignment.LOOK).count(8).speed(1)
+                                .angle(30)),
+                ParticleGroupBuilder.of(SpellEngineParticles.flame_medium_a)
+                        .batch(b -> b.shape(ParticleGroup.Shape.CONE)
+                                .anchor(ParticleGroup.Anchor.LAUNCH_POINT)
+                                .alignment(ParticleGroup.Alignment.LOOK).count(4).speed(1)
+                                .angle(30)),
+                ParticleGroupBuilder.of(SpellEngineParticles.flame_medium_b)
+                        .batch(b -> b.shape(ParticleGroup.Shape.CONE)
+                                .anchor(ParticleGroup.Anchor.LAUNCH_POINT)
+                                .alignment(ParticleGroup.Alignment.LOOK).count(4).speed(1)
+                                .angle(30))
+        );
 
         spell.release = new Spell.Release();
         spell.release.sound = new Sound(WizardsSounds.FIRE_BREATH_RELEASE.id());
@@ -920,11 +823,10 @@ public class WizardSpells {
         spell.target.area.angle_degrees = 40;
 
         var damage = SpellBuilder.Impacts.damage(0.9F, 0.9F);
-        damage.particles = new ParticleBatch[] {
-                new ParticleBatch("lava",
-                        ParticleBatch.Shape.CIRCLE, ParticleBatch.Origin.CENTER,
-                        3, 0.5F, 3F)
-        };
+        damage.visuals = Fx.Visuals.of(
+                ParticleGroupBuilder.of("lava")
+                        .batch(b -> b.shape(ParticleGroup.Shape.CIRCLE).count(3).speed(0.5F, 3F))
+        );
         damage.sound = new Sound(WizardsSounds.FIRE_BREATH_IMPACT.id());
 
         var fire = SpellBuilder.Impacts.fire(2);
@@ -959,7 +861,7 @@ public class WizardSpells {
 
         spell.active.cast.animation = PlayerAnimation.of("spell_engine:one_handed_projectile_charge_3");
         spell.active.cast.sound = new Sound(SpellEngineSounds.GENERIC_FIRE_CASTING.id(), 0);
-        spell.active.cast.particles = new ParticleBatch[] { fireCastingParticles() };
+        spell.active.cast.particles = List.of( fireCastingParticles() );
 
         spell.release = new Spell.Release();
         spell.release.animation = PlayerAnimation.of("spell_engine:one_handed_projectile_release_3");
@@ -978,16 +880,12 @@ public class WizardSpells {
         projectile.hitbox.length = 1F;
         projectile.client_data = new Spell.ProjectileData.Client();
         projectile.client_data.light_level = 12;
-        projectile.client_data.travel_particles = new ParticleBatch[] {
-                new ParticleBatch(
-                        SpellEngineParticles.flame_medium_b.id().toString(),
-                        ParticleBatch.Shape.CIRCLE, ParticleBatch.Origin.CENTER,
-                        null, 6, 0.15F, 0.2F, 0),
-                new ParticleBatch(
-                        "smoke",
-                        ParticleBatch.Shape.CIRCLE, ParticleBatch.Origin.CENTER,
-                        null, 3, 0.15F, 0.2F, 0)
-        };
+        projectile.client_data.travel_particles = List.of(
+                ParticleGroupBuilder.of(SpellEngineParticles.flame_medium_b)
+                        .batch(b -> b.shape(ParticleGroup.Shape.CIRCLE).count(6).speed(0.15F, 0.2F)),
+                ParticleGroupBuilder.of("smoke")
+                        .batch(b -> b.shape(ParticleGroup.Shape.CIRCLE).count(3).speed(0.15F, 0.2F))
+        );
         projectile.travel_sound = Sound.of(WizardsSounds.FIRE_SLASH_TRAVEL.id());
         projectile.travel_sound_interval = 15;
         // Grow the slash from zero to its full 0.6 scale over its first 20 ticks. In projectile
@@ -997,22 +895,20 @@ public class WizardSpells {
         fireSlash.fx = ModelEffectBuilder.create("wizards:spell_projectile/fire_slash")
                 .scale(0.6F)
                 .light(LightEmission.GLOW_TRANSLUCENT)
-                .scaleIn(0, 20, ModelEffect.Easing.EASE_OUT_CUBIC)
+                .scaleIn(0, 20, Easing.EASE_OUT_CUBIC)
                 .build();
         projectile.client_data.composite_model = SpellBuilder.ProjectileModels.composite(fireSlash);
         spell.deliver.projectile.projectile = projectile;
 
         var damage = SpellBuilder.Impacts.damage(0.75F, 0.5F); // full-charge value (charge scales down to min_output_ratio)
-        damage.particles = new ParticleBatch[] {
-                new ParticleBatch(
-                        SpellEngineParticles.flame.id().toString(),
-                        ParticleBatch.Shape.CIRCLE, ParticleBatch.Origin.CENTER,
-                        ParticleBatch.Rotation.LOOK, 3, 0, 0.1F, 0),
-                new ParticleBatch(
-                        "smoke",
-                        ParticleBatch.Shape.CIRCLE, ParticleBatch.Origin.CENTER,
-                        ParticleBatch.Rotation.LOOK, 1, 0, 0.1F, 0)
-        };
+        damage.visuals = Fx.Visuals.of(
+                ParticleGroupBuilder.of(SpellEngineParticles.flame)
+                        .batch(b -> b.shape(ParticleGroup.Shape.CIRCLE)
+                                .alignment(ParticleGroup.Alignment.LOOK).count(3).speed(0, 0.1F)),
+                ParticleGroupBuilder.of("smoke")
+                        .batch(b -> b.shape(ParticleGroup.Shape.CIRCLE)
+                                .alignment(ParticleGroup.Alignment.LOOK).count(1).speed(0, 0.1F))
+        );
         damage.sound = new Sound(WizardsSounds.FIRE_SLASH_IMPACT.id());
 
         var fire = SpellBuilder.Impacts.fire(3);
@@ -1041,7 +937,7 @@ public class WizardSpells {
         spell.active.cast.duration = 1F;
         spell.active.cast.animation = PlayerAnimation.of("spell_engine:one_handed_projectile_charge");
         spell.active.cast.sound = new Sound(SpellEngineSounds.GENERIC_FIRE_CASTING.id(), 0);
-        spell.active.cast.particles = new ParticleBatch[] { fireCastingParticles() };
+        spell.active.cast.particles = List.of( fireCastingParticles() );
 
         spell.release = new Spell.Release();
         spell.release.animation = PlayerAnimation.of("spell_engine:one_handed_area_release");
@@ -1062,30 +958,28 @@ public class WizardSpells {
         var projectile = new Spell.ProjectileData();
         projectile.client_data = new Spell.ProjectileData.Client();
         projectile.client_data.light_level = 12;
-        projectile.client_data.travel_particles = new ParticleBatch[] {
-                new ParticleBatch(
-                        SpellEngineParticles.flame.id().toString(),
-                        ParticleBatch.Shape.CIRCLE, ParticleBatch.Origin.CENTER,
-                        ParticleBatch.Rotation.LOOK, 3, 0, 0.1F, 0),
-                new ParticleBatch(
-                        "smoke",
-                        ParticleBatch.Shape.CIRCLE, ParticleBatch.Origin.CENTER,
-                        ParticleBatch.Rotation.LOOK, 5, 0.1F, 0.3F, 0),
-                new ParticleBatch(
-                        "campfire_cosy_smoke",
-                        ParticleBatch.Shape.CIRCLE, ParticleBatch.Origin.CENTER,
-                        ParticleBatch.Rotation.LOOK, 6, 0, 0.05F, 0)
-        };
+        projectile.client_data.travel_particles = List.of(
+                ParticleGroupBuilder.of(SpellEngineParticles.flame)
+                        .batch(b -> b.shape(ParticleGroup.Shape.CIRCLE)
+                                .alignment(ParticleGroup.Alignment.LOOK).count(3).speed(0, 0.1F)),
+                ParticleGroupBuilder.of("smoke")
+                        .batch(b -> b.shape(ParticleGroup.Shape.CIRCLE)
+                                .alignment(ParticleGroup.Alignment.LOOK).count(5)
+                                .speed(0.1F, 0.3F)),
+                ParticleGroupBuilder.of("campfire_cosy_smoke")
+                        .batch(b -> b.shape(ParticleGroup.Shape.CIRCLE)
+                                .alignment(ParticleGroup.Alignment.LOOK).count(6)
+                                .speed(0, 0.05F))
+        );
         projectile.client_data.composite_model = SpellBuilder.ProjectileModels.single("wizards:spell_projectile/fire_meteor");
         spell.deliver.meteor.projectile = projectile;
 
         var damage = SpellBuilder.Impacts.damage(1F, 2F);
         damage.action.damage.spell_power_coefficient = 1F;
-        damage.particles = new ParticleBatch[] {
-                new ParticleBatch("lava",
-                        ParticleBatch.Shape.CIRCLE, ParticleBatch.Origin.CENTER,
-                        3, 0.5F, 3F)
-        };
+        damage.visuals = Fx.Visuals.of(
+                ParticleGroupBuilder.of("lava")
+                        .batch(b -> b.shape(ParticleGroup.Shape.CIRCLE).count(3).speed(0.5F, 3F))
+        );
         damage.sound = new Sound(WizardsSounds.FIRE_BREATH_IMPACT.id());
         spell.impacts = List.of(damage);
 
@@ -1093,20 +987,18 @@ public class WizardSpells {
         var impactRadius = 6F;
         spell.area_impact.radius = impactRadius;
         spell.area_impact.area.distance_dropoff = Spell.Target.Area.DropoffCurve.SQUARED;
-        spell.area_impact.particles = new ParticleBatch[] {
-                new ParticleBatch("lava",
-                        ParticleBatch.Shape.CIRCLE, ParticleBatch.Origin.CENTER,
-                        90, 1.5F, 6F),
-                new ParticleBatch("flame",
-                        ParticleBatch.Shape.SPHERE, ParticleBatch.Origin.CENTER,
-                        100, 0.2F, 0.4F),
-                new ParticleBatch("smoke",
-                        ParticleBatch.Shape.SPHERE, ParticleBatch.Origin.CENTER,
-                        90, 0.1F, 0.3F),
-                SpellBuilder.Particles.area(SpellEngineParticles.area_effect_473.id())
+        spell.area_impact.visuals = Fx.Visuals.of(
+                ParticleGroupBuilder.of("lava")
+                        .batch(b -> b.shape(ParticleGroup.Shape.CIRCLE).count(90).speed(1.5F, 6F)),
+                ParticleGroupBuilder.of("flame")
+                        .batch(b -> b.shape(ParticleGroup.Shape.SPHERE).count(100).speed(0.2F, 0.4F)),
+                ParticleGroupBuilder.of("smoke")
+                        .batch(b -> b.shape(ParticleGroup.Shape.SPHERE).count(90).speed(0.1F, 0.3F)),
+                ParticleGroupBuilder.zone(SpellEngineParticles.area_effect_473)
                         .scale(impactRadius * 0.5F)
-                        .color(FIRE_COLOR.toRGBA())
-        };
+                        .color(FIRE_COLOR)
+                        .batch(ParticleGroupBuilder.Batches.ground(1))
+        );
         spell.area_impact.sound = Sound.withVolume(WizardsSounds.FIRE_METEOR_IMPACT.id(), 1.5F);
 
         SpellBuilder.Cost.exhaust(spell, 0.3F);
@@ -1134,35 +1026,32 @@ public class WizardSpells {
         spell.active.cast.animation = PlayerAnimation.of("spell_engine:one_handed_levitate_channel");
         spell.active.cast.start_sound = new Sound(WizardsSounds.FIRE_BREATH_START.id());
         spell.active.cast.sound = new Sound(WizardsSounds.FIRE_BREATH_CASTING.id(), 0);
-        spell.active.cast.particles = new ParticleBatch[] { fireCastingParticles() };
+        spell.active.cast.particles = List.of( fireCastingParticles() );
         spell.active.cast.movement_speed = 0;
 
 
         spell.release = new Spell.Release();
         spell.release.sound = Sound.withVolume(WizardsSounds.FIRE_STORM_RELEASE.id(), 1.2F);
-        spell.release.particles = new ParticleBatch[] {
-                new ParticleBatch("lava",
-                        ParticleBatch.Shape.CIRCLE, ParticleBatch.Origin.GROUND,
-                        90, 2.5F, 3F)
-                        .extent(1)
-        };
-        spell.release.particles_scaled_with_ranged = new ParticleBatch[] {
-                new ParticleBatch(
-                        SpellEngineParticles.area_effect_748.id().toString(),
-                        ParticleBatch.Shape.SPHERE, ParticleBatch.Origin.CENTER,
-                        1, 0, 0)
-                        .scale(0.8F)
-                        .color(0xFF4400FFL),
-        };
+        spell.release.visuals = Fx.Visuals.of(
+                ParticleGroupBuilder.of("lava")
+                        .batch(b -> b.shape(ParticleGroup.Shape.CIRCLE)
+                                .anchor(ParticleGroup.Anchor.GROUND).count(90).speed(2.5F, 3F)
+                                .extent(1))
+                ,
+                ParticleGroupBuilder.of(SpellEngineParticles.area_effect_748)
+                        .scaleWith(Fx.ScaleWith.RANGE)
+                        .color(0xFF4400FFL)
+                        .batch(ParticleGroupBuilder.Batches.placed(1))
+        );
 //        spell.release.model_fx = ModelEffectBuilder.forEach(
 //                ModelEffectBuilder.Preset.orbiters(
-//                        "wizards:spell_projectile/fire_wave", 3, 2.0F, -360F, 20, ModelEffect.Easing.EASE_IN_OUT_CUBIC),
+//                        "wizards:spell_projectile/fire_wave", 3, 2.0F, -360F, 20, Easing.EASE_IN_OUT_CUBIC),
 //                e -> { e
 //                        .initialScale(0)
-//                        .scaleIn(0, 5, ModelEffect.Easing.EASE_IN_OUT_CUBIC)
-//                        .translate(0, 0, 0.5F, 0, 5, ModelEffect.Easing.EASE_IN_CUBIC)
-//                        .scaleOut(15, 20, ModelEffect.Easing.EASE_IN_OUT_CUBIC)
-//                        .translate(0, 0,-0.5F, 15, 20, ModelEffect.Easing.EASE_IN_CUBIC)
+//                        .scaleIn(0, 5, Easing.EASE_IN_OUT_CUBIC)
+//                        .translate(0, 0, 0.5F, 0, 5, Easing.EASE_IN_CUBIC)
+//                        .scaleOut(15, 20, Easing.EASE_IN_OUT_CUBIC)
+//                        .translate(0, 0,-0.5F, 15, 20, Easing.EASE_IN_CUBIC)
 //                    ;
 //                }
 //        );
@@ -1174,11 +1063,10 @@ public class WizardSpells {
         spell.target.area.vertical_range_multiplier = 0.5F;
 
         var damage = SpellBuilder.Impacts.damage(0.8F, 0.5F);
-        damage.particles = new ParticleBatch[] {
-                new ParticleBatch("lava",
-                        ParticleBatch.Shape.CIRCLE, ParticleBatch.Origin.CENTER,
-                        3, 0.5F, 3F)
-        };
+        damage.visuals = Fx.Visuals.of(
+                ParticleGroupBuilder.of("lava")
+                        .batch(b -> b.shape(ParticleGroup.Shape.CIRCLE).count(3).speed(0.5F, 3F))
+        );
         damage.sound = new Sound(WizardsSounds.FIRE_BREATH_IMPACT.id());
 
         var fire = SpellBuilder.Impacts.fire(2);
@@ -1223,31 +1111,35 @@ public class WizardSpells {
         cloud.time_to_live_seconds = 8;
         cloud.spawn = new Spell.Delivery.Cloud.Spawn();
         cloud.spawn.sound = new Sound(WizardsSounds.FIRE_WALL_IGNITE.id());
-        cloud.spawn.particles = new ParticleBatch[] {
-                new ParticleBatch(
-                        SpellEngineParticles.flame.id().toString(),
-                        ParticleBatch.Shape.PILLAR, ParticleBatch.Origin.FEET,
-                        15, 0.1F, 0.5F)
-        };
+        cloud.spawn.visuals = Fx.Visuals.of(
+                ParticleGroupBuilder.of(SpellEngineParticles.flame)
+                        .batch(b -> b.shape(ParticleGroup.Shape.PILLAR)
+                                .verticalOrigin(ParticleGroupBuilder.Batches.FEET).count(15)
+                                .speed(0.1F, 0.5F))
+        );
         cloud.client_data = new Spell.Delivery.Cloud.ClientData();
         cloud.client_data.light_level = 15;
-        cloud.client_data.particles = new ParticleBatch[] {
-                new ParticleBatch(SpellEngineParticles.flame_ground.id().toString(),
-                        ParticleBatch.Shape.PILLAR, ParticleBatch.Origin.FEET,
-                        2, 0, 0),
-                new ParticleBatch(SpellEngineParticles.flame_medium_a.id().toString(),
-                        ParticleBatch.Shape.PILLAR, ParticleBatch.Origin.FEET,
-                        3, 0.02F, 0.3F),
-                new ParticleBatch(SpellEngineParticles.flame_medium_b.id().toString(),
-                        ParticleBatch.Shape.PILLAR, ParticleBatch.Origin.FEET,
-                        3, 0.01F, 0.35F),
-                new ParticleBatch(SpellEngineParticles.flame_spark.id().toString(),
-                        ParticleBatch.Shape.PILLAR, ParticleBatch.Origin.FEET,
-                        4, 0.05F, 0.3F),
-                new ParticleBatch("campfire_cosy_smoke",
-                        ParticleBatch.Shape.PILLAR, ParticleBatch.Origin.FEET,
-                        0.1F, 0.05F, 0.1F),
-        };
+        cloud.client_data.particles = List.of(
+                ParticleGroupBuilder.of(SpellEngineParticles.flame_ground)
+                        .batch(b -> b.shape(ParticleGroup.Shape.PILLAR)
+                                .verticalOrigin(ParticleGroupBuilder.Batches.FEET).count(2).speed(0)),
+                ParticleGroupBuilder.of(SpellEngineParticles.flame_medium_a)
+                        .batch(b -> b.shape(ParticleGroup.Shape.PILLAR)
+                                .verticalOrigin(ParticleGroupBuilder.Batches.FEET).count(3)
+                                .speed(0.02F, 0.3F)),
+                ParticleGroupBuilder.of(SpellEngineParticles.flame_medium_b)
+                        .batch(b -> b.shape(ParticleGroup.Shape.PILLAR)
+                                .verticalOrigin(ParticleGroupBuilder.Batches.FEET).count(3)
+                                .speed(0.01F, 0.35F)),
+                ParticleGroupBuilder.of(SpellEngineParticles.flame_spark)
+                        .batch(b -> b.shape(ParticleGroup.Shape.PILLAR)
+                                .verticalOrigin(ParticleGroupBuilder.Batches.FEET).count(4)
+                                .speed(0.05F, 0.3F)),
+                ParticleGroupBuilder.of("campfire_cosy_smoke")
+                        .batch(b -> b.shape(ParticleGroup.Shape.PILLAR)
+                                .verticalOrigin(ParticleGroupBuilder.Batches.FEET).count(0.1F)
+                                .speed(0.05F, 0.1F))
+        );
 
         // A row of 5 fire clouds, 2 blocks apart, 2 blocks in front of the caster, laid out left to
         // right (matching the release animation). The leftmost ignites immediately; the rest follow
@@ -1262,14 +1154,12 @@ public class WizardSpells {
         spell.deliver.clouds = List.of(cloud);
 
         var damage = SpellBuilder.Impacts.damage(0.8F, 0.4F);
-        damage.particles = new ParticleBatch[] {
-                new ParticleBatch("smoke",
-                        ParticleBatch.Shape.SPHERE, ParticleBatch.Origin.CENTER,
-                        15, 0.01F, 0.1F),
-                new ParticleBatch("flame",
-                        ParticleBatch.Shape.SPHERE, ParticleBatch.Origin.CENTER,
-                        10, 0.01F, 0.1F)
-        };
+        damage.visuals = Fx.Visuals.of(
+                ParticleGroupBuilder.of("smoke")
+                        .batch(b -> b.shape(ParticleGroup.Shape.SPHERE).count(15).speed(0.01F, 0.1F)),
+                ParticleGroupBuilder.of("flame")
+                        .batch(b -> b.shape(ParticleGroup.Shape.SPHERE).count(10).speed(0.01F, 0.1F))
+        );
         damage.sound = new Sound(WizardsSounds.FIRE_SCORCH_IMPACT.id());
         var fire = SpellBuilder.Impacts.fire(2);
         spell.impacts = List.of(damage, fire);
@@ -1323,7 +1213,7 @@ public class WizardSpells {
         spell.active.cast.duration = 1F;
         spell.active.cast.animation = PlayerAnimation.of("spell_engine:one_handed_projectile_charge");
         spell.active.cast.sound = new Sound(SpellEngineSounds.GENERIC_FROST_CASTING.id(), 0);
-        spell.active.cast.particles = new ParticleBatch[] { frostCastingParticles() };
+        spell.active.cast.particles = List.of( frostCastingParticles() );
 
         spell.release = new Spell.Release();
         spell.release.animation = PlayerAnimation.of("spell_engine:one_handed_projectile_release");
@@ -1339,30 +1229,22 @@ public class WizardSpells {
         var projectile = new Spell.ProjectileData();
         projectile.perks.bounce = 2;
         projectile.client_data = new Spell.ProjectileData.Client();
-        projectile.client_data.travel_particles = new ParticleBatch[] {
-                new ParticleBatch(
-                        SpellEngineParticles.MagicParticles.get(
-                                SpellEngineParticles.MagicParticles.Shape.FROST,
-                                SpellEngineParticles.MagicParticles.Motion.BURST
-                        ).id().toString(),
-                        ParticleBatch.Shape.CIRCLE, ParticleBatch.Origin.CENTER,
-                        ParticleBatch.Rotation.LOOK, 1, 0.1F, 0.2F, 0)
+        projectile.client_data.travel_particles = List.of(
+                ParticleGroupBuilder.magic(SpellEngineParticles.magic_frost, ParticleGroup.Motion.BURST)
                         .color(FROST_COLOR.toRGBA())
-        };
+                        .batch(b -> b.shape(ParticleGroup.Shape.CIRCLE)
+                                .alignment(ParticleGroup.Alignment.LOOK).count(1)
+                                .speed(0.1F, 0.2F))
+        );
         projectile.client_data.composite_model = SpellBuilder.ProjectileModels.single("wizards:spell_projectile/frost_shard", 0.75F);
         spell.deliver.projectile.projectile = projectile;
 
         var damage = SpellBuilder.Impacts.damage(0.6F, 1F);
-        damage.particles = new ParticleBatch[] {
-                new ParticleBatch(
-                        SpellEngineParticles.MagicParticles.get(
-                                SpellEngineParticles.MagicParticles.Shape.FROST,
-                                SpellEngineParticles.MagicParticles.Motion.BURST
-                        ).id().toString(),
-                        ParticleBatch.Shape.SPHERE, ParticleBatch.Origin.CENTER,
-                        25, 0.2F, 0.7F)
+        damage.visuals = Fx.Visuals.of(
+                ParticleGroupBuilder.magic(SpellEngineParticles.magic_frost, ParticleGroup.Motion.BURST)
                         .color(FROST_COLOR.toRGBA())
-        };
+                        .batch(b -> b.shape(ParticleGroup.Shape.SPHERE).count(25).speed(0.2F, 0.7F))
+        );
         damage.sound = new Sound(WizardsSounds.FROST_SHARD_IMPACT.id());
         spell.impacts = List.of(damage);
 
@@ -1389,7 +1271,7 @@ public class WizardSpells {
         spell.active.cast.duration = 1.1F;
         spell.active.cast.animation = PlayerAnimation.of("spell_engine:one_handed_projectile_charge");
         spell.active.cast.sound = new Sound(SpellEngineSounds.GENERIC_FROST_CASTING.id(), 0);
-        spell.active.cast.particles = new ParticleBatch[] { frostCastingParticles() };
+        spell.active.cast.particles = List.of( frostCastingParticles() );
 
         spell.release = new Spell.Release();
         spell.release.animation = PlayerAnimation.of("spell_engine:one_handed_projectile_release");
@@ -1408,20 +1290,16 @@ public class WizardSpells {
         projectile.perks.bounce = 2;
         projectile.client_data = new Spell.ProjectileData.Client();
         projectile.client_data.light_level = 12;
-        projectile.client_data.travel_particles = new ParticleBatch[] {
-                new ParticleBatch(
-                        SpellEngineParticles.snowflake.id().toString(),
-                        ParticleBatch.Shape.CIRCLE, ParticleBatch.Origin.CENTER,
-                        ParticleBatch.Rotation.LOOK, 4, 0, 0.1F, 0),
-                new ParticleBatch(
-                        SpellEngineParticles.MagicParticles.get(
-                                SpellEngineParticles.MagicParticles.Shape.FROST,
-                                SpellEngineParticles.MagicParticles.Motion.BURST
-                        ).id().toString(),
-                        ParticleBatch.Shape.CIRCLE, ParticleBatch.Origin.CENTER,
-                        ParticleBatch.Rotation.LOOK, 1, 0.1F, 0.2F, 0)
+        projectile.client_data.travel_particles = List.of(
+                ParticleGroupBuilder.of(SpellEngineParticles.snowflake)
+                        .batch(b -> b.shape(ParticleGroup.Shape.CIRCLE)
+                                .alignment(ParticleGroup.Alignment.LOOK).count(4).speed(0, 0.1F)),
+                ParticleGroupBuilder.magic(SpellEngineParticles.magic_frost, ParticleGroup.Motion.BURST)
                         .color(FROST_COLOR.toRGBA())
-        };
+                        .batch(b -> b.shape(ParticleGroup.Shape.CIRCLE)
+                                .alignment(ParticleGroup.Alignment.LOOK).count(1)
+                                .speed(0.1F, 0.2F))
+        );
         // Two-piece frostbolt: inner core spins one way, outer shell counter-rotates.
         var frostboltInner = SpellBuilder.ProjectileModels.model("wizards:spell_projectile/frostbolt_inner", 0.5F);
         var frostboltOuter = SpellBuilder.ProjectileModels.model("wizards:spell_projectile/frostbolt_outer", 0.5F);
@@ -1430,7 +1308,7 @@ public class WizardSpells {
         spell.deliver.projectile.projectile = projectile;
 
         var damage = SpellBuilder.Impacts.damage(0.8F, 1F);
-        damage.particles = frostImpactParticles();
+        damage.visuals = frostImpactVisuals();
         damage.sound = new Sound(SpellEngineSounds.GENERIC_FROST_IMPACT.id());
 
         var slowness = SpellBuilder.Impacts.effectAdd(WizardsEffects.frostSlowness.id.toString(), 5, 0, 1);
@@ -1438,12 +1316,10 @@ public class WizardSpells {
         slowness.action.status_effect.apply_limit.health_base = 100;
         slowness.action.status_effect.apply_limit.spell_power_multiplier = 4;
         slowness.action.status_effect.show_particles = false;
-        slowness.particles = new ParticleBatch[] {
-                new ParticleBatch(
-                        SpellEngineParticles.snowflake.id().toString(),
-                        ParticleBatch.Shape.SPHERE, ParticleBatch.Origin.CENTER,
-                        25, 0.1F, 0.4F)
-        };
+        slowness.visuals = Fx.Visuals.of(
+                ParticleGroupBuilder.of(SpellEngineParticles.snowflake)
+                        .batch(b -> b.shape(ParticleGroup.Shape.SPHERE).count(25).speed(0.1F, 0.4F))
+        );
 
         spell.impacts = List.of(damage, slowness);
 
@@ -1470,7 +1346,7 @@ public class WizardSpells {
         spell.active.cast.duration = 0.5F;
         spell.active.cast.animation = PlayerAnimation.of("spell_engine:one_handed_area_charge");
         spell.active.cast.sound = new Sound(SpellEngineSounds.GENERIC_FROST_CASTING.id(), 0);
-        spell.active.cast.particles = new ParticleBatch[] { frostCastingParticles() };
+        spell.active.cast.particles = List.of( frostCastingParticles() );
 
         spell.target.type = Spell.Target.Type.AREA;
         spell.target.area = new Spell.Target.Area();
@@ -1479,36 +1355,24 @@ public class WizardSpells {
         spell.release = new Spell.Release();
         spell.release.animation = PlayerAnimation.of("spell_engine:one_handed_area_release");
         spell.release.sound = new Sound(WizardsSounds.FROST_NOVA_RELEASE.id());
-        spell.release.particles = new ParticleBatch[] {
-                new ParticleBatch(
-                        SpellEngineParticles.snowflake.id().toString(),
-                        ParticleBatch.Shape.CIRCLE, ParticleBatch.Origin.CENTER,
-                        130, 0.2F, 0.6F),
-                new ParticleBatch(
-                        SpellEngineParticles.frost_shard.id().toString(),
-                        ParticleBatch.Shape.CIRCLE, ParticleBatch.Origin.CENTER,
-                        130, 0.5F, 0.9F)
-        };
-        spell.release.particles_scaled_with_ranged = new ParticleBatch[] {
-                new ParticleBatch(
-                        SpellEngineParticles.area_effect_293.id().toString(),
-                        ParticleBatch.Shape.SPHERE, ParticleBatch.Origin.GROUND,
-                        1, 0, 0)
-                        .scale(0.8F)
+        spell.release.visuals = Fx.Visuals.of(
+                ParticleGroupBuilder.of(SpellEngineParticles.snowflake)
+                        .batch(b -> b.shape(ParticleGroup.Shape.CIRCLE).count(130).speed(0.2F, 0.6F)),
+                ParticleGroupBuilder.of(SpellEngineParticles.frost_shard)
+                        .batch(b -> b.shape(ParticleGroup.Shape.CIRCLE).count(130).speed(0.5F, 0.9F))
+                ,
+                ParticleGroupBuilder.of(SpellEngineParticles.area_effect_293)
+                        .scaleWith(Fx.ScaleWith.RANGE)
                         .color(0x99E6FFFFL)
-        };
+                        .batch(ParticleGroupBuilder.Batches.ground(1))
+        );
 
         var damage = SpellBuilder.Impacts.damage(0.2F, 0.8F);
-        damage.particles = new ParticleBatch[] {
-                new ParticleBatch(
-                        SpellEngineParticles.MagicParticles.get(
-                                SpellEngineParticles.MagicParticles.Shape.FROST,
-                                SpellEngineParticles.MagicParticles.Motion.BURST
-                        ).id().toString(),
-                        ParticleBatch.Shape.SPHERE, ParticleBatch.Origin.CENTER,
-                        30, 0.2F, 0.7F)
+        damage.visuals = Fx.Visuals.of(
+                ParticleGroupBuilder.magic(SpellEngineParticles.magic_frost, ParticleGroup.Motion.BURST)
                         .color(FROST_COLOR.toRGBA())
-        };
+                        .batch(b -> b.shape(ParticleGroup.Shape.SPHERE).count(30).speed(0.2F, 0.7F))
+        );
         damage.sound = new Sound(WizardsSounds.FROST_NOVA_DAMAGE_IMPACT.id());
 
         var frozen = SpellBuilder.Impacts.effectAdd(WizardsEffects.frozen.id.toString(), 6, 1, 9);
@@ -1563,21 +1427,20 @@ public class WizardSpells {
         cloud.time_to_live_seconds = (SPIKE_APEX_TICK * 2 - 1) / 20F; // 39 ticks = 1.95s
         cloud.spawn = new Spell.Delivery.Cloud.Spawn();
         cloud.spawn.sound = new Sound(WizardsSounds.FROST_SPIKE_SPAWN.id());
-        cloud.spawn.particles = new ParticleBatch[] {
-                new ParticleBatch(
-                        SpellEngineParticles.snowflake.id().toString(),
-                        ParticleBatch.Shape.PILLAR, ParticleBatch.Origin.FEET,
-                        20, 0.1F, 0.5F)
-        };
-        cloud.spawn.model_fx = frostSpikeModelFx();
+        cloud.spawn.visuals = Fx.Visuals.of(
+                ParticleGroupBuilder.of(SpellEngineParticles.snowflake)
+                        .batch(b -> b.shape(ParticleGroup.Shape.PILLAR)
+                                .verticalOrigin(ParticleGroupBuilder.Batches.FEET).count(20)
+                                .speed(0.1F, 0.5F))
+        ).models(frostSpikeModelFx());
         cloud.client_data = new Spell.Delivery.Cloud.ClientData();
         cloud.client_data.light_level = 6;
-        cloud.client_data.particles = new ParticleBatch[] {
-                new ParticleBatch(
-                        SpellEngineParticles.snowflake.id().toString(),
-                        ParticleBatch.Shape.PILLAR, ParticleBatch.Origin.FEET,
-                        2, 0.02F, 0.3F)
-        };
+        cloud.client_data.particles = List.of(
+                ParticleGroupBuilder.of(SpellEngineParticles.snowflake)
+                        .batch(b -> b.shape(ParticleGroup.Shape.PILLAR)
+                                .verticalOrigin(ParticleGroupBuilder.Batches.FEET).count(2)
+                                .speed(0.02F, 0.3F))
+        );
 
         // Nine spike clouds marching straight forward away from the caster, 1.5 blocks apart, the
         // first 1.5 blocks out; each erupts 2 ticks after the previous one (like Wall of Flames).
@@ -1591,16 +1454,11 @@ public class WizardSpells {
 
         // Impacts mirror Frost Nova: frost damage + freeze.
         var damage = SpellBuilder.Impacts.damage(0.5F, 0F);
-        damage.particles = new ParticleBatch[] {
-                new ParticleBatch(
-                        SpellEngineParticles.MagicParticles.get(
-                                SpellEngineParticles.MagicParticles.Shape.FROST,
-                                SpellEngineParticles.MagicParticles.Motion.BURST
-                        ).id().toString(),
-                        ParticleBatch.Shape.SPHERE, ParticleBatch.Origin.CENTER,
-                        30, 0.2F, 0.7F)
+        damage.visuals = Fx.Visuals.of(
+                ParticleGroupBuilder.magic(SpellEngineParticles.magic_frost, ParticleGroup.Motion.BURST)
                         .color(FROST_COLOR.toRGBA())
-        };
+                        .batch(b -> b.shape(ParticleGroup.Shape.SPHERE).count(30).speed(0.2F, 0.7F))
+        );
         damage.sound = new Sound(WizardsSounds.FROST_SPIKE_IMPACT.id());
 
         var frozen = SpellBuilder.Impacts.effectAdd(WizardsEffects.frozen.id.toString(), 6, 1, 9);
@@ -1628,7 +1486,7 @@ public class WizardSpells {
 
     /// Two interlocking ice spikes erupting from the ground: they shoot up to full height by
     /// {@link #SPIKE_APEX_TICK} (when the cloud lands its single hit), linger, then sink back
-    /// underground. Spawned per cloud node via {@code cloud.spawn.model_fx}.
+    /// underground. Spawned per cloud node via {@code cloud.spawn.visuals.models}.
     private static List<ModelEffect> frostSpikeModelFx() {
         var spikeOne = ModelEffectBuilder.Preset.spike(
                         ModelEffectBuilder.create("wizards:spell_effect/frost_spike_1")
@@ -1664,16 +1522,16 @@ public class WizardSpells {
         spell.release = new Spell.Release();
         spell.release.animation =  PlayerAnimation.of("spell_engine:one_handed_area_release");
         spell.release.sound = new Sound(WizardsSounds.FROST_SHIELD_RELEASE.id());
-        spell.release.particles = new ParticleBatch[] {
-                new ParticleBatch(
-                        SpellEngineParticles.snowflake.id().toString(),
-                        ParticleBatch.Shape.PILLAR, ParticleBatch.Origin.FEET,
-                        90, 0.1F, 0.35F),
-                new ParticleBatch(
-                        SpellEngineParticles.frost_shard.id().toString(),
-                        ParticleBatch.Shape.WIDE_PIPE, ParticleBatch.Origin.FEET,
-                        50, 0.1F, 0.3F)
-        };
+        spell.release.visuals = Fx.Visuals.of(
+                ParticleGroupBuilder.of(SpellEngineParticles.snowflake)
+                        .batch(b -> b.shape(ParticleGroup.Shape.PILLAR)
+                                .verticalOrigin(ParticleGroupBuilder.Batches.FEET).count(90)
+                                .speed(0.1F, 0.35F)),
+                ParticleGroupBuilder.of(SpellEngineParticles.frost_shard)
+                        .batch(b -> b.shape(ParticleGroup.Shape.PIPE)
+                                .widthFactor(2F).verticalOrigin(ParticleGroupBuilder.Batches.FEET)
+                                .count(50).speed(0.1F, 0.3F))
+        );
 
         var shield = SpellBuilder.Impacts.effectSet(WizardsEffects.frostShield.id.toString(), 8, 0);
         shield.action.status_effect.show_particles = false;
@@ -1713,7 +1571,7 @@ public class WizardSpells {
 
         spell.active.cast.animation = PlayerAnimation.of("spell_engine:weapon_spearthrow_ready");
         spell.active.cast.sound = new Sound(WizardsSounds.FROST_LANCE_CASTING.id(), 0);
-        spell.active.cast.particles = new ParticleBatch[] { frostCastingParticles() };
+        spell.active.cast.particles = List.of( frostCastingParticles() );
 
         spell.release = new Spell.Release();
         spell.release.pitch_shift = 0.75F;
@@ -1733,20 +1591,16 @@ public class WizardSpells {
         projectile.perks.pierce = 999; // a lance pierces (no ricochet/bounce, unlike Frostbolt)
         projectile.client_data = new Spell.ProjectileData.Client();
         projectile.client_data.light_level = 12;
-        projectile.client_data.travel_particles = new ParticleBatch[] {
-                new ParticleBatch(
-                        SpellEngineParticles.snowflake.id().toString(),
-                        ParticleBatch.Shape.CIRCLE, ParticleBatch.Origin.CENTER,
-                        ParticleBatch.Rotation.LOOK, 4, 0, 0.1F, 0),
-                new ParticleBatch(
-                        SpellEngineParticles.MagicParticles.get(
-                                SpellEngineParticles.MagicParticles.Shape.FROST,
-                                SpellEngineParticles.MagicParticles.Motion.BURST
-                        ).id().toString(),
-                        ParticleBatch.Shape.CIRCLE, ParticleBatch.Origin.CENTER,
-                        ParticleBatch.Rotation.LOOK, 1, 0.1F, 0.2F, 0)
+        projectile.client_data.travel_particles = List.of(
+                ParticleGroupBuilder.of(SpellEngineParticles.snowflake)
+                        .batch(b -> b.shape(ParticleGroup.Shape.CIRCLE)
+                                .alignment(ParticleGroup.Alignment.LOOK).count(4).speed(0, 0.1F)),
+                ParticleGroupBuilder.magic(SpellEngineParticles.magic_frost, ParticleGroup.Motion.BURST)
                         .color(FROST_COLOR.toRGBA())
-        };
+                        .batch(b -> b.shape(ParticleGroup.Shape.CIRCLE)
+                                .alignment(ParticleGroup.Alignment.LOOK).count(1)
+                                .speed(0.1F, 0.2F))
+        );
         projectile.travel_sound = Sound.of(SpellEngineSounds.WEAPON_SPEAR_TRAVEL.id());
         var iceLance = SpellBuilder.ProjectileModels.model("wizards:spell_projectile/ice_lance", 0.5F); // same model for now
         iceLance.rotate_degrees_per_tick = 10;
@@ -1756,21 +1610,14 @@ public class WizardSpells {
         var damage = SpellBuilder.Impacts.damage(1.0F, 1.5F); // full-charge value (charge scales down to min_output_ratio)
         // A punchier impact than Frostbolt's shared frost burst: more magic particles with a wider
         // spread, plus ice shards spraying out from the shattered lance.
-        damage.particles = new ParticleBatch[] {
-                new ParticleBatch(
-                        SpellEngineParticles.MagicParticles.get(
-                                SpellEngineParticles.MagicParticles.Shape.FROST,
-                                SpellEngineParticles.MagicParticles.Motion.BURST
-                        ).id().toString(),
-                        ParticleBatch.Shape.SPHERE, ParticleBatch.Origin.CENTER,
-                        75, 0.3F, 0.8F)
-                        .color(FROST_COLOR.toRGBA()),
-                new ParticleBatch(
-                        SpellEngineParticles.frost_shard.id().toString(),
-                        ParticleBatch.Shape.SPHERE, ParticleBatch.Origin.CENTER,
-                        30, 0.2F, 0.4F)
+        damage.visuals = Fx.Visuals.of(
+                ParticleGroupBuilder.magic(SpellEngineParticles.magic_frost, ParticleGroup.Motion.BURST)
                         .color(FROST_COLOR.toRGBA())
-        };
+                        .batch(b -> b.shape(ParticleGroup.Shape.SPHERE).count(75).speed(0.3F, 0.8F)),
+                ParticleGroupBuilder.of(SpellEngineParticles.frost_shard)
+                        .color(FROST_COLOR.toRGBA())
+                        .batch(b -> b.shape(ParticleGroup.Shape.SPHERE).count(30).speed(0.2F, 0.4F))
+        );
         damage.sound = new Sound(WizardsSounds.FROST_LANCE_IMPACT.id());
 
         var slowness = SpellBuilder.Impacts.effectAdd(WizardsEffects.frostSlowness.id.toString(), 5, 0, 1);
@@ -1778,12 +1625,10 @@ public class WizardSpells {
         slowness.action.status_effect.apply_limit.health_base = 100;
         slowness.action.status_effect.apply_limit.spell_power_multiplier = 4;
         slowness.action.status_effect.show_particles = false;
-        slowness.particles = new ParticleBatch[] {
-                new ParticleBatch(
-                        SpellEngineParticles.snowflake.id().toString(),
-                        ParticleBatch.Shape.SPHERE, ParticleBatch.Origin.CENTER,
-                        25, 0.1F, 0.4F)
-        };
+        slowness.visuals = Fx.Visuals.of(
+                ParticleGroupBuilder.of(SpellEngineParticles.snowflake)
+                        .batch(b -> b.shape(ParticleGroup.Shape.SPHERE).count(25).speed(0.1F, 0.4F))
+        );
 
         spell.impacts = List.of(damage, slowness);
 
@@ -1809,7 +1654,7 @@ public class WizardSpells {
         SpellBuilder.Casting.channel(spell, 8, 12);
         spell.active.cast.animation = PlayerAnimation.of("spell_engine:one_handed_sky_charge");
         spell.active.cast.sound = new Sound(WizardsSounds.FROST_BLIZZARD_CASTING.id(), 0);
-        spell.active.cast.particles = new ParticleBatch[] { frostCastingParticles() };
+        spell.active.cast.particles = List.of( frostCastingParticles() );
 
         spell.target.type = Spell.Target.Type.AIM;
         spell.target.aim = new Spell.Target.Aim();
@@ -1825,20 +1670,16 @@ public class WizardSpells {
         var projectile = new Spell.ProjectileData();
         projectile.divergence = 8;
         projectile.client_data = new Spell.ProjectileData.Client();
-        projectile.client_data.travel_particles = new ParticleBatch[] {
-                new ParticleBatch(
-                        SpellEngineParticles.snowflake.id().toString(),
-                        ParticleBatch.Shape.CIRCLE, ParticleBatch.Origin.CENTER,
-                        ParticleBatch.Rotation.LOOK, 3, 0, 0.1F, 0),
-                new ParticleBatch(
-                        SpellEngineParticles.MagicParticles.get(
-                                SpellEngineParticles.MagicParticles.Shape.FROST,
-                                SpellEngineParticles.MagicParticles.Motion.BURST
-                        ).id().toString(),
-                        ParticleBatch.Shape.CIRCLE, ParticleBatch.Origin.CENTER,
-                        ParticleBatch.Rotation.LOOK, 1, 0.1F, 0.2F, 0)
+        projectile.client_data.travel_particles = List.of(
+                ParticleGroupBuilder.of(SpellEngineParticles.snowflake)
+                        .batch(b -> b.shape(ParticleGroup.Shape.CIRCLE)
+                                .alignment(ParticleGroup.Alignment.LOOK).count(3).speed(0, 0.1F)),
+                ParticleGroupBuilder.magic(SpellEngineParticles.magic_frost, ParticleGroup.Motion.BURST)
                         .color(FROST_COLOR.toRGBA())
-        };
+                        .batch(b -> b.shape(ParticleGroup.Shape.CIRCLE)
+                                .alignment(ParticleGroup.Alignment.LOOK).count(1)
+                                .speed(0.1F, 0.2F))
+        );
         projectile.client_data.composite_model = SpellBuilder.ProjectileModels.single("wizards:spell_projectile/frost_shard", 0.8F);
         spell.deliver.meteor.projectile = projectile;
 
@@ -1853,20 +1694,13 @@ public class WizardSpells {
         slowness.action.status_effect.apply_limit.health_base = 80;
         slowness.action.status_effect.apply_limit.spell_power_multiplier = 4;
         slowness.action.status_effect.show_particles = false;
-        slowness.particles = new ParticleBatch[] {
-                new ParticleBatch(
-                        SpellEngineParticles.MagicParticles.get(
-                                SpellEngineParticles.MagicParticles.Shape.FROST,
-                                SpellEngineParticles.MagicParticles.Motion.BURST
-                        ).id().toString(),
-                        ParticleBatch.Shape.SPHERE, ParticleBatch.Origin.CENTER,
-                        15, 0.2F, 0.7F)
-                        .color(FROST_COLOR.toRGBA()),
-                new ParticleBatch(
-                        SpellEngineParticles.snowflake.id().toString(),
-                        ParticleBatch.Shape.SPHERE, ParticleBatch.Origin.CENTER,
-                        5, 0.1F, 0.4F)
-        };
+        slowness.visuals = Fx.Visuals.of(
+                ParticleGroupBuilder.magic(SpellEngineParticles.magic_frost, ParticleGroup.Motion.BURST)
+                        .color(FROST_COLOR.toRGBA())
+                        .batch(b -> b.shape(ParticleGroup.Shape.SPHERE).count(15).speed(0.2F, 0.7F)),
+                ParticleGroupBuilder.of(SpellEngineParticles.snowflake)
+                        .batch(b -> b.shape(ParticleGroup.Shape.SPHERE).count(5).speed(0.1F, 0.4F))
+        );
 
         spell.impacts = List.of(damage, slowness);
 
@@ -1874,26 +1708,19 @@ public class WizardSpells {
         var impactRadius = 3;
         spell.area_impact.radius = impactRadius;
         spell.area_impact.area.distance_dropoff = Spell.Target.Area.DropoffCurve.SQUARED;
-        spell.area_impact.particles = new ParticleBatch[] {
-                new ParticleBatch(SpellEngineParticles.snowflake.id().toString(),
-                        ParticleBatch.Shape.SPHERE, ParticleBatch.Origin.CENTER,
-                        20, 0.1F, 0.3F),
-                new ParticleBatch(
-                        SpellEngineParticles.MagicParticles.get(
-                                SpellEngineParticles.MagicParticles.Shape.FROST,
-                                SpellEngineParticles.MagicParticles.Motion.BURST
-                        ).id().toString(),
-                        ParticleBatch.Shape.SPHERE, ParticleBatch.Origin.CENTER,
-                        15, 0.2F, 0.4F)
-                        .color(FROST_COLOR.toRGBA()),
-                new ParticleBatch(
-                        SpellEngineParticles.frost_shard.id().toString(),
-                        ParticleBatch.Shape.SPHERE, ParticleBatch.Origin.CENTER,
-                        15, 0.2F, 0.4F),
-                SpellBuilder.Particles.area(SpellEngineParticles.area_effect_474.id())
-                        .scale(impactRadius)
+        spell.area_impact.visuals = Fx.Visuals.of(
+                ParticleGroupBuilder.of(SpellEngineParticles.snowflake)
+                        .batch(b -> b.shape(ParticleGroup.Shape.SPHERE).count(20).speed(0.1F, 0.3F)),
+                ParticleGroupBuilder.magic(SpellEngineParticles.magic_frost, ParticleGroup.Motion.BURST)
                         .color(FROST_COLOR.toRGBA())
-        };
+                        .batch(b -> b.shape(ParticleGroup.Shape.SPHERE).count(15).speed(0.2F, 0.4F)),
+                ParticleGroupBuilder.of(SpellEngineParticles.frost_shard)
+                        .batch(b -> b.shape(ParticleGroup.Shape.SPHERE).count(15).speed(0.2F, 0.4F)),
+                ParticleGroupBuilder.zone(SpellEngineParticles.area_effect_474)
+                        .scale(impactRadius - 0.5F)
+                        .color(FROST_COLOR)
+                        .batch(ParticleGroupBuilder.Batches.ground(1))
+        );
         spell.area_impact.sound = Sound.withVolume(WizardsSounds.FROST_SHARD_IMPACT.id(), 1.5F);
 
         SpellBuilder.Cost.exhaust(spell, 0.4F);

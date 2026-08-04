@@ -23,31 +23,43 @@
       },
       "particles": [
         {
-          "particle_id": "spell_engine:flame",
-          "origin": "LAUNCH_POINT",
-          "shape": "CONE",
-          "rotation": "LOOK",
-          "count": 8.0,
-          "min_speed": 1.0,
-          "angle": 30.0
+          "id": "spell_engine:flame",
+          "appearance": {},
+          "batch": {
+            "count": 8.0,
+            "shape": "CONE",
+            "anchor": "LAUNCH_POINT",
+            "alignment": "LOOK",
+            "min_speed": 1.0,
+            "max_speed": 1.0,
+            "angle": 30.0
+          }
         },
         {
-          "particle_id": "spell_engine:flame_medium_a",
-          "origin": "LAUNCH_POINT",
-          "shape": "CONE",
-          "rotation": "LOOK",
-          "count": 4.0,
-          "min_speed": 1.0,
-          "angle": 30.0
+          "id": "spell_engine:flame_medium_a",
+          "appearance": {},
+          "batch": {
+            "count": 4.0,
+            "shape": "CONE",
+            "anchor": "LAUNCH_POINT",
+            "alignment": "LOOK",
+            "min_speed": 1.0,
+            "max_speed": 1.0,
+            "angle": 30.0
+          }
         },
         {
-          "particle_id": "spell_engine:flame_medium_b",
-          "origin": "LAUNCH_POINT",
-          "shape": "CONE",
-          "rotation": "LOOK",
-          "count": 4.0,
-          "min_speed": 1.0,
-          "angle": 30.0
+          "id": "spell_engine:flame_medium_b",
+          "appearance": {},
+          "batch": {
+            "count": 4.0,
+            "shape": "CONE",
+            "anchor": "LAUNCH_POINT",
+            "alignment": "LOOK",
+            "min_speed": 1.0,
+            "max_speed": 1.0,
+            "angle": 30.0
+          }
         }
       ]
     }
@@ -73,16 +85,21 @@
           "knockback": 0.9
         }
       },
-      "particles": [
-        {
-          "particle_id": "lava",
-          "origin": "CENTER",
-          "shape": "CIRCLE",
-          "count": 3.0,
-          "min_speed": 0.5,
-          "max_speed": 3.0
-        }
-      ],
+      "visuals": {
+        "particles": [
+          {
+            "id": "lava",
+            "appearance": {},
+            "batch": {
+              "count": 3.0,
+              "shape": "CIRCLE",
+              "anchor": "ENTITY",
+              "min_speed": 0.5,
+              "max_speed": 3.0
+            }
+          }
+        ]
+      },
       "sound": {
         "id": "wizards:fire_breath_impact"
       }

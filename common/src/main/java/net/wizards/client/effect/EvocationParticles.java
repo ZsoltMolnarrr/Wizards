@@ -2,7 +2,8 @@ package net.wizards.client.effect;
 
 import net.minecraft.entity.LivingEntity;
 import net.spell_engine.api.effect.CustomParticleStatusEffect;
-import net.spell_engine.api.spell.fx.ParticleBatch;
+import net.spell_engine.api.spell.fx.ParticleGroupBuilder;
+import net.spell_engine.api.spell.fx.ParticleGroup;
 import net.spell_engine.client.util.Color;
 import net.spell_engine.fx.ParticleHelper;
 import net.spell_engine.fx.SpellEngineParticles;
@@ -13,33 +14,20 @@ public class EvocationParticles implements CustomParticleStatusEffect.Spawner {
     private static final Color ARCANE_COLOR_LIGHT = Color.from(0xFF99FF);
     private static final Color ARCANE_COLOR_VERY_LIGHT = Color.from(0xFFCCFF);
 
-    private final List<ParticleBatch> particles;
+    private final List<ParticleGroup> particles;
 
     public EvocationParticles() {
         this.particles = List.of(
-                new ParticleBatch(
-                    SpellEngineParticles.lightning_arc_A.id().toString(),
-                    ParticleBatch.Shape.SPHERE,
-                    ParticleBatch.Origin.CENTER,
-                    null,
-                    1,
-                    0.05F,
-                    0.1F,
-                    0)
-                    .color(ARCANE_COLOR_LIGHT.toRGBA())
-                    .extent(0.5F),
-                new ParticleBatch(
-                    SpellEngineParticles.lightning_arc_B.id().toString(),
-                    ParticleBatch.Shape.SPHERE,
-                    ParticleBatch.Origin.CENTER,
-                    null,
-                    1,
-                    0.05F,
-                    0.1F,
-                    0)
-                    .color(ARCANE_COLOR_LIGHT.toRGBA())
-                    .extent(0.5F)
+                arc(SpellEngineParticles.lightning_arc_A),
+                arc(SpellEngineParticles.lightning_arc_B)
         );
+    }
+
+    private static ParticleGroup arc(SpellEngineParticles.Entry entry) {
+        return ParticleGroupBuilder.of(entry)
+                .color(ARCANE_COLOR_LIGHT)
+                .batch(b -> b.shape(ParticleGroup.Shape.SPHERE)
+                        .count(1).speed(0.05F, 0.1F).extent(0.5F));
     }
 
     @Override
@@ -49,8 +37,6 @@ public class EvocationParticles implements CustomParticleStatusEffect.Spawner {
         if (livingEntity.age % interval != 0) {
             return;
         }
-        for (var batch : particles) {
-            ParticleHelper.play(livingEntity.getWorld(), livingEntity, batch);
-        }
+        ParticleHelper.play(livingEntity.getWorld(), livingEntity, particles);
     }
 }

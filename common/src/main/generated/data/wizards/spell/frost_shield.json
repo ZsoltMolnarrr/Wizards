@@ -9,24 +9,35 @@
     "animation": {
       "id": "spell_engine:one_handed_area_release"
     },
-    "particles": [
-      {
-        "particle_id": "spell_engine:snowflake",
-        "origin": "FEET",
-        "shape": "PILLAR",
-        "count": 90.0,
-        "min_speed": 0.1,
-        "max_speed": 0.35
-      },
-      {
-        "particle_id": "spell_engine:frost_shard",
-        "origin": "FEET",
-        "shape": "WIDE_PIPE",
-        "count": 50.0,
-        "min_speed": 0.1,
-        "max_speed": 0.3
-      }
-    ],
+    "visuals": {
+      "particles": [
+        {
+          "id": "spell_engine:snowflake",
+          "appearance": {},
+          "batch": {
+            "count": 90.0,
+            "shape": "PILLAR",
+            "anchor": "ENTITY",
+            "vertical_origin": 0.1,
+            "min_speed": 0.1,
+            "max_speed": 0.35
+          }
+        },
+        {
+          "id": "spell_engine:frost_shard",
+          "appearance": {},
+          "batch": {
+            "count": 50.0,
+            "shape": "PIPE",
+            "anchor": "ENTITY",
+            "vertical_origin": 0.1,
+            "min_speed": 0.1,
+            "max_speed": 0.3,
+            "width_factor": 2.0
+          }
+        }
+      ]
+    },
     "sound": {
       "id": "wizards:frost_shield_release"
     }

@@ -25,45 +25,61 @@
               "id": "spell_engine:negative_feedback",
               "randomness": 0.0
             },
-            "particles": [
-              {
-                "particle_id": "minecraft:smoke",
-                "origin": "FEET",
-                "shape": "SPHERE",
-                "count": 12.0,
-                "min_speed": 0.05,
-                "max_speed": 0.15
-              }
-            ]
+            "visuals": {
+              "particles": [
+                {
+                  "id": "minecraft:smoke",
+                  "appearance": {},
+                  "batch": {
+                    "count": 12.0,
+                    "shape": "SPHERE",
+                    "anchor": "ENTITY",
+                    "vertical_origin": 0.1,
+                    "min_speed": 0.05,
+                    "max_speed": 0.15
+                  }
+                }
+              ]
+            }
           },
           "forward": {
             "distance": 15.0
           },
-          "depart_particles": [
-            {
-              "particle_id": "minecraft:portal",
-              "origin": "CENTER",
-              "shape": "SPHERE",
-              "count": 40.0,
-              "min_speed": 0.1,
-              "max_speed": 0.3,
-              "pre_spawn_travel": 1.0
-            }
-          ]
+          "depart": {
+            "particles": [
+              {
+                "id": "minecraft:portal",
+                "appearance": {},
+                "batch": {
+                  "count": 40.0,
+                  "shape": "SPHERE",
+                  "anchor": "ENTITY",
+                  "min_speed": 0.1,
+                  "max_speed": 0.3,
+                  "pre_travel": 1.0
+                }
+              }
+            ]
+          }
         }
       },
-      "particles": [
-        {
-          "particle_id": "minecraft:portal",
-          "origin": "CENTER",
-          "shape": "SPHERE",
-          "count": 40.0,
-          "min_speed": 0.1,
-          "max_speed": 0.3,
-          "pre_spawn_travel": 4.0,
-          "invert": true
-        }
-      ]
+      "visuals": {
+        "particles": [
+          {
+            "id": "minecraft:portal",
+            "appearance": {},
+            "batch": {
+              "count": 40.0,
+              "shape": "SPHERE",
+              "anchor": "ENTITY",
+              "min_speed": 0.1,
+              "max_speed": 0.3,
+              "pre_travel": 4.0,
+              "invert": true
+            }
+          }
+        ]
+      }
     }
   ],
   "cost": {

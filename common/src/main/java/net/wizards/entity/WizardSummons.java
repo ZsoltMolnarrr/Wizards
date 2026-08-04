@@ -4,9 +4,10 @@ import net.minecraft.entity.attribute.EntityAttributeModifier;
 import net.minecraft.entity.attribute.EntityAttributes;
 import net.spell_engine.api.datagen.SpellBuilder.Placements;
 import net.spell_engine.api.spell.Spell.Impact.Action.Summon;
-import net.spell_engine.api.spell.fx.ParticleBatch;
+import net.spell_engine.api.spell.fx.ParticleGroupBuilder;
+import net.spell_engine.api.spell.fx.ParticleGroup;
 import net.spell_engine.api.spell.fx.Sound;
-import net.spell_engine.api.spell.fx.VFX;
+import net.spell_engine.api.spell.fx.Fx;
 import net.spell_engine.api.spell.summon.AttributeScaling;
 import net.spell_engine.api.spell.summon.SummonBehaviour;
 import net.spell_engine.client.util.Color;
@@ -71,14 +72,13 @@ public class WizardSummons {
         b.sounds.step = new Sound(WizardsSounds.FROST_ELEMENTAL_STEP.id());
 
         // Spawn FX: a rising column of snowflakes bursting from the ground as the elemental forms.
-        b.spawn_fx = new VFX();
-        b.spawn_fx.particles = new ParticleBatch[] {
-                new ParticleBatch(
-                        SpellEngineParticles.snowflake.id().toString(),
-                        ParticleBatch.Shape.PILLAR, ParticleBatch.Origin.FEET,
-                        80, 0.15F, 0.6F)
-                        .extent(0.5F)
-        };
+        b.spawn_fx = new Fx.Visuals();
+        b.spawn_fx.particles = List.of(
+                ParticleGroupBuilder.of(SpellEngineParticles.snowflake)
+                        .batch(pb -> pb.shape(ParticleGroup.Shape.PILLAR)
+                                .verticalOrigin(ParticleGroupBuilder.Batches.FEET).count(80)
+                                .speed(0.15F, 0.6F).extent(0.5F))
+        );
 
         // Placement: a diamond around the caster — right, left, front, rear — each 2 blocks out and
         // snapped to the ground. `spawn_count` is 1, so only the first slot (right) is filled; the
@@ -111,21 +111,14 @@ public class WizardSummons {
 
         // Spawn FX: an arcane explosion as the emitter materialises — the same burst as Arcane Blast's
         // impact, but with DECELERATE motion so the particles rush outward and settle rather than scatter.
-        b.spawn_fx = new VFX();
-        b.spawn_fx.particles = new ParticleBatch[] {
-                new ParticleBatch(
-                        SpellEngineParticles.MagicParticles.get(
-                                SpellEngineParticles.MagicParticles.Shape.ARCANE,
-                                SpellEngineParticles.MagicParticles.Motion.DECELERATE
-                        ).id().toString(),
-                        ParticleBatch.Shape.SPHERE, ParticleBatch.Origin.CENTER,
-                        15, 0.3F, 0.5F)
-                        .color(Color.from(SpellSchools.ARCANE.color).toRGBA()),
-                new ParticleBatch(
-                        "firework",
-                        ParticleBatch.Shape.SPHERE, ParticleBatch.Origin.CENTER,
-                        10, 0.05F, 0.15F)
-        };
+        b.spawn_fx = new Fx.Visuals();
+        b.spawn_fx.particles = List.of(
+                ParticleGroupBuilder.magic(SpellEngineParticles.magic_arcane, ParticleGroup.Motion.DECELERATE)
+                        .color(Color.from(SpellSchools.ARCANE.color).toRGBA())
+                        .batch(pb -> pb.shape(ParticleGroup.Shape.SPHERE).count(15).speed(0.3F, 0.5F)),
+                ParticleGroupBuilder.of("firework")
+                        .batch(pb -> pb.shape(ParticleGroup.Shape.SPHERE).count(10).speed(0.05F, 0.15F))
+        );
 
         // Movement: stationary — no follow, no wander, no collision, no gravity
         b.movement.can_move = false;
@@ -193,28 +186,33 @@ public class WizardSummons {
         // area_effect_715 ring animates over 22 ticks, so it re-emits every 22 ticks to loop seamlessly.
         var aura = new SummonBehaviour.ExistenceParticles();
         var particle = SpellEngineParticles.area_effect_715;
-        aura.particles = new ParticleBatch[] {
-                new ParticleBatch(
-                        particle.id().toString(),
-                        ParticleBatch.Shape.SPHERE, ParticleBatch.Origin.GROUND,
-                        1, 0, 0)
+        aura.particles = List.of(
+                ParticleGroupBuilder.of(particle.id().toString())
                         .scale(1.2F)
                         .color(Color.from(SpellSchools.FIRE.color).toRGBA())
-        };
+                        .batch(pb -> pb.shape(ParticleGroup.Shape.SPHERE)
+                                .anchor(ParticleGroup.Anchor.GROUND).count(1).speed(0))
+        );
         aura.interval_ticks = particle.texture().frames();
 
         // A few small flames flickering around the hydra's feet, scattered within a short radius and
         // rising slightly. Refreshed every 5 ticks so the feet always look alight.
         var flames = new SummonBehaviour.ExistenceParticles();
         flames.interval_ticks = 5;
-        flames.particles = new ParticleBatch[] {
-                new ParticleBatch(SpellEngineParticles.flame_medium_a.id().toString(),
-                        ParticleBatch.Shape.SPHERE, ParticleBatch.Origin.FEET, 1, 0.01F, 0.06F).extent(0.4F),
-                new ParticleBatch(SpellEngineParticles.flame_medium_b.id().toString(),
-                        ParticleBatch.Shape.SPHERE, ParticleBatch.Origin.FEET, 1, 0.01F, 0.06F).extent(0.4F),
-                new ParticleBatch(SpellEngineParticles.flame_spark.id().toString(),
-                        ParticleBatch.Shape.SPHERE, ParticleBatch.Origin.FEET, 1, 0.02F, 0.08F).extent(0.5F),
-        };
+        flames.particles = List.of(
+                ParticleGroupBuilder.of(SpellEngineParticles.flame_medium_a)
+                        .batch(pb -> pb.shape(ParticleGroup.Shape.SPHERE)
+                                .verticalOrigin(ParticleGroupBuilder.Batches.FEET).count(1)
+                                .speed(0.01F, 0.06F).extent(0.4F)),
+                ParticleGroupBuilder.of(SpellEngineParticles.flame_medium_b)
+                        .batch(pb -> pb.shape(ParticleGroup.Shape.SPHERE)
+                                .verticalOrigin(ParticleGroupBuilder.Batches.FEET).count(1)
+                                .speed(0.01F, 0.06F).extent(0.4F)),
+                ParticleGroupBuilder.of(SpellEngineParticles.flame_spark)
+                        .batch(pb -> pb.shape(ParticleGroup.Shape.SPHERE)
+                                .verticalOrigin(ParticleGroupBuilder.Batches.FEET).count(1)
+                                .speed(0.02F, 0.08F).extent(0.5F))
+        );
 
         b.existence_particles = List.of(aura, flames);
 
@@ -280,25 +278,30 @@ public class WizardSummons {
     /// A one-shot fire puff played once per group as the Fire Hydra spawns: the same flame batches
     /// the Wall of Flames clouds emit (ground flames, medium flames, sparks and cosy smoke, all
     /// rising from the feet), but at reduced counts so it reads as a subtle flourish, not a blaze.
-    private static VFX fireHydraGroupSpawnFx() {
-        var fx = new VFX();
-        fx.particles = new ParticleBatch[] {
-                new ParticleBatch(SpellEngineParticles.flame_ground.id().toString(),
-                        ParticleBatch.Shape.PILLAR, ParticleBatch.Origin.FEET, 4, 0, 0)
-                        .extent(1F),
-                new ParticleBatch(SpellEngineParticles.flame_medium_a.id().toString(),
-                        ParticleBatch.Shape.PILLAR, ParticleBatch.Origin.FEET, 8, 0.02F, 0.3F)
-                        .extent(1F),
-                new ParticleBatch(SpellEngineParticles.flame_medium_b.id().toString(),
-                        ParticleBatch.Shape.PILLAR, ParticleBatch.Origin.FEET, 8, 0.01F, 0.35F)
-                        .extent(1F),
-                new ParticleBatch(SpellEngineParticles.flame_spark.id().toString(),
-                        ParticleBatch.Shape.PILLAR, ParticleBatch.Origin.FEET, 12, 0.05F, 0.3F)
-                        .extent(1F),
-                new ParticleBatch("campfire_cosy_smoke",
-                        ParticleBatch.Shape.PILLAR, ParticleBatch.Origin.FEET, 3F, 0.0125F, 0.05F)
-                        .extent(1F),
-        };
+    private static Fx.Visuals fireHydraGroupSpawnFx() {
+        var fx = new Fx.Visuals();
+        fx.particles = List.of(
+                ParticleGroupBuilder.of(SpellEngineParticles.flame_ground)
+                        .batch(pb -> pb.shape(ParticleGroup.Shape.PILLAR)
+                                .verticalOrigin(ParticleGroupBuilder.Batches.FEET).count(4).speed(0)
+                                .extent(1F)),
+                ParticleGroupBuilder.of(SpellEngineParticles.flame_medium_a)
+                        .batch(pb -> pb.shape(ParticleGroup.Shape.PILLAR)
+                                .verticalOrigin(ParticleGroupBuilder.Batches.FEET).count(8)
+                                .speed(0.02F, 0.3F).extent(1F)),
+                ParticleGroupBuilder.of(SpellEngineParticles.flame_medium_b)
+                        .batch(pb -> pb.shape(ParticleGroup.Shape.PILLAR)
+                                .verticalOrigin(ParticleGroupBuilder.Batches.FEET).count(8)
+                                .speed(0.01F, 0.35F).extent(1F)),
+                ParticleGroupBuilder.of(SpellEngineParticles.flame_spark)
+                        .batch(pb -> pb.shape(ParticleGroup.Shape.PILLAR)
+                                .verticalOrigin(ParticleGroupBuilder.Batches.FEET).count(12)
+                                .speed(0.05F, 0.3F).extent(1F)),
+                ParticleGroupBuilder.of("campfire_cosy_smoke")
+                        .batch(pb -> pb.shape(ParticleGroup.Shape.PILLAR)
+                                .verticalOrigin(ParticleGroupBuilder.Batches.FEET).count(3F)
+                                .speed(0.0125F, 0.05F).extent(1F))
+        );
         return fx;
     }
 

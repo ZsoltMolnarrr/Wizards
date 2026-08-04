@@ -24,26 +24,36 @@
       },
       "particles": [
         {
-          "particle_id": "spell_engine:magic_spark_decelerate",
-          "origin": "CENTER",
-          "shape": "SPHERE",
-          "count": 8.0,
-          "min_speed": 0.2,
-          "max_speed": 0.3,
-          "pre_spawn_travel": 6.0,
-          "invert": true,
-          "color_rgba": 4288282623
+          "id": "spell_engine:magic_spark",
+          "appearance": {
+            "color": 4288282623,
+            "motion": "DECELERATE"
+          },
+          "batch": {
+            "count": 8.0,
+            "shape": "SPHERE",
+            "anchor": "ENTITY",
+            "min_speed": 0.2,
+            "max_speed": 0.3,
+            "pre_travel": 6.0,
+            "invert": true
+          }
         },
         {
-          "particle_id": "spell_engine:magic_spark_decelerate",
-          "origin": "CENTER",
-          "shape": "SPHERE",
-          "count": 8.0,
-          "min_speed": 0.2,
-          "max_speed": 0.3,
-          "pre_spawn_travel": 6.0,
-          "invert": true,
-          "color_rgba": 4284940287
+          "id": "spell_engine:magic_spark",
+          "appearance": {
+            "color": 4284940287,
+            "motion": "DECELERATE"
+          },
+          "batch": {
+            "count": 8.0,
+            "shape": "SPHERE",
+            "anchor": "ENTITY",
+            "min_speed": 0.2,
+            "max_speed": 0.3,
+            "pre_travel": 6.0,
+            "invert": true
+          }
         }
       ]
     }

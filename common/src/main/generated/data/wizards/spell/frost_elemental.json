@@ -20,16 +20,19 @@
             "spawn_fx": {
               "particles": [
                 {
-                  "particle_id": "spell_engine:snowflake",
-                  "origin": "FEET",
-                  "shape": "PILLAR",
-                  "count": 80.0,
-                  "min_speed": 0.15,
-                  "max_speed": 0.6,
-                  "extent": 0.5
+                  "id": "spell_engine:snowflake",
+                  "appearance": {},
+                  "batch": {
+                    "count": 80.0,
+                    "shape": "PILLAR",
+                    "anchor": "ENTITY",
+                    "vertical_origin": 0.1,
+                    "min_speed": 0.15,
+                    "max_speed": 0.6,
+                    "extent": 0.5
+                  }
                 }
-              ],
-              "model_fx": []
+              ]
             },
             "movement": {
               "follow": {
