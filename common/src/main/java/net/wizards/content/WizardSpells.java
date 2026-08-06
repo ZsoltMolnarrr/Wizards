@@ -12,7 +12,7 @@ import net.spell_engine.api.spell.fx.PlayerAnimation;
 import net.spell_engine.api.spell.fx.ParticleGroupBuilder;
 import net.spell_engine.api.spell.fx.ParticleGroup;
 import net.spell_engine.api.spell.fx.Sound;
-import net.spell_engine.client.gui.SpellTooltip;
+import net.spell_engine.api.spell.tooltip.TooltipTokens;
 import net.spell_engine.client.util.Color;
 import net.spell_engine.fx.SpellEngineParticles;
 import net.spell_engine.fx.SpellEngineSounds;
@@ -48,22 +48,18 @@ public class WizardSpells {
         }
     }
     public record Entry(Identifier id, Spell spell, String title, String description,
-                        @Nullable SpellTooltip.DescriptionMutator mutator,
                         @Nullable List<WeaponGroup> weaponGroups,
                         @Nullable Book book) {
         public Entry(Identifier id, Spell spell, String title, String description) {
-            this(id, spell, title, description, null, List.of(), null);
-        }
-        public Entry mutator(SpellTooltip.DescriptionMutator mutator) {
-            return new Entry(id, spell, title, description, mutator, weaponGroups, book);
+            this(id, spell, title, description, List.of(), null);
         }
         public Entry weaponGroup(WeaponGroup weaponGroup) {
             var newGroups = new ArrayList<>(weaponGroups != null ? weaponGroups : List.of());
             newGroups.add(weaponGroup);
-            return new Entry(id, spell, title, description, mutator, newGroups, book);
+            return new Entry(id, spell, title, description, newGroups, book);
         }
         public Entry book(Book book) {
-            return new Entry(id, spell, title, description, mutator, weaponGroups, book);
+            return new Entry(id, spell, title, description, weaponGroups, book);
         }
     }
 
@@ -554,7 +550,11 @@ public class WizardSpells {
     private static Entry arcane_evocation() {
         var id = Identifier.of(WizardsMod.ID, "arcane_evocation");
         var name = "Evocation";
-        var description = "Channel to gain Evocation, stacking up to {effect_amplifier_cap} times, lasting {effect_duration} sec. Each stack increases spell critical strike chance and spell haste by {bonus_1}, but also increases damage you take by {bonus_3}.";
+        var description = "Channel to gain Evocation, stacking up to {effect_amplifier_cap} times, lasting {effect_duration} sec. Each stack increases spell critical strike chance and spell haste by "
+                + TooltipTokens.effect(WizardsEffects.evocation.id, 0, Identifier.of("spell_power:critical_chance"))
+                + ", but also increases damage you take by "
+                + TooltipTokens.effect(WizardsEffects.evocation.id, 0, Identifier.of("spell_engine:damage_taken"))
+                + ".";
         var spell = SpellBuilder.createSpellActive();
         spell.school = SpellSchools.ARCANE;
         spell.tier = 4;
@@ -595,13 +595,7 @@ public class WizardSpells {
         SpellBuilder.Cost.cooldown(spell, 45);
         spell.cost.cooldown.proportional = true;
 
-        SpellTooltip.DescriptionMutator mutator = (args) -> {
-            var values = effect.config.attributes().stream().map(m ->
-                SpellTooltip.bonus(m.value, m.operation)
-            ).toList();
-            return SpellTooltip.replaceTokens(args.description(), "bonus", values);
-        };
-        return new Entry(id, spell, name, description).book(Book.ARCANE).mutator(mutator);
+        return new Entry(id, spell, name, description).book(Book.ARCANE);
     }
 
     public static Entry fire_scorch = add(fire_scorch());

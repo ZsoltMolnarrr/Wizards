@@ -123,7 +123,7 @@
   "spell.wizards.arcane_blink.name": "Блінк",
   "spell.wizards.arcane_bolt.description": "Стріляє згустком енергії, завдаючи {damage} шкоди від таємничих чарів.",
   "spell.wizards.arcane_bolt.name": "Таємнича стріла",
-  "spell.wizards.arcane_evocation.description": "Спрямовує енергію для отримання Евокації, накопичується до {effect_amplifier_cap} разів, триває {effect_duration} сек. Кожен заряд збільшує шанс критичного удару та швидкість заклинання на {bonus_1}, але також збільшує отримувану шкоду на {bonus_3}.",
+  "spell.wizards.arcane_evocation.description": "Спрямовує енергію для отримання Евокації, накопичується до {effect_amplifier_cap} разів, триває {effect_duration} сек. Кожен заряд збільшує шанс критичного удару та швидкість заклинання на {effect|wizards:arcane_evocation|0|spell_power:critical_chance}, але також збільшує отримувану шкоду на {effect|wizards:arcane_evocation|0|spell_engine:damage_taken}.",
   "spell.wizards.arcane_evocation.name": "Евокація",
   "spell.wizards.arcane_explosion.description": "Створює магічний вибух навколо вас, завдаючи {damage} шкоди від таємничих чарів найближчим ворогам.",
   "spell.wizards.arcane_explosion.name": "Таємнича детонація",

@@ -9,7 +9,6 @@ import net.spell_engine.api.render.LightEmission;
 import net.spell_engine.api.render.ModelFxEffectRenderer;
 import net.spell_engine.api.spell.fx.Easing;
 import net.spell_engine.api.spell.fx.ModelEffect;
-import net.spell_engine.client.gui.SpellTooltip;
 import net.spell_engine.rpg_series.item.Armor;
 import net.wizards.WizardsMod;
 import net.wizards.client.armor.WizardArmorRenderer;
@@ -42,12 +41,6 @@ public class WizardsClientMod {
         // Defer Fire Hydra rendering to AFTER_TRANSLUCENT so its translucent body
         // is not occluded by water, clouds or distant terrain.
         FireHydraRenderer.setup();
-
-        for (var entry: WizardSpells.entries) {
-            if (entry.mutator() != null) {
-                SpellTooltip.addDescriptionMutator(entry.id(), entry.mutator());
-            }
-        }
     }
 
     private static ModelFxEffectRenderer frozenModelFxRenderer() {
