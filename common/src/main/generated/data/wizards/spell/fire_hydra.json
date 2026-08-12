@@ -25,7 +25,8 @@
                     "id": "spell_engine:area_effect_715",
                     "appearance": {
                       "color": 4281532671,
-                      "scale": 1.2
+                      "scale": 1.2,
+                      "facing": "GROUND"
                     },
                     "batch": {
                       "count": 1.0,

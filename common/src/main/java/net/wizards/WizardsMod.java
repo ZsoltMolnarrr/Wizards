@@ -6,6 +6,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.text.Text;
+import net.spell_engine.Platform;
 import net.spell_engine.api.config.ConfigFile;
 import net.tiny_config.ConfigManager;
 import net.wizards.config.Default;
@@ -52,12 +53,7 @@ public class WizardsMod {
         effectsConfig.refresh();
         villageConfig.refresh();
         tweaksConfig.refresh();
-        // FIXME: Development-environment detection dropped during the Forgified Fabric API sunset —
-        //  `FabricLoader.getInstance().isDevelopmentEnvironment()` is unavailable without FFAPI on
-        //  NeoForge. Mocked to `true` for now; reintroduce a loader-neutral hook via SpellEngine's
-        //  Platform.Util (isDevelopmentEnvironment) and route this through it.
-        boolean isDevelopmentEnvironment = true;
-        if (isDevelopmentEnvironment) {
+        if (Platform.util().isDevelopmentEnvironment()) {
             tweaksConfig.value.ignore_items_required_mods = true;
         }
     }

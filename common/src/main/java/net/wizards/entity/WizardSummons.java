@@ -187,7 +187,7 @@ public class WizardSummons {
         var aura = new SummonBehaviour.ExistenceParticles();
         var particle = SpellEngineParticles.area_effect_715;
         aura.particles = List.of(
-                ParticleGroupBuilder.of(particle.id().toString())
+                ParticleGroupBuilder.zone(particle.id())
                         .scale(1.2F)
                         .color(Color.from(SpellSchools.FIRE.color).toRGBA())
                         .batch(pb -> pb.shape(ParticleGroup.Shape.SPHERE)
