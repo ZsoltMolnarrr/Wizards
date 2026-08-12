@@ -61,7 +61,9 @@ public class WizardEntities {
                     .dimensions(1F, 2F)
                     .maxTrackingRange(64)
                     .trackingTickInterval(3)
-                    .build(),
+                    // Vanilla build(String id) — the no-arg build() is a Fabric API interface-injected
+                    // default (FabricEntityType.Builder) that does not exist on NeoForge at runtime.
+                    .build("frost_elemental"),
             frostDefaults()));
 
     public static final Entry<ArcaneEmitterEntity> ARCANE_EMITTER = add(new Entry<>(
@@ -73,7 +75,7 @@ public class WizardEntities {
                     .dimensions(0.6F, 0.6F)
                     .maxTrackingRange(64)
                     .trackingTickInterval(3)
-                    .build(),
+                    .build("arcane_emitter"),
             arcaneDefaults()));
 
     public static final Entry<FireHydraEntity> FIRE_HYDRA = add(new Entry<>(
@@ -85,7 +87,7 @@ public class WizardEntities {
                     .dimensions(1.5F, 3.0F)
                     .maxTrackingRange(64)
                     .trackingTickInterval(3)
-                    .build(),
+                    .build("fire_hydra"),
             fireDefaults()));
 
     // Default base attributes per summon — seeded into Wizards' OWN config file

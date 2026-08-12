@@ -1,7 +1,7 @@
 package net.wizards.client.entity;
 
-import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.render.Camera;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.entity.EntityRendererFactory;
@@ -32,39 +32,39 @@ public class FireHydraRenderer extends MobEntityRenderer<FireHydraEntity, FireHy
 
     private record Deferred(FireHydraEntity entity, float yaw, float tickDelta, int light) {}
 
-    public static void setup() {
-        WorldRenderEvents.AFTER_TRANSLUCENT.register(context -> {
-            if (deferredQueue.isEmpty()) {
-                return;
-            }
-            var client = MinecraftClient.getInstance();
-            var dispatcher = client.getEntityRenderDispatcher();
-            var vertexConsumers = client.getBufferBuilders().getEntityVertexConsumers();
-            var matrices = context.matrixStack();
-            Vec3d cam = context.camera().getPos();
-            float tickDelta = context.tickCounter().getTickDelta(true);
+    // Replays the queued Fire Hydra renders during the world's after-translucent pass. Loader-neutral —
+    // each platform's client entrypoint calls this from its own event (Fabric
+    // `WorldRenderEvents.AFTER_TRANSLUCENT`; NeoForge `RenderLevelStageEvent` AFTER_TRANSLUCENT_BLOCKS),
+    // mirroring SpellEngine's BeamRenderer.renderAfterTranslucent.
+    public static void renderAfterTranslucent(MatrixStack matrices, Camera camera, float tickDelta) {
+        if (deferredQueue.isEmpty()) {
+            return;
+        }
+        var client = MinecraftClient.getInstance();
+        var dispatcher = client.getEntityRenderDispatcher();
+        var vertexConsumers = client.getBufferBuilders().getEntityVertexConsumers();
+        Vec3d cam = camera.getPos();
 
-            matrices.push();
-            matrices.translate(-cam.x, -cam.y, -cam.z);
-            for (Deferred d : deferredQueue) {
-                FireHydraEntity entity = d.entity();
-                if (!(dispatcher.getRenderer(entity) instanceof FireHydraRenderer renderer)) {
-                    continue;
-                }
-                double x = MathHelper.lerp(tickDelta, entity.lastRenderX, entity.getX());
-                double y = MathHelper.lerp(tickDelta, entity.lastRenderY, entity.getY());
-                double z = MathHelper.lerp(tickDelta, entity.lastRenderZ, entity.getZ());
-                matrices.push();
-                matrices.translate(x, y, z);
-                renderer.inDeferredPass = true;
-                renderer.render(entity, d.yaw(), d.tickDelta(), matrices, vertexConsumers, d.light());
-                renderer.inDeferredPass = false;
-                matrices.pop();
+        matrices.push();
+        matrices.translate(-cam.x, -cam.y, -cam.z);
+        for (Deferred d : deferredQueue) {
+            FireHydraEntity entity = d.entity();
+            if (!(dispatcher.getRenderer(entity) instanceof FireHydraRenderer renderer)) {
+                continue;
             }
+            double x = MathHelper.lerp(tickDelta, entity.lastRenderX, entity.getX());
+            double y = MathHelper.lerp(tickDelta, entity.lastRenderY, entity.getY());
+            double z = MathHelper.lerp(tickDelta, entity.lastRenderZ, entity.getZ());
+            matrices.push();
+            matrices.translate(x, y, z);
+            renderer.inDeferredPass = true;
+            renderer.render(entity, d.yaw(), d.tickDelta(), matrices, vertexConsumers, d.light());
+            renderer.inDeferredPass = false;
             matrices.pop();
-            vertexConsumers.draw();
-            deferredQueue.clear();
-        });
+        }
+        matrices.pop();
+        vertexConsumers.draw();
+        deferredQueue.clear();
     }
 
     public FireHydraRenderer(EntityRendererFactory.Context context) {

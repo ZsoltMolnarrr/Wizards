@@ -13,7 +13,6 @@ import net.spell_engine.rpg_series.item.Armor;
 import net.wizards.WizardsMod;
 import net.wizards.client.armor.WizardArmorRenderer;
 import net.wizards.client.effect.*;
-import net.wizards.client.entity.FireHydraRenderer;
 import net.wizards.content.WizardSpells;
 import net.wizards.effect.WizardsEffects;
 import net.wizards.item.WizardArmors;
@@ -38,9 +37,9 @@ public class WizardsClientMod {
 
         CustomParticleStatusEffect.register(WizardsEffects.evocation.effect, new EvocationParticles());
 
-        // Defer Fire Hydra rendering to AFTER_TRANSLUCENT so its translucent body
-        // is not occluded by water, clouds or distant terrain.
-        FireHydraRenderer.setup();
+        // Fire Hydra rendering is deferred to the world's after-translucent pass (so its translucent body
+        // is not occluded by water, clouds or distant terrain) via FireHydraRenderer.renderAfterTranslucent,
+        // which each platform's client entrypoint wires to its own loader-native render event.
     }
 
     private static ModelFxEffectRenderer frozenModelFxRenderer() {

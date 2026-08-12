@@ -1,8 +1,7 @@
 package net.wizards;
 
 import net.fabric_extras.structure_pool.api.StructurePoolConfig;
-import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
-import net.fabricmc.loader.api.FabricLoader;
+import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
@@ -53,7 +52,12 @@ public class WizardsMod {
         effectsConfig.refresh();
         villageConfig.refresh();
         tweaksConfig.refresh();
-        if (FabricLoader.getInstance().isDevelopmentEnvironment()) {
+        // FIXME: Development-environment detection dropped during the Forgified Fabric API sunset —
+        //  `FabricLoader.getInstance().isDevelopmentEnvironment()` is unavailable without FFAPI on
+        //  NeoForge. Mocked to `true` for now; reintroduce a loader-neutral hook via SpellEngine's
+        //  Platform.Util (isDevelopmentEnvironment) and route this through it.
+        boolean isDevelopmentEnvironment = true;
+        if (isDevelopmentEnvironment) {
             tweaksConfig.value.ignore_items_required_mods = true;
         }
     }
@@ -69,7 +73,7 @@ public class WizardsMod {
     }
 
     public static void registerItems() {
-        Group.WIZARDS = FabricItemGroup.builder()
+        Group.WIZARDS = new ItemGroup.Builder(ItemGroup.Row.TOP, 0)
                 .icon(() -> new ItemStack(WizardArmors.wizardRobeSet.head))
                 .displayName(Text.translatable("itemGroup.wizards.general"))
                 .build();
@@ -83,10 +87,6 @@ public class WizardsMod {
     public static void registerEffects() {
         WizardsEffects.register(effectsConfig.value);
         effectsConfig.save();
-    }
-
-    public static void registerPOI() {
-        WizardVillagers.registerPOI();
     }
 
     public static void registerVillagers() {

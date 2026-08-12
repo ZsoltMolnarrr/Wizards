@@ -6,7 +6,9 @@ import net.neoforged.fml.ModLoadingContext;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
+import net.neoforged.neoforge.client.event.RenderLevelStageEvent;
 import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
+import net.neoforged.neoforge.common.NeoForge;
 import net.spell_engine.client.gui.ConfigMenuScreen;
 import net.wizards.WizardsMod;
 import net.wizards.client.WizardsClientMod;
@@ -24,6 +26,15 @@ public class NeoForgeClientMod {
     public static void onClientSetup(FMLClientSetupEvent event) {
         WizardsClientMod.init();
         ModLoadingContext.get().registerExtensionPoint(IConfigScreenFactory.class, () -> (modContainer, parent) -> new ConfigMenuScreen(parent));
+
+        // Replay deferred Fire Hydra rendering after translucent terrain (see FireHydraRenderer).
+        // Game-bus event, subscribed here since this class is on the mod bus.
+        NeoForge.EVENT_BUS.addListener(RenderLevelStageEvent.class, render -> {
+            if (render.getStage() == RenderLevelStageEvent.Stage.AFTER_TRANSLUCENT_BLOCKS) {
+                FireHydraRenderer.renderAfterTranslucent(render.getPoseStack(), render.getCamera(),
+                        render.getPartialTick().getTickDelta(true));
+            }
+        });
     }
 
     @SubscribeEvent
