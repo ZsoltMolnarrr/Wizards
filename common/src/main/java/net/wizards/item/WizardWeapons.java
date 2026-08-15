@@ -6,7 +6,7 @@ import net.minecraft.item.Items;
 import net.minecraft.recipe.Ingredient;
 import net.minecraft.registry.Registries;
 import net.minecraft.util.Identifier;
-import net.spell_engine.api.config.WeaponConfig;
+import net.spell_engine.rpg_series.config.WeaponConfig;
 import net.spell_engine.api.spell.container.SpellContainers;
 import net.spell_engine.rpg_series.item.Equipment;
 import net.spell_engine.rpg_series.item.Weapon;
