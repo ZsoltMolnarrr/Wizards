@@ -1,10 +1,8 @@
 {
   "itemGroup.wizards.general": "마법사 (RPG 시리즈)",
-
   "item.wizards.spell_book/arcane": "비전의 책",
   "item.wizards.spell_book/fire": "불의 책",
   "item.wizards.spell_book/frost": "서리의 책",
-
   "item.wizards.wand_novice": "초심자 완드",
   "item.wizards.wand_arcane": "비전 완드",
   "item.wizards.wand_fire": "불 완드",
@@ -38,7 +36,6 @@
   "item.wizards.frost_robe_chest": "서리 로브 상의",
   "item.wizards.frost_robe_legs": "서리 로브 하의",
   "item.wizards.frost_robe_feet": "서리 부츠",
-
   "spell.wizards.arcane_bolt.name": "비전 화살",
   "spell.wizards.arcane_bolt.description": "에너지 화살을 발사하여 {damage}의 비전 주문 피해를 입힙니다.",
   "spell.wizards.arcane_missile.name": "비전 미사일",
@@ -51,7 +48,6 @@
   "spell.wizards.arcane_beam.description": "에너지 광선을 채널링하여 매 초 {damage}의 비전 피해를 입힙니다. 모든 비전 충전을 소모합니다.",
   "spell.wizards.arcane_blink.name": "점멸",
   "spell.wizards.arcane_blink.description": "{teleport_distance}블록 앞으로 순간이동합니다.",
-
   "spell.wizards.fire_scorch.name": "그을림",
   "spell.wizards.fire_scorch.description": "대상을 그을려 {damage}의 불 주문 피해를 입히고 불을 붙입니다.",
   "spell.wizards.fireball.name": "화염구",
@@ -62,7 +58,6 @@
   "spell.wizards.fire_meteor.description": "대상에게 유성을 떨어뜨려 각 유성이 {impact_range}블록 내에서 최대 {damage}의 불 주문 피해를 입힙니다.",
   "spell.wizards.fire_wall.name": "불의 벽",
   "spell.wizards.fire_wall.description": "불의 벽을 생성하여 {cloud_duration}초 동안 유지되며, 이를 통과하는 적에게 지속적으로 최대 {damage}의 불 주문 피해를 입힙니다.",
-
   "spell.wizards.frost_shard.name": "서리 파편",
   "spell.wizards.frost_shard.description": "서리 파편을 발사하여 {pierce}명의 적을 관통하고 {damage}의 서리 주문 피해를 입힙니다.",
   "spell.wizards.frostbolt.name": "서리 화살",
@@ -79,28 +74,24 @@
   "effect.wizards.frost_shield.description": "활성화 상태에서 들어오는 공격을 차단하지만 이동 속도를 늦춥니다.",
   "spell.wizards.frost_blizzard.name": "눈보라",
   "spell.wizards.frost_blizzard.description": "대상과 주변 적에게 서리 파편의 비를 내리게 하여 {impact_range}블록 반경 내에서 최대 {damage}의 서리 주문 피해를 입히고 목표를 느리게 합니다.",
-
   "advancements.rpg_series.path_choose_arcane.title": "비전의 길",
   "advancements.rpg_series.path_choose_arcane.description": "비전의 책을 만드세요",
   "advancements.rpg_series.path_choose_fire.title": "불의 길",
   "advancements.rpg_series.path_choose_fire.description": "불의 책을 만드세요",
   "advancements.rpg_series.path_choose_frost.title": "서리의 길",
   "advancements.rpg_series.path_choose_frost.description": "서리의 책을 만드세요",
-
   "advancements.rpg_series.spell_novice_arcane.title": "마법 적응",
   "advancements.rpg_series.spell_novice_arcane.description": "첫 번째 비전 마법 주문을 얻으세요",
   "advancements.rpg_series.spell_novice_fire.title": "불장난",
   "advancements.rpg_series.spell_novice_fire.description": "첫 번째 불 마법 주문을 얻으세요",
   "advancements.rpg_series.spell_novice_frost.title": "차분하게",
   "advancements.rpg_series.spell_novice_frost.description": "첫 번째 서리 마법 주문을 얻으세요",
-
   "advancements.rpg_series.spell_master_arcane.title": "마음의 통제",
   "advancements.rpg_series.spell_master_arcane.description": "모든 비전 마법 주문을 얻으세요",
   "advancements.rpg_series.spell_master_fire.title": "방화광",
   "advancements.rpg_series.spell_master_fire.description": "모든 불 마법 주문을 얻으세요",
   "advancements.rpg_series.spell_master_frost.title": "얼어붙은 혈관",
   "advancements.rpg_series.spell_master_frost.description": "모든 서리 마법 주문을 얻으세요",
-
   "advancements.rpg_series.obtain_wizard_robes.title": "마법사는 결코 늦지 않는다",
   "advancements.rpg_series.obtain_wizard_robes.description": "마법사 로브 세트를 완성하세요",
   "advancements.rpg_series.obtain_wand.title": "완드가 마법사를 선택한다",
@@ -111,7 +102,6 @@
   "advancements.rpg_series.obtain_fire_rune.description": "불의 룬을 얻으세요",
   "advancements.rpg_series.obtain_frost_rune.title": "서리의 길",
   "advancements.rpg_series.obtain_frost_rune.description": "서리의 룬을 얻으세요",
-
   "entity.minecraft.villager.wizard_merchant": "마법사 상인",
   "entity.minecraft.villager.wizards.wizard_merchant": "마법사 상인",
   "entity.minecraft.villager.wizards:wizard_merchant": "마법사 상인",
@@ -149,5 +139,28 @@
   "advancements.rpg_series.spell_cast_frost_book.title": "냉기 능력 강화",
   "advancements.rpg_series.spell_cast_frost_book.description": "서리 서적에서 주문 시전하기",
   "advancements.rpg_series.trade_with_wizard.title": "마법 거래",
-  "advancements.rpg_series.trade_with_wizard.description": "마법사 상인 주민과 거래하기"
+  "advancements.rpg_series.trade_with_wizard.description": "마법사 상인 주민과 거래하기",
+  "effect.wizards.arcane_evocation": "발현",
+  "effect.wizards.arcane_evocation.description": "주문 치명타 확률과 속도를 증가시키지만, 받는 피해량도 증가시킵니다.",
+  "entity.wizards.arcane_emitter": "비전 방출기",
+  "entity.wizards.fire_hydra": "화염 히드라",
+  "entity.wizards.frost_elemental": "서리 정령",
+  "spell.wizards.arcane_barrage.description": "당신 뒤에 비전 방출기 {summon_count}개를 소환하여 대상이나 조준한 곳을 향해 발사합니다. {summon_duration}초 동안 유지되며 당신의 비전 주문력으로 강화됩니다.",
+  "spell.wizards.arcane_barrage.name": "비전 연사",
+  "spell.wizards.arcane_evocation.description": "채널링하여 발현 효과를 얻습니다. 최대 {effect_amplifier_cap}번까지 중첩되며 {effect_duration}초 동안 유지됩니다. 중첩당 주문 치명타 확률과 주문 가속이 {effect|wizards:arcane_evocation|0|spell_power:critical_chance} 증가하지만, 받는 피해량도 {effect|wizards:arcane_evocation|0|spell_engine:damage_taken} 증가합니다.",
+  "spell.wizards.arcane_evocation.name": "발현",
+  "spell.wizards.arcane_explosion.description": "당신 주변에 마법 폭발을 일으켜 주변 적에게 {damage}의 비전 주문 피해를 입힙니다.",
+  "spell.wizards.arcane_explosion.name": "비전 파열",
+  "spell.wizards.fire_hydra.description": "당신 근처에 화염 히드라 머리 {summon_count}개를 소환하여 주변 적을 공격합니다. {summon_duration}초 동안 유지되며 당신의 불 주문력으로 강화됩니다.",
+  "spell.wizards.fire_hydra.name": "화염 히드라",
+  "spell.wizards.fire_slash.description": "넓은 화염의 파동을 발사하여 경로 상의 적에게 {damage}의 불 주문 피해를 입힙니다. 시전을 오래 유지할수록 더 강하게 타격하고 크기도 커집니다.",
+  "spell.wizards.fire_slash.name": "화염 베기",
+  "spell.wizards.fire_storm.description": "당신 주변의 대상을 불태워 매 초 최대 {damage}의 불 주문 피해를 입힙니다.",
+  "spell.wizards.fire_storm.name": "화염 폭풍",
+  "spell.wizards.frost_elemental.description": "서리 정령을 소환하여 {summon_duration}초 동안 곁에서 함께 싸우며, 당신의 서리 주문력으로 강화됩니다.",
+  "spell.wizards.frost_elemental.name": "서리 정령",
+  "spell.wizards.frost_lance.description": "얼음 창을 발사하여 경로 상의 모든 적을 관통하고 {damage}의 서리 주문 피해를 입히며 {effect_duration}초 동안 대상을 느리게 합니다. 시전을 오래 유지할수록 더 강하게 타격하고, 창이 더 크고 빠르게 날아가며, 더 멀리 도달합니다.",
+  "spell.wizards.frost_lance.name": "서리 창",
+  "spell.wizards.frost_spikes.description": "땅에서 서리 가시를 일렬로 솟아오르게 하여 {damage}의 서리 주문 피해를 입히고 경로에 있는 적을 {effect_duration}초 동안 얼립니다. 얼어붙은 대상은 서리 마법에 취약합니다.",
+  "spell.wizards.frost_spikes.name": "서리 가시"
 }

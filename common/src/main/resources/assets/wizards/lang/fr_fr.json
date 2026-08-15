@@ -1,17 +1,14 @@
 {
   "itemGroup.wizards.general": "Wizards",
-
   "item.wizards.spell_book/arcane": "Tome d’Arcanes",
   "item.wizards.spell_book/fire": "Tome de Feu",
   "item.wizards.spell_book/frost": "Tome de Givre",
   "item.wizards.spell_scroll/arcane": "Parchemin d’Arcanes",
   "item.wizards.spell_scroll/fire": "Parchemin de Feu",
   "item.wizards.spell_scroll/frost": "Parchemin de Givre",
-
   "item.wizards.spell_book/arcane.spell_binding.description": "Tome des Sorciers Arcanistes, utilisant l'énergie pure pour concentrer de puissantes attaques sur une seule cible\n- Atouts : Dégâts magiques concentrés sur des cibles individuelles\n- Faiblesses : Défense très faible\n- Équipement : Armure légère",
   "item.wizards.spell_book/fire.spell_binding.description": "Tome des Sorciers du Feu, utilisant la magie ardente pour vaincre les ennemis proches comme lointains\n- Atouts : Dégâts magiques de zone\n- Faiblesses : Faible défense et mobilité\n- Équipement : Armure légère",
   "item.wizards.spell_book/frost.spell_binding.description": "Tome des Sorciers du Givre, utilisant la magie glaciale pour ralentir les ennemis et contrôler le champ de bataille\n- Atouts : Dégâts magiques qui ralentissent et gèlent les ennemis\n- Faiblesses : Faible défense et mobilité\n- Équipement : Armure légère",
-
   "item.wizards.wand_novice": "Baguette de Novice",
   "item.wizards.wand_arcane": "Baguette Arcanique",
   "item.wizards.wand_fire": "Baguette de Feu",
@@ -20,70 +17,56 @@
   "item.wizards.staff_arcane": "Bâton Arcanique",
   "item.wizards.staff_fire": "Bâton de Feu",
   "item.wizards.staff_frost": "Bâton de Givre",
-
   "item.wizards.wand_netherite_arcane": "Baguette Arcanique en Netherite",
   "item.wizards.wand_netherite_fire": "Baguette de Feu en Netherite",
   "item.wizards.wand_netherite_frost": "Baguette de Givre en Netherite",
   "item.wizards.staff_netherite_arcane": "Bâton Arcanique en Netherite",
   "item.wizards.staff_netherite_fire": "Bâton de Feu en Netherite",
   "item.wizards.staff_netherite_frost": "Bâton de Givre en Netherite",
-
   "item.wizards.staff_crystal_arcane": "Bâton Arcanique en Cristal",
   "item.wizards.staff_ruby_fire": "Bâton de Feu en Rubis",
   "item.wizards.staff_smaragdant_frost": "Bâton de Givre Smaragdant",
   "item.wizards.aether_wizard_staff": "Bâton de Magistère Valkyrien",
-
   "item.wizards.wizard_robe_head": "Chapeau de Sorcier",
   "item.wizards.wizard_robe_chest": "Tunique de Sorcier",
   "item.wizards.wizard_robe_legs": "Pantalon de Sorcier",
   "item.wizards.wizard_robe_feet": "Bottes de Sorcier",
-
   "item.wizards.arcane_robe_head": "Chapeau Arcanique",
   "item.wizards.arcane_robe_chest": "Tunique Arcanique",
   "item.wizards.arcane_robe_legs": "Pantalon Arcanique",
   "item.wizards.arcane_robe_feet": "Bottes Arcanique",
-
   "item.wizards.fire_robe_head": "Chapeau de Feu",
   "item.wizards.fire_robe_chest": "Tunique de Feu",
   "item.wizards.fire_robe_legs": "Pantalon de Feu",
   "item.wizards.fire_robe_feet": "Bottes de Feu",
-
   "item.wizards.frost_robe_head": "Chapeau de Givre",
   "item.wizards.frost_robe_chest": "Tunique de Givre",
   "item.wizards.frost_robe_legs": "Pantalon de Givre",
   "item.wizards.frost_robe_feet": "Bottes de Givre",
-
   "item.wizards.netherite_arcane_robe_head": "Chapeau Arcanique en Netherite",
   "item.wizards.netherite_arcane_robe_chest": "Tunique Arcanique en Netherite",
   "item.wizards.netherite_arcane_robe_legs": "Pantalon Arcanique en Netherite",
   "item.wizards.netherite_arcane_robe_feet": "Bottes Arcanique en Netherite",
-
   "item.wizards.netherite_fire_robe_head": "Chapeau de Feu en Netherite",
   "item.wizards.netherite_fire_robe_chest": "Tunique de Feu en Netherite",
   "item.wizards.netherite_fire_robe_legs": "Pantalon de Feu en Netherite",
   "item.wizards.netherite_fire_robe_feet": "Bottes de Feu en Netherite",
-
   "item.wizards.netherite_frost_robe_head": "Chapeau de Givre en Netherite",
   "item.wizards.netherite_frost_robe_chest": "Tunique de Givre en Netherite",
   "item.wizards.netherite_frost_robe_legs": "Pantalon de Givre en Netherite",
   "item.wizards.netherite_frost_robe_feet": "Bottes de Givre en Netherite",
-
   "spell.wizards.arcane_bolt.name": "Trait Arcanique",
   "spell.wizards.arcane_bolt.description": "Lance un trait d'énergie, infligeant {damage} dégâts arcaniques.",
   "spell.wizards.arcane_blast.name": "Explosion Arcanique",
   "spell.wizards.arcane_blast.description": "Frappe la cible, infligeant {damage} dégâts arcaniques. Confère une Charge Arcanique, cumulable jusqu’à {effect_amplifier_cap} fois.",
   "effect.wizards.arcane_charge": "Charge Arcanique",
   "effect.wizards.arcane_charge.description": "Augmente les dégâts de sorts arcaniques infligés",
-
   "spell.wizards.arcane_missile.name": "Projectiles Arcanique",
   "spell.wizards.arcane_missile.description": "Lance continuellement des projectiles d’énergie transperçant {pierce} cibles, infligeant {damage} dégâts arcaniques par seconde.",
-
   "spell.wizards.arcane_beam.name": "Rayon Arcanique",
   "spell.wizards.arcane_beam.description": "Canalise un rayon d’énergie, infligeant {damage} dégâts arcaniques par seconde. Consomme toutes les Charges Arcanique.",
-
   "spell.wizards.arcane_blink.name": "Transfert",
   "spell.wizards.arcane_blink.description": "Vous téléporte de {teleport_distance} blocs vers l’avant.",
-
   "spell.wizards.fire_scorch.name": "Brûlure",
   "spell.wizards.fire_scorch.description": "Brûle la cible, infligeant {damage} dégâts de feu et l’enflamme.",
   "spell.wizards.fireball.name": "Boule de Feu",
@@ -96,80 +79,88 @@
   "spell.wizards.fire_meteor.description": "Fait s’écraser des météores sur la cible, chacun infligeant jusqu’à {damage} dégâts de feu dans un rayon de {impact_range} blocs.",
   "spell.wizards.fire_wall.name": "Mur de Flammes",
   "spell.wizards.fire_wall.description": "Crée un mur de flammes durant {cloud_duration} secondes, infligeant jusqu’à {damage} dégâts de feu en continu aux ennemis le traversant.",
-
   "spell.wizards.frost_shard.name": "Éclat de Givre",
   "spell.wizards.frost_shard.description": "Lance un éclat de givre pouvant ricocher, infligeant {damage} dégâts de givre à l’impact.",
   "spell.wizards.frostbolt.name": "Éclair de Givre",
   "spell.wizards.frostbolt.description": "Lance un projectile de givre ricochant vers {ricochet} cibles proches supplémentaires, infligeant {damage} dégâts de givre et ralentissant la cible.",
-
   "effect.wizards.frost_slowness": "Ralentissement",
   "effect.wizards.frost_slowness.description": "Réduit la vitesse de déplacement",
-
   "spell.wizards.frost_nova.name": "Nova de Givre",
   "spell.wizards.frost_nova.description": "Gèle les ennemis autour de vous pendant {effect_duration} secondes, infligeant {damage} dégâts de givre et bloquant leur mouvement. Les cibles gelées sont vulnérables à la magie du givre.",
   "effect.wizards.frozen": "Gelé",
   "effect.wizards.frozen.description": "Empêche tout mouvement, dissipé après avoir subi des dégâts ; vulnérable à la magie du givre",
-
   "spell.wizards.frost_shield.name": "Bouclier de Givre",
   "spell.wizards.frost_shield.description": "Vous protège des attaques, projectiles et du feu pendant {effect_duration} secondes, mais réduit votre vitesse de déplacement.",
   "effect.wizards.frost_shield": "Bouclier de Givre",
   "effect.wizards.frost_shield.description": "Bloque les attaques entrantes tant qu’il est actif, mais ralentit le mouvement",
-
   "spell.wizards.frost_blizzard.name": "Blizzard",
   "spell.wizards.frost_blizzard.description": "Fait pleuvoir des éclats de givre sur votre cible et les ennemis proches, infligeant jusqu’à {damage} dégâts de givre dans un rayon de {impact_range} blocs et les ralentissant.",
-
   "advancements.rpg_series.path_choose_arcane.title": "Voie des Arcanes",
   "advancements.rpg_series.path_choose_arcane.description": "Créer un Tome d’Arcanes",
   "advancements.rpg_series.path_choose_fire.title": "Voie du Feu",
   "advancements.rpg_series.path_choose_fire.description": "Créer un Tome de Feu",
   "advancements.rpg_series.path_choose_frost.title": "Voie du Givre",
   "advancements.rpg_series.path_choose_frost.description": "Créer un Tome de Givre",
-
   "advancements.rpg_series.spell_novice_arcane.title": "Harmonisation Magique",
   "advancements.rpg_series.spell_novice_arcane.description": "Obtenir votre premier sort Arcanique",
   "advancements.rpg_series.spell_novice_fire.title": "Jouer avec le feu",
   "advancements.rpg_series.spell_novice_fire.description": "Obtenir votre premier sort de Feu",
   "advancements.rpg_series.spell_novice_frost.title": "Rester au frais",
   "advancements.rpg_series.spell_novice_frost.description": "Obtenir votre premier sort de Givre",
-
   "advancements.rpg_series.spell_master_arcane.title": "Maîtrise Mentale",
   "advancements.rpg_series.spell_master_arcane.description": "Obtenir tous les sorts Arcanique",
   "advancements.rpg_series.spell_master_fire.title": "Pyromane",
   "advancements.rpg_series.spell_master_fire.description": "Obtenir tous les sorts de Feu",
   "advancements.rpg_series.spell_master_frost.title": "Veines de Givre",
   "advancements.rpg_series.spell_master_frost.description": "Obtenir tous les sorts de Givre",
-
   "advancements.rpg_series.obtain_wizard_robes.title": "Un Sorcier n’est Jamais en Retard",
   "advancements.rpg_series.obtain_wizard_robes.description": "Acquérir un ensemble complet de vêtements de Sorcier",
-
   "advancements.rpg_series.obtain_wand.title": "La Baguette Choisit le Sorcier",
   "advancements.rpg_series.obtain_wand.description": "Obtenir une Baguette",
-
   "advancements.rpg_series.obtain_arcane_rune.title": "Voie des Arcanes",
   "advancements.rpg_series.obtain_arcane_rune.description": "Obtenir une Rune Arcanique",
   "advancements.rpg_series.obtain_fire_rune.title": "Voie du Feu",
   "advancements.rpg_series.obtain_fire_rune.description": "Obtenir une Rune de Feu",
   "advancements.rpg_series.obtain_frost_rune.title": "Voie du Givre",
   "advancements.rpg_series.obtain_frost_rune.description": "Obtenir une Rune de Givre",
-
   "advancements.rpg_series.spell_cast_arcane_wand.title": "Entraînement Arcanique",
   "advancements.rpg_series.spell_cast_arcane_wand.description": "Lancer un sort avec une Baguette Arcanique",
   "advancements.rpg_series.spell_cast_fire_wand.title": "Entraînement de Feu",
   "advancements.rpg_series.spell_cast_fire_wand.description": "Lancer un sort avec une Baguette de Feu",
   "advancements.rpg_series.spell_cast_frost_wand.title": "Entraînement de Givre",
   "advancements.rpg_series.spell_cast_frost_wand.description": "Lancer un sort avec une Baguette de Givre",
-
   "advancements.rpg_series.spell_cast_arcane_book.title": "Puissance Arcanique",
   "advancements.rpg_series.spell_cast_arcane_book.description": "Lancer un sort depuis le Tome d’Arcanes",
   "advancements.rpg_series.spell_cast_fire_book.title": "Puissance de Feu",
   "advancements.rpg_series.spell_cast_fire_book.description": "Lancer un sort depuis le Tome de Feu",
   "advancements.rpg_series.spell_cast_frost_book.title": "Puissance de Givre",
   "advancements.rpg_series.spell_cast_frost_book.description": "Lancer un sort depuis le Tome de Givre",
-
   "advancements.rpg_series.trade_with_wizard.title": "Commerce Magique",
   "advancements.rpg_series.trade_with_wizard.description": "Échanger avec un villageois Marchand-Sorcier",
-
   "entity.minecraft.villager.wizard_merchant": "Marchand-Sorcier",
   "entity.minecraft.villager.wizards.wizard_merchant": "Marchand-Sorcier",
-  "entity.minecraft.villager.wizards:wizard_merchant": "Marchand-Sorcier"
+  "entity.minecraft.villager.wizards:wizard_merchant": "Marchand-Sorcier",
+  "effect.wizards.arcane_evocation": "Évocation",
+  "effect.wizards.arcane_evocation.description": "Augmente la chance de coup critique et la hâte des sorts, mais aussi les dégâts que vous subissez",
+  "entity.wizards.arcane_emitter": "Émetteur Arcanique",
+  "entity.wizards.fire_hydra": "Hydre de Feu",
+  "entity.wizards.frost_elemental": "Élémentaire de Givre",
+  "spell.wizards.arcane_barrage.description": "Invoque {summon_count} Émetteurs Arcaniques derrière vous, qui tirent sur votre cible ou là où vous visez. Ils durent {summon_duration} sec et sont renforcés par votre Puissance des sorts arcaniques.",
+  "spell.wizards.arcane_barrage.name": "Barrage Arcanique",
+  "spell.wizards.arcane_evocation.description": "Canalisez pour obtenir Évocation, cumulable jusqu’à {effect_amplifier_cap} fois, durant {effect_duration} sec. Chaque charge augmente la chance de coup critique et la hâte des sorts de {effect|wizards:arcane_evocation|0|spell_power:critical_chance}, mais augmente aussi les dégâts que vous subissez de {effect|wizards:arcane_evocation|0|spell_engine:damage_taken}.",
+  "spell.wizards.arcane_evocation.name": "Évocation",
+  "spell.wizards.arcane_explosion.description": "Crée une déflagration magique autour de vous, infligeant {damage} dégâts arcaniques aux ennemis proches.",
+  "spell.wizards.arcane_explosion.name": "Déflagration Arcanique",
+  "spell.wizards.fire_hydra.description": "Invoque un groupe de {summon_count} têtes d’Hydre de Feu près de vous, attaquant les ennemis proches. Elles durent {summon_duration} sec et sont renforcées par votre Puissance des sorts de feu.",
+  "spell.wizards.fire_hydra.name": "Hydre de Feu",
+  "spell.wizards.fire_slash.description": "Lance une large vague de flammes, infligeant {damage} dégâts de feu aux ennemis sur son passage. Plus vous maintenez le lancement, plus l’impact est violent et plus la vague grandit.",
+  "spell.wizards.fire_slash.name": "Lame de Feu",
+  "spell.wizards.fire_storm.description": "Incendie les cibles autour de vous, infligeant jusqu’à {damage} dégâts de feu par seconde.",
+  "spell.wizards.fire_storm.name": "Tempête de Feu",
+  "spell.wizards.frost_elemental.description": "Invoque un Élémentaire de Givre pour combattre à vos côtés pendant {summon_duration} sec, renforcé par votre Puissance des sorts de givre.",
+  "spell.wizards.frost_elemental.name": "Élémentaire de Givre",
+  "spell.wizards.frost_lance.description": "Lance une lance de glace, transperçant tous les ennemis sur son passage, infligeant {damage} dégâts de givre et ralentissant les cibles pendant {effect_duration} sec. Plus vous maintenez le lancement, plus l’impact est violent, plus la lance est grande et rapide, et plus elle vole loin.",
+  "spell.wizards.frost_lance.name": "Lance de Glace",
+  "spell.wizards.frost_spikes.description": "Fait surgir une ligne de pics de givre du sol, infligeant {damage} dégâts de givre et gelant les ennemis pris sur leur passage pendant {effect_duration} sec. Les cibles gelées sont vulnérables à la magie du givre.",
+  "spell.wizards.frost_spikes.name": "Pics de Givre"
 }

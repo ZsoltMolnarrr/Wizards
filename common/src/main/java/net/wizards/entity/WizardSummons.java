@@ -21,7 +21,7 @@ import java.util.List;
 
 /// Factory of the Wizards summon definitions. Each builder returns a {@link Summon}
 /// ({@code Spell.Impact.Action.Summon}) that a spell drops into a `SUMMON` impact — the engine's
-/// {@code SpellHelper} spawns and configures it.
+/// {@code SpellImpacts} spawns and configures it.
 public class WizardSummons {
 
     // MARK: Summon definitions

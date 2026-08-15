@@ -1,6 +1,5 @@
 {
   "itemGroup.wizards.general": "Wizards",
-
   "item.wizards.arcane_spell_book": "Buch der Arkanen Künste",
   "item.wizards.fire_spell_book": "Buch des Feuers",
   "item.wizards.frost_spell_book": "Buch des Frostes",
@@ -10,7 +9,6 @@
   "item.wizards.arcane_spell_book.spell_binding.description": "Zauberbuch der arkanen Zauberer, das reine Energie nutzt, um mächtige Angriffe auf einzelne Ziele zu konzentrieren\n- Stärken: Konzentrierter magischer Schaden gegen einzelne Gegner\n- Schwächen: Sehr geringe Verteidigung\n- Ausrüstung: Leicht gepanzert",
   "item.wizards.fire_spell_book.spell_binding.description": "Zauberbuch der Feuerzauberer, das feurige Magie einsetzt, um nah und fern befindliche Feinde zu besiegen\n- Stärken: Magischer Schaden in großen Bereichen\n- Schwächen: Geringe Verteidigung und Mobilität\n- Ausrüstung: Leichte Rüstung",
   "item.wizards.frost_spell_book.spell_binding.description": "Zauberbuch der Frostmagier, nutzt Kältezauber, um Gegner zu verlangsamen und das Schlachtfeld zu kontrollieren\n- Stärken: Magischer Schaden, der Gegner verlangsamt und einfriert\n- Schwächen: Geringe Verteidigung und Mobilität\n- Ausrüstung: Leicht gepanzert",
-
   "item.wizards.wand_novice": "Anfänger-Zauberstab",
   "item.wizards.wand_arcane": "Arkaner-Zauberstab",
   "item.wizards.wand_fire": "Feuer-Zauberstab",
@@ -57,7 +55,6 @@
   "item.wizards.netherite_frost_robe_chest": "Frost Netheriterobe Oberteil",
   "item.wizards.netherite_frost_robe_legs": "Frost Netheriterobe Unterteil",
   "item.wizards.netherite_frost_robe_feet": "Frost Netheritestiefel",
-
   "spell.wizards.arcane_bolt.name": "Arkaner Blitz",
   "spell.wizards.arcane_bolt.description": "Schießt einen Energiestrahl ab, der {damage} arkanen Zauberschaden verursacht.",
   "spell.wizards.arcane_blast.name": "Arkane Explosion",
@@ -70,7 +67,6 @@
   "spell.wizards.arcane_beam.description": "Kanalisiert einen Energiestrahl, der jede Sekunde {damge} arkanen Schaden verursacht. Verbraucht alle arkanen Ladungen.",
   "spell.wizards.arcane_blink.name": "Arkanes Blinzeln",
   "spell.wizards.arcane_blink.description": "Teleportiert dich um {teleport_distance} Blöcke nach vorne.",
-
   "spell.wizards.fire_scorch.name": "Verbrennen",
   "spell.wizards.fire_scorch.description": "Verbrennt das Ziel, verursacht {damage} Feuerspruchschaden und setzt es in Brand.",
   "spell.wizards.fireball.name": "Feuerball",
@@ -83,7 +79,6 @@
   "spell.wizards.fire_meteor.description": "Lässt einen Meteoriten auf das Ziel stürzen, der innerhalb von {impact_range} Blöcken bis zu {damage} Feuerschaden verursacht.",
   "spell.wizards.fire_wall.name": "Flammenwand",
   "spell.wizards.fire_wall.description": "Erzeugt eine Feuerwand, die {cloud_duration} Sekunden lang bestehen bleibt und Gegnern, die sie durchqueren, kontinuierlich bis zu {damage} Feuerschaden zufügt.",
-
   "spell.wizards.frost_shard.name": "Frostsplitter",
   "spell.wizards.frost_shard.description": "Schießt einen Frostsplitter ab, der von Wänden abprallen kann und beim Aufprall {damage} Frostzauber-Schaden verursacht.",
   "spell.wizards.frostbolt.name": "Frostblitz",
@@ -100,28 +95,24 @@
   "effect.wizards.frost_shield.description": "Blockiert eingehende Angriffe, solange es aktiv ist, verlangsamt jedoch die Bewegung.",
   "spell.wizards.frost_blizzard.name": "Schneesturm",
   "spell.wizards.frost_blizzard.description": "Lässt einen Regen aus Frostsplittern auf dein Ziel und nahegelegene Gegner herabfallen, der bis zu {damage} Frostzauber-Schaden verursacht und das Ziel verlangsamt, in einem Radius von {impact_range} Blöcken.",
-
   "advancements.rpg_series.path_choose_arcane.title": "Pfad des Arkanen",
   "advancements.rpg_series.path_choose_arcane.description": "Erstelle ein Buch der Arkanen Künste",
   "advancements.rpg_series.path_choose_fire.title": "Pfad des Feuers",
   "advancements.rpg_series.path_choose_fire.description": "Erstelle ein Buch der Feuerkünste",
   "advancements.rpg_series.path_choose_frost.title": "Pfad des Frostes",
   "advancements.rpg_series.path_choose_frost.description": "Erstelle ein Buch der Frostigen Künste",
-
   "advancements.rpg_series.spell_novice_arcane.title": "Magische Einstimmung",
   "advancements.rpg_series.spell_novice_arcane.description": "Erhalte deinen ersten arkanen Zauber",
   "advancements.rpg_series.spell_novice_fire.title": "Mit dem Feuer spielen",
   "advancements.rpg_series.spell_novice_fire.description": "Erhalte deinen ersten FeuerzZauber",
   "advancements.rpg_series.spell_novice_frost.title": "Kühlen Kopf bewahren",
   "advancements.rpg_series.spell_novice_frost.description": "Erhalte deinen ersten Frostzauber",
-
   "advancements.rpg_series.spell_master_arcane.title": "Beherrschung des Geistes",
   "advancements.rpg_series.spell_master_arcane.description": "Erhalte alle arkanen Zauber",
   "advancements.rpg_series.spell_master_fire.title": "Pyromane",
   "advancements.rpg_series.spell_master_fire.description": "Erhalte alle Feuerzauber",
   "advancements.rpg_series.spell_master_frost.title": "Eis in den Adern",
   "advancements.rpg_series.spell_master_frost.description": "Erhalte alle Frostzauber",
-
   "advancements.rpg_series.obtain_wizard_robes.title": "Ein Zauberer ist niemals zu spät",
   "advancements.rpg_series.obtain_wizard_robes.description": "Erwerben Sie einen vollständigen Satz Zaubererroben.",
   "advancements.rpg_series.obtain_wand.title": "Der Zauberstab wählt den Zauberer",
@@ -132,26 +123,53 @@
   "advancements.rpg_series.obtain_fire_rune.description": "Erhalte eine Feuerrune",
   "advancements.rpg_series.obtain_frost_rune.title": "Pfad des Frostes",
   "advancements.rpg_series.obtain_frost_rune.description": "Erhalte eine Frost Rune",
-
   "advancements.rpg_series.spell_cast_arcane_wand.title": "Arkanes Üben",
   "advancements.rpg_series.spell_cast_arcane_wand.description": "Zaubere mit einem arkanen Zauberstab",
   "advancements.rpg_series.spell_cast_fire_wand.title": "Feuriges Üben",
   "advancements.rpg_series.spell_cast_fire_wand.description": "Zaubere mit einem Feuerzauberstab",
   "advancements.rpg_series.spell_cast_frost_wand.title": "Frostiges Üben",
   "advancements.rpg_series.spell_cast_frost_wand.description": "Zaubere mit einem Frostzauberstab",
-
   "advancements.rpg_series.spell_cast_arcane_book.title": "Arkane Ermächtigung",
   "advancements.rpg_series.spell_cast_arcane_book.description": "Wirke einen Zauber aus dem Buch der Arkanen Künste",
   "advancements.rpg_series.spell_cast_fire_book.title": "Feurige Ermächtigung",
   "advancements.rpg_series.spell_cast_fire_book.description": "Wirke einen Zauber aus dem Buch des Feuers",
   "advancements.rpg_series.spell_cast_frost_book.title": "Frostige Ermächtigung",
   "advancements.rpg_series.spell_cast_frost_book.description": "Wirke einen Zauber aus dem Buch des Frostes",
-
-
   "advancements.rpg_series.trade_with_wizard.title": "Magischer Händler",
   "advancements.rpg_series.trade_with_wizard.description": "Handel mit einem Zauberer-Händler-Dorfbewohner",
-
   "entity.minecraft.villager.wizard_merchant": "Zauberer-Händler",
   "entity.minecraft.villager.wizards.wizard_merchant": "Zauberer-Händler",
-  "entity.minecraft.villager.wizards:wizard_merchant": "Zauberer-Händler"
+  "entity.minecraft.villager.wizards:wizard_merchant": "Zauberer-Händler",
+  "effect.wizards.arcane_evocation": "Evokation",
+  "effect.wizards.arcane_evocation.description": "Erhöht kritische Zauberchance und Zaubertempo, aber auch den Schaden, den du erleidest",
+  "entity.wizards.arcane_emitter": "Arkaner Emitter",
+  "entity.wizards.fire_hydra": "Feuerhydra",
+  "entity.wizards.frost_elemental": "Frostelementar",
+  "item.wizards.spell_book/arcane": "Buch der Arkanen Künste",
+  "item.wizards.spell_book/arcane.spell_binding.description": "Zauberbuch der arkanen Zauberer, das reine Energie nutzt, um mächtige Angriffe auf einzelne Ziele zu konzentrieren\n- Stärken: Konzentrierter magischer Schaden gegen einzelne Gegner\n- Schwächen: Sehr geringe Verteidigung\n- Ausrüstung: Leicht gepanzert",
+  "item.wizards.spell_book/fire": "Buch des Feuers",
+  "item.wizards.spell_book/fire.spell_binding.description": "Zauberbuch der Feuerzauberer, das feurige Magie einsetzt, um nah und fern befindliche Feinde zu besiegen\n- Stärken: Magischer Schaden in großen Bereichen\n- Schwächen: Geringe Verteidigung und Mobilität\n- Ausrüstung: Leichte Rüstung",
+  "item.wizards.spell_book/frost": "Buch des Frostes",
+  "item.wizards.spell_book/frost.spell_binding.description": "Zauberbuch der Frostmagier, nutzt Kältezauber, um Gegner zu verlangsamen und das Schlachtfeld zu kontrollieren\n- Stärken: Magischer Schaden, der Gegner verlangsamt und einfriert\n- Schwächen: Geringe Verteidigung und Mobilität\n- Ausrüstung: Leicht gepanzert",
+  "item.wizards.spell_scroll/arcane": "Arkane Zauberrolle",
+  "item.wizards.spell_scroll/fire": "Feuer Zauberrolle",
+  "item.wizards.spell_scroll/frost": "Frost Zauberrolle",
+  "spell.wizards.arcane_barrage.description": "Beschwört {summon_count} Arkane Emitter hinter dir, die auf dein Ziel oder den anvisierten Punkt feuern. Sie halten {summon_duration} Sek. an und werden durch deine Arkane Zauberkraft verstärkt.",
+  "spell.wizards.arcane_barrage.name": "Arkanes Sperrfeuer",
+  "spell.wizards.arcane_evocation.description": "Kanalisiere, um Evokation zu erhalten, die bis zu {effect_amplifier_cap} Mal stapelbar ist und {effect_duration} Sek. anhält. Jeder Stapel erhöht die kritische Zauberchance und das Zaubertempo um {effect|wizards:arcane_evocation|0|spell_power:critical_chance}, erhöht aber auch den erlittenen Schaden um {effect|wizards:arcane_evocation|0|spell_engine:damage_taken}.",
+  "spell.wizards.arcane_evocation.name": "Evokation",
+  "spell.wizards.arcane_explosion.description": "Erzeugt eine magische Detonation um dich herum, die {damage} arkanen Zauberschaden an nahen Gegnern verursacht.",
+  "spell.wizards.arcane_explosion.name": "Arkane Detonation",
+  "spell.wizards.fire_hydra.description": "Beschwört eine Gruppe von {summon_count} Feuerhydra-Köpfen in deiner Nähe, die nahe Gegner angreifen. Sie halten {summon_duration} Sek. an und werden durch deine Feuer-Zauberkraft verstärkt.",
+  "spell.wizards.fire_hydra.name": "Feuerhydra",
+  "spell.wizards.fire_slash.description": "Schleudert eine breite Flammenwelle, die {damage} Feuerzauberschaden an Gegnern in ihrem Weg verursacht. Je länger der Zauber gehalten wird, desto härter trifft er und desto größer wird er.",
+  "spell.wizards.fire_slash.name": "Flammenschlag",
+  "spell.wizards.fire_storm.description": "Verbrennt Ziele in deiner Umgebung und verursacht jede Sekunde bis zu {damage} Feuerzauberschaden.",
+  "spell.wizards.fire_storm.name": "Feuersturm",
+  "spell.wizards.frost_elemental.description": "Beschwört einen Frostelementar, der {summon_duration} Sek. an deiner Seite kämpft, verstärkt durch deine Frost-Zauberkraft.",
+  "spell.wizards.frost_elemental.name": "Frostelementar",
+  "spell.wizards.frost_lance.description": "Schleudert eine Eislanze, die alle Gegner in ihrem Weg durchbohrt, {damage} Frostzauberschaden verursacht und Ziele für {effect_duration} Sek. verlangsamt. Je länger der Zauber gehalten wird, desto härter trifft sie, desto größer und schneller wird die Lanze und desto weiter fliegt sie.",
+  "spell.wizards.frost_lance.name": "Eislanze",
+  "spell.wizards.frost_spikes.description": "Lässt eine Reihe von Froststacheln aus dem Boden aufsteigen, die {damage} Frostzauberschaden verursachen und Gegner in ihrem Weg für {effect_duration} Sek. einfrieren. Eingefrorene Ziele sind anfällig für Frostmagie.",
+  "spell.wizards.frost_spikes.name": "Froststacheln"
 }
