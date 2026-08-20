@@ -18,7 +18,7 @@ import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.spell_engine.api.spell.SpellDataComponents;
-import net.spell_engine.internals.criteria.SpellCastCriteria;
+import net.spell_engine.misc.criteria.SpellCastCriteria;
 import net.spell_engine.spellbinding.SpellBindingCriteria;
 import net.spell_engine.spellbinding.SpellBookCreationCriteria;
 

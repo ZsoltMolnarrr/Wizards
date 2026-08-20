@@ -41,7 +41,6 @@ repositories {
     }
     maven { url 'https://maven.kosmx.dev/' }
     maven { url 'https://maven.shedaniel.me/' }
-    maven { url 'https://maven.azuredoom.com/mods' }
     maven {
         name = 'Modrinth'
         url = 'https://api.modrinth.com/maven'
@@ -54,10 +53,11 @@ repositories {
         url = 'https://maven.ladysnake.org/releases'
     }
 
-    // For Accessories
-    maven { url 'https://maven.wispforest.io/releases' }
     maven { url 'https://maven.su5ed.dev/releases' }
     maven { url 'https://maven.fabricmc.net' }
+
+    // For Curios (transitive from SpellEngine on NeoForge)
+    maven { url 'https://maven.theillusivec4.top/' }
 
     mavenLocal()
 }
@@ -69,17 +69,9 @@ dependencies {
 
     modImplementation("dev.kosmx.player-anim:player-animation-lib-forge:${project.player_anim_version}")
     modImplementation("me.shedaniel.cloth:cloth-config-${platform}:${project.cloth_config_version}")
-    modImplementation("mod.azure.azurelibarmor:azurelibarmor-neo-${project.azure_mc_version}:${project.azure_lib_version}")
+    modImplementation("net.rpg_foundation:armor_model_api-neoforge:${project.armor_model_api_version}")
     modImplementation("maven.modrinth:tiny-config:${project.tiny_config_version}-${platform}")
 
-    // Accessories - https://docs.wispforest.io/accessories/developer/dev_setup
-    modImplementation "maven.modrinth:owo-lib:${project.owo_neo_version}" // AccessoryItem wouldn't compile without this
-    modImplementation("io.wispforest:accessories-neoforge:${project.accessories_version}")
-    forgeRuntimeLibrary("blue.endless:jankson:1.2.2")
-    forgeRuntimeLibrary("io.wispforest:endec:0.1.5.1")
-    forgeRuntimeLibrary("io.wispforest.endec:gson:0.1.3.1")
-    forgeRuntimeLibrary("io.wispforest.endec:jankson:0.1.3.1")
-    forgeRuntimeLibrary("io.wispforest.endec:netty:0.1.2")
 
     modImplementation("maven.modrinth:structure-pool-api:${project.structure_pool_api_version}-${platform}")
 //    modImplementation("net.foundation:structure_pool_api-${platform}:${project.structure_pool_api_version}")
@@ -142,7 +134,7 @@ publishMods {
         client = true                    // >=1 of client/server REQUIRED by CurseForge (Error 1021)
         server = true
         changelogType = "markdown"
-        requires("azurelib-armor", "spell-engine", "rune-crafting", "structure-pool-api")
+        requires("armor-model-api", "spell-engine", "rune-crafting", "structure-pool-api")
     }
 
     modrinth {
@@ -150,7 +142,7 @@ publishMods {
         accessToken = providers.environmentVariable("MODRINTH_API_KEY")
         minecraftVersions.add(project.minecraft_version)
         minecraftVersions.add(project.minecraft_compat_version)
-        requires { slug = "azurelib-armor" }
+        requires { slug = "armor-model-api" }
         requires { slug = "spell-engine" }
         requires { slug = "runes" }
         requires { slug = "structure-pool-api" }
