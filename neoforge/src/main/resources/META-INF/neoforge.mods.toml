@@ -28,9 +28,9 @@ ordering = "NONE"
 side = "BOTH"
 
 [[dependencies.wizards]]
-modId = "armor_model_api"
+modId = "azurelibarmor"
 type = "required"
-versionRange = "[${armor_model_api_version},)"
+versionRange = "[${azure_lib_version},)"
 ordering = "NONE"
 side = "BOTH"
 
