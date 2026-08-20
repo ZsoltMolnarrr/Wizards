@@ -50,11 +50,6 @@ repositories {
         name = "Ladysnake Libs"
         url = 'https://maven.ladysnake.org/releases'
     }
-//    maven {
-//        name = "TerraformersMC"
-//        url = "https://maven.terraformersmc.com/"
-//        content { includeGroup 'dev.emi' }
-//    }
 
     mavenLocal()
 }

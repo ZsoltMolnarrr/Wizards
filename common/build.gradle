@@ -15,12 +15,6 @@ repositories {
             includeGroup 'maven.modrinth'
         }
     }
-    maven {
-        name = "Ladysnake Libs"
-        url = 'https://maven.ladysnake.org/releases'
-    }
-
-    maven { url 'https://maven.su5ed.dev/releases' }
     maven { url 'https://maven.fabricmc.net' }
 
     mavenLocal()
