@@ -39,7 +39,13 @@ repositories {
     maven { url 'https://maven.fabricmc.net' }
     maven { url 'https://maven.kosmx.dev/' }
     maven { url 'https://maven.shedaniel.me/' }
-    maven { url 'https://maven.azuredoom.com/mods' }
+    // CurseMaven - for Armor Model API
+    maven {
+        url = "https://www.cursemaven.com"
+        content {
+            includeGroup "curse.maven"
+        }
+    }
     maven {
         name = 'Modrinth'
         url = 'https://api.modrinth.com/maven'
@@ -69,7 +75,7 @@ dependencies {
 
     modImplementation("dev.kosmx.player-anim:player-animation-lib-${platform}:${project.player_anim_version}")
     modImplementation("me.shedaniel.cloth:cloth-config-${platform}:${project.cloth_config_version}")
-    modImplementation("mod.azure.azurelibarmor:azurelibarmor-fabric-${project.azure_mc_version}:${project.azure_lib_version}")
+    modImplementation("curse.maven:armor-model-api-1659764:${project.armor_model_api_fabric_file}")
     modImplementation("maven.modrinth:tiny-config:${project.tiny_config_version}-${platform}")
 
 //    // Trinkets
@@ -117,12 +123,7 @@ remapJar {
 // `build` — with none of the tokens present — is completely unaffected.
 def releaseTypeName = (project.findProperty('release_type') ?: 'beta').toString()
 
-// Convenience alias: build + publish to every configured destination in one go.
-// CI does NOT use this -- `publish.yml` invokes `:fabric:build` plus an explicit subset of
-// the plugin's per-destination tasks (`publishCurseforge` / `publishModrinth` /
-// `publishGithub`), so a release can target only some platforms. Keep that in mind when
-// changing this alias: it is now a local/manual convenience, not the CI entry point.
-// The plugin's own aggregate task is `publishMods` (plural).
+// Local convenience alias -- CI invokes the per-destination publish tasks directly.
 tasks.register("publishMod") {
     dependsOn(build)
     finalizedBy(tasks.named("publishMods"))
@@ -146,18 +147,17 @@ publishMods {
         client = true                    // >=1 of client/server REQUIRED by CurseForge (Error 1021)
         server = true
         changelogType = "markdown"
-        requires("fabric-api", "azurelib-armor", "spell-engine", "rune-crafting", "structure-pool-api")
+        requires("fabric-api", "armor-model-api", "spell-engine", "rune-crafting", "structure-pool-api")
     }
 
     modrinth {
-        // Modrinth side metadata -- without it the version publishes as "Unknown".
         environment = me.modmuss50.mpp.platforms.modrinth.ModrinthEnvironment.CLIENT_AND_SERVER
         projectId = providers.environmentVariable("MODRINTH_PROJECT_RAW_ID")
         accessToken = providers.environmentVariable("MODRINTH_API_KEY")
         minecraftVersions.add(project.minecraft_version)
         minecraftVersions.add(project.minecraft_compat_version)
         requires { slug = "fabric-api" }
-        requires { slug = "azurelib-armor" }
+        requires { slug = "armor-model-api" }
         requires { slug = "spell-engine" }
         requires { slug = "runes" }
         requires { slug = "structure-pool-api" }
@@ -176,14 +176,8 @@ publishMods {
     }
 }
 
-// The GitHub release is the *seal* on a successful publish, so it must run LAST: if a mod
-// host upload fails (e.g. a CurseForge 500), Gradle aborts the build before the release is
-// created, so there is never a green GitHub release pointing at a half-published version.
-// `mustRunAfter` is an ordering rule ONLY -- it does not pull the referenced tasks into the
-// graph. A Modrinth-only run therefore still works and simply ignores the CurseForge rule.
-// This matters because command-line task order is NOT an execution-order guarantee.
-// NOTE: must sit AFTER the `publishMods` block -- the plugin registers one task per
-// destination while that block is evaluated, so these names do not exist before it.
+// GitHub release last: a failed mod upload aborts the build before the release exists.
+// Ordering only -- unselected tasks are ignored. Must sit after the publishMods block.
 tasks.named("publishGithub") {
     mustRunAfter(tasks.named("publishCurseforge"), tasks.named("publishModrinth"))
 }

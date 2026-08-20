@@ -1,3 +1,7 @@
+# 3.1.1
+
+- Replaced armor rendering dependency AzureLibArmor with ArmorModelAPI
+
 # 3.1.0
 
 **Important disclaimer** - NeoForge users need to unequip their spell books, jewelry, relics and quivers to preserve it, before updating to this version!
