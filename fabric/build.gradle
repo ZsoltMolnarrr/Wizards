@@ -51,6 +51,12 @@ repositories {
         url = 'https://maven.ladysnake.org/releases'
     }
 
+    // Hosts `dev.emi:trinkets`, inherited transitively from SpellEngine's Fabric artifact.
+    maven {
+        name = "Sleeping Town"
+        url = "https://repo.sleeping.town/"
+    }
+
     mavenLocal()
 }
 
