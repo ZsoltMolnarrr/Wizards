@@ -41,13 +41,6 @@ repositories {
     }
     maven { url 'https://maven.kosmx.dev/' }
     maven { url 'https://maven.shedaniel.me/' }
-    // CurseMaven - for Armor Model API
-    maven {
-        url = "https://www.cursemaven.com"
-        content {
-            includeGroup "curse.maven"
-        }
-    }
     maven {
         name = 'Modrinth'
         url = 'https://api.modrinth.com/maven'
@@ -57,7 +50,7 @@ repositories {
     }
     maven { url 'https://maven.fabricmc.net' }
 
-    // For Curios (transitive from SpellEngine on NeoForge)
+    // For Curios
     maven { url 'https://maven.theillusivec4.top/' }
 
     mavenLocal()
@@ -70,9 +63,11 @@ dependencies {
 
     modImplementation("dev.kosmx.player-anim:player-animation-lib-forge:${project.player_anim_version}")
     modImplementation("me.shedaniel.cloth:cloth-config-${platform}:${project.cloth_config_version}")
-    modImplementation("curse.maven:armor-model-api-1659764:${project.armor_model_api_neoforge_file}")
+    modImplementation("maven.modrinth:armor-model-api:${project.armor_model_api_version}-${platform}")
     modImplementation("maven.modrinth:tiny-config:${project.tiny_config_version}-${platform}")
 
+    // Curios - https://docs.illusivesoulworks.com/category/curios
+    modImplementation("top.theillusivec4.curios:curios-neoforge:${project.curios_version}")
 
     modImplementation("maven.modrinth:structure-pool-api:${project.structure_pool_api_version}-${platform}")
 //    modImplementation("net.foundation:structure_pool_api-${platform}:${project.structure_pool_api_version}")
