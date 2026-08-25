@@ -1,18 +1,18 @@
 package net.wizards.client.entity;
 
-import net.minecraft.client.render.entity.animation.Animation;
+import net.minecraft.client.render.entity.animation.AnimationDefinition;
 import net.minecraft.client.render.entity.animation.AnimationHelper;
 import net.minecraft.client.render.entity.animation.Keyframe;
 import net.minecraft.client.render.entity.animation.Transformation;
 
 public class FireHydraAnimations {
-	public static final Animation idle = Animation.Builder.create(2.0F).looping()
+	public static final AnimationDefinition idle = AnimationDefinition.Builder.create(2.0F).looping()
 		.addBoneAnimation("root", new Transformation(Transformation.Targets.ROTATE, 
 			new Keyframe(0.0F, AnimationHelper.createRotationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR),
 			new Keyframe(1.0F, AnimationHelper.createRotationalVector(-1.0F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC),
 			new Keyframe(2.0F, AnimationHelper.createRotationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR)
 		))
-		.addBoneAnimation("root", new Transformation(Transformation.Targets.TRANSLATE, 
+		.addBoneAnimation("root", new Transformation(Transformation.Targets.MOVE_ORIGIN, 
 			new Keyframe(0.0F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR),
 			new Keyframe(0.85F, AnimationHelper.createTranslationalVector(0.0F, 0.25F, 0.0F), Transformation.Interpolations.CUBIC),
 			new Keyframe(2.0F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR)
@@ -52,7 +52,7 @@ public class FireHydraAnimations {
 			new Keyframe(1.25F, AnimationHelper.createRotationalVector(-42.5F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR),
 			new Keyframe(2.0F, AnimationHelper.createRotationalVector(-40.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR)
 		))
-		.addBoneAnimation("kneck_base", new Transformation(Transformation.Targets.TRANSLATE, 
+		.addBoneAnimation("kneck_base", new Transformation(Transformation.Targets.MOVE_ORIGIN, 
 			new Keyframe(0.0F, AnimationHelper.createTranslationalVector(0.0F, -2.0F, 1.0F), Transformation.Interpolations.LINEAR),
 			new Keyframe(2.0F, AnimationHelper.createTranslationalVector(0.0F, -2.0F, 1.0F), Transformation.Interpolations.LINEAR)
 		))
@@ -64,7 +64,7 @@ public class FireHydraAnimations {
 		))
 		.build();
 
-	public static final Animation attack = Animation.Builder.create(2.15F)
+	public static final AnimationDefinition attack = AnimationDefinition.Builder.create(2.15F)
 		.addBoneAnimation("root", new Transformation(Transformation.Targets.ROTATE, 
 			new Keyframe(0.0F, AnimationHelper.createRotationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC),
 			new Keyframe(0.2F, AnimationHelper.createRotationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR),
@@ -75,7 +75,7 @@ public class FireHydraAnimations {
 			new Keyframe(1.65F, AnimationHelper.createRotationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC),
 			new Keyframe(2.15F, AnimationHelper.createRotationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR)
 		))
-		.addBoneAnimation("root", new Transformation(Transformation.Targets.TRANSLATE, 
+		.addBoneAnimation("root", new Transformation(Transformation.Targets.MOVE_ORIGIN, 
 			new Keyframe(0.0F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC),
 			new Keyframe(0.2F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR),
 			new Keyframe(1.65F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC),
@@ -111,7 +111,7 @@ public class FireHydraAnimations {
 			new Keyframe(1.55F, AnimationHelper.createRotationalVector(-42.5F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC),
 			new Keyframe(2.05F, AnimationHelper.createRotationalVector(-42.5F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR)
 		))
-		.addBoneAnimation("head", new Transformation(Transformation.Targets.TRANSLATE, 
+		.addBoneAnimation("head", new Transformation(Transformation.Targets.MOVE_ORIGIN, 
 			new Keyframe(0.0F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR),
 			new Keyframe(0.5F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 2.0F), Transformation.Interpolations.CUBIC),
 			new Keyframe(0.6F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 2.0F), Transformation.Interpolations.CUBIC),
@@ -129,7 +129,7 @@ public class FireHydraAnimations {
 			new Keyframe(1.6F, AnimationHelper.createRotationalVector(15.0F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC),
 			new Keyframe(2.1F, AnimationHelper.createRotationalVector(15.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR)
 		))
-		.addBoneAnimation("jaw", new Transformation(Transformation.Targets.TRANSLATE, 
+		.addBoneAnimation("jaw", new Transformation(Transformation.Targets.MOVE_ORIGIN, 
 			new Keyframe(0.0F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR),
 			new Keyframe(0.5F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, -1.0F), Transformation.Interpolations.CUBIC),
 			new Keyframe(0.6F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, -1.0F), Transformation.Interpolations.CUBIC),
@@ -157,7 +157,7 @@ public class FireHydraAnimations {
 			new Keyframe(1.6F, AnimationHelper.createRotationalVector(-40.0F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC),
 			new Keyframe(2.1F, AnimationHelper.createRotationalVector(-40.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR)
 		))
-		.addBoneAnimation("kneck_base", new Transformation(Transformation.Targets.TRANSLATE, 
+		.addBoneAnimation("kneck_base", new Transformation(Transformation.Targets.MOVE_ORIGIN, 
 			new Keyframe(0.0F, AnimationHelper.createTranslationalVector(0.0F, -2.0F, 1.0F), Transformation.Interpolations.CUBIC),
 			new Keyframe(0.2F, AnimationHelper.createTranslationalVector(0.0F, -2.0F, 1.0F), Transformation.Interpolations.LINEAR),
 			new Keyframe(1.6F, AnimationHelper.createTranslationalVector(0.0F, -2.0F, 1.0F), Transformation.Interpolations.CUBIC),
@@ -175,7 +175,7 @@ public class FireHydraAnimations {
 		))
 		.build();
 
-	public static final Animation fireball = Animation.Builder.create(1.55F)
+	public static final AnimationDefinition fireball = AnimationDefinition.Builder.create(1.55F)
 		.addBoneAnimation("root", new Transformation(Transformation.Targets.ROTATE, 
 			new Keyframe(0.0F, AnimationHelper.createRotationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC),
 			new Keyframe(0.15F, AnimationHelper.createRotationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR),
@@ -183,7 +183,7 @@ public class FireHydraAnimations {
 			new Keyframe(1.05F, AnimationHelper.createRotationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC),
 			new Keyframe(1.55F, AnimationHelper.createRotationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR)
 		))
-		.addBoneAnimation("root", new Transformation(Transformation.Targets.TRANSLATE, 
+		.addBoneAnimation("root", new Transformation(Transformation.Targets.MOVE_ORIGIN, 
 			new Keyframe(0.0F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC),
 			new Keyframe(0.15F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR),
 			new Keyframe(0.6F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR),
@@ -214,7 +214,7 @@ public class FireHydraAnimations {
 			new Keyframe(0.95F, AnimationHelper.createRotationalVector(-41.76F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC),
 			new Keyframe(1.45F, AnimationHelper.createRotationalVector(-42.5F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR)
 		))
-		.addBoneAnimation("head", new Transformation(Transformation.Targets.TRANSLATE, 
+		.addBoneAnimation("head", new Transformation(Transformation.Targets.MOVE_ORIGIN, 
 			new Keyframe(0.0F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR),
 			new Keyframe(0.15F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR),
 			new Keyframe(0.3F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 2.0F), Transformation.Interpolations.LINEAR),
@@ -230,7 +230,7 @@ public class FireHydraAnimations {
 			new Keyframe(1.0F, AnimationHelper.createRotationalVector(10.0F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC),
 			new Keyframe(1.5F, AnimationHelper.createRotationalVector(15.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR)
 		))
-		.addBoneAnimation("jaw", new Transformation(Transformation.Targets.TRANSLATE, 
+		.addBoneAnimation("jaw", new Transformation(Transformation.Targets.MOVE_ORIGIN, 
 			new Keyframe(0.0F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR),
 			new Keyframe(0.15F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR),
 			new Keyframe(0.3F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, -2.0F), Transformation.Interpolations.LINEAR),
@@ -254,7 +254,7 @@ public class FireHydraAnimations {
 			new Keyframe(1.0F, AnimationHelper.createRotationalVector(-45.0F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC),
 			new Keyframe(1.5F, AnimationHelper.createRotationalVector(-40.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR)
 		))
-		.addBoneAnimation("kneck_base", new Transformation(Transformation.Targets.TRANSLATE, 
+		.addBoneAnimation("kneck_base", new Transformation(Transformation.Targets.MOVE_ORIGIN, 
 			new Keyframe(0.0F, AnimationHelper.createTranslationalVector(0.0F, -2.0F, 1.0F), Transformation.Interpolations.CUBIC),
 			new Keyframe(0.15F, AnimationHelper.createTranslationalVector(0.0F, -2.0F, 1.0F), Transformation.Interpolations.LINEAR),
 			new Keyframe(1.0F, AnimationHelper.createTranslationalVector(0.0F, -2.0F, 1.0F), Transformation.Interpolations.CUBIC),
@@ -270,7 +270,7 @@ public class FireHydraAnimations {
 		))
 		.build();
 
-	public static final Animation firebreath = Animation.Builder.create(2.0F)
+	public static final AnimationDefinition firebreath = AnimationDefinition.Builder.create(2.0F)
 		.addBoneAnimation("root", new Transformation(Transformation.Targets.ROTATE, 
 			new Keyframe(0.0F, AnimationHelper.createRotationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC),
 			new Keyframe(0.15F, AnimationHelper.createRotationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR),
@@ -278,7 +278,7 @@ public class FireHydraAnimations {
 			new Keyframe(1.6F, AnimationHelper.createRotationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC),
 			new Keyframe(2.0F, AnimationHelper.createRotationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR)
 		))
-		.addBoneAnimation("root", new Transformation(Transformation.Targets.TRANSLATE, 
+		.addBoneAnimation("root", new Transformation(Transformation.Targets.MOVE_ORIGIN, 
 			new Keyframe(0.0F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC),
 			new Keyframe(0.15F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR),
 			new Keyframe(0.5F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR),
@@ -315,7 +315,7 @@ public class FireHydraAnimations {
 			new Keyframe(1.65F, AnimationHelper.createRotationalVector(-122.4753F, -1.3429F, -2.1089F), Transformation.Interpolations.CUBIC),
 			new Keyframe(2.0F, AnimationHelper.createRotationalVector(-122.5F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR)
 		))
-		.addBoneAnimation("head", new Transformation(Transformation.Targets.TRANSLATE, 
+		.addBoneAnimation("head", new Transformation(Transformation.Targets.MOVE_ORIGIN, 
 			new Keyframe(0.0F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR),
 			new Keyframe(0.15F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR),
 			new Keyframe(0.3F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 2.0F), Transformation.Interpolations.LINEAR),
@@ -333,7 +333,7 @@ public class FireHydraAnimations {
 			new Keyframe(1.6F, AnimationHelper.createRotationalVector(75.0F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC),
 			new Keyframe(2.0F, AnimationHelper.createRotationalVector(80.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR)
 		))
-		.addBoneAnimation("jaw", new Transformation(Transformation.Targets.TRANSLATE, 
+		.addBoneAnimation("jaw", new Transformation(Transformation.Targets.MOVE_ORIGIN, 
 			new Keyframe(0.0F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR),
 			new Keyframe(0.15F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR),
 			new Keyframe(0.3F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, -2.0F), Transformation.Interpolations.LINEAR),
@@ -361,7 +361,7 @@ public class FireHydraAnimations {
 			new Keyframe(1.6F, AnimationHelper.createRotationalVector(-37.5F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC),
 			new Keyframe(2.0F, AnimationHelper.createRotationalVector(-37.5F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR)
 		))
-		.addBoneAnimation("kneck_base", new Transformation(Transformation.Targets.TRANSLATE, 
+		.addBoneAnimation("kneck_base", new Transformation(Transformation.Targets.MOVE_ORIGIN, 
 			new Keyframe(0.0F, AnimationHelper.createTranslationalVector(0.0F, -2.0F, 1.0F), Transformation.Interpolations.CUBIC),
 			new Keyframe(0.15F, AnimationHelper.createTranslationalVector(0.0F, -2.0F, 1.0F), Transformation.Interpolations.LINEAR)
 		))
@@ -377,13 +377,13 @@ public class FireHydraAnimations {
 		))
 		.build();
 
-	public static final Animation firebreath_end = Animation.Builder.create(0.95F)
+	public static final AnimationDefinition firebreath_end = AnimationDefinition.Builder.create(0.95F)
 		.addBoneAnimation("root", new Transformation(Transformation.Targets.ROTATE, 
 			new Keyframe(0.0F, AnimationHelper.createRotationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC),
 			new Keyframe(0.45F, AnimationHelper.createRotationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC),
 			new Keyframe(0.95F, AnimationHelper.createRotationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR)
 		))
-		.addBoneAnimation("root", new Transformation(Transformation.Targets.TRANSLATE, 
+		.addBoneAnimation("root", new Transformation(Transformation.Targets.MOVE_ORIGIN, 
 			new Keyframe(0.0F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC),
 			new Keyframe(0.45F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC),
 			new Keyframe(0.95F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR)
@@ -403,7 +403,7 @@ public class FireHydraAnimations {
 			new Keyframe(0.35F, AnimationHelper.createRotationalVector(-42.5F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC),
 			new Keyframe(0.85F, AnimationHelper.createRotationalVector(-42.5F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR)
 		))
-		.addBoneAnimation("head", new Transformation(Transformation.Targets.TRANSLATE, 
+		.addBoneAnimation("head", new Transformation(Transformation.Targets.MOVE_ORIGIN, 
 			new Keyframe(0.0F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 2.0F), Transformation.Interpolations.CUBIC),
 			new Keyframe(0.35F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC),
 			new Keyframe(0.85F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR)
@@ -413,7 +413,7 @@ public class FireHydraAnimations {
 			new Keyframe(0.4F, AnimationHelper.createRotationalVector(15.0F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC),
 			new Keyframe(0.9F, AnimationHelper.createRotationalVector(15.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR)
 		))
-		.addBoneAnimation("jaw", new Transformation(Transformation.Targets.TRANSLATE, 
+		.addBoneAnimation("jaw", new Transformation(Transformation.Targets.MOVE_ORIGIN, 
 			new Keyframe(0.0F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, -2.0F), Transformation.Interpolations.CUBIC),
 			new Keyframe(0.4F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC),
 			new Keyframe(0.9F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR)
@@ -428,7 +428,7 @@ public class FireHydraAnimations {
 			new Keyframe(0.4F, AnimationHelper.createRotationalVector(-40.0F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC),
 			new Keyframe(0.9F, AnimationHelper.createRotationalVector(-40.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR)
 		))
-		.addBoneAnimation("kneck_base", new Transformation(Transformation.Targets.TRANSLATE, 
+		.addBoneAnimation("kneck_base", new Transformation(Transformation.Targets.MOVE_ORIGIN, 
 			new Keyframe(0.4F, AnimationHelper.createTranslationalVector(0.0F, -2.0F, 1.0F), Transformation.Interpolations.CUBIC),
 			new Keyframe(0.9F, AnimationHelper.createTranslationalVector(0.0F, -2.0F, 1.0F), Transformation.Interpolations.LINEAR)
 		))
@@ -439,12 +439,12 @@ public class FireHydraAnimations {
 		))
 		.build();
 
-	public static final Animation spawn = Animation.Builder.create(1.6F)
+	public static final AnimationDefinition spawn = AnimationDefinition.Builder.create(1.6F)
 		.addBoneAnimation("root", new Transformation(Transformation.Targets.ROTATE, 
 			new Keyframe(0.0F, AnimationHelper.createRotationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR),
 			new Keyframe(0.15F, AnimationHelper.createRotationalVector(0.0F, 0.0F, -5.0F), Transformation.Interpolations.LINEAR)
 		))
-		.addBoneAnimation("root", new Transformation(Transformation.Targets.TRANSLATE, 
+		.addBoneAnimation("root", new Transformation(Transformation.Targets.MOVE_ORIGIN, 
 			new Keyframe(0.0F, AnimationHelper.createTranslationalVector(0.0F, -58.0F, 0.0F), Transformation.Interpolations.LINEAR),
 			new Keyframe(0.35F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR),
 			new Keyframe(0.45F, AnimationHelper.createTranslationalVector(0.0F, 2.0F, 0.0F), Transformation.Interpolations.LINEAR),
@@ -461,7 +461,7 @@ public class FireHydraAnimations {
 			new Keyframe(1.1F, AnimationHelper.createRotationalVector(57.5F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC),
 			new Keyframe(1.35F, AnimationHelper.createRotationalVector(47.5F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR)
 		))
-		.addBoneAnimation("kneck_part_2", new Transformation(Transformation.Targets.TRANSLATE, 
+		.addBoneAnimation("kneck_part_2", new Transformation(Transformation.Targets.MOVE_ORIGIN, 
 			new Keyframe(0.0F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR)
 		))
 		.addBoneAnimation("kneck_part_3", new Transformation(Transformation.Targets.ROTATE, 
@@ -474,7 +474,7 @@ public class FireHydraAnimations {
 			new Keyframe(1.1F, AnimationHelper.createRotationalVector(-25.0477F, 1.9203F, 2.395F), Transformation.Interpolations.CUBIC),
 			new Keyframe(1.35F, AnimationHelper.createRotationalVector(-30.0477F, 1.9203F, 2.395F), Transformation.Interpolations.LINEAR)
 		))
-		.addBoneAnimation("kneck_part_3", new Transformation(Transformation.Targets.TRANSLATE, 
+		.addBoneAnimation("kneck_part_3", new Transformation(Transformation.Targets.MOVE_ORIGIN, 
 			new Keyframe(0.0F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR)
 		))
 		.addBoneAnimation("head", new Transformation(Transformation.Targets.ROTATE, 
@@ -487,7 +487,7 @@ public class FireHydraAnimations {
 			new Keyframe(1.2F, AnimationHelper.createRotationalVector(-51.02F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR),
 			new Keyframe(1.35F, AnimationHelper.createRotationalVector(-42.5F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR)
 		))
-		.addBoneAnimation("head", new Transformation(Transformation.Targets.TRANSLATE, 
+		.addBoneAnimation("head", new Transformation(Transformation.Targets.MOVE_ORIGIN, 
 			new Keyframe(0.0F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 2.0F), Transformation.Interpolations.LINEAR)
 		))
 		.addBoneAnimation("jaw", new Transformation(Transformation.Targets.ROTATE, 
@@ -497,7 +497,7 @@ public class FireHydraAnimations {
 			new Keyframe(0.9F, AnimationHelper.createRotationalVector(7.5F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC),
 			new Keyframe(1.2F, AnimationHelper.createRotationalVector(5.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR)
 		))
-		.addBoneAnimation("jaw", new Transformation(Transformation.Targets.TRANSLATE, 
+		.addBoneAnimation("jaw", new Transformation(Transformation.Targets.MOVE_ORIGIN, 
 			new Keyframe(0.0F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR)
 		))
 		.addBoneAnimation("kneck_part_1", new Transformation(Transformation.Targets.ROTATE, 
@@ -510,7 +510,7 @@ public class FireHydraAnimations {
 			new Keyframe(1.15F, AnimationHelper.createRotationalVector(25.0099F, 0.0485F, -0.313F), Transformation.Interpolations.CUBIC),
 			new Keyframe(1.45F, AnimationHelper.createRotationalVector(25.0099F, 0.0485F, -0.313F), Transformation.Interpolations.LINEAR)
 		))
-		.addBoneAnimation("kneck_part_1", new Transformation(Transformation.Targets.TRANSLATE, 
+		.addBoneAnimation("kneck_part_1", new Transformation(Transformation.Targets.MOVE_ORIGIN, 
 			new Keyframe(0.0F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR)
 		))
 		.addBoneAnimation("kneck_base", new Transformation(Transformation.Targets.ROTATE, 
@@ -521,7 +521,7 @@ public class FireHydraAnimations {
 			new Keyframe(0.9F, AnimationHelper.createRotationalVector(-37.5F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC),
 			new Keyframe(1.2F, AnimationHelper.createRotationalVector(-40.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR)
 		))
-		.addBoneAnimation("kneck_base", new Transformation(Transformation.Targets.TRANSLATE, 
+		.addBoneAnimation("kneck_base", new Transformation(Transformation.Targets.MOVE_ORIGIN, 
 			new Keyframe(0.0F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR),
 			new Keyframe(0.35F, AnimationHelper.createTranslationalVector(0.0F, -2.0F, 1.0F), Transformation.Interpolations.CUBIC),
 			new Keyframe(0.6F, AnimationHelper.createTranslationalVector(0.0F, -2.0F, 1.0F), Transformation.Interpolations.LINEAR),
@@ -537,7 +537,7 @@ public class FireHydraAnimations {
 			new Keyframe(0.9F, AnimationHelper.createRotationalVector(67.5F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC),
 			new Keyframe(1.2F, AnimationHelper.createRotationalVector(70.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR)
 		))
-		.addBoneAnimation("kneck_part_4", new Transformation(Transformation.Targets.TRANSLATE, 
+		.addBoneAnimation("kneck_part_4", new Transformation(Transformation.Targets.MOVE_ORIGIN, 
 			new Keyframe(0.0F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR)
 		))
 		.build();

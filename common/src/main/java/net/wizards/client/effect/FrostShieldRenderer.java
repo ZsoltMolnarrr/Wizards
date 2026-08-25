@@ -1,8 +1,7 @@
 package net.wizards.client.effect;
 
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.RenderLayer;
-import net.minecraft.client.render.VertexConsumerProvider;
+import net.minecraft.client.render.command.OrderedRenderCommandQueue;
 import net.minecraft.client.texture.SpriteAtlasTexture;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.LivingEntity;
@@ -23,12 +22,12 @@ public class FrostShieldRenderer implements CustomModelStatusEffect.Renderer {
     private static final RenderLayer OVERLAY_RENDER_LAYER = CustomLayers.spellEffect(LightEmission.RADIATE, false);
 
     @Override
-    public void renderEffect(long appliedAtWorldTime, int amplifier, LivingEntity livingEntity, float delta, MatrixStack matrixStack, VertexConsumerProvider vertexConsumers, int light) {
+    public void renderEffect(long appliedAtWorldTime, int amplifier, LivingEntity livingEntity, float delta, MatrixStack matrixStack, OrderedRenderCommandQueue queue, int light) {
         float yOffset = 1.15F; // y + 0.01 to avoid Y fighting
         matrixStack.push();
         matrixStack.translate(0, yOffset, 0); // y + 0.01 to avoid Y fighting
-        CustomModels.render(BASE_RENDER_LAYER, MinecraftClient.getInstance().getItemRenderer(), modelId_base,
-                matrixStack, vertexConsumers, light, livingEntity.getId());
+        CustomModels.render(BASE_RENDER_LAYER, modelId_base,
+                matrixStack, queue, light, livingEntity.getId());
         matrixStack.pop();
 
 //        float overlayScale = 1.05F;

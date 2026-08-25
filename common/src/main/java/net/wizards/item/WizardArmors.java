@@ -1,12 +1,14 @@
 package net.wizards.item;
 
-import net.minecraft.item.ArmorItem;
-import net.minecraft.item.ArmorMaterial;
-import net.minecraft.item.Items;
-import net.minecraft.recipe.Ingredient;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.Registry;
+import net.minecraft.item.Item;
+import net.minecraft.item.equipment.ArmorMaterial;
+import net.minecraft.item.equipment.EquipmentAsset;
+import net.minecraft.item.equipment.EquipmentAssetKeys;
+import net.minecraft.item.equipment.EquipmentType;
+import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.entry.RegistryEntry;
+import net.minecraft.registry.tag.ItemTags;
+import net.minecraft.registry.tag.TagKey;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.Identifier;
 import net.spell_engine.rpg_series.config.ArmorSetConfig;
@@ -24,85 +26,92 @@ import java.util.Map;
 import java.util.function.Supplier;
 
 public class WizardArmors {
-    private static final Supplier<Ingredient> WOOL_INGREDIENTS = () -> { return Ingredient.ofItems(
-            Items.WHITE_WOOL,
-            Items.ORANGE_WOOL,
-            Items.MAGENTA_WOOL,
-            Items.LIGHT_BLUE_WOOL,
-            Items.YELLOW_WOOL,
-            Items.LIME_WOOL,
-            Items.PINK_WOOL,
-            Items.GRAY_WOOL,
-            Items.LIGHT_GRAY_WOOL,
-            Items.CYAN_WOOL,
-            Items.PURPLE_WOOL,
-            Items.BLUE_WOOL,
-            Items.BROWN_WOOL,
-            Items.GREEN_WOOL,
-            Items.RED_WOOL,
-            Items.BLACK_WOOL);
-    };
+    /// Repair ingredients are tags since 1.21.2 (`ArmorMaterial.repairIngredient`).
+    /// `#minecraft:wool` is exactly the 16 wool items the 1.21.1 ingredient listed.
+    private static final TagKey<Item> WOOL_INGREDIENTS = ItemTags.WOOL;
+    private static final TagKey<Item> NETHERITE_INGREDIENTS = ItemTags.REPAIRS_NETHERITE_ARMOR;
 
-    public static RegistryEntry<ArmorMaterial> material(String name,
-                                         int protectionHead, int protectionChest, int protectionLegs, int protectionFeet,
-                                         int enchantability, RegistryEntry<SoundEvent> equipSound, Supplier<Ingredient> repairIngredient) {
-        var material = new ArmorMaterial(
-                Map.of(
-                ArmorItem.Type.HELMET, protectionHead,
-                ArmorItem.Type.CHESTPLATE, protectionChest,
-                ArmorItem.Type.LEGGINGS, protectionLegs,
-                ArmorItem.Type.BOOTS, protectionFeet),
-                enchantability, equipSound, repairIngredient,
-                List.of(new ArmorMaterial.Layer(Identifier.of(WizardsMod.ID, name))),
-                0,0
-                );
-        return Registry.registerReference(Registries.ARMOR_MATERIAL, Identifier.of(WizardsMod.ID, name), material);
+    /// 1.21.4 replaced armor material layers with equipment assets
+    /// (`assets/<ns>/equipment/<name>.json`). Wizards renders its armor through
+    /// ArmorModelAPI's geo renderers, so no asset file is shipped — the loader falls back to an
+    /// empty model and only the geo pass draws.
+    private static RegistryKey<EquipmentAsset> assetId(String name) {
+        return RegistryKey.of(EquipmentAssetKeys.REGISTRY_KEY, Identifier.of(WizardsMod.ID, name));
     }
 
-    public static RegistryEntry<ArmorMaterial> material_wizard = material(
+    /// `ArmorMaterial` is a plain record since 1.21.2 — no registry, no `RegistryEntry`.
+    /// `durability` here must match the value passed to `Armor.Entry.create`, because
+    /// `Item.Settings.armor(material, type)` recomputes `maxDamage` from the material.
+    public static ArmorMaterial material(String name,
+                                         int durability,
+                                         int protectionHead, int protectionChest, int protectionLegs, int protectionFeet,
+                                         int enchantability, RegistryEntry<SoundEvent> equipSound, TagKey<Item> repairIngredient) {
+        return new ArmorMaterial(
+                durability,
+                Map.of(
+                        EquipmentType.HELMET, protectionHead,
+                        EquipmentType.CHESTPLATE, protectionChest,
+                        EquipmentType.LEGGINGS, protectionLegs,
+                        EquipmentType.BOOTS, protectionFeet),
+                enchantability,
+                equipSound,
+                0F,
+                0F,
+                repairIngredient,
+                assetId(name));
+    }
+
+    public static ArmorMaterial material_wizard = material(
             "wizard_robe",
+            10,
             1, 3, 2, 1,
             9,
             WizardsSounds.WIZARD_ROBES_EQUIP.entry(), WOOL_INGREDIENTS);
 
-    public static RegistryEntry<ArmorMaterial> material_arcane = material(
+    public static ArmorMaterial material_arcane = material(
             "arcane_robe",
+            20,
             1, 3, 2, 1,
             10,
             WizardsSounds.WIZARD_ROBES_EQUIP.entry(), WOOL_INGREDIENTS);
 
-    public static RegistryEntry<ArmorMaterial> material_fire = material(
+    public static ArmorMaterial material_fire = material(
             "fire_robe",
+            20,
             1, 3, 2, 1,
             10,
             WizardsSounds.WIZARD_ROBES_EQUIP.entry(), WOOL_INGREDIENTS);
 
-    public static RegistryEntry<ArmorMaterial> material_frost = material(
+    public static ArmorMaterial material_frost = material(
             "frost_robe",
+            20,
             1, 3, 2, 1,
             10,
             WizardsSounds.WIZARD_ROBES_EQUIP.entry(), WOOL_INGREDIENTS);
 
-    public static RegistryEntry<ArmorMaterial> material_netherite_arcane = material(
+    public static ArmorMaterial material_netherite_arcane = material(
             "netherite_arcane_robe",
+            30,
             1, 3, 2, 1,
             15,
-            WizardsSounds.WIZARD_ROBES_EQUIP.entry(), () -> { return Ingredient.ofItems(Items.NETHERITE_INGOT); });
+            WizardsSounds.WIZARD_ROBES_EQUIP.entry(), NETHERITE_INGREDIENTS);
 
-    public static RegistryEntry<ArmorMaterial> material_netherite_fire = material(
+    public static ArmorMaterial material_netherite_fire = material(
             "netherite_fire_robe",
+            30,
             1, 3, 2, 1,
             15,
-            WizardsSounds.WIZARD_ROBES_EQUIP.entry(), () -> { return Ingredient.ofItems(Items.NETHERITE_INGOT); });
+            WizardsSounds.WIZARD_ROBES_EQUIP.entry(), NETHERITE_INGREDIENTS);
 
-    public static RegistryEntry<ArmorMaterial> material_netherite_frost = material(
+    public static ArmorMaterial material_netherite_frost = material(
             "netherite_frost_robe",
+            30,
             1, 3, 2, 1,
             15,
-            WizardsSounds.WIZARD_ROBES_EQUIP.entry(), () -> { return Ingredient.ofItems(Items.NETHERITE_INGOT); });
+            WizardsSounds.WIZARD_ROBES_EQUIP.entry(), NETHERITE_INGREDIENTS);
 
     public static final ArrayList<Armor.Entry> entries = new ArrayList<>();
-    private static Armor.Entry create(RegistryEntry<ArmorMaterial> material, Identifier id, int durability, Armor.Set.ItemFactory factory, ArmorSetConfig defaults, int tier) {
+    private static Armor.Entry create(ArmorMaterial material, Identifier id, int durability, Armor.Set.ItemFactory factory, ArmorSetConfig defaults, int tier) {
         var entry = Armor.Entry.create(
                 material,
                 id,

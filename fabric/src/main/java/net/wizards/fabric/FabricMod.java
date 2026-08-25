@@ -22,7 +22,7 @@ public final class FabricMod implements ModInitializer {
                 WizardVillagers.poiBlockStates());
         WizardsMod.registerVillagers(); // registers the profession + builds WizardVillagers.TRADES
         WizardVillagers.TRADES.forEach((tier, factories) ->
-                TradeOfferHelper.registerVillagerOffers(WizardVillagers.PROFESSION, tier,
+                TradeOfferHelper.registerVillagerOffers(WizardVillagers.PROFESSION_KEY, tier,
                         list -> list.addAll(factories)));
     }
 }

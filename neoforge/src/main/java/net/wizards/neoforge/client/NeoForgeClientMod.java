@@ -33,11 +33,11 @@ public class NeoForgeClientMod {
         // *after* translucent terrain, so AFTER_TRANSLUCENT_BLOCKS fires before particles and the
         // hydra's own puddle particle would paint over the model. AFTER_PARTICLES matches where
         // Fabric's WorldRenderEvents.AFTER_TRANSLUCENT injects (just before clouds, after particles).
-        NeoForge.EVENT_BUS.addListener(RenderLevelStageEvent.class, render -> {
-            if (render.getStage() == RenderLevelStageEvent.Stage.AFTER_PARTICLES) {
-                FireHydraRenderer.renderAfterTranslucent(render.getPoseStack(), render.getCamera(),
-                        render.getPartialTick().getTickDelta(true));
-            }
+        // 21.11: stages are event subclasses; camera + tick progress are no longer carried by the event.
+        NeoForge.EVENT_BUS.addListener(RenderLevelStageEvent.AfterParticles.class, render -> {
+            var client = net.minecraft.client.MinecraftClient.getInstance();
+            FireHydraRenderer.renderAfterTranslucent(render.getPoseStack(), client.gameRenderer.getCamera(),
+                    client.getRenderTickCounter().getTickProgress(true));
         });
     }
 

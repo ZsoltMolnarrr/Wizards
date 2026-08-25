@@ -8,7 +8,8 @@ import net.minecraft.util.math.MathHelper;
 import net.wizards.WizardsMod;
 import net.wizards.entity.FrostElementalEntity;
 
-public class FrostElementalRenderer extends MobEntityRenderer<FrostElementalEntity, FrostElementalModel> {
+public class FrostElementalRenderer
+        extends MobEntityRenderer<FrostElementalEntity, SummonedEntityRenderState, FrostElementalModel> {
     public static final Identifier TEXTURE =
             Identifier.of(WizardsMod.ID, "textures/entity/frost_elemental.png");
 
@@ -21,13 +22,28 @@ public class FrostElementalRenderer extends MobEntityRenderer<FrostElementalEnti
     }
 
     @Override
-    protected void setupTransforms(FrostElementalEntity entity, MatrixStack matrices, float animationProgress, float bodyYaw, float tickDelta, float scale) {
-        super.setupTransforms(entity, matrices, animationProgress, bodyYaw, tickDelta, scale);
-        matrices.translate(0.0, MathHelper.sin(animationProgress * FLOAT_FREQUENCY) * FLOAT_AMPLITUDE, 0.0);
+    public SummonedEntityRenderState createRenderState() {
+        return new SummonedEntityRenderState();
     }
 
     @Override
-    public Identifier getTexture(FrostElementalEntity entity) {
+    public void updateRenderState(FrostElementalEntity entity, SummonedEntityRenderState state, float tickProgress) {
+        super.updateRenderState(entity, state, tickProgress);
+        state.copyFrom(entity);
+        state.attackAnimationSpeed = entity.getAttackAnimationSpeed(
+                FrostElementalModel.attackAnimationLengthTicks(state.attackVariant));
+        state.spellReleaseAnimationSpeed = entity.getSpellReleaseAnimationSpeed(
+                FrostElementalModel.spellReleaseAnimationLengthTicks(state.spellReleaseVariant));
+    }
+
+    @Override
+    protected void setupTransforms(SummonedEntityRenderState state, MatrixStack matrices, float bodyYaw, float baseHeight) {
+        super.setupTransforms(state, matrices, bodyYaw, baseHeight);
+        matrices.translate(0.0F, MathHelper.sin(state.age * FLOAT_FREQUENCY) * FLOAT_AMPLITUDE, 0.0F);
+    }
+
+    @Override
+    public Identifier getTexture(SummonedEntityRenderState state) {
         return TEXTURE;
     }
 }

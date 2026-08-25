@@ -329,14 +329,14 @@ public class WizardSummons {
         var s = school.id.toString();
         var entries = new ArrayList<AttributeScaling.Entry>();
         if (defensiveMultiplier > 0) {
-            entries.add(scalingEntry(EntityAttributes.GENERIC_MAX_HEALTH.getIdAsString(), s, 0, 2.0 * defensiveMultiplier));
-            entries.add(scalingEntry(EntityAttributes.GENERIC_ARMOR.getIdAsString(), s, 10 * defensiveMultiplier, 0.1 * defensiveMultiplier));
+            entries.add(scalingEntry(EntityAttributes.MAX_HEALTH.getIdAsString(), s, 0, 2.0 * defensiveMultiplier));
+            entries.add(scalingEntry(EntityAttributes.ARMOR.getIdAsString(), s, 10 * defensiveMultiplier, 0.1 * defensiveMultiplier));
         }
-        entries.add(scalingEntry(EntityAttributes.GENERIC_ATTACK_DAMAGE.getIdAsString(), s, 0, 0.5));
+        entries.add(scalingEntry(EntityAttributes.ATTACK_DAMAGE.getIdAsString(), s, 0, 0.5));
         entries.add(scalingEntry(s, s, SPELL_POWER_BASE, spellPowerCoefficient)); // spell power feeds back into the school attribute
-        entries.add(scalingEntry(EntityAttributes.GENERIC_ATTACK_KNOCKBACK.getIdAsString(), s, 0, 0.1));
+        entries.add(scalingEntry(EntityAttributes.ATTACK_KNOCKBACK.getIdAsString(), s, 0, 0.1));
         if (defensiveMultiplier > 0) {
-            entries.add(scalingEntry(EntityAttributes.GENERIC_KNOCKBACK_RESISTANCE.getIdAsString(), s, 5 * defensiveMultiplier, 0.05 * defensiveMultiplier));
+            entries.add(scalingEntry(EntityAttributes.KNOCKBACK_RESISTANCE.getIdAsString(), s, 5 * defensiveMultiplier, 0.05 * defensiveMultiplier));
         }
         return entries;
     }

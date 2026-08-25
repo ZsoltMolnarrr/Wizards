@@ -6,6 +6,8 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.SpawnGroup;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
+import net.minecraft.registry.RegistryKey;
+import net.minecraft.registry.RegistryKeys;
 import net.minecraft.util.Identifier;
 import net.spell_engine.api.spell.summon.SummonedEntities;
 import net.spell_engine.api.spell.summon.SummonedEntityConfig;
@@ -61,9 +63,9 @@ public class WizardEntities {
                     .dimensions(1F, 2F)
                     .maxTrackingRange(64)
                     .trackingTickInterval(3)
-                    // Vanilla build(String id) — the no-arg build() is a Fabric API interface-injected
+                    // Vanilla build(RegistryKey) — the no-arg build() is a Fabric API interface-injected
                     // default (FabricEntityType.Builder) that does not exist on NeoForge at runtime.
-                    .build("frost_elemental"),
+                    .build(RegistryKey.of(RegistryKeys.ENTITY_TYPE, Identifier.of(WizardsMod.ID, "frost_elemental"))),
             frostDefaults()));
 
     public static final Entry<ArcaneEmitterEntity> ARCANE_EMITTER = add(new Entry<>(
@@ -75,7 +77,7 @@ public class WizardEntities {
                     .dimensions(0.6F, 0.6F)
                     .maxTrackingRange(64)
                     .trackingTickInterval(3)
-                    .build("arcane_emitter"),
+                    .build(RegistryKey.of(RegistryKeys.ENTITY_TYPE, Identifier.of(WizardsMod.ID, "arcane_emitter"))),
             arcaneDefaults()));
 
     public static final Entry<FireHydraEntity> FIRE_HYDRA = add(new Entry<>(
@@ -87,7 +89,7 @@ public class WizardEntities {
                     .dimensions(1.5F, 3.0F)
                     .maxTrackingRange(64)
                     .trackingTickInterval(3)
-                    .build("fire_hydra"),
+                    .build(RegistryKey.of(RegistryKeys.ENTITY_TYPE, Identifier.of(WizardsMod.ID, "fire_hydra"))),
             fireDefaults()));
 
     // Default base attributes per summon — seeded into Wizards' OWN config file

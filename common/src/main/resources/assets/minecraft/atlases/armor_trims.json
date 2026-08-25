@@ -2,6 +2,18 @@
   "replace": false,
   "sources": [
     {
+      "type": "single",
+      "resource": "wizards:armor/trim/wizard_robe_generic"
+    },
+    {
+      "type": "single",
+      "resource": "wizards:armor/trim/spec_robe_generic"
+    },
+    {
+      "type": "single",
+      "resource": "wizards:armor/trim/netherite_spec_robe_generic"
+    },
+    {
       "type": "paletted_permutations",
       "textures": [
         "wizards:armor/trim/wizard_robe_generic",

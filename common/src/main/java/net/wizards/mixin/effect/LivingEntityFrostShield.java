@@ -3,8 +3,11 @@ package net.wizards.mixin.effect;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.registry.tag.DamageTypeTags;
+import net.minecraft.server.world.ServerWorld;
+import net.wizards.content.WizardsSounds;
 import net.wizards.effect.WizardsEffects;
 import net.wizards.effect.FrostShielded;
+import net.wizards.util.SoundHelper;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -14,6 +17,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(LivingEntity.class)
 public abstract class LivingEntityFrostShield implements FrostShielded {
     private boolean hasFrostShield = false;
+
     @Inject(method = "isBlocking", at = @At("HEAD"), cancellable = true)
     private void isBlocking_HEAD_FrostShield(CallbackInfoReturnable<Boolean> cir) {
         if (hasFrostShield) {
@@ -22,30 +26,23 @@ public abstract class LivingEntityFrostShield implements FrostShielded {
         }
     }
 
-    @Inject(method = "blockedByShield", at = @At("HEAD"), cancellable = true)
-    private void blockedByShield_HEAD_FrostShield(DamageSource source, CallbackInfoReturnable<Boolean> cir) {
+    /// 1.21.11 replaced the boolean `blockedByShield(DamageSource)` with a float
+    /// "how much of this hit was blocked" query driven by the `BLOCKS_ATTACKS` component.
+    /// A frost shield has no item behind it, so it answers "all of it" directly, and plays
+    /// its own impact sound (vanilla's block sound comes from the blocking item's component,
+    /// which is absent here).
+    @Inject(method = "getDamageBlockedAmount", at = @At("HEAD"), cancellable = true)
+    private void getDamageBlockedAmount_HEAD_FrostShield(ServerWorld world, DamageSource source, float amount, CallbackInfoReturnable<Float> cir) {
         if (hasFrostShield && !source.isIn(DamageTypeTags.BYPASSES_INVULNERABILITY)) {
-            cir.setReturnValue(true);
+            var entity = (LivingEntity) ((Object)this);
+            SoundHelper.playSoundEvent(entity.getEntityWorld(), entity, WizardsSounds.FROST_SHIELD_IMPACT.soundEvent());
+            cir.setReturnValue(amount);
             cir.cancel();
         }
     }
 
-    // Replaced with a workaround mixin for `ServerWorld`
-    // Server launch with Wilder Wild was crashing, due to vanilla method signature altered somehow?
-//    @ModifyArg(method = "damage", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/World;sendEntityStatus(Lnet/minecraft/entity/Entity;B)V"), index = 1)
-//    private byte damage_sendEntityStatus_NoSendShieldEvent(byte status) {
-//        if (status == EntityStatuses.BLOCK_WITH_SHIELD) {
-//            var entity = (LivingEntity) ((Object)this);
-//            if (hasFrostShield) {
-//                SoundHelper.playSoundEvent(entity.world, entity, FrostShieldStatusEffect.sound);
-//                return 0; // `0` is unused, but make sure to check in `EntityStatuses`, when updating
-//            }
-//        }
-//        return status;
-//    }
-
     @Inject(method = "damage", at = @At("HEAD"), cancellable = true)
-    private void damage_HEAD_FrostShieldFireImmunity(DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
+    private void damage_HEAD_FrostShieldFireImmunity(ServerWorld world, DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
         if (hasFrostShield && source.isIn(DamageTypeTags.IS_FIRE)) {
             cir.setReturnValue(false);
             cir.cancel();

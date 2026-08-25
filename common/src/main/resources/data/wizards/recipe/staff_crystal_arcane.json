@@ -16,15 +16,9 @@
   "type": "minecraft:crafting_shaped",
   "category": "equipment",
   "key": {
-    "P": {
-      "item": "minecraft:ender_pearl"
-    },
-    "C": {
-      "item": "betterend:crystal_shards"
-    },
-    "M": {
-      "item": "betterend:aeternium_ingot"
-    }
+    "P": "minecraft:ender_pearl",
+    "C": "betterend:crystal_shards",
+    "M": "betterend:aeternium_ingot"
   },
   "pattern": [
     " CP",

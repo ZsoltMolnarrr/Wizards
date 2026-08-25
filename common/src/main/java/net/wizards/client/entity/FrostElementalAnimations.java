@@ -1,12 +1,12 @@
 package net.wizards.client.entity;
 
-import net.minecraft.client.render.entity.animation.Animation;
+import net.minecraft.client.render.entity.animation.AnimationDefinition;
 import net.minecraft.client.render.entity.animation.AnimationHelper;
 import net.minecraft.client.render.entity.animation.Keyframe;
 import net.minecraft.client.render.entity.animation.Transformation;
 
 public class FrostElementalAnimations {
-        public static final Animation idle = Animation.Builder.create(3.0F).looping()
+        public static final AnimationDefinition idle = AnimationDefinition.Builder.create(3.0F).looping()
                 .addBoneAnimation("root", new Transformation(Transformation.Targets.ROTATE,
                         new Keyframe(0.0F, AnimationHelper.createRotationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR),
                         new Keyframe(1.4F, AnimationHelper.createRotationalVector(-1.0F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC),
@@ -18,7 +18,7 @@ public class FrostElementalAnimations {
                         new Keyframe(2.05F, AnimationHelper.createRotationalVector(5.21F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR),
                         new Keyframe(3.0F, AnimationHelper.createRotationalVector(5.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR)
                 ))
-                .addBoneAnimation("chest", new Transformation(Transformation.Targets.TRANSLATE,
+                .addBoneAnimation("chest", new Transformation(Transformation.Targets.MOVE_ORIGIN,
                         new Keyframe(0.0F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR),
                         new Keyframe(1.0F, AnimationHelper.createTranslationalVector(0.0F, 0.2497F, -0.012F), Transformation.Interpolations.CUBIC),
                         new Keyframe(1.95F, AnimationHelper.createTranslationalVector(0.0F, -0.0989F, 0.0188F), Transformation.Interpolations.LINEAR),
@@ -30,7 +30,7 @@ public class FrostElementalAnimations {
                         new Keyframe(1.95F, AnimationHelper.createRotationalVector(2.26F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR),
                         new Keyframe(3.0F, AnimationHelper.createRotationalVector(2.5F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR)
                 ))
-                .addBoneAnimation("head", new Transformation(Transformation.Targets.TRANSLATE,
+                .addBoneAnimation("head", new Transformation(Transformation.Targets.MOVE_ORIGIN,
                         new Keyframe(0.0F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR),
                         new Keyframe(1.3F, AnimationHelper.createTranslationalVector(0.0F, -0.2492F, 0.0199F), Transformation.Interpolations.CUBIC),
                         new Keyframe(3.0F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR)
@@ -106,13 +106,13 @@ public class FrostElementalAnimations {
                 ))
                 .build();
 
-        public static final Animation walk = Animation.Builder.create(2.35F).looping()
+        public static final AnimationDefinition walk = AnimationDefinition.Builder.create(2.35F).looping()
                 .addBoneAnimation("chest", new Transformation(Transformation.Targets.ROTATE,
                         new Keyframe(0.0F, AnimationHelper.createRotationalVector(5.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR),
                         new Keyframe(1.2F, AnimationHelper.createRotationalVector(2.2687F, -0.0492F, -0.0576F), Transformation.Interpolations.CUBIC),
                         new Keyframe(2.35F, AnimationHelper.createRotationalVector(5.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR)
                 ))
-                .addBoneAnimation("chest", new Transformation(Transformation.Targets.TRANSLATE,
+                .addBoneAnimation("chest", new Transformation(Transformation.Targets.MOVE_ORIGIN,
                         new Keyframe(0.0F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR),
                         new Keyframe(1.2F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, -0.25F), Transformation.Interpolations.CUBIC),
                         new Keyframe(2.35F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR)
@@ -122,7 +122,7 @@ public class FrostElementalAnimations {
                         new Keyframe(0.9F, AnimationHelper.createRotationalVector(-25.5417F, 0.0542F, 0.0408F), Transformation.Interpolations.CUBIC),
                         new Keyframe(2.35F, AnimationHelper.createRotationalVector(-22.5F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR)
                 ))
-                .addBoneAnimation("head", new Transformation(Transformation.Targets.TRANSLATE,
+                .addBoneAnimation("head", new Transformation(Transformation.Targets.MOVE_ORIGIN,
                         new Keyframe(0.0F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR),
                         new Keyframe(2.35F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR)
                 ))
@@ -193,7 +193,7 @@ public class FrostElementalAnimations {
                 ))
                 .build();
 
-        public static final Animation attack = Animation.Builder.create(2.0F)
+        public static final AnimationDefinition attack = AnimationDefinition.Builder.create(2.0F)
                 .addBoneAnimation("root", new Transformation(Transformation.Targets.ROTATE,
                         new Keyframe(0.0F, AnimationHelper.createRotationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR),
                         new Keyframe(1.5F, AnimationHelper.createRotationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC),
@@ -209,7 +209,7 @@ public class FrostElementalAnimations {
                         new Keyframe(1.5F, AnimationHelper.createRotationalVector(5.0F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC),
                         new Keyframe(1.85F, AnimationHelper.createRotationalVector(5.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR)
                 ))
-                .addBoneAnimation("chest", new Transformation(Transformation.Targets.TRANSLATE,
+                .addBoneAnimation("chest", new Transformation(Transformation.Targets.MOVE_ORIGIN,
                         new Keyframe(0.0F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR),
                         new Keyframe(1.5F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC),
                         new Keyframe(1.85F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR)
@@ -224,7 +224,7 @@ public class FrostElementalAnimations {
                         new Keyframe(1.55F, AnimationHelper.createRotationalVector(2.5F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC),
                         new Keyframe(1.9F, AnimationHelper.createRotationalVector(2.5F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR)
                 ))
-                .addBoneAnimation("head", new Transformation(Transformation.Targets.TRANSLATE,
+                .addBoneAnimation("head", new Transformation(Transformation.Targets.MOVE_ORIGIN,
                         new Keyframe(0.0F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR),
                         new Keyframe(1.55F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC),
                         new Keyframe(1.9F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR)
@@ -268,7 +268,7 @@ public class FrostElementalAnimations {
                         new Keyframe(1.45F, AnimationHelper.createRotationalVector(-37.5F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC),
                         new Keyframe(1.8F, AnimationHelper.createRotationalVector(-37.5F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR)
                 ))
-                .addBoneAnimation("left_forearm", new Transformation(Transformation.Targets.TRANSLATE,
+                .addBoneAnimation("left_forearm", new Transformation(Transformation.Targets.MOVE_ORIGIN,
                         new Keyframe(0.0F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR),
                         new Keyframe(0.4F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, -1.0F), Transformation.Interpolations.CUBIC),
                         new Keyframe(0.6F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, -1.0F), Transformation.Interpolations.LINEAR),
@@ -283,7 +283,7 @@ public class FrostElementalAnimations {
                         new Keyframe(1.45F, AnimationHelper.createRotationalVector(0.0F, 0.0F, 5.0F), Transformation.Interpolations.CUBIC),
                         new Keyframe(1.8F, AnimationHelper.createRotationalVector(0.0F, 0.0F, 5.0F), Transformation.Interpolations.LINEAR)
                 ))
-                .addBoneAnimation("left_finger_3", new Transformation(Transformation.Targets.TRANSLATE,
+                .addBoneAnimation("left_finger_3", new Transformation(Transformation.Targets.MOVE_ORIGIN,
                         new Keyframe(0.0F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR),
                         new Keyframe(0.15F, AnimationHelper.createTranslationalVector(-1.0F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC),
                         new Keyframe(0.6F, AnimationHelper.createTranslationalVector(-1.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR),
@@ -299,7 +299,7 @@ public class FrostElementalAnimations {
                         new Keyframe(1.5F, AnimationHelper.createRotationalVector(0.0F, 0.0F, -5.0F), Transformation.Interpolations.CUBIC),
                         new Keyframe(1.85F, AnimationHelper.createRotationalVector(0.0F, 0.0F, -5.0F), Transformation.Interpolations.LINEAR)
                 ))
-                .addBoneAnimation("left_finger_1", new Transformation(Transformation.Targets.TRANSLATE,
+                .addBoneAnimation("left_finger_1", new Transformation(Transformation.Targets.MOVE_ORIGIN,
                         new Keyframe(0.0F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR),
                         new Keyframe(0.4F, AnimationHelper.createTranslationalVector(1.0F, -1.0F, 0.0F), Transformation.Interpolations.CUBIC),
                         new Keyframe(0.6F, AnimationHelper.createTranslationalVector(1.0F, -1.0F, 0.0F), Transformation.Interpolations.LINEAR),
@@ -315,7 +315,7 @@ public class FrostElementalAnimations {
                         new Keyframe(1.45F, AnimationHelper.createRotationalVector(0.0F, 0.0F, -5.0F), Transformation.Interpolations.CUBIC),
                         new Keyframe(1.8F, AnimationHelper.createRotationalVector(0.0F, 0.0F, -5.0F), Transformation.Interpolations.LINEAR)
                 ))
-                .addBoneAnimation("left_finger_2", new Transformation(Transformation.Targets.TRANSLATE,
+                .addBoneAnimation("left_finger_2", new Transformation(Transformation.Targets.MOVE_ORIGIN,
                         new Keyframe(0.0F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR),
                         new Keyframe(0.4F, AnimationHelper.createTranslationalVector(1.0F, -1.0F, 0.0F), Transformation.Interpolations.CUBIC),
                         new Keyframe(0.6F, AnimationHelper.createTranslationalVector(1.0F, -1.0F, 0.0F), Transformation.Interpolations.LINEAR),
@@ -375,7 +375,7 @@ public class FrostElementalAnimations {
                 ))
                 .build();
 
-        public static final Animation attack_2 = Animation.Builder.create(2.0F)
+        public static final AnimationDefinition attack_2 = AnimationDefinition.Builder.create(2.0F)
                 .addBoneAnimation("root", new Transformation(Transformation.Targets.ROTATE,
                         new Keyframe(0.0F, AnimationHelper.createRotationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR),
                         new Keyframe(1.7F, AnimationHelper.createRotationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC),
@@ -390,7 +390,7 @@ public class FrostElementalAnimations {
                         new Keyframe(1.65F, AnimationHelper.createRotationalVector(5.0F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC),
                         new Keyframe(1.95F, AnimationHelper.createRotationalVector(5.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR)
                 ))
-                .addBoneAnimation("chest", new Transformation(Transformation.Targets.TRANSLATE,
+                .addBoneAnimation("chest", new Transformation(Transformation.Targets.MOVE_ORIGIN,
                         new Keyframe(0.0F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR),
                         new Keyframe(1.65F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC),
                         new Keyframe(1.95F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR)
@@ -404,7 +404,7 @@ public class FrostElementalAnimations {
                         new Keyframe(1.7F, AnimationHelper.createRotationalVector(2.5F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC),
                         new Keyframe(2.0F, AnimationHelper.createRotationalVector(2.5F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR)
                 ))
-                .addBoneAnimation("head", new Transformation(Transformation.Targets.TRANSLATE,
+                .addBoneAnimation("head", new Transformation(Transformation.Targets.MOVE_ORIGIN,
                         new Keyframe(0.0F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR),
                         new Keyframe(1.7F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC),
                         new Keyframe(2.0F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR)
@@ -436,7 +436,7 @@ public class FrostElementalAnimations {
                         new Keyframe(1.6F, AnimationHelper.createRotationalVector(15.0F, 22.5F, -22.5F), Transformation.Interpolations.CUBIC),
                         new Keyframe(2.0F, AnimationHelper.createRotationalVector(15.0F, 22.5F, -22.5F), Transformation.Interpolations.LINEAR)
                 ))
-                .addBoneAnimation("left_arm", new Transformation(Transformation.Targets.TRANSLATE,
+                .addBoneAnimation("left_arm", new Transformation(Transformation.Targets.MOVE_ORIGIN,
                         new Keyframe(0.0F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR),
                         new Keyframe(0.7F, AnimationHelper.createTranslationalVector(0.0F, -2.0F, -2.0F), Transformation.Interpolations.CUBIC),
                         new Keyframe(1.1F, AnimationHelper.createTranslationalVector(0.0F, -2.0F, -2.0F), Transformation.Interpolations.LINEAR),
@@ -452,7 +452,7 @@ public class FrostElementalAnimations {
                         new Keyframe(1.65F, AnimationHelper.createRotationalVector(-37.5F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC),
                         new Keyframe(1.95F, AnimationHelper.createRotationalVector(-37.5F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR)
                 ))
-                .addBoneAnimation("left_forearm", new Transformation(Transformation.Targets.TRANSLATE,
+                .addBoneAnimation("left_forearm", new Transformation(Transformation.Targets.MOVE_ORIGIN,
                         new Keyframe(0.0F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR),
                         new Keyframe(1.65F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC),
                         new Keyframe(1.95F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR)
@@ -465,7 +465,7 @@ public class FrostElementalAnimations {
                         new Keyframe(1.7F, AnimationHelper.createRotationalVector(0.0F, 0.0F, 5.0F), Transformation.Interpolations.CUBIC),
                         new Keyframe(2.0F, AnimationHelper.createRotationalVector(0.0F, 0.0F, 5.0F), Transformation.Interpolations.LINEAR)
                 ))
-                .addBoneAnimation("left_finger_3", new Transformation(Transformation.Targets.TRANSLATE,
+                .addBoneAnimation("left_finger_3", new Transformation(Transformation.Targets.MOVE_ORIGIN,
                         new Keyframe(0.0F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR),
                         new Keyframe(1.7F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC),
                         new Keyframe(2.0F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR)
@@ -478,7 +478,7 @@ public class FrostElementalAnimations {
                         new Keyframe(1.6F, AnimationHelper.createRotationalVector(0.0F, 0.0F, -5.0F), Transformation.Interpolations.CUBIC),
                         new Keyframe(1.9F, AnimationHelper.createRotationalVector(0.0F, 0.0F, -5.0F), Transformation.Interpolations.LINEAR)
                 ))
-                .addBoneAnimation("left_finger_1", new Transformation(Transformation.Targets.TRANSLATE,
+                .addBoneAnimation("left_finger_1", new Transformation(Transformation.Targets.MOVE_ORIGIN,
                         new Keyframe(0.0F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR),
                         new Keyframe(1.6F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC),
                         new Keyframe(1.9F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR)
@@ -491,7 +491,7 @@ public class FrostElementalAnimations {
                         new Keyframe(1.7F, AnimationHelper.createRotationalVector(0.0F, 0.0F, -5.0F), Transformation.Interpolations.CUBIC),
                         new Keyframe(2.0F, AnimationHelper.createRotationalVector(0.0F, 0.0F, -5.0F), Transformation.Interpolations.LINEAR)
                 ))
-                .addBoneAnimation("left_finger_2", new Transformation(Transformation.Targets.TRANSLATE,
+                .addBoneAnimation("left_finger_2", new Transformation(Transformation.Targets.MOVE_ORIGIN,
                         new Keyframe(0.0F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR),
                         new Keyframe(1.7F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC),
                         new Keyframe(2.0F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR)
@@ -542,7 +542,7 @@ public class FrostElementalAnimations {
                 ))
                 .build();
 
-        public static final Animation shoot_charge = Animation.Builder.create(2.0F)
+        public static final AnimationDefinition shoot_charge = AnimationDefinition.Builder.create(2.0F)
                 .addBoneAnimation("root", new Transformation(Transformation.Targets.ROTATE,
                         new Keyframe(0.0F, AnimationHelper.createRotationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR)
                 ))
@@ -553,7 +553,7 @@ public class FrostElementalAnimations {
                         new Keyframe(1.0F, AnimationHelper.createRotationalVector(9.7026F, 28.8811F, 2.7461F), Transformation.Interpolations.CUBIC),
                         new Keyframe(2.0F, AnimationHelper.createRotationalVector(5.7686F, 29.8742F, 2.8807F), Transformation.Interpolations.LINEAR)
                 ))
-                .addBoneAnimation("chest", new Transformation(Transformation.Targets.TRANSLATE,
+                .addBoneAnimation("chest", new Transformation(Transformation.Targets.MOVE_ORIGIN,
                         new Keyframe(0.0F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR)
                 ))
                 .addBoneAnimation("head", new Transformation(Transformation.Targets.ROTATE,
@@ -563,7 +563,7 @@ public class FrostElementalAnimations {
                         new Keyframe(1.1F, AnimationHelper.createRotationalVector(0.8862F, -29.9685F, -1.4426F), Transformation.Interpolations.CUBIC),
                         new Keyframe(2.0F, AnimationHelper.createRotationalVector(2.8862F, -29.9685F, -1.4426F), Transformation.Interpolations.LINEAR)
                 ))
-                .addBoneAnimation("head", new Transformation(Transformation.Targets.TRANSLATE,
+                .addBoneAnimation("head", new Transformation(Transformation.Targets.MOVE_ORIGIN,
                         new Keyframe(0.0F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR)
                 ))
                 .addBoneAnimation("body", new Transformation(Transformation.Targets.ROTATE,
@@ -592,7 +592,7 @@ public class FrostElementalAnimations {
                         new Keyframe(1.6F, AnimationHelper.createRotationalVector(18.9817F, 23.1257F, -25.1259F), Transformation.Interpolations.CUBIC),
                         new Keyframe(2.0F, AnimationHelper.createRotationalVector(18.9817F, 23.1257F, -25.1259F), Transformation.Interpolations.LINEAR)
                 ))
-                .addBoneAnimation("left_arm", new Transformation(Transformation.Targets.TRANSLATE,
+                .addBoneAnimation("left_arm", new Transformation(Transformation.Targets.MOVE_ORIGIN,
                         new Keyframe(0.0F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR)
                 ))
                 .addBoneAnimation("left_forearm", new Transformation(Transformation.Targets.ROTATE,
@@ -603,25 +603,25 @@ public class FrostElementalAnimations {
                         new Keyframe(1.6F, AnimationHelper.createRotationalVector(-47.5F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC),
                         new Keyframe(2.0F, AnimationHelper.createRotationalVector(-47.5F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR)
                 ))
-                .addBoneAnimation("left_forearm", new Transformation(Transformation.Targets.TRANSLATE,
+                .addBoneAnimation("left_forearm", new Transformation(Transformation.Targets.MOVE_ORIGIN,
                         new Keyframe(0.0F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR)
                 ))
                 .addBoneAnimation("left_finger_3", new Transformation(Transformation.Targets.ROTATE,
                         new Keyframe(0.0F, AnimationHelper.createRotationalVector(0.0F, 0.0F, 5.0F), Transformation.Interpolations.LINEAR)
                 ))
-                .addBoneAnimation("left_finger_3", new Transformation(Transformation.Targets.TRANSLATE,
+                .addBoneAnimation("left_finger_3", new Transformation(Transformation.Targets.MOVE_ORIGIN,
                         new Keyframe(0.0F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR)
                 ))
                 .addBoneAnimation("left_finger_1", new Transformation(Transformation.Targets.ROTATE,
                         new Keyframe(0.0F, AnimationHelper.createRotationalVector(0.0F, 0.0F, -5.0F), Transformation.Interpolations.LINEAR)
                 ))
-                .addBoneAnimation("left_finger_1", new Transformation(Transformation.Targets.TRANSLATE,
+                .addBoneAnimation("left_finger_1", new Transformation(Transformation.Targets.MOVE_ORIGIN,
                         new Keyframe(0.0F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR)
                 ))
                 .addBoneAnimation("left_finger_2", new Transformation(Transformation.Targets.ROTATE,
                         new Keyframe(0.0F, AnimationHelper.createRotationalVector(0.0F, 0.0F, -5.0F), Transformation.Interpolations.LINEAR)
                 ))
-                .addBoneAnimation("left_finger_2", new Transformation(Transformation.Targets.TRANSLATE,
+                .addBoneAnimation("left_finger_2", new Transformation(Transformation.Targets.MOVE_ORIGIN,
                         new Keyframe(0.0F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR)
                 ))
                 .addBoneAnimation("right_arm", new Transformation(Transformation.Targets.ROTATE,
@@ -631,7 +631,7 @@ public class FrostElementalAnimations {
                         new Keyframe(1.0F, AnimationHelper.createRotationalVector(-6.7509F, -6.8788F, 73.4561F), Transformation.Interpolations.CUBIC),
                         new Keyframe(2.0F, AnimationHelper.createRotationalVector(-7.5881F, -5.9414F, 80.9442F), Transformation.Interpolations.LINEAR)
                 ))
-                .addBoneAnimation("right_arm", new Transformation(Transformation.Targets.TRANSLATE,
+                .addBoneAnimation("right_arm", new Transformation(Transformation.Targets.MOVE_ORIGIN,
                         new Keyframe(0.0F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR),
                         new Keyframe(0.25F, AnimationHelper.createTranslationalVector(0.0F, -2.0F, 0.0F), Transformation.Interpolations.CUBIC),
                         new Keyframe(0.55F, AnimationHelper.createTranslationalVector(0.0F, -2.0F, 0.0F), Transformation.Interpolations.LINEAR),
@@ -644,7 +644,7 @@ public class FrostElementalAnimations {
                         new Keyframe(1.15F, AnimationHelper.createRotationalVector(-116.5916F, 4.5662F, 14.4962F), Transformation.Interpolations.CUBIC),
                         new Keyframe(2.0F, AnimationHelper.createRotationalVector(-116.9526F, 0.0526F, 5.5631F), Transformation.Interpolations.LINEAR)
                 ))
-                .addBoneAnimation("right_forearm", new Transformation(Transformation.Targets.TRANSLATE,
+                .addBoneAnimation("right_forearm", new Transformation(Transformation.Targets.MOVE_ORIGIN,
                         new Keyframe(0.0F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR),
                         new Keyframe(0.3F, AnimationHelper.createTranslationalVector(0.0F, 1.0F, -2.0F), Transformation.Interpolations.CUBIC),
                         new Keyframe(0.55F, AnimationHelper.createTranslationalVector(0.0F, 1.0F, -2.0F), Transformation.Interpolations.LINEAR),
@@ -658,7 +658,7 @@ public class FrostElementalAnimations {
                         new Keyframe(1.6F, AnimationHelper.createRotationalVector(0.7879F, 17.4828F, -82.3789F), Transformation.Interpolations.CUBIC),
                         new Keyframe(2.0F, AnimationHelper.createRotationalVector(0.7879F, 17.4828F, -82.3789F), Transformation.Interpolations.LINEAR)
                 ))
-                .addBoneAnimation("right_finger_2", new Transformation(Transformation.Targets.TRANSLATE,
+                .addBoneAnimation("right_finger_2", new Transformation(Transformation.Targets.MOVE_ORIGIN,
                         new Keyframe(0.0F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR),
                         new Keyframe(0.3F, AnimationHelper.createTranslationalVector(-1.0F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC),
                         new Keyframe(0.5F, AnimationHelper.createTranslationalVector(-1.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR),
@@ -673,7 +673,7 @@ public class FrostElementalAnimations {
                         new Keyframe(1.6F, AnimationHelper.createRotationalVector(-1.3097F, -7.3853F, -74.9156F), Transformation.Interpolations.CUBIC),
                         new Keyframe(2.0F, AnimationHelper.createRotationalVector(-1.3097F, -7.3853F, -74.9156F), Transformation.Interpolations.LINEAR)
                 ))
-                .addBoneAnimation("right_finger_1", new Transformation(Transformation.Targets.TRANSLATE,
+                .addBoneAnimation("right_finger_1", new Transformation(Transformation.Targets.MOVE_ORIGIN,
                         new Keyframe(0.0F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR),
                         new Keyframe(0.3F, AnimationHelper.createTranslationalVector(-1.0F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC),
                         new Keyframe(0.5F, AnimationHelper.createTranslationalVector(-1.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR),
@@ -688,7 +688,7 @@ public class FrostElementalAnimations {
                         new Keyframe(1.6F, AnimationHelper.createRotationalVector(0.0F, 0.0F, 85.0F), Transformation.Interpolations.CUBIC),
                         new Keyframe(2.0F, AnimationHelper.createRotationalVector(0.0F, 0.0F, 85.0F), Transformation.Interpolations.LINEAR)
                 ))
-                .addBoneAnimation("right_finger_3", new Transformation(Transformation.Targets.TRANSLATE,
+                .addBoneAnimation("right_finger_3", new Transformation(Transformation.Targets.MOVE_ORIGIN,
                         new Keyframe(0.0F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR),
                         new Keyframe(0.3F, AnimationHelper.createTranslationalVector(1.0F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC),
                         new Keyframe(0.5F, AnimationHelper.createTranslationalVector(1.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR),
@@ -700,7 +700,7 @@ public class FrostElementalAnimations {
                 ))
                 .build();
 
-        public static final Animation shoot_release = Animation.Builder.create(1.3F)
+        public static final AnimationDefinition shoot_release = AnimationDefinition.Builder.create(1.3F)
                 .addBoneAnimation("root", new Transformation(Transformation.Targets.ROTATE,
                         new Keyframe(0.8F, AnimationHelper.createRotationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC),
                         new Keyframe(1.1F, AnimationHelper.createRotationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR)
@@ -713,7 +713,7 @@ public class FrostElementalAnimations {
                         new Keyframe(0.9F, AnimationHelper.createRotationalVector(5.0F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC),
                         new Keyframe(1.2F, AnimationHelper.createRotationalVector(5.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR)
                 ))
-                .addBoneAnimation("chest", new Transformation(Transformation.Targets.TRANSLATE,
+                .addBoneAnimation("chest", new Transformation(Transformation.Targets.MOVE_ORIGIN,
                         new Keyframe(0.9F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC),
                         new Keyframe(1.2F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR)
                 ))
@@ -725,7 +725,7 @@ public class FrostElementalAnimations {
                         new Keyframe(0.9F, AnimationHelper.createRotationalVector(2.5F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC),
                         new Keyframe(1.2F, AnimationHelper.createRotationalVector(2.5F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR)
                 ))
-                .addBoneAnimation("head", new Transformation(Transformation.Targets.TRANSLATE,
+                .addBoneAnimation("head", new Transformation(Transformation.Targets.MOVE_ORIGIN,
                         new Keyframe(0.9F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC),
                         new Keyframe(1.2F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR)
                 ))
@@ -753,7 +753,7 @@ public class FrostElementalAnimations {
                         new Keyframe(0.95F, AnimationHelper.createRotationalVector(15.0F, 22.5F, -22.5F), Transformation.Interpolations.CUBIC),
                         new Keyframe(1.25F, AnimationHelper.createRotationalVector(15.0F, 22.5F, -22.5F), Transformation.Interpolations.LINEAR)
                 ))
-                .addBoneAnimation("left_arm", new Transformation(Transformation.Targets.TRANSLATE,
+                .addBoneAnimation("left_arm", new Transformation(Transformation.Targets.MOVE_ORIGIN,
                         new Keyframe(0.95F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC),
                         new Keyframe(1.25F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR)
                 ))
@@ -765,7 +765,7 @@ public class FrostElementalAnimations {
                         new Keyframe(0.95F, AnimationHelper.createRotationalVector(-37.5F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC),
                         new Keyframe(1.25F, AnimationHelper.createRotationalVector(-37.5F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR)
                 ))
-                .addBoneAnimation("left_forearm", new Transformation(Transformation.Targets.TRANSLATE,
+                .addBoneAnimation("left_forearm", new Transformation(Transformation.Targets.MOVE_ORIGIN,
                         new Keyframe(0.95F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC),
                         new Keyframe(1.25F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR)
                 ))
@@ -773,7 +773,7 @@ public class FrostElementalAnimations {
                         new Keyframe(0.8F, AnimationHelper.createRotationalVector(0.0F, 0.0F, 5.0F), Transformation.Interpolations.CUBIC),
                         new Keyframe(1.1F, AnimationHelper.createRotationalVector(0.0F, 0.0F, 5.0F), Transformation.Interpolations.LINEAR)
                 ))
-                .addBoneAnimation("left_finger_3", new Transformation(Transformation.Targets.TRANSLATE,
+                .addBoneAnimation("left_finger_3", new Transformation(Transformation.Targets.MOVE_ORIGIN,
                         new Keyframe(0.8F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC),
                         new Keyframe(1.1F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR)
                 ))
@@ -781,7 +781,7 @@ public class FrostElementalAnimations {
                         new Keyframe(0.8F, AnimationHelper.createRotationalVector(0.0F, 0.0F, -5.0F), Transformation.Interpolations.CUBIC),
                         new Keyframe(1.1F, AnimationHelper.createRotationalVector(0.0F, 0.0F, -5.0F), Transformation.Interpolations.LINEAR)
                 ))
-                .addBoneAnimation("left_finger_1", new Transformation(Transformation.Targets.TRANSLATE,
+                .addBoneAnimation("left_finger_1", new Transformation(Transformation.Targets.MOVE_ORIGIN,
                         new Keyframe(0.8F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC),
                         new Keyframe(1.1F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR)
                 ))
@@ -789,7 +789,7 @@ public class FrostElementalAnimations {
                         new Keyframe(0.8F, AnimationHelper.createRotationalVector(0.0F, 0.0F, -5.0F), Transformation.Interpolations.CUBIC),
                         new Keyframe(1.1F, AnimationHelper.createRotationalVector(0.0F, 0.0F, -5.0F), Transformation.Interpolations.LINEAR)
                 ))
-                .addBoneAnimation("left_finger_2", new Transformation(Transformation.Targets.TRANSLATE,
+                .addBoneAnimation("left_finger_2", new Transformation(Transformation.Targets.MOVE_ORIGIN,
                         new Keyframe(0.8F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC),
                         new Keyframe(1.1F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR)
                 ))
@@ -801,7 +801,7 @@ public class FrostElementalAnimations {
                         new Keyframe(0.9F, AnimationHelper.createRotationalVector(15.0F, -22.5F, 22.5F), Transformation.Interpolations.CUBIC),
                         new Keyframe(1.2F, AnimationHelper.createRotationalVector(15.0F, -22.5F, 22.5F), Transformation.Interpolations.LINEAR)
                 ))
-                .addBoneAnimation("right_arm", new Transformation(Transformation.Targets.TRANSLATE,
+                .addBoneAnimation("right_arm", new Transformation(Transformation.Targets.MOVE_ORIGIN,
                         new Keyframe(0.0F, AnimationHelper.createTranslationalVector(0.0F, -2.0F, 0.0F), Transformation.Interpolations.LINEAR),
                         new Keyframe(0.1F, AnimationHelper.createTranslationalVector(0.0F, -3.0F, -3.0F), Transformation.Interpolations.CUBIC),
                         new Keyframe(0.25F, AnimationHelper.createTranslationalVector(0.0F, -3.0F, -3.0F), Transformation.Interpolations.LINEAR),
@@ -817,7 +817,7 @@ public class FrostElementalAnimations {
                         new Keyframe(0.9F, AnimationHelper.createRotationalVector(-37.5F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC),
                         new Keyframe(1.2F, AnimationHelper.createRotationalVector(-37.5F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR)
                 ))
-                .addBoneAnimation("right_forearm", new Transformation(Transformation.Targets.TRANSLATE,
+                .addBoneAnimation("right_forearm", new Transformation(Transformation.Targets.MOVE_ORIGIN,
                         new Keyframe(0.0F, AnimationHelper.createTranslationalVector(0.0F, 1.0F, -2.0F), Transformation.Interpolations.LINEAR),
                         new Keyframe(0.1F, AnimationHelper.createTranslationalVector(0.0F, 1.0F, -2.0F), Transformation.Interpolations.CUBIC),
                         new Keyframe(0.25F, AnimationHelper.createTranslationalVector(0.0F, 1.0F, -2.0F), Transformation.Interpolations.LINEAR),
@@ -831,7 +831,7 @@ public class FrostElementalAnimations {
                         new Keyframe(0.95F, AnimationHelper.createRotationalVector(0.0F, 0.0F, 5.0F), Transformation.Interpolations.CUBIC),
                         new Keyframe(1.25F, AnimationHelper.createRotationalVector(0.0F, 0.0F, 5.0F), Transformation.Interpolations.LINEAR)
                 ))
-                .addBoneAnimation("right_finger_2", new Transformation(Transformation.Targets.TRANSLATE,
+                .addBoneAnimation("right_finger_2", new Transformation(Transformation.Targets.MOVE_ORIGIN,
                         new Keyframe(0.0F, AnimationHelper.createTranslationalVector(-1.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR),
                         new Keyframe(0.1F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC),
                         new Keyframe(0.25F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR),
@@ -847,7 +847,7 @@ public class FrostElementalAnimations {
                         new Keyframe(0.9F, AnimationHelper.createRotationalVector(0.0F, 0.0F, 5.0F), Transformation.Interpolations.CUBIC),
                         new Keyframe(1.2F, AnimationHelper.createRotationalVector(0.0F, 0.0F, 5.0F), Transformation.Interpolations.LINEAR)
                 ))
-                .addBoneAnimation("right_finger_1", new Transformation(Transformation.Targets.TRANSLATE,
+                .addBoneAnimation("right_finger_1", new Transformation(Transformation.Targets.MOVE_ORIGIN,
                         new Keyframe(0.0F, AnimationHelper.createTranslationalVector(-1.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR),
                         new Keyframe(0.05F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC),
                         new Keyframe(0.25F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR),
@@ -863,7 +863,7 @@ public class FrostElementalAnimations {
                         new Keyframe(1.0F, AnimationHelper.createRotationalVector(0.0F, 0.0F, -5.0F), Transformation.Interpolations.CUBIC),
                         new Keyframe(1.3F, AnimationHelper.createRotationalVector(0.0F, 0.0F, -5.0F), Transformation.Interpolations.LINEAR)
                 ))
-                .addBoneAnimation("right_finger_3", new Transformation(Transformation.Targets.TRANSLATE,
+                .addBoneAnimation("right_finger_3", new Transformation(Transformation.Targets.MOVE_ORIGIN,
                         new Keyframe(0.0F, AnimationHelper.createTranslationalVector(1.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR),
                         new Keyframe(0.05F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC),
                         new Keyframe(0.25F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR),
@@ -877,13 +877,13 @@ public class FrostElementalAnimations {
                 ))
                 .build();
 
-        public static final Animation spell_release = Animation.Builder.create(1.5F)
+        public static final AnimationDefinition spell_release = AnimationDefinition.Builder.create(1.5F)
                 .addBoneAnimation("root", new Transformation(Transformation.Targets.ROTATE,
                         new Keyframe(0.0F, AnimationHelper.createRotationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR),
                         new Keyframe(1.0F, AnimationHelper.createRotationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC),
                         new Keyframe(1.45F, AnimationHelper.createRotationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR)
                 ))
-                .addBoneAnimation("root", new Transformation(Transformation.Targets.TRANSLATE,
+                .addBoneAnimation("root", new Transformation(Transformation.Targets.MOVE_ORIGIN,
                         new Keyframe(0.0F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR),
                         new Keyframe(0.1F, AnimationHelper.createTranslationalVector(0.0F, -1.29F, 0.0F), Transformation.Interpolations.CUBIC),
                         new Keyframe(0.25F, AnimationHelper.createTranslationalVector(0.0F, -1.29F, 0.0F), Transformation.Interpolations.LINEAR),
@@ -903,7 +903,7 @@ public class FrostElementalAnimations {
                         new Keyframe(1.0F, AnimationHelper.createRotationalVector(5.0F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC),
                         new Keyframe(1.45F, AnimationHelper.createRotationalVector(5.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR)
                 ))
-                .addBoneAnimation("chest", new Transformation(Transformation.Targets.TRANSLATE,
+                .addBoneAnimation("chest", new Transformation(Transformation.Targets.MOVE_ORIGIN,
                         new Keyframe(0.0F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR),
                         new Keyframe(1.0F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC),
                         new Keyframe(1.45F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR)
@@ -918,7 +918,7 @@ public class FrostElementalAnimations {
                         new Keyframe(1.05F, AnimationHelper.createRotationalVector(2.5F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC),
                         new Keyframe(1.5F, AnimationHelper.createRotationalVector(2.5F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR)
                 ))
-                .addBoneAnimation("head", new Transformation(Transformation.Targets.TRANSLATE,
+                .addBoneAnimation("head", new Transformation(Transformation.Targets.MOVE_ORIGIN,
                         new Keyframe(0.0F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR),
                         new Keyframe(1.05F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC),
                         new Keyframe(1.5F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR)
@@ -932,7 +932,7 @@ public class FrostElementalAnimations {
                         new Keyframe(1.0F, AnimationHelper.createRotationalVector(2.5F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC),
                         new Keyframe(1.45F, AnimationHelper.createRotationalVector(2.5F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR)
                 ))
-                .addBoneAnimation("body", new Transformation(Transformation.Targets.TRANSLATE,
+                .addBoneAnimation("body", new Transformation(Transformation.Targets.MOVE_ORIGIN,
                         new Keyframe(0.0F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR),
                         new Keyframe(1.0F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC),
                         new Keyframe(1.45F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR)
@@ -947,7 +947,7 @@ public class FrostElementalAnimations {
                         new Keyframe(1.05F, AnimationHelper.createRotationalVector(17.5F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC),
                         new Keyframe(1.5F, AnimationHelper.createRotationalVector(17.5F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR)
                 ))
-                .addBoneAnimation("tail", new Transformation(Transformation.Targets.TRANSLATE,
+                .addBoneAnimation("tail", new Transformation(Transformation.Targets.MOVE_ORIGIN,
                         new Keyframe(0.0F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR),
                         new Keyframe(1.05F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC),
                         new Keyframe(1.5F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR)
@@ -972,7 +972,7 @@ public class FrostElementalAnimations {
                         new Keyframe(1.05F, AnimationHelper.createRotationalVector(-37.5F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC),
                         new Keyframe(1.5F, AnimationHelper.createRotationalVector(-37.5F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR)
                 ))
-                .addBoneAnimation("left_forearm", new Transformation(Transformation.Targets.TRANSLATE,
+                .addBoneAnimation("left_forearm", new Transformation(Transformation.Targets.MOVE_ORIGIN,
                         new Keyframe(0.0F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR),
                         new Keyframe(0.5F, AnimationHelper.createTranslationalVector(0.0F, 1.0F, -1.0F), Transformation.Interpolations.CUBIC),
                         new Keyframe(0.75F, AnimationHelper.createTranslationalVector(0.0F, 1.0F, -1.0F), Transformation.Interpolations.LINEAR),
@@ -988,7 +988,7 @@ public class FrostElementalAnimations {
                         new Keyframe(1.0F, AnimationHelper.createRotationalVector(0.0F, 0.0F, 5.0F), Transformation.Interpolations.CUBIC),
                         new Keyframe(1.45F, AnimationHelper.createRotationalVector(0.0F, 0.0F, 5.0F), Transformation.Interpolations.LINEAR)
                 ))
-                .addBoneAnimation("left_finger_3", new Transformation(Transformation.Targets.TRANSLATE,
+                .addBoneAnimation("left_finger_3", new Transformation(Transformation.Targets.MOVE_ORIGIN,
                         new Keyframe(0.0F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR),
                         new Keyframe(0.1F, AnimationHelper.createTranslationalVector(-1.0F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC),
                         new Keyframe(0.25F, AnimationHelper.createTranslationalVector(-1.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR),
@@ -1006,7 +1006,7 @@ public class FrostElementalAnimations {
                         new Keyframe(1.05F, AnimationHelper.createRotationalVector(0.0F, 0.0F, -5.0F), Transformation.Interpolations.CUBIC),
                         new Keyframe(1.5F, AnimationHelper.createRotationalVector(0.0F, 0.0F, -5.0F), Transformation.Interpolations.LINEAR)
                 ))
-                .addBoneAnimation("left_finger_1", new Transformation(Transformation.Targets.TRANSLATE,
+                .addBoneAnimation("left_finger_1", new Transformation(Transformation.Targets.MOVE_ORIGIN,
                         new Keyframe(0.0F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR),
                         new Keyframe(0.1F, AnimationHelper.createTranslationalVector(1.0F, -1.0F, 0.0F), Transformation.Interpolations.CUBIC),
                         new Keyframe(0.25F, AnimationHelper.createTranslationalVector(1.0F, -1.0F, 0.0F), Transformation.Interpolations.LINEAR),
@@ -1024,7 +1024,7 @@ public class FrostElementalAnimations {
                         new Keyframe(1.0F, AnimationHelper.createRotationalVector(0.0F, 0.0F, -5.0F), Transformation.Interpolations.CUBIC),
                         new Keyframe(1.45F, AnimationHelper.createRotationalVector(0.0F, 0.0F, -5.0F), Transformation.Interpolations.LINEAR)
                 ))
-                .addBoneAnimation("left_finger_2", new Transformation(Transformation.Targets.TRANSLATE,
+                .addBoneAnimation("left_finger_2", new Transformation(Transformation.Targets.MOVE_ORIGIN,
                         new Keyframe(0.0F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR),
                         new Keyframe(0.1F, AnimationHelper.createTranslationalVector(1.0F, -1.0F, 0.0F), Transformation.Interpolations.CUBIC),
                         new Keyframe(0.25F, AnimationHelper.createTranslationalVector(1.0F, -1.0F, 0.0F), Transformation.Interpolations.LINEAR),
@@ -1043,7 +1043,7 @@ public class FrostElementalAnimations {
                         new Keyframe(1.0F, AnimationHelper.createRotationalVector(15.0F, -22.5F, 22.5F), Transformation.Interpolations.CUBIC),
                         new Keyframe(1.45F, AnimationHelper.createRotationalVector(15.0F, -22.5F, 22.5F), Transformation.Interpolations.LINEAR)
                 ))
-                .addBoneAnimation("right_arm", new Transformation(Transformation.Targets.TRANSLATE,
+                .addBoneAnimation("right_arm", new Transformation(Transformation.Targets.MOVE_ORIGIN,
                         new Keyframe(0.0F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR),
                         new Keyframe(1.0F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC),
                         new Keyframe(1.45F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR)
@@ -1058,7 +1058,7 @@ public class FrostElementalAnimations {
                         new Keyframe(1.05F, AnimationHelper.createRotationalVector(-37.5F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC),
                         new Keyframe(1.5F, AnimationHelper.createRotationalVector(-37.5F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR)
                 ))
-                .addBoneAnimation("right_forearm", new Transformation(Transformation.Targets.TRANSLATE,
+                .addBoneAnimation("right_forearm", new Transformation(Transformation.Targets.MOVE_ORIGIN,
                         new Keyframe(0.0F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR),
                         new Keyframe(0.5F, AnimationHelper.createTranslationalVector(0.0F, 1.0F, -1.0F), Transformation.Interpolations.CUBIC),
                         new Keyframe(0.75F, AnimationHelper.createTranslationalVector(0.0F, 1.0F, -1.0F), Transformation.Interpolations.LINEAR),
@@ -1074,7 +1074,7 @@ public class FrostElementalAnimations {
                         new Keyframe(1.0F, AnimationHelper.createRotationalVector(0.0F, 0.0F, 5.0F), Transformation.Interpolations.CUBIC),
                         new Keyframe(1.45F, AnimationHelper.createRotationalVector(0.0F, 0.0F, 5.0F), Transformation.Interpolations.LINEAR)
                 ))
-                .addBoneAnimation("right_finger_2", new Transformation(Transformation.Targets.TRANSLATE,
+                .addBoneAnimation("right_finger_2", new Transformation(Transformation.Targets.MOVE_ORIGIN,
                         new Keyframe(0.0F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR),
                         new Keyframe(0.1F, AnimationHelper.createTranslationalVector(-1.0F, -1.0F, 0.0F), Transformation.Interpolations.CUBIC),
                         new Keyframe(0.25F, AnimationHelper.createTranslationalVector(-1.0F, -1.0F, 0.0F), Transformation.Interpolations.LINEAR),
@@ -1092,7 +1092,7 @@ public class FrostElementalAnimations {
                         new Keyframe(1.05F, AnimationHelper.createRotationalVector(0.0F, 0.0F, 5.0F), Transformation.Interpolations.CUBIC),
                         new Keyframe(1.5F, AnimationHelper.createRotationalVector(0.0F, 0.0F, 5.0F), Transformation.Interpolations.LINEAR)
                 ))
-                .addBoneAnimation("right_finger_1", new Transformation(Transformation.Targets.TRANSLATE,
+                .addBoneAnimation("right_finger_1", new Transformation(Transformation.Targets.MOVE_ORIGIN,
                         new Keyframe(0.0F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR),
                         new Keyframe(0.1F, AnimationHelper.createTranslationalVector(-1.0F, -1.0F, 0.0F), Transformation.Interpolations.CUBIC),
                         new Keyframe(0.25F, AnimationHelper.createTranslationalVector(-1.0F, -1.0F, 0.0F), Transformation.Interpolations.LINEAR),
@@ -1110,7 +1110,7 @@ public class FrostElementalAnimations {
                         new Keyframe(1.0F, AnimationHelper.createRotationalVector(0.0F, 0.0F, -5.0F), Transformation.Interpolations.CUBIC),
                         new Keyframe(1.45F, AnimationHelper.createRotationalVector(0.0F, 0.0F, -5.0F), Transformation.Interpolations.LINEAR)
                 ))
-                .addBoneAnimation("right_finger_3", new Transformation(Transformation.Targets.TRANSLATE,
+                .addBoneAnimation("right_finger_3", new Transformation(Transformation.Targets.MOVE_ORIGIN,
                         new Keyframe(0.0F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR),
                         new Keyframe(0.1F, AnimationHelper.createTranslationalVector(1.0F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC),
                         new Keyframe(0.25F, AnimationHelper.createTranslationalVector(1.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR),
@@ -1126,12 +1126,12 @@ public class FrostElementalAnimations {
                 ))
                 .build();
 
-        public static final Animation spawn = Animation.Builder.create(0.95F)
+        public static final AnimationDefinition spawn = AnimationDefinition.Builder.create(0.95F)
                 .addBoneAnimation("root", new Transformation(Transformation.Targets.ROTATE,
                         new Keyframe(0.0F, AnimationHelper.createRotationalVector(0.0F, -360.0F, 0.0F), Transformation.Interpolations.LINEAR),
                         new Keyframe(0.25F, AnimationHelper.createRotationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC)
                 ))
-                .addBoneAnimation("root", new Transformation(Transformation.Targets.TRANSLATE,
+                .addBoneAnimation("root", new Transformation(Transformation.Targets.MOVE_ORIGIN,
                         new Keyframe(0.0F, AnimationHelper.createTranslationalVector(0.0F, -4.0F, 0.0F), Transformation.Interpolations.LINEAR),
                         new Keyframe(0.25F, AnimationHelper.createTranslationalVector(0.0F, 4.0F, 0.0F), Transformation.Interpolations.CUBIC),
                         new Keyframe(0.55F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR)
@@ -1149,7 +1149,7 @@ public class FrostElementalAnimations {
                         new Keyframe(0.65F, AnimationHelper.createRotationalVector(5.0F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC),
                         new Keyframe(0.9F, AnimationHelper.createRotationalVector(5.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR)
                 ))
-                .addBoneAnimation("chest", new Transformation(Transformation.Targets.TRANSLATE,
+                .addBoneAnimation("chest", new Transformation(Transformation.Targets.MOVE_ORIGIN,
                         new Keyframe(0.65F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC),
                         new Keyframe(0.9F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR)
                 ))
@@ -1161,7 +1161,7 @@ public class FrostElementalAnimations {
                         new Keyframe(0.7F, AnimationHelper.createRotationalVector(2.5F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC),
                         new Keyframe(0.95F, AnimationHelper.createRotationalVector(2.5F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR)
                 ))
-                .addBoneAnimation("head", new Transformation(Transformation.Targets.TRANSLATE,
+                .addBoneAnimation("head", new Transformation(Transformation.Targets.MOVE_ORIGIN,
                         new Keyframe(0.7F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC),
                         new Keyframe(0.95F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR)
                 ))
@@ -1177,7 +1177,7 @@ public class FrostElementalAnimations {
                         new Keyframe(0.7F, AnimationHelper.createRotationalVector(17.5F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC),
                         new Keyframe(0.95F, AnimationHelper.createRotationalVector(17.5F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR)
                 ))
-                .addBoneAnimation("tail", new Transformation(Transformation.Targets.TRANSLATE,
+                .addBoneAnimation("tail", new Transformation(Transformation.Targets.MOVE_ORIGIN,
                         new Keyframe(0.0F, AnimationHelper.createTranslationalVector(0.0F, 1.0F, 0.0F), Transformation.Interpolations.CUBIC),
                         new Keyframe(0.15F, AnimationHelper.createTranslationalVector(0.0F, 1.0F, 0.0F), Transformation.Interpolations.LINEAR),
                         new Keyframe(0.3F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC),
@@ -1231,7 +1231,7 @@ public class FrostElementalAnimations {
                         new Keyframe(0.7F, AnimationHelper.createRotationalVector(15.0F, -22.5F, 22.5F), Transformation.Interpolations.CUBIC),
                         new Keyframe(0.95F, AnimationHelper.createRotationalVector(15.0F, -22.5F, 22.5F), Transformation.Interpolations.LINEAR)
                 ))
-                .addBoneAnimation("right_arm", new Transformation(Transformation.Targets.TRANSLATE,
+                .addBoneAnimation("right_arm", new Transformation(Transformation.Targets.MOVE_ORIGIN,
                         new Keyframe(0.0F, AnimationHelper.createTranslationalVector(0.0F, -1.0F, 0.0F), Transformation.Interpolations.CUBIC),
                         new Keyframe(0.15F, AnimationHelper.createTranslationalVector(0.0F, -1.0F, 0.0F), Transformation.Interpolations.LINEAR),
                         new Keyframe(0.3F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC),
@@ -1245,7 +1245,7 @@ public class FrostElementalAnimations {
                         new Keyframe(0.65F, AnimationHelper.createRotationalVector(-37.5F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC),
                         new Keyframe(0.9F, AnimationHelper.createRotationalVector(-37.5F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR)
                 ))
-                .addBoneAnimation("right_forearm", new Transformation(Transformation.Targets.TRANSLATE,
+                .addBoneAnimation("right_forearm", new Transformation(Transformation.Targets.MOVE_ORIGIN,
                         new Keyframe(0.0F, AnimationHelper.createTranslationalVector(0.0F, 1.0F, 0.0F), Transformation.Interpolations.CUBIC),
                         new Keyframe(0.15F, AnimationHelper.createTranslationalVector(0.0F, 1.0F, 0.0F), Transformation.Interpolations.LINEAR),
                         new Keyframe(0.3F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.CUBIC),

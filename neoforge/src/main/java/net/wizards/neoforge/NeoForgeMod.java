@@ -49,7 +49,7 @@ public final class NeoForgeMod {
     }
 
     private static void onVillagerTrades(VillagerTradesEvent event) {
-        if (event.getType() != WizardVillagers.PROFESSION) {
+        if (!event.getType().equals(WizardVillagers.PROFESSION_KEY)) {
             return;
         }
         WizardVillagers.TRADES.forEach((tier, factories) -> {

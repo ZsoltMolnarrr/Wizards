@@ -16,15 +16,9 @@
   "type": "minecraft:crafting_shaped",
   "category": "equipment",
   "key": {
-    "P": {
-      "item": "minecraft:prismarine_crystals"
-    },
-    "C": {
-      "item": "betterend:smaragdant_crystal_shard"
-    },
-    "M": {
-      "item": "betterend:aeternium_ingot"
-    }
+    "P": "minecraft:prismarine_crystals",
+    "C": "betterend:smaragdant_crystal_shard",
+    "M": "betterend:aeternium_ingot"
   },
   "pattern": [
     " CP",

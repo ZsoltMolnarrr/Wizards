@@ -6,7 +6,9 @@ import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricLanguageProvider;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricRecipeProvider;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagProvider;
-import net.minecraft.data.server.recipe.RecipeExporter;
+import net.minecraft.data.recipe.RecipeExporter;
+import net.minecraft.data.recipe.RecipeGenerator;
+import net.minecraft.registry.RegistryKey;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.Items;
@@ -84,24 +86,24 @@ public class WizardsDataGenerator implements DataGeneratorEntrypoint {
         @Override
         protected void configure(RegistryWrapper.WrapperLookup wrapperLookup) {
             var namespace = WizardsMod.ID;
-            var treasureTagBuilder = getOrCreateTagBuilder(SpellTags.TREASURE);
+            var treasureTagBuilder = builder(SpellTags.TREASURE);
             var processedBooks = new HashSet<WizardSpells.Book>();
             WizardSpells.entries.forEach(entry -> {
                 if (entry.book() != null) {
                     var bookTagKey = SpellTags.spellBook(namespace, entry.book().toString().toLowerCase());
-                    var bookTag = getOrCreateTagBuilder(bookTagKey);
-                    bookTag.addOptional(entry.id());
+                    var bookTag = builder(bookTagKey);
+                    bookTag.addOptional(RegistryKey.of(SpellRegistry.KEY, entry.id()));
                     var scrollTagKey = SpellTags.spellScroll(namespace, entry.book().toString().toLowerCase());
-                    var scrollTag = getOrCreateTagBuilder(scrollTagKey);
-                    scrollTag.addOptional(entry.id());
+                    var scrollTag = builder(scrollTagKey);
+                    scrollTag.addOptional(RegistryKey.of(SpellRegistry.KEY, entry.id()));
                     if (processedBooks.add(entry.book())) {
                         treasureTagBuilder.addOptionalTag(scrollTagKey);
                     }
                 }
                 for (var group : entry.weaponGroups()) {
                     var weaponGroupTagKey = SpellTags.weapon(namespace, group.toString().toLowerCase());
-                    var weaponGroupTag = getOrCreateTagBuilder(weaponGroupTagKey);
-                    weaponGroupTag.addOptional(entry.id());
+                    var weaponGroupTag = builder(weaponGroupTagKey);
+                    weaponGroupTag.addOptional(RegistryKey.of(SpellRegistry.KEY, entry.id()));
                 }
             });
 
@@ -112,7 +114,7 @@ public class WizardsDataGenerator implements DataGeneratorEntrypoint {
             // school-specific staff group only, NOT wizard_staff (which spans every school).
             for (var book : WizardSpells.Book.values()) {
                 var school = book.name().toLowerCase();
-                var umbrella = getOrCreateTagBuilder(TagKey.of(SpellRegistry.KEY, Identifier.of(namespace, school)));
+                var umbrella = builder(TagKey.of(SpellRegistry.KEY, Identifier.of(namespace, school)));
                 umbrella.addOptionalTag(SpellTags.spellBook(namespace, school));
                 umbrella.addOptionalTag(SpellTags.weapon(namespace, school + "_staff"));
             }
@@ -142,42 +144,57 @@ public class WizardsDataGenerator implements DataGeneratorEntrypoint {
 
         public static int UNSMELT_TIME = 300;
 
+        /// 1.21.2+: the provider only supplies a `RecipeGenerator`, which owns the exporter.
         @Override
-        public void generate(RecipeExporter exporter) {
-            disassembleArmor(exporter, WizardArmors.wizardRobeSet, Items.LAPIS_LAZULI);
-            disassembleArmor(exporter, WizardArmors.arcaneRobeSet, Items.ENDER_PEARL);
-            disassembleArmor(exporter, WizardArmors.fireRobeSet, Items.BLAZE_POWDER);
-            disassembleArmor(exporter, WizardArmors.frostRobeSet, Items.PRISMARINE_SHARD);
-            disassembleArmor(exporter, WizardArmors.netherite_arcane, Items.NETHERITE_SCRAP);
-            disassembleArmor(exporter, WizardArmors.netherite_fire, Items.NETHERITE_SCRAP);
-            disassembleArmor(exporter, WizardArmors.netherite_frost, Items.NETHERITE_SCRAP);
+        protected RecipeGenerator getRecipeGenerator(RegistryWrapper.WrapperLookup registries, RecipeExporter exporter) {
+            return new RecipeGenerator(registries, exporter) {
+                @Override
+                public void generate() {
+                    UnsmeltGenerator.generateAll(this);
+                }
+            };
+        }
 
-            disassemble(exporter,
+        @Override
+        public String getName() {
+            return "Wizard Unsmelting Recipes";
+        }
+
+        private static void generateAll(RecipeGenerator gen) {
+            disassembleArmor(gen, WizardArmors.wizardRobeSet, Items.LAPIS_LAZULI);
+            disassembleArmor(gen, WizardArmors.arcaneRobeSet, Items.ENDER_PEARL);
+            disassembleArmor(gen, WizardArmors.fireRobeSet, Items.BLAZE_POWDER);
+            disassembleArmor(gen, WizardArmors.frostRobeSet, Items.PRISMARINE_SHARD);
+            disassembleArmor(gen, WizardArmors.netherite_arcane, Items.NETHERITE_SCRAP);
+            disassembleArmor(gen, WizardArmors.netherite_fire, Items.NETHERITE_SCRAP);
+            disassembleArmor(gen, WizardArmors.netherite_frost, Items.NETHERITE_SCRAP);
+
+            disassemble(gen,
                     List.of(WizardWeapons.arcaneWand.item(), WizardWeapons.fireWand.item()),
                     Items.GOLD_NUGGET);
-            disassemble(exporter,
+            disassemble(gen,
                     List.of(WizardWeapons.frostWand.item()),
                     Items.IRON_NUGGET);
 
-            disassemble(exporter,
+            disassemble(gen,
                     List.of(WizardWeapons.arcaneStaff.item()),
                     Items.AMETHYST_SHARD);
-            disassemble(exporter,
+            disassemble(gen,
                     List.of(WizardWeapons.fireStaff.item()),
                     Items.BLAZE_POWDER);
-            disassemble(exporter,
+            disassemble(gen,
                     List.of(WizardWeapons.frostStaff.item()),
                     Items.PRISMARINE_CRYSTALS);
 
-            disassemble(exporter,
+            disassemble(gen,
                     WizardWeapons.entries.stream()
                             .filter(entry -> entry.id().getPath().contains("netherite"))
                             .map(entry -> (ItemConvertible) entry.item()).toList(),
                     Items.NETHERITE_SCRAP);
         }
 
-        private static void disassembleArmor(RecipeExporter exporter, Armor.Set armorSet, Item output) {
-            FabricRecipeProvider.offerSmelting(exporter,
+        private static void disassembleArmor(RecipeGenerator gen, Armor.Set armorSet, Item output) {
+            gen.offerSmelting(
                     armorSet.pieces(),
                     RecipeCategory.MISC,
                     output,
@@ -185,7 +202,7 @@ public class WizardsDataGenerator implements DataGeneratorEntrypoint {
                     UNSMELT_TIME,
                     "disassemble"
             );
-            FabricRecipeProvider.offerBlasting(exporter,
+            gen.offerBlasting(
                     armorSet.pieces(),
                     RecipeCategory.MISC,
                     output,
@@ -195,8 +212,8 @@ public class WizardsDataGenerator implements DataGeneratorEntrypoint {
             );
         }
 
-        private static void disassemble(RecipeExporter exporter, List<ItemConvertible> items, Item output) {
-            FabricRecipeProvider.offerSmelting(exporter,
+        private static void disassemble(RecipeGenerator gen, List<ItemConvertible> items, Item output) {
+            gen.offerSmelting(
                     items,
                     RecipeCategory.MISC,
                     output,
@@ -204,7 +221,7 @@ public class WizardsDataGenerator implements DataGeneratorEntrypoint {
                     UNSMELT_TIME,
                     "disassemble"
             );
-            FabricRecipeProvider.offerBlasting(exporter,
+            gen.offerBlasting(
                     items,
                     RecipeCategory.MISC,
                     output,
@@ -301,7 +318,9 @@ public class WizardsDataGenerator implements DataGeneratorEntrypoint {
                 builder.add("entity." + namespace + "." + entry.id.getPath(), entry.name);
             }
 
-            // Wizard Merchant villager (several key formats are referenced across versions)
+            // Wizard Merchant villager (several key formats are referenced across versions;
+            // 1.21.11 builds the key as `entity.<namespace>.villager.<path>`)
+            builder.add("entity." + namespace + ".villager.wizard_merchant", "Wizard Merchant");
             builder.add("entity.minecraft.villager.wizard_merchant", "Wizard Merchant");
             builder.add("entity.minecraft.villager." + namespace + ".wizard_merchant", "Wizard Merchant");
             builder.add("entity.minecraft.villager." + namespace + ":wizard_merchant", "Wizard Merchant");

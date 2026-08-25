@@ -37,6 +37,6 @@ public class EvocationParticles implements CustomParticleStatusEffect.Spawner {
         if (livingEntity.age % interval != 0) {
             return;
         }
-        ParticleHelper.play(livingEntity.getWorld(), livingEntity, particles);
+        ParticleHelper.play(livingEntity.getEntityWorld(), livingEntity, particles);
     }
 }

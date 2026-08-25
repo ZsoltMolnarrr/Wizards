@@ -17,7 +17,7 @@ import net.minecraft.registry.Registries;
 import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
-import net.spell_engine.api.spell.SpellDataComponents;
+import net.minecraft.component.DataComponentTypes;
 import net.spell_engine.misc.criteria.SpellCastCriteria;
 import net.spell_engine.spellbinding.SpellBindingCriteria;
 import net.spell_engine.spellbinding.SpellBookCreationCriteria;
@@ -196,9 +196,12 @@ public class WizardAdvancements extends FabricAdvancementProvider {
         return new ItemStack(Registries.ITEM.get(Identifier.of(itemId)));
     }
 
+    /// 1.21.11: the vanilla `minecraft:item_model` component names an item-model *definition*
+    /// (`assets/wizards/items/spell_book/<school>.json`) and Spell Engine sets it to the pool id
+    /// verbatim, so the advancement icon must use the same id.
     private static ItemStack spellBookIcon(String school) {
         var stack = new ItemStack(Registries.ITEM.get(Identifier.of("spell_engine", "spell_book")));
-        stack.set(SpellDataComponents.ITEM_MODEL, Identifier.of("wizards", "item/spell_book/" + school));
+        stack.set(DataComponentTypes.ITEM_MODEL, Identifier.of("wizards", "spell_book/" + school));
         return stack;
     }
 

@@ -33,12 +33,12 @@ public class WizardsEffects {
             new EffectConfig(
                     List.of(
                             new AttributeModifier(
-                                    EntityAttributes.GENERIC_MOVEMENT_SPEED.getIdAsString(),
+                                    EntityAttributes.MOVEMENT_SPEED.getIdAsString(),
                                     -10,
                                     EntityAttributeModifier.Operation.ADD_MULTIPLIED_BASE
                             ),
                             new AttributeModifier(
-                                    EntityAttributes.GENERIC_JUMP_STRENGTH.getIdAsString(),
+                                    EntityAttributes.JUMP_STRENGTH.getIdAsString(),
                                     -10,
                                     EntityAttributeModifier.Operation.ADD_MULTIPLIED_BASE
                             )
@@ -53,7 +53,7 @@ public class WizardsEffects {
             new EffectConfig(
                     List.of(
                             new AttributeModifier(
-                                    EntityAttributes.GENERIC_MOVEMENT_SPEED.getIdAsString(),
+                                    EntityAttributes.MOVEMENT_SPEED.getIdAsString(),
                                     -0.5F,
                                     EntityAttributeModifier.Operation.ADD_MULTIPLIED_BASE
                             )
@@ -68,7 +68,7 @@ public class WizardsEffects {
             new EffectConfig(
                     List.of(
                             new AttributeModifier(
-                                    EntityAttributes.GENERIC_MOVEMENT_SPEED.getIdAsString(),
+                                    EntityAttributes.MOVEMENT_SPEED.getIdAsString(),
                                     -0.15F,
                                     EntityAttributeModifier.Operation.ADD_MULTIPLIED_BASE
                             )

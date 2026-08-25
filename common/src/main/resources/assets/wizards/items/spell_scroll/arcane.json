@@ -1,0 +1,6 @@
+{
+  "model": {
+    "type": "minecraft:model",
+    "model": "wizards:item/spell_scroll/arcane"
+  }
+}

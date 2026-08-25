@@ -7,6 +7,8 @@ import net.minecraft.item.Items;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.registry.RegistryKey;
+import net.minecraft.registry.RegistryKeys;
+import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.village.TradeOffers;
 import net.minecraft.village.VillagerProfession;
@@ -26,6 +28,10 @@ import java.util.Set;
 public class WizardVillagers {
     public static final String WIZARD_MERCHANT = "wizard_merchant";
     public static final Identifier POI_ID = Identifier.of(WizardsMod.ID, WIZARD_MERCHANT);
+    /// 1.21.11 addresses professions by registry key (Fabric's `TradeOfferHelper` and NeoForge's
+    /// `VillagerTradesEvent#getType` both take/return one).
+    public static final RegistryKey<VillagerProfession> PROFESSION_KEY =
+            RegistryKey.of(RegistryKeys.VILLAGER_PROFESSION, POI_ID);
     public static final int POI_TICKET_COUNT = 1;
     public static final int POI_SEARCH_DISTANCE = 10;
 
@@ -48,7 +54,9 @@ public class WizardVillagers {
     public static VillagerProfession registerProfession(String name, RegistryKey<PointOfInterestType> workStation) {
         var id = Identifier.of(WizardsMod.ID, name);
         return Registry.register(Registries.VILLAGER_PROFESSION, Identifier.of(WizardsMod.ID, name), new VillagerProfession(
-                id.toString(),
+                // 1.21.11: the profession's first field is the display Text (vanilla builds
+                // `entity.<namespace>.villager.<path>`), not the raw id string.
+                Text.translatable("entity." + id.getNamespace() + ".villager." + id.getPath()),
                 (entry) -> {
                     return entry.matchesKey(workStation);
                 },
@@ -137,12 +145,12 @@ public class WizardVillagers {
                 new TradeOffers.SellItemFactory(WizardArmors.wizardRobeSet.legs, 20, 1, 12, 16, 0.1F)
         ));
         TRADES.put(5, List.of(
-                (entity, random) -> new TradeOffers.SellEnchantedToolFactory(
-                        WizardWeapons.arcaneStaff.item(), 40, 3, 30, 0F).create(entity, random),
-                (entity, random) -> new TradeOffers.SellEnchantedToolFactory(
-                        WizardWeapons.fireStaff.item(), 40, 3, 30, 0F).create(entity, random),
-                (entity, random) -> new TradeOffers.SellEnchantedToolFactory(
-                        WizardWeapons.frostStaff.item(), 40, 3, 30, 0F).create(entity, random)
+                (world, entity, random) -> new TradeOffers.SellEnchantedToolFactory(
+                        WizardWeapons.arcaneStaff.item(), 40, 3, 30, 0F).create(world, entity, random),
+                (world, entity, random) -> new TradeOffers.SellEnchantedToolFactory(
+                        WizardWeapons.fireStaff.item(), 40, 3, 30, 0F).create(world, entity, random),
+                (world, entity, random) -> new TradeOffers.SellEnchantedToolFactory(
+                        WizardWeapons.frostStaff.item(), 40, 3, 30, 0F).create(world, entity, random)
         ));
     }
 }

@@ -16,15 +16,9 @@
   "type": "minecraft:crafting_shaped",
   "category": "equipment",
   "key": {
-    "P": {
-      "item": "minecraft:blaze_powder"
-    },
-    "R": {
-      "item": "betternether:nether_ruby"
-    },
-    "M": {
-      "item": "betternether:cincinnasite_ingot"
-    }
+    "P": "minecraft:blaze_powder",
+    "R": "betternether:nether_ruby",
+    "M": "betternether:cincinnasite_ingot"
   },
   "pattern": [
     " RP",
