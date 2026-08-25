@@ -16,14 +16,14 @@ logoFile = "icon.png"
 [[dependencies.wizards]]
 modId = "neoforge"
 type = "required"
-versionRange = "[21.1,)"
+versionRange = "[21.11,)"
 ordering = "NONE"
 side = "BOTH"
 
 [[dependencies.wizards]]
 modId = "minecraft"
 type = "required"
-versionRange = "[${minecraft_compat_version},)"
+versionRange = "[1.21.11,)"
 ordering = "NONE"
 side = "BOTH"
 

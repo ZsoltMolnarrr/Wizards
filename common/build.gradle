@@ -6,8 +6,8 @@ architectury {
 def platform = "fabric";
 
 repositories {
-    maven { url 'https://maven.kosmx.dev/' }
-    maven { url 'https://maven.shedaniel.me/' }
+    maven { url = 'https://repo.redlance.org/public' } // PAL (Player Animation Library)
+    maven { url = 'https://maven.shedaniel.me/' }
     maven {
         name = 'Modrinth'
         url = 'https://api.modrinth.com/maven'
@@ -15,12 +15,16 @@ repositories {
             includeGroup 'maven.modrinth'
         }
     }
-    maven { url 'https://maven.fabricmc.net' }
+    maven { url = 'https://maven.fabricmc.net' }
 
     // Hosts `dev.emi:trinkets`, inherited transitively from SpellEngine's Fabric artifact.
     maven {
         name = "Sleeping Town"
         url = "https://repo.sleeping.town/"
+    }
+    maven {
+        name = "Ladysnake Libs"
+        url = 'https://maven.ladysnake.org/releases'
     }
 
     mavenLocal()
@@ -33,19 +37,23 @@ dependencies {
     modImplementation "net.fabricmc:fabric-loader:$project.fabric_loader_version"
     modImplementation "net.fabricmc.fabric-api:fabric-api:$project.fabric_api_version"
 
-    modImplementation("dev.kosmx.player-anim:player-animation-lib-${platform}:${project.player_anim_version}")
+    modImplementation("com.zigythebird.playeranim:PlayerAnimationLibCommon:${project.player_anim_version}")
+    // Core has no Minecraft references: plain implementation (remapping it would poison the loom cache)
+    implementation("com.zigythebird.playeranim:PlayerAnimationLibCore:${project.player_anim_version}")
     modImplementation("me.shedaniel.cloth:cloth-config-${platform}:${project.cloth_config_version}")
-    modImplementation("maven.modrinth:armor-model-api:${project.armor_model_api_version}-${platform}")
+    modImplementation("net.rpg_foundation:armor_model_api-${platform}:${project.armor_model_api_version}")
+//    modImplementation("maven.modrinth:armor-model-api:${project.armor_model_api_version}-${platform}")
     modImplementation("maven.modrinth:tiny-config:${project.tiny_config_version}-${platform}")
 
-    modImplementation("maven.modrinth:structure-pool-api:${project.structure_pool_api_version}-${platform}")
-//    modImplementation("net.foundation:structure_pool_api-${platform}:${project.structure_pool_api_version}")
-    modImplementation("maven.modrinth:runes:${project.runes_version}-${platform}")
-//    modImplementation("net.rpg_series:runes-${platform}:${project.runes_version}")
-    modImplementation("maven.modrinth:spell-power:${project.spell_power_version}-${platform}")
-//    modImplementation("net.spell_power:spell_power-${platform}:${project.spell_power_version}")
-    modImplementation("maven.modrinth:spell-engine:${project.spell_engine_version}-${platform}")
-//    modImplementation("net.spell_engine:spell_engine-${platform}:${project.spell_engine_version}") { transitive = false }
+    modImplementation("net.foundation:structure_pool_api-${platform}:${project.structure_pool_api_version}")
+//    modImplementation("maven.modrinth:structure-pool-api:${project.structure_pool_api_version}-${platform}")
+    modImplementation("net.rpg_series:runes-${platform}:${project.runes_version}")
+//    modImplementation("maven.modrinth:runes:${project.runes_version}-${platform}")
+    modImplementation("net.spell_power:spell_power-${platform}:${project.spell_power_version}")
+//    modImplementation("maven.modrinth:spell-power:${project.spell_power_version}-${platform}")
+    modImplementation("net.foundation:ranged_weapon_api-${platform}:${project.ranged_weapon_api_version}")
+    modImplementation("net.spell_engine:spell_engine-${platform}:${project.spell_engine_version}") { transitive = false }
+//    modImplementation("maven.modrinth:spell-engine:${project.spell_engine_version}-${platform}")
 
     // Compatibility
     // Fabric specific
