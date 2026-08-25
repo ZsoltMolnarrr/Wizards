@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "minecraft:prismarine_shard_from_smelting_frost_robe_feet"
+        "recipe": "wizards:prismarine_shard_from_smelting_frost_robe_feet"
       },
       "trigger": "minecraft:recipe_unlocked"
     }
@@ -26,7 +26,7 @@
   ],
   "rewards": {
     "recipes": [
-      "minecraft:prismarine_shard_from_smelting_frost_robe_feet"
+      "wizards:prismarine_shard_from_smelting_frost_robe_feet"
     ]
   }
 }

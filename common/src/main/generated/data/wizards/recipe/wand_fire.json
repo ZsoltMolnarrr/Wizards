@@ -2,12 +2,8 @@
   "type": "minecraft:crafting_shaped",
   "category": "equipment",
   "key": {
-    "A": {
-      "item": "minecraft:gunpowder"
-    },
-    "G": {
-      "item": "minecraft:gold_ingot"
-    }
+    "A": "minecraft:gunpowder",
+    "G": "minecraft:gold_ingot"
   },
   "pattern": [
     " A",

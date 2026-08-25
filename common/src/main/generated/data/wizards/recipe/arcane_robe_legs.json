@@ -2,12 +2,8 @@
   "type": "minecraft:crafting_shaped",
   "category": "equipment",
   "key": {
-    "L": {
-      "item": "minecraft:ender_pearl"
-    },
-    "W": {
-      "tag": "minecraft:wool"
-    }
+    "L": "minecraft:ender_pearl",
+    "W": "#minecraft:wool"
   },
   "pattern": [
     "LLL",

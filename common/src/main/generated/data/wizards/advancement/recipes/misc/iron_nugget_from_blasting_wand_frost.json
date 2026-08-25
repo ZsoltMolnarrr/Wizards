@@ -3,7 +3,7 @@
   "criteria": {
     "has_the_recipe": {
       "conditions": {
-        "recipe": "minecraft:iron_nugget_from_blasting_wand_frost"
+        "recipe": "wizards:iron_nugget_from_blasting_wand_frost"
       },
       "trigger": "minecraft:recipe_unlocked"
     },
@@ -26,7 +26,7 @@
   ],
   "rewards": {
     "recipes": [
-      "minecraft:iron_nugget_from_blasting_wand_frost"
+      "wizards:iron_nugget_from_blasting_wand_frost"
     ]
   }
 }

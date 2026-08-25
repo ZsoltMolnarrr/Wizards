@@ -5,7 +5,7 @@
       "conditions": {
         "items": [
           {
-            "items": "minecraft:netherite_ingot"
+            "items": "#minecraft:netherite_tool_materials"
           }
         ]
       },
@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "minecraft:netherite_fire_robe_legs_smithing"
+        "recipe": "wizards:netherite_fire_robe_legs_smithing"
       },
       "trigger": "minecraft:recipe_unlocked"
     }
@@ -26,7 +26,7 @@
   ],
   "rewards": {
     "recipes": [
-      "minecraft:netherite_fire_robe_legs_smithing"
+      "wizards:netherite_fire_robe_legs_smithing"
     ]
   }
 }

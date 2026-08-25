@@ -14,7 +14,7 @@
     },
     "icon": {
       "components": {
-        "spell_engine:item_model": "wizards:item/spell_book/arcane"
+        "minecraft:item_model": "wizards:spell_book/arcane"
       },
       "count": 1,
       "id": "spell_engine:spell_book"

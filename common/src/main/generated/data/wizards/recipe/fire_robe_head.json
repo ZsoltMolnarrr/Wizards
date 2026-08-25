@@ -2,12 +2,8 @@
   "type": "minecraft:crafting_shaped",
   "category": "equipment",
   "key": {
-    "L": {
-      "item": "minecraft:blaze_powder"
-    },
-    "W": {
-      "tag": "minecraft:wool"
-    }
+    "L": "minecraft:blaze_powder",
+    "W": "#minecraft:wool"
   },
   "pattern": [
     "  W",

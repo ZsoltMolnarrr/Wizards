@@ -4,9 +4,7 @@
   "cookingtime": 300,
   "experience": 0.1,
   "group": "disassemble",
-  "ingredient": {
-    "item": "wizards:netherite_arcane_robe_head"
-  },
+  "ingredient": "wizards:netherite_arcane_robe_head",
   "result": {
     "id": "minecraft:netherite_scrap"
   }

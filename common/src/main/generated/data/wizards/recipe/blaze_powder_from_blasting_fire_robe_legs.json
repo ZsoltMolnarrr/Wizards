@@ -4,9 +4,7 @@
   "cookingtime": 150,
   "experience": 0.1,
   "group": "disassemble",
-  "ingredient": {
-    "item": "wizards:fire_robe_legs"
-  },
+  "ingredient": "wizards:fire_robe_legs",
   "result": {
     "id": "minecraft:blaze_powder"
   }

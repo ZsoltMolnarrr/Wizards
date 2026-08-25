@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "minecraft:netherite_scrap_from_smelting_staff_netherite_arcane"
+        "recipe": "wizards:netherite_scrap_from_smelting_staff_netherite_arcane"
       },
       "trigger": "minecraft:recipe_unlocked"
     }
@@ -26,7 +26,7 @@
   ],
   "rewards": {
     "recipes": [
-      "minecraft:netherite_scrap_from_smelting_staff_netherite_arcane"
+      "wizards:netherite_scrap_from_smelting_staff_netherite_arcane"
     ]
   }
 }

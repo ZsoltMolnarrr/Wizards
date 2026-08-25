@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "minecraft:prismarine_shard_from_blasting_frost_robe_chest"
+        "recipe": "wizards:prismarine_shard_from_blasting_frost_robe_chest"
       },
       "trigger": "minecraft:recipe_unlocked"
     }
@@ -26,7 +26,7 @@
   ],
   "rewards": {
     "recipes": [
-      "minecraft:prismarine_shard_from_blasting_frost_robe_chest"
+      "wizards:prismarine_shard_from_blasting_frost_robe_chest"
     ]
   }
 }

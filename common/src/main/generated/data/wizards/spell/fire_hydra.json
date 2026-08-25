@@ -122,7 +122,7 @@
           "attribute_scaling": {
             "entries": [
               {
-                "attribute_id": "minecraft:generic.max_health",
+                "attribute_id": "minecraft:max_health",
                 "modifiers": [
                   {
                     "attribute_id": "spell_power:fire",
@@ -133,7 +133,7 @@
                 ]
               },
               {
-                "attribute_id": "minecraft:generic.armor",
+                "attribute_id": "minecraft:armor",
                 "modifiers": [
                   {
                     "attribute_id": "spell_power:fire",
@@ -144,7 +144,7 @@
                 ]
               },
               {
-                "attribute_id": "minecraft:generic.attack_damage",
+                "attribute_id": "minecraft:attack_damage",
                 "modifiers": [
                   {
                     "attribute_id": "spell_power:fire",
@@ -166,7 +166,7 @@
                 ]
               },
               {
-                "attribute_id": "minecraft:generic.attack_knockback",
+                "attribute_id": "minecraft:attack_knockback",
                 "modifiers": [
                   {
                     "attribute_id": "spell_power:fire",
@@ -177,7 +177,7 @@
                 ]
               },
               {
-                "attribute_id": "minecraft:generic.knockback_resistance",
+                "attribute_id": "minecraft:knockback_resistance",
                 "modifiers": [
                   {
                     "attribute_id": "spell_power:fire",

@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "minecraft:prismarine_crystals_from_smelting_staff_frost"
+        "recipe": "wizards:prismarine_crystals_from_smelting_staff_frost"
       },
       "trigger": "minecraft:recipe_unlocked"
     }
@@ -26,7 +26,7 @@
   ],
   "rewards": {
     "recipes": [
-      "minecraft:prismarine_crystals_from_smelting_staff_frost"
+      "wizards:prismarine_crystals_from_smelting_staff_frost"
     ]
   }
 }

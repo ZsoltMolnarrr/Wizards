@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "minecraft:netherite_scrap_from_blasting_netherite_arcane_robe_legs"
+        "recipe": "wizards:netherite_scrap_from_blasting_netherite_arcane_robe_legs"
       },
       "trigger": "minecraft:recipe_unlocked"
     }
@@ -26,7 +26,7 @@
   ],
   "rewards": {
     "recipes": [
-      "minecraft:netherite_scrap_from_blasting_netherite_arcane_robe_legs"
+      "wizards:netherite_scrap_from_blasting_netherite_arcane_robe_legs"
     ]
   }
 }

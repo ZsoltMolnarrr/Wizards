@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "minecraft:netherite_scrap_from_smelting_netherite_arcane_robe_chest"
+        "recipe": "wizards:netherite_scrap_from_smelting_netherite_arcane_robe_chest"
       },
       "trigger": "minecraft:recipe_unlocked"
     }
@@ -26,7 +26,7 @@
   ],
   "rewards": {
     "recipes": [
-      "minecraft:netherite_scrap_from_smelting_netherite_arcane_robe_chest"
+      "wizards:netherite_scrap_from_smelting_netherite_arcane_robe_chest"
     ]
   }
 }

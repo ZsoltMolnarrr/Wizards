@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "minecraft:ender_pearl_from_blasting_arcane_robe_legs"
+        "recipe": "wizards:ender_pearl_from_blasting_arcane_robe_legs"
       },
       "trigger": "minecraft:recipe_unlocked"
     }
@@ -26,7 +26,7 @@
   ],
   "rewards": {
     "recipes": [
-      "minecraft:ender_pearl_from_blasting_arcane_robe_legs"
+      "wizards:ender_pearl_from_blasting_arcane_robe_legs"
     ]
   }
 }

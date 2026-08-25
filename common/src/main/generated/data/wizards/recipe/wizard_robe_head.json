@@ -2,12 +2,8 @@
   "type": "minecraft:crafting_shaped",
   "category": "equipment",
   "key": {
-    "L": {
-      "item": "minecraft:lapis_lazuli"
-    },
-    "W": {
-      "tag": "minecraft:wool"
-    }
+    "L": "minecraft:lapis_lazuli",
+    "W": "#minecraft:wool"
   },
   "pattern": [
     "  W",

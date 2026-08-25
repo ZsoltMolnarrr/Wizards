@@ -1,16 +1,9 @@
 {
   "type": "minecraft:smithing_transform",
-  "addition": {
-    "item": "minecraft:netherite_ingot"
-  },
-  "base": {
-    "item": "wizards:staff_fire"
-  },
+  "addition": "#minecraft:netherite_tool_materials",
+  "base": "wizards:staff_fire",
   "result": {
-    "count": 1,
     "id": "wizards:staff_netherite_fire"
   },
-  "template": {
-    "item": "minecraft:netherite_upgrade_smithing_template"
-  }
+  "template": "minecraft:netherite_upgrade_smithing_template"
 }

@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "minecraft:netherite_scrap_from_smelting_netherite_frost_robe_head"
+        "recipe": "wizards:netherite_scrap_from_smelting_netherite_frost_robe_head"
       },
       "trigger": "minecraft:recipe_unlocked"
     }
@@ -26,7 +26,7 @@
   ],
   "rewards": {
     "recipes": [
-      "minecraft:netherite_scrap_from_smelting_netherite_frost_robe_head"
+      "wizards:netherite_scrap_from_smelting_netherite_frost_robe_head"
     ]
   }
 }

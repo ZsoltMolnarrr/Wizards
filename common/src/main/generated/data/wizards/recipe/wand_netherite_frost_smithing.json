@@ -1,16 +1,9 @@
 {
   "type": "minecraft:smithing_transform",
-  "addition": {
-    "item": "minecraft:netherite_ingot"
-  },
-  "base": {
-    "item": "wizards:wand_frost"
-  },
+  "addition": "#minecraft:netherite_tool_materials",
+  "base": "wizards:wand_frost",
   "result": {
-    "count": 1,
     "id": "wizards:wand_netherite_frost"
   },
-  "template": {
-    "item": "minecraft:netherite_upgrade_smithing_template"
-  }
+  "template": "minecraft:netherite_upgrade_smithing_template"
 }

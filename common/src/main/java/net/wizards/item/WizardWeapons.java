@@ -36,9 +36,14 @@ public class WizardWeapons {
             };
         } else {
             return () -> {
-                var item = Registries.ITEM.get(id);
-                var ingredient = item != null ? item : fallback;
-                return Ingredient.ofItems(ingredient);
+                // 1.21.2+: `Ingredient.ofItems` throws on air, and `Registries.ITEM.get(id)` answers
+                // AIR (never null) for an id no loaded mod provides — so resolve optionally and fall
+                // back to the vanilla item. On 1.21.1 this silently produced an air ingredient.
+                var item = Registries.ITEM.getOptionalValue(id).orElse(fallback);
+                if (item == Items.AIR) {
+                    item = fallback;
+                }
+                return Ingredient.ofItems(item);
             };
         }
     }

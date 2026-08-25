@@ -4,9 +4,7 @@
   "cookingtime": 150,
   "experience": 0.1,
   "group": "disassemble",
-  "ingredient": {
-    "item": "wizards:netherite_frost_robe_chest"
-  },
+  "ingredient": "wizards:netherite_frost_robe_chest",
   "result": {
     "id": "minecraft:netherite_scrap"
   }

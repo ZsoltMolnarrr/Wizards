@@ -2,12 +2,8 @@
   "type": "minecraft:crafting_shaped",
   "category": "equipment",
   "key": {
-    "C": {
-      "item": "minecraft:coal"
-    },
-    "S": {
-      "item": "minecraft:stick"
-    }
+    "C": "minecraft:coal",
+    "S": "minecraft:stick"
   },
   "pattern": [
     " C",

@@ -4,9 +4,7 @@
   "cookingtime": 150,
   "experience": 0.1,
   "group": "disassemble",
-  "ingredient": {
-    "item": "wizards:staff_frost"
-  },
+  "ingredient": "wizards:staff_frost",
   "result": {
     "id": "minecraft:prismarine_crystals"
   }

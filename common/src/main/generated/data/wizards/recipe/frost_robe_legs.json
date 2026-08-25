@@ -2,12 +2,8 @@
   "type": "minecraft:crafting_shaped",
   "category": "equipment",
   "key": {
-    "L": {
-      "item": "minecraft:prismarine_shard"
-    },
-    "W": {
-      "tag": "minecraft:wool"
-    }
+    "L": "minecraft:prismarine_shard",
+    "W": "#minecraft:wool"
   },
   "pattern": [
     "LLL",

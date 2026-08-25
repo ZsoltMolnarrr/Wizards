@@ -2,12 +2,8 @@
   "type": "minecraft:crafting_shaped",
   "category": "equipment",
   "key": {
-    "Q": {
-      "item": "minecraft:quartz"
-    },
-    "S": {
-      "item": "minecraft:stick"
-    }
+    "Q": "minecraft:quartz",
+    "S": "minecraft:stick"
   },
   "pattern": [
     "  Q",

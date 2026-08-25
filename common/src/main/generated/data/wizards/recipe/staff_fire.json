@@ -2,18 +2,10 @@
   "type": "minecraft:crafting_shaped",
   "category": "equipment",
   "key": {
-    "G": {
-      "item": "minecraft:gold_ingot"
-    },
-    "N": {
-      "item": "minecraft:nether_brick"
-    },
-    "P": {
-      "item": "minecraft:blaze_powder"
-    },
-    "S": {
-      "item": "minecraft:stick"
-    }
+    "G": "minecraft:gold_ingot",
+    "N": "minecraft:nether_brick",
+    "P": "minecraft:blaze_powder",
+    "S": "minecraft:stick"
   },
   "pattern": [
     " NP",

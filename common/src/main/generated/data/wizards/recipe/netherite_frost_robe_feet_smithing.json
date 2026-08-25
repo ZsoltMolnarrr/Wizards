@@ -1,16 +1,9 @@
 {
   "type": "minecraft:smithing_transform",
-  "addition": {
-    "item": "minecraft:netherite_ingot"
-  },
-  "base": {
-    "item": "wizards:frost_robe_feet"
-  },
+  "addition": "#minecraft:netherite_tool_materials",
+  "base": "wizards:frost_robe_feet",
   "result": {
-    "count": 1,
     "id": "wizards:netherite_frost_robe_feet"
   },
-  "template": {
-    "item": "minecraft:netherite_upgrade_smithing_template"
-  }
+  "template": "minecraft:netherite_upgrade_smithing_template"
 }

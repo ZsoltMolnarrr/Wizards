@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "minecraft:netherite_scrap_from_blasting_netherite_fire_robe_feet"
+        "recipe": "wizards:netherite_scrap_from_blasting_netherite_fire_robe_feet"
       },
       "trigger": "minecraft:recipe_unlocked"
     }
@@ -26,7 +26,7 @@
   ],
   "rewards": {
     "recipes": [
-      "minecraft:netherite_scrap_from_blasting_netherite_fire_robe_feet"
+      "wizards:netherite_scrap_from_blasting_netherite_fire_robe_feet"
     ]
   }
 }

@@ -2,12 +2,8 @@
   "type": "minecraft:crafting_shaped",
   "category": "equipment",
   "key": {
-    "I": {
-      "item": "minecraft:iron_ingot"
-    },
-    "S": {
-      "item": "minecraft:snowball"
-    }
+    "I": "minecraft:iron_ingot",
+    "S": "minecraft:snowball"
   },
   "pattern": [
     " S",

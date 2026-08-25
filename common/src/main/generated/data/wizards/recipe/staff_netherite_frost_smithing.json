@@ -1,16 +1,9 @@
 {
   "type": "minecraft:smithing_transform",
-  "addition": {
-    "item": "minecraft:netherite_ingot"
-  },
-  "base": {
-    "item": "wizards:staff_frost"
-  },
+  "addition": "#minecraft:netherite_tool_materials",
+  "base": "wizards:staff_frost",
   "result": {
-    "count": 1,
     "id": "wizards:staff_netherite_frost"
   },
-  "template": {
-    "item": "minecraft:netherite_upgrade_smithing_template"
-  }
+  "template": "minecraft:netherite_upgrade_smithing_template"
 }
