@@ -1,6 +1,6 @@
 package net.wizards.config;
 
-import net.rpg_foundation.structure_pool_api.api.StructurePoolConfig;
+import net.rpg_foundation.structure_pool.api.StructurePoolConfig;
 import net.spell_engine.rpg_series.config.ConfigFile;
 
 import java.util.ArrayList;

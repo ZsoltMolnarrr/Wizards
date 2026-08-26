@@ -1,7 +1,7 @@
 package net.wizards.villager;
 
 import com.google.common.collect.ImmutableSet;
-import net.rpg_foundation.structure_pool_api.api.StructurePoolAPI;
+import net.rpg_foundation.structure_pool.api.StructurePoolAPI;
 import net.minecraft.block.BlockState;
 import net.minecraft.item.Items;
 import net.minecraft.registry.Registries;
