@@ -76,7 +76,7 @@ dependencies {
 //    modImplementation("maven.modrinth:runes:${project.runes_version}-${platform}")
     modImplementation("net.spell_power:spell_power-${platform}:${project.spell_power_version}")
 //    modImplementation("maven.modrinth:spell-power:${project.spell_power_version}-${platform}")
-    modImplementation("net.foundation:ranged_weapon_api-${platform}:${project.ranged_weapon_api_version}")
+    modImplementation("net.rpg_foundation:ranged_weapon_api-${platform}:${project.ranged_weapon_api_version}")
     modImplementation("net.spell_engine:spell_engine-${platform}:${project.spell_engine_version}") { transitive = false }
 //    modImplementation("maven.modrinth:spell-engine:${project.spell_engine_version}-${platform}")
 }
