@@ -1,0 +1,9 @@
+{
+  "values": [
+    "minecraft:netherite_ingot",
+    {
+      "id": "aether:ambrosium_shard",
+      "required": false
+    }
+  ]
+}

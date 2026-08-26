@@ -1,0 +1,9 @@
+{
+  "values": [
+    "minecraft:netherite_ingot",
+    {
+      "id": "betternether:nether_ruby",
+      "required": false
+    }
+  ]
+}

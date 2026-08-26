@@ -9,6 +9,7 @@ import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagProvider;
 import net.minecraft.data.recipe.RecipeExporter;
 import net.minecraft.data.recipe.RecipeGenerator;
 import net.minecraft.registry.RegistryKey;
+import net.minecraft.registry.RegistryKeys;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.Items;
@@ -32,6 +33,7 @@ import net.wizards.content.WizardsSounds;
 import net.wizards.effect.WizardsEffects;
 import net.wizards.entity.WizardEntities;
 import net.wizards.item.WizardArmors;
+import net.wizards.item.WizardItemTags;
 import net.wizards.item.WizardWeapons;
 
 import java.util.HashSet;
@@ -62,6 +64,13 @@ public class WizardsDataGenerator implements DataGeneratorEntrypoint {
         protected void configure(RegistryWrapper.WrapperLookup wrapperLookup) {
             generateWeaponTags(WizardWeapons.entries);
             generateArmorTags(WizardArmors.entries, RPGSeriesItemTags.ArmorMetaType.MAGIC);
+
+            // Anvil repair tags (`minecraft:repairable`), one per material
+            for (var repair: WizardItemTags.REPAIR_TAGS) {
+                var tag = builder(repair.tag());
+                repair.required().forEach(id -> tag.add(RegistryKey.of(RegistryKeys.ITEM, id)));
+                repair.optional().forEach(id -> tag.addOptional(RegistryKey.of(RegistryKeys.ITEM, id)));
+            }
         }
     }
 
