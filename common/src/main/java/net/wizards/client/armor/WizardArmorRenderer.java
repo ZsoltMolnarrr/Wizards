@@ -1,6 +1,6 @@
 package net.wizards.client.armor;
 
-import net.minecraft.util.Identifier;
+import net.minecraft.resources.Identifier;
 import net.rpg_foundation.armor_api.client.GeoArmorRenderer;
 import net.wizards.WizardsMod;
 
@@ -35,8 +35,8 @@ public final class WizardArmorRenderer {
 
     private static GeoArmorRenderer make(String modelName, String textureName, String trimTextureName) {
         return GeoArmorRenderer.of(
-                Identifier.of(WizardsMod.ID, "geo/" + modelName + ".geo.json"),
-                Identifier.of(WizardsMod.ID, "textures/armor/" + textureName + ".png"))
-                .trim(Identifier.of(WizardsMod.ID, "armor/trim/" + trimTextureName), false);
+                Identifier.fromNamespaceAndPath(WizardsMod.ID, "geo/" + modelName + ".geo.json"),
+                Identifier.fromNamespaceAndPath(WizardsMod.ID, "textures/armor/" + textureName + ".png"))
+                .trim(Identifier.fromNamespaceAndPath(WizardsMod.ID, "armor/trim/" + trimTextureName), false);
     }
 }

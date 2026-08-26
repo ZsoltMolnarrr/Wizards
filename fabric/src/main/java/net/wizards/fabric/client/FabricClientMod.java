@@ -4,7 +4,7 @@ import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.world.WorldRenderEvents;
-import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.Minecraft;
 import net.wizards.client.WizardsClientMod;
 import net.wizards.client.entity.ArcaneEmitterModel;
 import net.wizards.client.entity.ArcaneEmitterRenderer;
@@ -30,7 +30,7 @@ public final class FabricClientMod implements ClientModInitializer {
         // 1.21.9+ world render events are extraction/main split; AFTER_TRANSLUCENT is gone — END_MAIN
         // is the equivalent late hook (same one SpellEngine's beams use).
         WorldRenderEvents.END_MAIN.register(context ->
-                FireHydraRenderer.renderAfterTranslucent(context.matrices(), context.gameRenderer().getCamera(),
-                        MinecraftClient.getInstance().getRenderTickCounter().getTickProgress(true)));
+                FireHydraRenderer.renderAfterTranslucent(context.matrices(), context.gameRenderer().getMainCamera(),
+                        Minecraft.getInstance().getDeltaTracker().getGameTimeDeltaPartialTick(true)));
     }
 }

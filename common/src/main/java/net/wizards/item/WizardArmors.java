@@ -1,16 +1,16 @@
 package net.wizards.item;
 
-import net.minecraft.item.Item;
-import net.minecraft.item.equipment.ArmorMaterial;
-import net.minecraft.item.equipment.EquipmentAsset;
-import net.minecraft.item.equipment.EquipmentAssetKeys;
-import net.minecraft.item.equipment.EquipmentType;
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.registry.tag.ItemTags;
-import net.minecraft.registry.tag.TagKey;
-import net.minecraft.sound.SoundEvent;
-import net.minecraft.util.Identifier;
+import net.minecraft.core.Holder;
+import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.tags.ItemTags;
+import net.minecraft.tags.TagKey;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.equipment.ArmorMaterial;
+import net.minecraft.world.item.equipment.ArmorType;
+import net.minecraft.world.item.equipment.EquipmentAsset;
+import net.minecraft.world.item.equipment.EquipmentAssets;
 import net.spell_engine.rpg_series.config.ArmorSetConfig;
 import net.spell_engine.rpg_series.config.AttributeModifier;
 import net.spell_engine.rpg_series.item.Armor;
@@ -35,8 +35,8 @@ public class WizardArmors {
     /// (`assets/<ns>/equipment/<name>.json`). Wizards renders its armor through
     /// ArmorModelAPI's geo renderers, so no asset file is shipped — the loader falls back to an
     /// empty model and only the geo pass draws.
-    private static RegistryKey<EquipmentAsset> assetId(String name) {
-        return RegistryKey.of(EquipmentAssetKeys.REGISTRY_KEY, Identifier.of(WizardsMod.ID, name));
+    private static ResourceKey<EquipmentAsset> assetId(String name) {
+        return ResourceKey.create(EquipmentAssets.ROOT_ID, Identifier.fromNamespaceAndPath(WizardsMod.ID, name));
     }
 
     /// `ArmorMaterial` is a plain record since 1.21.2 — no registry, no `RegistryEntry`.
@@ -45,14 +45,14 @@ public class WizardArmors {
     public static ArmorMaterial material(String name,
                                          int durability,
                                          int protectionHead, int protectionChest, int protectionLegs, int protectionFeet,
-                                         int enchantability, RegistryEntry<SoundEvent> equipSound, TagKey<Item> repairIngredient) {
+                                         int enchantability, Holder<SoundEvent> equipSound, TagKey<Item> repairIngredient) {
         return new ArmorMaterial(
                 durability,
                 Map.of(
-                        EquipmentType.HELMET, protectionHead,
-                        EquipmentType.CHESTPLATE, protectionChest,
-                        EquipmentType.LEGGINGS, protectionLegs,
-                        EquipmentType.BOOTS, protectionFeet),
+                        ArmorType.HELMET, protectionHead,
+                        ArmorType.CHESTPLATE, protectionChest,
+                        ArmorType.LEGGINGS, protectionLegs,
+                        ArmorType.BOOTS, protectionFeet),
                 enchantability,
                 equipSound,
                 0F,
@@ -139,7 +139,7 @@ public class WizardArmors {
 
     public static final Armor.Set wizardRobeSet = create(
             material_wizard,
-            Identifier.of(WizardsMod.ID, "wizard_robe"),
+            Identifier.fromNamespaceAndPath(WizardsMod.ID, "wizard_robe"),
             10,
             WizardArmor::new,
             ArmorSetConfig.with(
@@ -165,7 +165,7 @@ public class WizardArmors {
 
     public static final Armor.Set arcaneRobeSet = create(
             material_arcane,
-            Identifier.of(WizardsMod.ID, "arcane_robe"),
+            Identifier.fromNamespaceAndPath(WizardsMod.ID, "arcane_robe"),
             20,
             WizardArmor::new,
             ArmorSetConfig.with(
@@ -195,7 +195,7 @@ public class WizardArmors {
 
     public static final Armor.Set fireRobeSet = create(
             material_fire,
-            Identifier.of(WizardsMod.ID, "fire_robe"),
+            Identifier.fromNamespaceAndPath(WizardsMod.ID, "fire_robe"),
             20,
             WizardArmor::new,
             ArmorSetConfig.with(
@@ -225,7 +225,7 @@ public class WizardArmors {
 
     public static final Armor.Set frostRobeSet = create(
             material_frost,
-            Identifier.of(WizardsMod.ID, "frost_robe"),
+            Identifier.fromNamespaceAndPath(WizardsMod.ID, "frost_robe"),
             20,
             WizardArmor::new,
             ArmorSetConfig.with(
@@ -256,7 +256,7 @@ public class WizardArmors {
 
     public static final Armor.Set netherite_arcane = create(
             material_netherite_arcane,
-            Identifier.of(WizardsMod.ID, "netherite_arcane_robe"),
+            Identifier.fromNamespaceAndPath(WizardsMod.ID, "netherite_arcane_robe"),
             30,
             WizardArmor::new,
             ArmorSetConfig.with(
@@ -286,7 +286,7 @@ public class WizardArmors {
 
     public static final Armor.Set netherite_fire = create(
             material_netherite_fire,
-            Identifier.of(WizardsMod.ID, "netherite_fire_robe"),
+            Identifier.fromNamespaceAndPath(WizardsMod.ID, "netherite_fire_robe"),
             30,
             WizardArmor::new,
             ArmorSetConfig.with(
@@ -316,7 +316,7 @@ public class WizardArmors {
 
     public static final Armor.Set netherite_frost = create(
             material_netherite_frost,
-            Identifier.of(WizardsMod.ID, "netherite_frost_robe"),
+            Identifier.fromNamespaceAndPath(WizardsMod.ID, "netherite_frost_robe"),
             30,
             WizardArmor::new,
             ArmorSetConfig.with(

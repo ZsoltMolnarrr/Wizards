@@ -1,6 +1,6 @@
 package net.wizards.client.effect;
 
-import net.minecraft.entity.LivingEntity;
+import net.minecraft.world.entity.LivingEntity;
 import net.spell_engine.api.effect.CustomParticleStatusEffect;
 import net.spell_engine.api.spell.fx.ParticleGroupBuilder;
 import net.spell_engine.api.spell.fx.ParticleGroup;
@@ -34,9 +34,9 @@ public class EvocationParticles implements CustomParticleStatusEffect.Spawner {
     public void spawnParticles(LivingEntity livingEntity, int amplifier) {
         int clampedAmplifier = Math.min(amplifier + 1, 10);
         int interval = 20 - (clampedAmplifier * 16 / 10);
-        if (livingEntity.age % interval != 0) {
+        if (livingEntity.tickCount % interval != 0) {
             return;
         }
-        ParticleHelper.play(livingEntity.getEntityWorld(), livingEntity, particles);
+        ParticleHelper.play(livingEntity.level(), livingEntity, particles);
     }
 }

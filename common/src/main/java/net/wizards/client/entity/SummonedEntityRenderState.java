@@ -1,7 +1,7 @@
 package net.wizards.client.entity;
 
-import net.minecraft.client.render.entity.state.LivingEntityRenderState;
-import net.minecraft.entity.AnimationState;
+import net.minecraft.client.renderer.entity.state.LivingEntityRenderState;
+import net.minecraft.world.entity.AnimationState;
 import net.spell_engine.entity.SummonedEntity;
 
 /// Render state for Spell Engine summons (1.21.2+ split rendering: the entity is read on the

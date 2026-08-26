@@ -1,18 +1,18 @@
 package net.wizards.villager;
 
 import com.google.common.collect.ImmutableSet;
+import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.entity.ai.village.poi.PoiType;
+import net.minecraft.world.entity.npc.villager.VillagerProfession;
+import net.minecraft.world.entity.npc.villager.VillagerTrades;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.block.state.BlockState;
 import net.rpg_foundation.structure_pool.api.StructurePoolAPI;
-import net.minecraft.block.BlockState;
-import net.minecraft.item.Items;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.Registry;
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.registry.RegistryKeys;
-import net.minecraft.text.Text;
-import net.minecraft.util.Identifier;
-import net.minecraft.village.TradeOffers;
-import net.minecraft.village.VillagerProfession;
-import net.minecraft.world.poi.PointOfInterestType;
 import net.runes.api.RuneItems;
 import net.runes.crafting.RuneCraftingBlock;
 import net.spell_engine.Platform;
@@ -27,11 +27,11 @@ import java.util.Set;
 
 public class WizardVillagers {
     public static final String WIZARD_MERCHANT = "wizard_merchant";
-    public static final Identifier POI_ID = Identifier.of(WizardsMod.ID, WIZARD_MERCHANT);
+    public static final Identifier POI_ID = Identifier.fromNamespaceAndPath(WizardsMod.ID, WIZARD_MERCHANT);
     /// 1.21.11 addresses professions by registry key (Fabric's `TradeOfferHelper` and NeoForge's
     /// `VillagerTradesEvent#getType` both take/return one).
-    public static final RegistryKey<VillagerProfession> PROFESSION_KEY =
-            RegistryKey.of(RegistryKeys.VILLAGER_PROFESSION, POI_ID);
+    public static final ResourceKey<VillagerProfession> PROFESSION_KEY =
+            ResourceKey.create(Registries.VILLAGER_PROFESSION, POI_ID);
     public static final int POI_TICKET_COUNT = 1;
     public static final int POI_SEARCH_DISTANCE = 10;
 
@@ -40,7 +40,7 @@ public class WizardVillagers {
     /// whose block-state mapping NeoForge wires up via its POI registry callback), so it lives in each
     /// platform's entrypoint — this only exposes the shared state set.
     public static Set<BlockState> poiBlockStates() {
-        return ImmutableSet.copyOf(RuneCraftingBlock.INSTANCE.getStateManager().getStates());
+        return ImmutableSet.copyOf(RuneCraftingBlock.INSTANCE.getStateDefinition().getPossibleStates());
     }
 
     /// The registered wizard-merchant profession, set by {@link #register()}. Read by the loader-specific
@@ -49,19 +49,19 @@ public class WizardVillagers {
 
     /// Trade offers per merchant tier (1..5), populated by {@link #register()}. The actual registration
     /// with the game is loader-specific and lives in each platform's entrypoint.
-    public static final LinkedHashMap<Integer, List<TradeOffers.Factory>> TRADES = new LinkedHashMap<>();
+    public static final LinkedHashMap<Integer, List<VillagerTrades.ItemListing>> TRADES = new LinkedHashMap<>();
 
-    public static VillagerProfession registerProfession(String name, RegistryKey<PointOfInterestType> workStation) {
-        var id = Identifier.of(WizardsMod.ID, name);
-        return Registry.register(Registries.VILLAGER_PROFESSION, Identifier.of(WizardsMod.ID, name), new VillagerProfession(
+    public static VillagerProfession registerProfession(String name, ResourceKey<PoiType> workStation) {
+        var id = Identifier.fromNamespaceAndPath(WizardsMod.ID, name);
+        return Registry.register(BuiltInRegistries.VILLAGER_PROFESSION, Identifier.fromNamespaceAndPath(WizardsMod.ID, name), new VillagerProfession(
                 // 1.21.11: the profession's first field is the display Text (vanilla builds
                 // `entity.<namespace>.villager.<path>`), not the raw id string.
-                Text.translatable("entity." + id.getNamespace() + ".villager." + id.getPath()),
+                Component.translatable("entity." + id.getNamespace() + ".villager." + id.getPath()),
                 (entry) -> {
-                    return entry.matchesKey(workStation);
+                    return entry.is(workStation);
                 },
                 (entry) -> {
-                    return entry.matchesKey(workStation);
+                    return entry.is(workStation);
                 },
                 ImmutableSet.of(),
                 ImmutableSet.of(),
@@ -102,7 +102,7 @@ public class WizardVillagers {
         }
         PROFESSION = registerProfession(
                 WIZARD_MERCHANT,
-                RegistryKey.of(Registries.POINT_OF_INTEREST_TYPE.getKey(), POI_ID));
+                ResourceKey.create(BuiltInRegistries.POINT_OF_INTEREST_TYPE.key(), POI_ID));
 //        List<Offer> wizardMerchantOffers = List.of(
 //                Offer.sell(1, new ItemStack(RuneItems.get(RuneItems.RuneType.ARCANE), 8), 2, 128, 1, 0.01f),
 //                Offer.sell(1, new ItemStack(RuneItems.get(RuneItems.RuneType.FIRE), 8), 2, 128, 1, 0.01f),
@@ -122,35 +122,35 @@ public class WizardVillagers {
 
         TRADES.clear();
         TRADES.put(1, List.of(
-                new TradeOffers.SellItemFactory(RuneItems.get(RuneItems.RuneType.ARCANE), 2, 8, 128, 3, 0.1f),
-                new TradeOffers.SellItemFactory(RuneItems.get(RuneItems.RuneType.FIRE), 2, 8, 128, 3, 0.1f),
-                new TradeOffers.SellItemFactory(RuneItems.get(RuneItems.RuneType.FROST), 2, 8, 128, 3, 0.1f)
+                new VillagerTrades.ItemsForEmeralds(RuneItems.get(RuneItems.RuneType.ARCANE), 2, 8, 128, 3, 0.1f),
+                new VillagerTrades.ItemsForEmeralds(RuneItems.get(RuneItems.RuneType.FIRE), 2, 8, 128, 3, 0.1f),
+                new VillagerTrades.ItemsForEmeralds(RuneItems.get(RuneItems.RuneType.FROST), 2, 8, 128, 3, 0.1f)
         ));
         TRADES.put(2, List.of(
-                new TradeOffers.SellItemFactory(WizardWeapons.wizardStaff.item(), 4, 1, 12, 18),
-                new TradeOffers.SellItemFactory(WizardWeapons.noviceWand.item(), 4, 1, 12, 18),
-                new TradeOffers.SellItemFactory(WizardWeapons.arcaneWand.item(), 18, 1, 12, 18),
-                new TradeOffers.SellItemFactory(WizardWeapons.fireWand.item(), 18, 1, 12, 18),
-                new TradeOffers.SellItemFactory(WizardWeapons.frostWand.item(), 18, 1, 12, 18),
+                new VillagerTrades.ItemsForEmeralds(WizardWeapons.wizardStaff.item(), 4, 1, 12, 18),
+                new VillagerTrades.ItemsForEmeralds(WizardWeapons.noviceWand.item(), 4, 1, 12, 18),
+                new VillagerTrades.ItemsForEmeralds(WizardWeapons.arcaneWand.item(), 18, 1, 12, 18),
+                new VillagerTrades.ItemsForEmeralds(WizardWeapons.fireWand.item(), 18, 1, 12, 18),
+                new VillagerTrades.ItemsForEmeralds(WizardWeapons.frostWand.item(), 18, 1, 12, 18),
 
-                new TradeOffers.BuyItemFactory(Items.WHITE_WOOL, 10, 12, 5, 6),
-                new TradeOffers.BuyItemFactory(Items.LAPIS_LAZULI, 6, 3, 5, 12)
+                new VillagerTrades.EmeraldForItems(Items.WHITE_WOOL, 10, 12, 5, 6),
+                new VillagerTrades.EmeraldForItems(Items.LAPIS_LAZULI, 6, 3, 5, 12)
         ));
         TRADES.put(3, List.of(
-                new TradeOffers.SellItemFactory(WizardArmors.wizardRobeSet.head, 15, 1, 12, 16, 0.1F),
-                new TradeOffers.SellItemFactory(WizardArmors.wizardRobeSet.feet, 15, 1, 12, 16, 0.1F)
+                new VillagerTrades.ItemsForEmeralds(WizardArmors.wizardRobeSet.head, 15, 1, 12, 16, 0.1F),
+                new VillagerTrades.ItemsForEmeralds(WizardArmors.wizardRobeSet.feet, 15, 1, 12, 16, 0.1F)
         ));
         TRADES.put(4, List.of(
-                new TradeOffers.SellItemFactory(WizardArmors.wizardRobeSet.chest, 20, 1, 12, 16, 0.1F),
-                new TradeOffers.SellItemFactory(WizardArmors.wizardRobeSet.legs, 20, 1, 12, 16, 0.1F)
+                new VillagerTrades.ItemsForEmeralds(WizardArmors.wizardRobeSet.chest, 20, 1, 12, 16, 0.1F),
+                new VillagerTrades.ItemsForEmeralds(WizardArmors.wizardRobeSet.legs, 20, 1, 12, 16, 0.1F)
         ));
         TRADES.put(5, List.of(
-                (world, entity, random) -> new TradeOffers.SellEnchantedToolFactory(
-                        WizardWeapons.arcaneStaff.item(), 40, 3, 30, 0F).create(world, entity, random),
-                (world, entity, random) -> new TradeOffers.SellEnchantedToolFactory(
-                        WizardWeapons.fireStaff.item(), 40, 3, 30, 0F).create(world, entity, random),
-                (world, entity, random) -> new TradeOffers.SellEnchantedToolFactory(
-                        WizardWeapons.frostStaff.item(), 40, 3, 30, 0F).create(world, entity, random)
+                (world, entity, random) -> new VillagerTrades.EnchantedItemForEmeralds(
+                        WizardWeapons.arcaneStaff.item(), 40, 3, 30, 0F).getOffer(world, entity, random),
+                (world, entity, random) -> new VillagerTrades.EnchantedItemForEmeralds(
+                        WizardWeapons.fireStaff.item(), 40, 3, 30, 0F).getOffer(world, entity, random),
+                (world, entity, random) -> new VillagerTrades.EnchantedItemForEmeralds(
+                        WizardWeapons.frostStaff.item(), 40, 3, 30, 0F).getOffer(world, entity, random)
         ));
     }
 }

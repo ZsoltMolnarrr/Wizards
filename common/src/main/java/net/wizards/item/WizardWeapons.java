@@ -1,7 +1,7 @@
 package net.wizards.item;
 
+import net.minecraft.tags.ItemTags;
 import net.spell_engine.Platform;
-import net.minecraft.registry.tag.ItemTags;
 import net.spell_engine.rpg_series.config.WeaponConfig;
 import net.spell_engine.api.spell.container.SpellContainers;
 import net.spell_engine.rpg_series.item.Equipment;

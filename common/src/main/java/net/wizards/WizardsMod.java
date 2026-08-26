@@ -1,11 +1,11 @@
 package net.wizards;
 
+import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.ItemStack;
 import net.rpg_foundation.structure_pool.api.StructurePoolConfig;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ItemStack;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.Registry;
-import net.minecraft.text.Text;
 import net.spell_engine.Platform;
 import net.spell_engine.rpg_series.config.ConfigFile;
 import net.tiny_config.ConfigManager;
@@ -69,11 +69,11 @@ public class WizardsMod {
     }
 
     public static void registerItems() {
-        Group.WIZARDS = new ItemGroup.Builder(ItemGroup.Row.TOP, 0)
+        Group.WIZARDS = new CreativeModeTab.Builder(CreativeModeTab.Row.TOP, 0)
                 .icon(() -> new ItemStack(WizardArmors.wizardRobeSet.head))
-                .displayName(Text.translatable("itemGroup.wizards.general"))
+                .title(Component.translatable("itemGroup.wizards.general"))
                 .build();
-        Registry.register(Registries.ITEM_GROUP, Group.KEY, Group.WIZARDS);
+        Registry.register(BuiltInRegistries.CREATIVE_MODE_TAB, Group.KEY, Group.WIZARDS);
         WizardBooks.register();
         WizardWeapons.register(equipmentConfig.value.weapons);
         WizardArmors.register(equipmentConfig.value.armor_sets);

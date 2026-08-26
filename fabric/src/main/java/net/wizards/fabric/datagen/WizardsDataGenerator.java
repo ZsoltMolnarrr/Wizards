@@ -6,17 +6,17 @@ import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricLanguageProvider;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricRecipeProvider;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagProvider;
-import net.minecraft.data.recipe.RecipeExporter;
-import net.minecraft.data.recipe.RecipeGenerator;
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.registry.RegistryKeys;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemConvertible;
-import net.minecraft.item.Items;
-import net.minecraft.recipe.book.RecipeCategory;
-import net.minecraft.registry.RegistryWrapper;
-import net.minecraft.registry.tag.TagKey;
-import net.minecraft.util.Identifier;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.data.recipes.RecipeCategory;
+import net.minecraft.data.recipes.RecipeOutput;
+import net.minecraft.data.recipes.RecipeProvider;
+import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.tags.TagKey;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.ItemLike;
 import net.spell_engine.api.datagen.NamespacedLangGenerator;
 import net.spell_engine.api.datagen.SimpleSoundGeneratorV2;
 import net.spell_engine.api.datagen.SpellGenerator;
@@ -56,26 +56,26 @@ public class WizardsDataGenerator implements DataGeneratorEntrypoint {
     }
 
     public static class ItemTagGenerator extends RPGSeriesDataGen.ItemTagGenerator {
-        public ItemTagGenerator(FabricDataOutput output, CompletableFuture<RegistryWrapper.WrapperLookup> registriesFuture) {
+        public ItemTagGenerator(FabricDataOutput output, CompletableFuture<HolderLookup.Provider> registriesFuture) {
             super(output, registriesFuture);
         }
 
         @Override
-        protected void configure(RegistryWrapper.WrapperLookup wrapperLookup) {
+        protected void addTags(HolderLookup.Provider wrapperLookup) {
             generateWeaponTags(WizardWeapons.entries);
             generateArmorTags(WizardArmors.entries, RPGSeriesItemTags.ArmorMetaType.MAGIC);
 
             // Anvil repair tags (`minecraft:repairable`), one per material
             for (var repair: WizardItemTags.REPAIR_TAGS) {
                 var tag = builder(repair.tag());
-                repair.required().forEach(id -> tag.add(RegistryKey.of(RegistryKeys.ITEM, id)));
-                repair.optional().forEach(id -> tag.addOptional(RegistryKey.of(RegistryKeys.ITEM, id)));
+                repair.required().forEach(id -> tag.add(ResourceKey.create(Registries.ITEM, id)));
+                repair.optional().forEach(id -> tag.addOptional(ResourceKey.create(Registries.ITEM, id)));
             }
         }
     }
 
     public static class SpellGen extends SpellGenerator {
-        public SpellGen(FabricDataOutput dataOutput, CompletableFuture<RegistryWrapper.WrapperLookup> registryLookup) {
+        public SpellGen(FabricDataOutput dataOutput, CompletableFuture<HolderLookup.Provider> registryLookup) {
             super(dataOutput, registryLookup);
         }
 
@@ -88,12 +88,12 @@ public class WizardsDataGenerator implements DataGeneratorEntrypoint {
     }
 
     public static class SpellTagGenerator extends FabricTagProvider<Spell> {
-        public SpellTagGenerator(FabricDataOutput output, CompletableFuture<RegistryWrapper.WrapperLookup> registriesFuture) {
+        public SpellTagGenerator(FabricDataOutput output, CompletableFuture<HolderLookup.Provider> registriesFuture) {
             super(output, SpellRegistry.KEY, registriesFuture);
         }
 
         @Override
-        protected void configure(RegistryWrapper.WrapperLookup wrapperLookup) {
+        protected void addTags(HolderLookup.Provider wrapperLookup) {
             var namespace = WizardsMod.ID;
             var treasureTagBuilder = builder(SpellTags.TREASURE);
             var processedBooks = new HashSet<WizardSpells.Book>();
@@ -101,10 +101,10 @@ public class WizardsDataGenerator implements DataGeneratorEntrypoint {
                 if (entry.book() != null) {
                     var bookTagKey = SpellTags.spellBook(namespace, entry.book().toString().toLowerCase());
                     var bookTag = builder(bookTagKey);
-                    bookTag.addOptional(RegistryKey.of(SpellRegistry.KEY, entry.id()));
+                    bookTag.addOptional(ResourceKey.create(SpellRegistry.KEY, entry.id()));
                     var scrollTagKey = SpellTags.spellScroll(namespace, entry.book().toString().toLowerCase());
                     var scrollTag = builder(scrollTagKey);
-                    scrollTag.addOptional(RegistryKey.of(SpellRegistry.KEY, entry.id()));
+                    scrollTag.addOptional(ResourceKey.create(SpellRegistry.KEY, entry.id()));
                     if (processedBooks.add(entry.book())) {
                         treasureTagBuilder.addOptionalTag(scrollTagKey);
                     }
@@ -112,7 +112,7 @@ public class WizardsDataGenerator implements DataGeneratorEntrypoint {
                 for (var group : entry.weaponGroups()) {
                     var weaponGroupTagKey = SpellTags.weapon(namespace, group.toString().toLowerCase());
                     var weaponGroupTag = builder(weaponGroupTagKey);
-                    weaponGroupTag.addOptional(RegistryKey.of(SpellRegistry.KEY, entry.id()));
+                    weaponGroupTag.addOptional(ResourceKey.create(SpellRegistry.KEY, entry.id()));
                 }
             });
 
@@ -123,7 +123,7 @@ public class WizardsDataGenerator implements DataGeneratorEntrypoint {
             // school-specific staff group only, NOT wizard_staff (which spans every school).
             for (var book : WizardSpells.Book.values()) {
                 var school = book.name().toLowerCase();
-                var umbrella = builder(TagKey.of(SpellRegistry.KEY, Identifier.of(namespace, school)));
+                var umbrella = builder(TagKey.create(SpellRegistry.KEY, Identifier.fromNamespaceAndPath(namespace, school)));
                 umbrella.addOptionalTag(SpellTags.spellBook(namespace, school));
                 umbrella.addOptionalTag(SpellTags.weapon(namespace, school + "_staff"));
             }
@@ -131,7 +131,7 @@ public class WizardsDataGenerator implements DataGeneratorEntrypoint {
     }
 
     public static class SoundGen extends SimpleSoundGeneratorV2 {
-        public SoundGen(FabricDataOutput dataOutput, CompletableFuture<RegistryWrapper.WrapperLookup> registryLookup) {
+        public SoundGen(FabricDataOutput dataOutput, CompletableFuture<HolderLookup.Provider> registryLookup) {
             super(dataOutput, registryLookup);
         }
 
@@ -147,7 +147,7 @@ public class WizardsDataGenerator implements DataGeneratorEntrypoint {
     }
 
     public static class UnsmeltGenerator extends FabricRecipeProvider {
-        public UnsmeltGenerator(FabricDataOutput output, CompletableFuture<RegistryWrapper.WrapperLookup> registriesFuture) {
+        public UnsmeltGenerator(FabricDataOutput output, CompletableFuture<HolderLookup.Provider> registriesFuture) {
             super(output, registriesFuture);
         }
 
@@ -155,10 +155,10 @@ public class WizardsDataGenerator implements DataGeneratorEntrypoint {
 
         /// 1.21.2+: the provider only supplies a `RecipeGenerator`, which owns the exporter.
         @Override
-        protected RecipeGenerator getRecipeGenerator(RegistryWrapper.WrapperLookup registries, RecipeExporter exporter) {
-            return new RecipeGenerator(registries, exporter) {
+        protected RecipeProvider createRecipeProvider(HolderLookup.Provider registries, RecipeOutput exporter) {
+            return new RecipeProvider(registries, exporter) {
                 @Override
-                public void generate() {
+                public void buildRecipes() {
                     UnsmeltGenerator.generateAll(this);
                 }
             };
@@ -169,7 +169,7 @@ public class WizardsDataGenerator implements DataGeneratorEntrypoint {
             return "Wizard Unsmelting Recipes";
         }
 
-        private static void generateAll(RecipeGenerator gen) {
+        private static void generateAll(RecipeProvider gen) {
             disassembleArmor(gen, WizardArmors.wizardRobeSet, Items.LAPIS_LAZULI);
             disassembleArmor(gen, WizardArmors.arcaneRobeSet, Items.ENDER_PEARL);
             disassembleArmor(gen, WizardArmors.fireRobeSet, Items.BLAZE_POWDER);
@@ -198,12 +198,12 @@ public class WizardsDataGenerator implements DataGeneratorEntrypoint {
             disassemble(gen,
                     WizardWeapons.entries.stream()
                             .filter(entry -> entry.id().getPath().contains("netherite"))
-                            .map(entry -> (ItemConvertible) entry.item()).toList(),
+                            .map(entry -> (ItemLike) entry.item()).toList(),
                     Items.NETHERITE_SCRAP);
         }
 
-        private static void disassembleArmor(RecipeGenerator gen, Armor.Set armorSet, Item output) {
-            gen.offerSmelting(
+        private static void disassembleArmor(RecipeProvider gen, Armor.Set armorSet, Item output) {
+            gen.oreSmelting(
                     armorSet.pieces(),
                     RecipeCategory.MISC,
                     output,
@@ -211,7 +211,7 @@ public class WizardsDataGenerator implements DataGeneratorEntrypoint {
                     UNSMELT_TIME,
                     "disassemble"
             );
-            gen.offerBlasting(
+            gen.oreBlasting(
                     armorSet.pieces(),
                     RecipeCategory.MISC,
                     output,
@@ -221,8 +221,8 @@ public class WizardsDataGenerator implements DataGeneratorEntrypoint {
             );
         }
 
-        private static void disassemble(RecipeGenerator gen, List<ItemConvertible> items, Item output) {
-            gen.offerSmelting(
+        private static void disassemble(RecipeProvider gen, List<ItemLike> items, Item output) {
+            gen.oreSmelting(
                     items,
                     RecipeCategory.MISC,
                     output,
@@ -230,7 +230,7 @@ public class WizardsDataGenerator implements DataGeneratorEntrypoint {
                     UNSMELT_TIME,
                     "disassemble"
             );
-            gen.offerBlasting(
+            gen.oreBlasting(
                     items,
                     RecipeCategory.MISC,
                     output,
@@ -242,7 +242,7 @@ public class WizardsDataGenerator implements DataGeneratorEntrypoint {
     }
 
     public static class WeaponGen extends WeaponAttributeGenerator {
-        public WeaponGen(FabricDataOutput dataOutput, CompletableFuture<RegistryWrapper.WrapperLookup> registryLookup) {
+        public WeaponGen(FabricDataOutput dataOutput, CompletableFuture<HolderLookup.Provider> registryLookup) {
             super(dataOutput, registryLookup);
         }
 
@@ -262,12 +262,12 @@ public class WizardsDataGenerator implements DataGeneratorEntrypoint {
      * ad-hoc strings (creative tab, villager) that have no dedicated content entry.
      */
     public static class LangGen extends NamespacedLangGenerator {
-        public LangGen(FabricDataOutput dataOutput, CompletableFuture<RegistryWrapper.WrapperLookup> registryLookup) {
+        public LangGen(FabricDataOutput dataOutput, CompletableFuture<HolderLookup.Provider> registryLookup) {
             super(dataOutput, registryLookup, WizardsMod.ID);
         }
 
         @Override
-        public void generateTranslations(RegistryWrapper.WrapperLookup registryLookup, FabricLanguageProvider.TranslationBuilder builder) {
+        public void generateTranslations(HolderLookup.Provider registryLookup, FabricLanguageProvider.TranslationBuilder builder) {
             var namespace = WizardsMod.ID;
 
             // Creative tab

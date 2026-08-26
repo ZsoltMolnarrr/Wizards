@@ -1,25 +1,25 @@
 package net.wizards.client.entity;
 
-import net.minecraft.client.render.RenderLayer;
-import net.minecraft.client.render.RenderLayers;
-import net.minecraft.client.render.entity.EntityRendererFactory;
-import net.minecraft.client.render.entity.MobEntityRenderer;
-import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.util.Identifier;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
+import net.minecraft.client.renderer.entity.MobRenderer;
+import net.minecraft.client.renderer.rendertype.RenderType;
+import net.minecraft.client.renderer.rendertype.RenderTypes;
+import net.minecraft.resources.Identifier;
 import net.spell_engine.api.render.CustomLayers;
 import net.spell_engine.api.render.LightEmission;
 import net.wizards.WizardsMod;
 import net.wizards.entity.ArcaneEmitterEntity;
 
 public class ArcaneEmitterRenderer
-        extends MobEntityRenderer<ArcaneEmitterEntity, SummonedEntityRenderState, ArcaneEmitterModel> {
+        extends MobRenderer<ArcaneEmitterEntity, SummonedEntityRenderState, ArcaneEmitterModel> {
     public static final Identifier TEXTURE =
-            Identifier.of(WizardsMod.ID, "textures/entity/arcane_emitter.png");
-    public static final RenderLayer renderLayer = CustomLayers.spellObject(TEXTURE, LightEmission.GLOW_TRANSLUCENT, false);
+            Identifier.fromNamespaceAndPath(WizardsMod.ID, "textures/entity/arcane_emitter.png");
+    public static final RenderType renderLayer = CustomLayers.spellObject(TEXTURE, LightEmission.GLOW_TRANSLUCENT, false);
     // RenderLayer.getEntityTranslucentEmissive(TEXTURE);
 
-    public ArcaneEmitterRenderer(EntityRendererFactory.Context context) {
-        super(context, new ArcaneEmitterModel(context.getPart(ArcaneEmitterModel.LAYER)), 0f);
+    public ArcaneEmitterRenderer(EntityRendererProvider.Context context) {
+        super(context, new ArcaneEmitterModel(context.bakeLayer(ArcaneEmitterModel.LAYER)), 0f);
     }
 
     @Override
@@ -28,27 +28,27 @@ public class ArcaneEmitterRenderer
     }
 
     @Override
-    public void updateRenderState(ArcaneEmitterEntity entity, SummonedEntityRenderState state, float tickProgress) {
-        super.updateRenderState(entity, state, tickProgress);
+    public void extractRenderState(ArcaneEmitterEntity entity, SummonedEntityRenderState state, float tickProgress) {
+        super.extractRenderState(entity, state, tickProgress);
         state.copyFrom(entity);
     }
 
     @Override
-    protected void setupTransforms(SummonedEntityRenderState state, MatrixStack matrices, float bodyYaw, float baseHeight) {
-        super.setupTransforms(state, matrices, bodyYaw, baseHeight);
+    protected void setupRotations(SummonedEntityRenderState state, PoseStack matrices, float bodyYaw, float baseHeight) {
+        super.setupRotations(state, matrices, bodyYaw, baseHeight);
         // Shift the model up so it renders centred on the entity's bounding box (height / 2)
-        matrices.translate(0.0F, state.height / 2.0F, 0.0F);
+        matrices.translate(0.0F, state.boundingBoxHeight / 2.0F, 0.0F);
     }
 
     @Override
-    public Identifier getTexture(SummonedEntityRenderState state) {
+    public Identifier getTextureLocation(SummonedEntityRenderState state) {
         return TEXTURE;
     }
 
     @Override
-    protected RenderLayer getRenderLayer(SummonedEntityRenderState state, boolean showBody, boolean translucent, boolean showOutline) {
+    protected RenderType getRenderType(SummonedEntityRenderState state, boolean showBody, boolean translucent, boolean showOutline) {
         if (showOutline) {
-            return RenderLayers.outlineNoCull(TEXTURE);
+            return RenderTypes.outline(TEXTURE);
         }
         return renderLayer;
     }

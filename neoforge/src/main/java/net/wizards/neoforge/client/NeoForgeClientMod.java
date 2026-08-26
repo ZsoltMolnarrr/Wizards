@@ -35,9 +35,9 @@ public class NeoForgeClientMod {
         // Fabric's WorldRenderEvents.AFTER_TRANSLUCENT injects (just before clouds, after particles).
         // 21.11: stages are event subclasses; camera + tick progress are no longer carried by the event.
         NeoForge.EVENT_BUS.addListener(RenderLevelStageEvent.AfterParticles.class, render -> {
-            var client = net.minecraft.client.MinecraftClient.getInstance();
-            FireHydraRenderer.renderAfterTranslucent(render.getPoseStack(), client.gameRenderer.getCamera(),
-                    client.getRenderTickCounter().getTickProgress(true));
+            var client = net.minecraft.client.Minecraft.getInstance();
+            FireHydraRenderer.renderAfterTranslucent(render.getPoseStack(), client.gameRenderer.getMainCamera(),
+                    client.getDeltaTracker().getGameTimeDeltaPartialTick(true));
         });
     }
 

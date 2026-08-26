@@ -1,6 +1,6 @@
 package net.wizards.item;
 
-import net.minecraft.item.Item;
+import net.minecraft.world.item.Item;
 import net.spell_engine.rpg_series.item.Armor;
 
 import java.util.HashMap;

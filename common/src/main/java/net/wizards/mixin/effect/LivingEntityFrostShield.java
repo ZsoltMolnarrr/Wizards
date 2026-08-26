@@ -1,9 +1,9 @@
 package net.wizards.mixin.effect;
 
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.damage.DamageSource;
-import net.minecraft.registry.tag.DamageTypeTags;
-import net.minecraft.server.world.ServerWorld;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.tags.DamageTypeTags;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.LivingEntity;
 import net.wizards.content.WizardsSounds;
 import net.wizards.effect.WizardsEffects;
 import net.wizards.effect.FrostShielded;
@@ -31,19 +31,19 @@ public abstract class LivingEntityFrostShield implements FrostShielded {
     /// A frost shield has no item behind it, so it answers "all of it" directly, and plays
     /// its own impact sound (vanilla's block sound comes from the blocking item's component,
     /// which is absent here).
-    @Inject(method = "getDamageBlockedAmount", at = @At("HEAD"), cancellable = true)
-    private void getDamageBlockedAmount_HEAD_FrostShield(ServerWorld world, DamageSource source, float amount, CallbackInfoReturnable<Float> cir) {
-        if (hasFrostShield && !source.isIn(DamageTypeTags.BYPASSES_INVULNERABILITY)) {
+    @Inject(method = "applyItemBlocking", at = @At("HEAD"), cancellable = true)
+    private void getDamageBlockedAmount_HEAD_FrostShield(ServerLevel world, DamageSource source, float amount, CallbackInfoReturnable<Float> cir) {
+        if (hasFrostShield && !source.is(DamageTypeTags.BYPASSES_INVULNERABILITY)) {
             var entity = (LivingEntity) ((Object)this);
-            SoundHelper.playSoundEvent(entity.getEntityWorld(), entity, WizardsSounds.FROST_SHIELD_IMPACT.soundEvent());
+            SoundHelper.playSoundEvent(entity.level(), entity, WizardsSounds.FROST_SHIELD_IMPACT.soundEvent());
             cir.setReturnValue(amount);
             cir.cancel();
         }
     }
 
-    @Inject(method = "damage", at = @At("HEAD"), cancellable = true)
-    private void damage_HEAD_FrostShieldFireImmunity(ServerWorld world, DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
-        if (hasFrostShield && source.isIn(DamageTypeTags.IS_FIRE)) {
+    @Inject(method = "hurtServer", at = @At("HEAD"), cancellable = true)
+    private void damage_HEAD_FrostShieldFireImmunity(ServerLevel world, DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
+        if (hasFrostShield && source.is(DamageTypeTags.IS_FIRE)) {
             cir.setReturnValue(false);
             cir.cancel();
         }
@@ -52,9 +52,9 @@ public abstract class LivingEntityFrostShield implements FrostShielded {
     @Inject(method = "baseTick", at = @At("TAIL"))
     private void baseTick_TAIL_FrostShield(CallbackInfo ci) {
         var entity = (LivingEntity) ((Object)this);
-        hasFrostShield = entity.hasStatusEffect(WizardsEffects.frostShield.entry);
+        hasFrostShield = entity.hasEffect(WizardsEffects.frostShield.entry);
         if (hasFrostShield && entity.isOnFire()) {
-            entity.extinguish();
+            entity.clearFire();
         }
     }
 

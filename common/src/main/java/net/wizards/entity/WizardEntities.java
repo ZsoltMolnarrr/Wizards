@@ -1,14 +1,14 @@
 package net.wizards.entity;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.SpawnGroup;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.Registry;
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.registry.RegistryKeys;
-import net.minecraft.util.Identifier;
+import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.MobCategory;
 import net.spell_engine.api.spell.summon.SummonedEntities;
 import net.spell_engine.api.spell.summon.SummonedEntityConfig;
 import net.spell_power.api.SpellSchools;
@@ -51,45 +51,45 @@ public class WizardEntities {
     }
 
     public static final Entry<FrostElementalEntity> FROST_ELEMENTAL = add(new Entry<>(
-            Identifier.of(WizardsMod.ID, "frost_elemental"),
+            Identifier.fromNamespaceAndPath(WizardsMod.ID, "frost_elemental"),
             "Frost Elemental",
-            EntityType.Builder.<FrostElementalEntity>create(FrostElementalEntity::new, SpawnGroup.MISC)
+            EntityType.Builder.<FrostElementalEntity>of(FrostElementalEntity::new, MobCategory.MISC)
                     // dimensions(float, float) yields `changing` (fixed=false) so
                     // EntityDimensions.scaled() actually applies the GENERIC_SCALE attribute
                     // when getBaseDimensions falls through to the type (i.e., when
                     // behaviour.dimensions is null). With `fixed`, scaled() is a no-op and
                     // getWidth()/getHeight() stay locked at base size — which silently shrinks
                     // the melee reach below the visible model size.
-                    .dimensions(1F, 2F)
-                    .maxTrackingRange(64)
-                    .trackingTickInterval(3)
+                    .sized(1F, 2F)
+                    .clientTrackingRange(64)
+                    .updateInterval(3)
                     // Vanilla build(RegistryKey) — the no-arg build() is a Fabric API interface-injected
                     // default (FabricEntityType.Builder) that does not exist on NeoForge at runtime.
-                    .build(RegistryKey.of(RegistryKeys.ENTITY_TYPE, Identifier.of(WizardsMod.ID, "frost_elemental"))),
+                    .build(ResourceKey.create(Registries.ENTITY_TYPE, Identifier.fromNamespaceAndPath(WizardsMod.ID, "frost_elemental"))),
             frostDefaults()));
 
     public static final Entry<ArcaneEmitterEntity> ARCANE_EMITTER = add(new Entry<>(
-            Identifier.of(WizardsMod.ID, "arcane_emitter"),
+            Identifier.fromNamespaceAndPath(WizardsMod.ID, "arcane_emitter"),
             "Arcane Emitter",
-            EntityType.Builder.<ArcaneEmitterEntity>create(ArcaneEmitterEntity::new, SpawnGroup.MISC)
+            EntityType.Builder.<ArcaneEmitterEntity>of(ArcaneEmitterEntity::new, MobCategory.MISC)
                     // was fixed(); vanilla builder only yields `changing`, which is equivalent
                     // here since this entity carries no GENERIC_SCALE attribute.
-                    .dimensions(0.6F, 0.6F)
-                    .maxTrackingRange(64)
-                    .trackingTickInterval(3)
-                    .build(RegistryKey.of(RegistryKeys.ENTITY_TYPE, Identifier.of(WizardsMod.ID, "arcane_emitter"))),
+                    .sized(0.6F, 0.6F)
+                    .clientTrackingRange(64)
+                    .updateInterval(3)
+                    .build(ResourceKey.create(Registries.ENTITY_TYPE, Identifier.fromNamespaceAndPath(WizardsMod.ID, "arcane_emitter"))),
             arcaneDefaults()));
 
     public static final Entry<FireHydraEntity> FIRE_HYDRA = add(new Entry<>(
-            Identifier.of(WizardsMod.ID, "fire_hydra"),
+            Identifier.fromNamespaceAndPath(WizardsMod.ID, "fire_hydra"),
             "Fire Hydra",
-            EntityType.Builder.<FireHydraEntity>create(FireHydraEntity::new, SpawnGroup.MISC)
+            EntityType.Builder.<FireHydraEntity>of(FireHydraEntity::new, MobCategory.MISC)
                     // was fixed(); vanilla builder only yields `changing`, which is equivalent
                     // here since this entity carries no GENERIC_SCALE attribute.
-                    .dimensions(1.5F, 3.0F)
-                    .maxTrackingRange(64)
-                    .trackingTickInterval(3)
-                    .build(RegistryKey.of(RegistryKeys.ENTITY_TYPE, Identifier.of(WizardsMod.ID, "fire_hydra"))),
+                    .sized(1.5F, 3.0F)
+                    .clientTrackingRange(64)
+                    .updateInterval(3)
+                    .build(ResourceKey.create(Registries.ENTITY_TYPE, Identifier.fromNamespaceAndPath(WizardsMod.ID, "fire_hydra"))),
             fireDefaults()));
 
     // Default base attributes per summon — seeded into Wizards' OWN config file
@@ -146,7 +146,7 @@ public class WizardEntities {
         for (var entry : entries) {
             // Attributes are registered right here with the freshly-built type, so type and attribute
             // registration are a single co-located step — no required ordering between them.
-            Registry.register(Registries.ENTITY_TYPE, entry.id, entry.type);
+            Registry.register(BuiltInRegistries.ENTITY_TYPE, entry.id, entry.type);
             if (entry.summonConfig != null) {
                 // Only summoned (living) entities carry a config; safe by construction.
                 @SuppressWarnings("unchecked")

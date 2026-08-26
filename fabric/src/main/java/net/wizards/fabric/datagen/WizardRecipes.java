@@ -2,13 +2,13 @@ package net.wizards.fabric.datagen;
 
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricRecipeProvider;
-import net.minecraft.data.recipe.RecipeExporter;
-import net.minecraft.data.recipe.RecipeGenerator;
-import net.minecraft.item.Item;
-import net.minecraft.item.Items;
-import net.minecraft.recipe.book.RecipeCategory;
-import net.minecraft.registry.RegistryWrapper;
-import net.minecraft.registry.tag.ItemTags;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.data.recipes.RecipeCategory;
+import net.minecraft.data.recipes.RecipeOutput;
+import net.minecraft.data.recipes.RecipeProvider;
+import net.minecraft.tags.ItemTags;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Items;
 import net.spell_engine.rpg_series.item.Armor;
 import net.wizards.item.WizardArmors;
 import net.wizards.item.WizardWeapons;
@@ -22,14 +22,14 @@ import java.util.concurrent.CompletableFuture;
  */
 public class WizardRecipes extends FabricRecipeProvider {
 
-    public WizardRecipes(FabricDataOutput output, CompletableFuture<RegistryWrapper.WrapperLookup> registriesFuture) {
+    public WizardRecipes(FabricDataOutput output, CompletableFuture<HolderLookup.Provider> registriesFuture) {
         super(output, registriesFuture);
     }
 
     /// 1.21.2+ splits the provider from the generator: the provider is registered with the pack,
     /// the generator holds the exporter + the item registry lookup that every builder now needs.
     @Override
-    protected RecipeGenerator getRecipeGenerator(RegistryWrapper.WrapperLookup registries, RecipeExporter exporter) {
+    protected RecipeProvider createRecipeProvider(HolderLookup.Provider registries, RecipeOutput exporter) {
         return new Generator(registries, exporter);
     }
 
@@ -38,13 +38,13 @@ public class WizardRecipes extends FabricRecipeProvider {
         return "Wizard Crafting Recipes";
     }
 
-    private static class Generator extends RecipeGenerator {
-        Generator(RegistryWrapper.WrapperLookup registries, RecipeExporter exporter) {
+    private static class Generator extends RecipeProvider {
+        Generator(HolderLookup.Provider registries, RecipeOutput exporter) {
             super(registries, exporter);
         }
 
     @Override
-    public void generate() {
+    public void buildRecipes() {
         generateWandRecipes();
         generateStaffRecipes();
         generateArmorRecipes();
@@ -57,40 +57,40 @@ public class WizardRecipes extends FabricRecipeProvider {
 
     private void generateWandRecipes() {
         // Novice Wand - coal + stick
-        this.createShaped(RecipeCategory.COMBAT, WizardWeapons.noviceWand.item())
+        this.shaped(RecipeCategory.COMBAT, WizardWeapons.noviceWand.item())
                 .pattern(" C")
                 .pattern("S ")
-                .input('C', Items.COAL)
-                .input('S', Items.STICK)
-                .criterion(hasItem(Items.COAL), this.conditionsFromItem(Items.COAL))
-                .offerTo(this.exporter);
+                .define('C', Items.COAL)
+                .define('S', Items.STICK)
+                .unlockedBy(getHasName(Items.COAL), this.has(Items.COAL))
+                .save(this.output);
 
         // Arcane Wand - amethyst shard + gold ingot
-        this.createShaped(RecipeCategory.COMBAT, WizardWeapons.arcaneWand.item())
+        this.shaped(RecipeCategory.COMBAT, WizardWeapons.arcaneWand.item())
                 .pattern(" A")
                 .pattern("G ")
-                .input('A', Items.AMETHYST_SHARD)
-                .input('G', Items.GOLD_INGOT)
-                .criterion(hasItem(Items.AMETHYST_SHARD), this.conditionsFromItem(Items.AMETHYST_SHARD))
-                .offerTo(this.exporter);
+                .define('A', Items.AMETHYST_SHARD)
+                .define('G', Items.GOLD_INGOT)
+                .unlockedBy(getHasName(Items.AMETHYST_SHARD), this.has(Items.AMETHYST_SHARD))
+                .save(this.output);
 
         // Fire Wand - gunpowder + gold ingot
-        this.createShaped(RecipeCategory.COMBAT, WizardWeapons.fireWand.item())
+        this.shaped(RecipeCategory.COMBAT, WizardWeapons.fireWand.item())
                 .pattern(" A")
                 .pattern("G ")
-                .input('A', Items.GUNPOWDER)
-                .input('G', Items.GOLD_INGOT)
-                .criterion(hasItem(Items.GUNPOWDER), this.conditionsFromItem(Items.GUNPOWDER))
-                .offerTo(this.exporter);
+                .define('A', Items.GUNPOWDER)
+                .define('G', Items.GOLD_INGOT)
+                .unlockedBy(getHasName(Items.GUNPOWDER), this.has(Items.GUNPOWDER))
+                .save(this.output);
 
         // Frost Wand - snowball + iron ingot
-        this.createShaped(RecipeCategory.COMBAT, WizardWeapons.frostWand.item())
+        this.shaped(RecipeCategory.COMBAT, WizardWeapons.frostWand.item())
                 .pattern(" S")
                 .pattern("I ")
-                .input('S', Items.SNOWBALL)
-                .input('I', Items.IRON_INGOT)
-                .criterion(hasItem(Items.SNOWBALL), this.conditionsFromItem(Items.SNOWBALL))
-                .offerTo(this.exporter);
+                .define('S', Items.SNOWBALL)
+                .define('I', Items.IRON_INGOT)
+                .unlockedBy(getHasName(Items.SNOWBALL), this.has(Items.SNOWBALL))
+                .save(this.output);
     }
 
     // ========================================
@@ -99,50 +99,50 @@ public class WizardRecipes extends FabricRecipeProvider {
 
     private void generateStaffRecipes() {
         // Wizard Staff - quartz + stick
-        this.createShaped(RecipeCategory.COMBAT, WizardWeapons.wizardStaff.item())
+        this.shaped(RecipeCategory.COMBAT, WizardWeapons.wizardStaff.item())
                 .pattern("  Q")
                 .pattern(" S ")
                 .pattern("S  ")
-                .input('Q', Items.QUARTZ)
-                .input('S', Items.STICK)
-                .criterion(hasItem(Items.QUARTZ), this.conditionsFromItem(Items.QUARTZ))
-                .offerTo(this.exporter);
+                .define('Q', Items.QUARTZ)
+                .define('S', Items.STICK)
+                .unlockedBy(getHasName(Items.QUARTZ), this.has(Items.QUARTZ))
+                .save(this.output);
 
         // Arcane Staff - amethyst shard + ender pearl + gold ingot + stick
-        this.createShaped(RecipeCategory.COMBAT, WizardWeapons.arcaneStaff.item())
+        this.shaped(RecipeCategory.COMBAT, WizardWeapons.arcaneStaff.item())
                 .pattern(" AP")
                 .pattern(" SA")
                 .pattern("G  ")
-                .input('P', Items.ENDER_PEARL)
-                .input('A', Items.AMETHYST_SHARD)
-                .input('G', Items.GOLD_INGOT)
-                .input('S', Items.STICK)
-                .criterion(hasItem(Items.AMETHYST_SHARD), this.conditionsFromItem(Items.AMETHYST_SHARD))
-                .offerTo(this.exporter);
+                .define('P', Items.ENDER_PEARL)
+                .define('A', Items.AMETHYST_SHARD)
+                .define('G', Items.GOLD_INGOT)
+                .define('S', Items.STICK)
+                .unlockedBy(getHasName(Items.AMETHYST_SHARD), this.has(Items.AMETHYST_SHARD))
+                .save(this.output);
 
         // Fire Staff - blaze powder + nether brick + gold ingot + stick
-        this.createShaped(RecipeCategory.COMBAT, WizardWeapons.fireStaff.item())
+        this.shaped(RecipeCategory.COMBAT, WizardWeapons.fireStaff.item())
                 .pattern(" NP")
                 .pattern(" SN")
                 .pattern("G  ")
-                .input('P', Items.BLAZE_POWDER)
-                .input('N', Items.NETHER_BRICK)
-                .input('G', Items.GOLD_INGOT)
-                .input('S', Items.STICK)
-                .criterion(hasItem(Items.BLAZE_POWDER), this.conditionsFromItem(Items.BLAZE_POWDER))
-                .offerTo(this.exporter);
+                .define('P', Items.BLAZE_POWDER)
+                .define('N', Items.NETHER_BRICK)
+                .define('G', Items.GOLD_INGOT)
+                .define('S', Items.STICK)
+                .unlockedBy(getHasName(Items.BLAZE_POWDER), this.has(Items.BLAZE_POWDER))
+                .save(this.output);
 
         // Frost Staff - prismarine crystals + snowball + iron ingot + stick
-        this.createShaped(RecipeCategory.COMBAT, WizardWeapons.frostStaff.item())
+        this.shaped(RecipeCategory.COMBAT, WizardWeapons.frostStaff.item())
                 .pattern(" BP")
                 .pattern(" SB")
                 .pattern("I  ")
-                .input('P', Items.PRISMARINE_CRYSTALS)
-                .input('B', Items.SNOWBALL)
-                .input('I', Items.IRON_INGOT)
-                .input('S', Items.STICK)
-                .criterion(hasItem(Items.PRISMARINE_CRYSTALS), this.conditionsFromItem(Items.PRISMARINE_CRYSTALS))
-                .offerTo(this.exporter);
+                .define('P', Items.PRISMARINE_CRYSTALS)
+                .define('B', Items.SNOWBALL)
+                .define('I', Items.IRON_INGOT)
+                .define('S', Items.STICK)
+                .unlockedBy(getHasName(Items.PRISMARINE_CRYSTALS), this.has(Items.PRISMARINE_CRYSTALS))
+                .save(this.output);
 
         // Note: Conditional staves (ruby_fire, smaragdant_frost, crystal_arcane)
         // are kept as hand-written JSONs with mod load conditions
@@ -171,43 +171,43 @@ public class WizardRecipes extends FabricRecipeProvider {
      */
     private void generateArmorSet(Armor.Set set, Item specialIngredient) {
         // Helmet/Head - pattern: "  W" / " W " / "WLW"
-        this.createShaped(RecipeCategory.COMBAT, set.head)
+        this.shaped(RecipeCategory.COMBAT, set.head)
                 .pattern("  W")
                 .pattern(" W ")
                 .pattern("WLW")
-                .input('L', specialIngredient)
-                .input('W', ItemTags.WOOL)
-                .criterion(hasItem(specialIngredient), this.conditionsFromItem(specialIngredient))
-                .offerTo(this.exporter);
+                .define('L', specialIngredient)
+                .define('W', ItemTags.WOOL)
+                .unlockedBy(getHasName(specialIngredient), this.has(specialIngredient))
+                .save(this.output);
 
         // Chestplate - pattern: "L L" / "WLW" / "WWW"
-        this.createShaped(RecipeCategory.COMBAT, set.chest)
+        this.shaped(RecipeCategory.COMBAT, set.chest)
                 .pattern("L L")
                 .pattern("WLW")
                 .pattern("WWW")
-                .input('L', specialIngredient)
-                .input('W', ItemTags.WOOL)
-                .criterion(hasItem(specialIngredient), this.conditionsFromItem(specialIngredient))
-                .offerTo(this.exporter);
+                .define('L', specialIngredient)
+                .define('W', ItemTags.WOOL)
+                .unlockedBy(getHasName(specialIngredient), this.has(specialIngredient))
+                .save(this.output);
 
         // Leggings - pattern: "LLL" / "W W" / "W W"
-        this.createShaped(RecipeCategory.COMBAT, set.legs)
+        this.shaped(RecipeCategory.COMBAT, set.legs)
                 .pattern("LLL")
                 .pattern("W W")
                 .pattern("W W")
-                .input('L', specialIngredient)
-                .input('W', ItemTags.WOOL)
-                .criterion(hasItem(specialIngredient), this.conditionsFromItem(specialIngredient))
-                .offerTo(this.exporter);
+                .define('L', specialIngredient)
+                .define('W', ItemTags.WOOL)
+                .unlockedBy(getHasName(specialIngredient), this.has(specialIngredient))
+                .save(this.output);
 
         // Boots - pattern: "L L" / "W W"
-        this.createShaped(RecipeCategory.COMBAT, set.feet)
+        this.shaped(RecipeCategory.COMBAT, set.feet)
                 .pattern("L L")
                 .pattern("W W")
-                .input('L', specialIngredient)
-                .input('W', ItemTags.WOOL)
-                .criterion(hasItem(specialIngredient), this.conditionsFromItem(specialIngredient))
-                .offerTo(this.exporter);
+                .define('L', specialIngredient)
+                .define('W', ItemTags.WOOL)
+                .unlockedBy(getHasName(specialIngredient), this.has(specialIngredient))
+                .save(this.output);
     }
 
     // ========================================
@@ -216,32 +216,32 @@ public class WizardRecipes extends FabricRecipeProvider {
 
     private void generateNetheriteUpgrades() {
         // Wand upgrades
-        this.offerNetheriteUpgradeRecipe(WizardWeapons.arcaneWand.item(), RecipeCategory.COMBAT, WizardWeapons.netheriteArcaneWand.item());
-        this.offerNetheriteUpgradeRecipe(WizardWeapons.fireWand.item(), RecipeCategory.COMBAT, WizardWeapons.netheriteFireWand.item());
-        this.offerNetheriteUpgradeRecipe(WizardWeapons.frostWand.item(), RecipeCategory.COMBAT, WizardWeapons.netheriteFrostWand.item());
+        this.netheriteSmithing(WizardWeapons.arcaneWand.item(), RecipeCategory.COMBAT, WizardWeapons.netheriteArcaneWand.item());
+        this.netheriteSmithing(WizardWeapons.fireWand.item(), RecipeCategory.COMBAT, WizardWeapons.netheriteFireWand.item());
+        this.netheriteSmithing(WizardWeapons.frostWand.item(), RecipeCategory.COMBAT, WizardWeapons.netheriteFrostWand.item());
 
         // Staff upgrades
-        this.offerNetheriteUpgradeRecipe(WizardWeapons.arcaneStaff.item(), RecipeCategory.COMBAT, WizardWeapons.netheriteArcaneStaff.item());
-        this.offerNetheriteUpgradeRecipe(WizardWeapons.fireStaff.item(), RecipeCategory.COMBAT, WizardWeapons.netheriteFireStaff.item());
-        this.offerNetheriteUpgradeRecipe(WizardWeapons.frostStaff.item(), RecipeCategory.COMBAT, WizardWeapons.netheriteFrostStaff.item());
+        this.netheriteSmithing(WizardWeapons.arcaneStaff.item(), RecipeCategory.COMBAT, WizardWeapons.netheriteArcaneStaff.item());
+        this.netheriteSmithing(WizardWeapons.fireStaff.item(), RecipeCategory.COMBAT, WizardWeapons.netheriteFireStaff.item());
+        this.netheriteSmithing(WizardWeapons.frostStaff.item(), RecipeCategory.COMBAT, WizardWeapons.netheriteFrostStaff.item());
 
         // Armor upgrades - Arcane set
-        this.offerNetheriteUpgradeRecipe(WizardArmors.arcaneRobeSet.head, RecipeCategory.COMBAT, WizardArmors.netherite_arcane.head);
-        this.offerNetheriteUpgradeRecipe(WizardArmors.arcaneRobeSet.chest, RecipeCategory.COMBAT, WizardArmors.netherite_arcane.chest);
-        this.offerNetheriteUpgradeRecipe(WizardArmors.arcaneRobeSet.legs, RecipeCategory.COMBAT, WizardArmors.netherite_arcane.legs);
-        this.offerNetheriteUpgradeRecipe(WizardArmors.arcaneRobeSet.feet, RecipeCategory.COMBAT, WizardArmors.netherite_arcane.feet);
+        this.netheriteSmithing(WizardArmors.arcaneRobeSet.head, RecipeCategory.COMBAT, WizardArmors.netherite_arcane.head);
+        this.netheriteSmithing(WizardArmors.arcaneRobeSet.chest, RecipeCategory.COMBAT, WizardArmors.netherite_arcane.chest);
+        this.netheriteSmithing(WizardArmors.arcaneRobeSet.legs, RecipeCategory.COMBAT, WizardArmors.netherite_arcane.legs);
+        this.netheriteSmithing(WizardArmors.arcaneRobeSet.feet, RecipeCategory.COMBAT, WizardArmors.netherite_arcane.feet);
 
         // Armor upgrades - Fire set
-        this.offerNetheriteUpgradeRecipe(WizardArmors.fireRobeSet.head, RecipeCategory.COMBAT, WizardArmors.netherite_fire.head);
-        this.offerNetheriteUpgradeRecipe(WizardArmors.fireRobeSet.chest, RecipeCategory.COMBAT, WizardArmors.netherite_fire.chest);
-        this.offerNetheriteUpgradeRecipe(WizardArmors.fireRobeSet.legs, RecipeCategory.COMBAT, WizardArmors.netherite_fire.legs);
-        this.offerNetheriteUpgradeRecipe(WizardArmors.fireRobeSet.feet, RecipeCategory.COMBAT, WizardArmors.netherite_fire.feet);
+        this.netheriteSmithing(WizardArmors.fireRobeSet.head, RecipeCategory.COMBAT, WizardArmors.netherite_fire.head);
+        this.netheriteSmithing(WizardArmors.fireRobeSet.chest, RecipeCategory.COMBAT, WizardArmors.netherite_fire.chest);
+        this.netheriteSmithing(WizardArmors.fireRobeSet.legs, RecipeCategory.COMBAT, WizardArmors.netherite_fire.legs);
+        this.netheriteSmithing(WizardArmors.fireRobeSet.feet, RecipeCategory.COMBAT, WizardArmors.netherite_fire.feet);
 
         // Armor upgrades - Frost set
-        this.offerNetheriteUpgradeRecipe(WizardArmors.frostRobeSet.head, RecipeCategory.COMBAT, WizardArmors.netherite_frost.head);
-        this.offerNetheriteUpgradeRecipe(WizardArmors.frostRobeSet.chest, RecipeCategory.COMBAT, WizardArmors.netherite_frost.chest);
-        this.offerNetheriteUpgradeRecipe(WizardArmors.frostRobeSet.legs, RecipeCategory.COMBAT, WizardArmors.netherite_frost.legs);
-        this.offerNetheriteUpgradeRecipe(WizardArmors.frostRobeSet.feet, RecipeCategory.COMBAT, WizardArmors.netherite_frost.feet);
+        this.netheriteSmithing(WizardArmors.frostRobeSet.head, RecipeCategory.COMBAT, WizardArmors.netherite_frost.head);
+        this.netheriteSmithing(WizardArmors.frostRobeSet.chest, RecipeCategory.COMBAT, WizardArmors.netherite_frost.chest);
+        this.netheriteSmithing(WizardArmors.frostRobeSet.legs, RecipeCategory.COMBAT, WizardArmors.netherite_frost.legs);
+        this.netheriteSmithing(WizardArmors.frostRobeSet.feet, RecipeCategory.COMBAT, WizardArmors.netherite_frost.feet);
     }
 
     }

@@ -1,12 +1,11 @@
 package net.wizards.effect;
 
-import net.minecraft.entity.attribute.EntityAttributeModifier;
-import net.minecraft.entity.attribute.EntityAttributes;
-import net.minecraft.entity.effect.StatusEffectCategory;
-import net.minecraft.util.Identifier;
 import net.spell_engine.rpg_series.config.AttributeModifier;
 import net.spell_engine.rpg_series.config.ConfigFile;
 import net.spell_engine.rpg_series.config.EffectConfig;
+import net.minecraft.resources.Identifier;
+import net.minecraft.world.effect.MobEffectCategory;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.spell_engine.api.effect.CustomStatusEffect;
 import net.spell_engine.api.effect.Effects;
 import net.spell_engine.api.effect.RemoveOnHit;
@@ -25,92 +24,92 @@ public class WizardsEffects {
         return entry;
     }
 
-    public static Effects.Entry frozen = add(new Effects.Entry(Identifier.of(WizardsMod.ID, "frozen"),
+    public static Effects.Entry frozen = add(new Effects.Entry(Identifier.fromNamespaceAndPath(WizardsMod.ID, "frozen"),
             "Frozen",
             "Prevents movement, removed upon taking damage, vulnerable to frost magic",
-            new FrozenStatusEffect(StatusEffectCategory.HARMFUL, 0x99ccff)
+            new FrozenStatusEffect(MobEffectCategory.HARMFUL, 0x99ccff)
                     .setVulnerability(SpellSchools.FROST, new SpellPower.Vulnerability(0, 1F, 0F)),
             new EffectConfig(
                     List.of(
                             new AttributeModifier(
-                                    EntityAttributes.MOVEMENT_SPEED.getIdAsString(),
+                                    Attributes.MOVEMENT_SPEED.getRegisteredName(),
                                     -10,
-                                    EntityAttributeModifier.Operation.ADD_MULTIPLIED_BASE
+                                    net.minecraft.world.entity.ai.attributes.AttributeModifier.Operation.ADD_MULTIPLIED_BASE
                             ),
                             new AttributeModifier(
-                                    EntityAttributes.JUMP_STRENGTH.getIdAsString(),
+                                    Attributes.JUMP_STRENGTH.getRegisteredName(),
                                     -10,
-                                    EntityAttributeModifier.Operation.ADD_MULTIPLIED_BASE
+                                    net.minecraft.world.entity.ai.attributes.AttributeModifier.Operation.ADD_MULTIPLIED_BASE
                             )
                     )
             )
     ));
 
-    public static Effects.Entry frostShield = add(new Effects.Entry(Identifier.of(WizardsMod.ID, "frost_shield"),
+    public static Effects.Entry frostShield = add(new Effects.Entry(Identifier.fromNamespaceAndPath(WizardsMod.ID, "frost_shield"),
             "Frost Shield",
             "Blocks incoming attacks while active, but slows down movement",
-            new FrostShieldStatusEffect(StatusEffectCategory.BENEFICIAL, 0x99ccff),
+            new FrostShieldStatusEffect(MobEffectCategory.BENEFICIAL, 0x99ccff),
             new EffectConfig(
                     List.of(
                             new AttributeModifier(
-                                    EntityAttributes.MOVEMENT_SPEED.getIdAsString(),
+                                    Attributes.MOVEMENT_SPEED.getRegisteredName(),
                                     -0.5F,
-                                    EntityAttributeModifier.Operation.ADD_MULTIPLIED_BASE
+                                    net.minecraft.world.entity.ai.attributes.AttributeModifier.Operation.ADD_MULTIPLIED_BASE
                             )
                     )
             )
     ));
 
-    public static Effects.Entry frostSlowness = add(new Effects.Entry(Identifier.of(WizardsMod.ID, "frost_slowness"),
+    public static Effects.Entry frostSlowness = add(new Effects.Entry(Identifier.fromNamespaceAndPath(WizardsMod.ID, "frost_slowness"),
             "Slowness",
             "Reduces movement speed",
-            new FrozenStatusEffect(StatusEffectCategory.HARMFUL, 0x99ccff),
+            new FrozenStatusEffect(MobEffectCategory.HARMFUL, 0x99ccff),
             new EffectConfig(
                     List.of(
                             new AttributeModifier(
-                                    EntityAttributes.MOVEMENT_SPEED.getIdAsString(),
+                                    Attributes.MOVEMENT_SPEED.getRegisteredName(),
                                     -0.15F,
-                                    EntityAttributeModifier.Operation.ADD_MULTIPLIED_BASE
+                                    net.minecraft.world.entity.ai.attributes.AttributeModifier.Operation.ADD_MULTIPLIED_BASE
                             )
                     )
             )
     ));
 
-    public static Effects.Entry evocation = add(new Effects.Entry(Identifier.of(WizardsMod.ID, "arcane_evocation"),
+    public static Effects.Entry evocation = add(new Effects.Entry(Identifier.fromNamespaceAndPath(WizardsMod.ID, "arcane_evocation"),
             "Evocation",
             "Increases spell critical strike and speed, but also damage you take",
-            new CustomStatusEffect(StatusEffectCategory.BENEFICIAL, 0xcc44ff),
+            new CustomStatusEffect(MobEffectCategory.BENEFICIAL, 0xcc44ff),
             new EffectConfig(
                     List.of(
                             new AttributeModifier(
                                     "spell_power:critical_chance",
                                     0.03F,
-                                    EntityAttributeModifier.Operation.ADD_MULTIPLIED_BASE
+                                    net.minecraft.world.entity.ai.attributes.AttributeModifier.Operation.ADD_MULTIPLIED_BASE
                             ),
                             new AttributeModifier(
                                     "spell_power:haste",
                                     0.03F,
-                                    EntityAttributeModifier.Operation.ADD_MULTIPLIED_BASE
+                                    net.minecraft.world.entity.ai.attributes.AttributeModifier.Operation.ADD_MULTIPLIED_BASE
                             ),
                             new AttributeModifier(
                                     "spell_engine:damage_taken",
                                     0.1F,
-                                    EntityAttributeModifier.Operation.ADD_MULTIPLIED_BASE
+                                    net.minecraft.world.entity.ai.attributes.AttributeModifier.Operation.ADD_MULTIPLIED_BASE
                             )
                     )
             )
     ));
 
-    public static Effects.Entry arcaneCharge = add(new Effects.Entry(Identifier.of(WizardsMod.ID, "arcane_charge"),
+    public static Effects.Entry arcaneCharge = add(new Effects.Entry(Identifier.fromNamespaceAndPath(WizardsMod.ID, "arcane_charge"),
             "Arcane Charge",
             "Increases Arcane spell damage done",
-            new CustomStatusEffect(StatusEffectCategory.BENEFICIAL, 0xff4bdd),
+            new CustomStatusEffect(MobEffectCategory.BENEFICIAL, 0xff4bdd),
             new EffectConfig(
                     List.of(
                             new AttributeModifier(
                                     SpellSchools.ARCANE.id.toString(),
                                     0.15F,
-                                    EntityAttributeModifier.Operation.ADD_MULTIPLIED_BASE
+                                    net.minecraft.world.entity.ai.attributes.AttributeModifier.Operation.ADD_MULTIPLIED_BASE
                             )
                     )
             )

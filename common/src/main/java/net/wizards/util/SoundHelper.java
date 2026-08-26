@@ -1,24 +1,24 @@
 package net.wizards.util;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvent;
-import net.minecraft.world.World;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
 
 public class SoundHelper {
-    public static void playSoundEvent(World world, Entity entity, SoundEvent soundEvent) {
+    public static void playSoundEvent(Level world, Entity entity, SoundEvent soundEvent) {
         playSoundEvent(world, entity, soundEvent, 1, 1);
     }
 
-    public static void playSoundEvent(World world, Entity entity, SoundEvent soundEvent, float volume, float pitch) {
+    public static void playSoundEvent(Level world, Entity entity, SoundEvent soundEvent, float volume, float pitch) {
         world.playSound(
-                (PlayerEntity)null,
+                (Player)null,
                 entity.getX(),
                 entity.getY(),
                 entity.getZ(),
                 soundEvent,
-                SoundCategory.PLAYERS,
+                SoundSource.PLAYERS,
                 volume,
                 pitch);
     }

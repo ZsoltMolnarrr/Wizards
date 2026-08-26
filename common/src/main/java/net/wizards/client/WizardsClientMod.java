@@ -1,6 +1,6 @@
 package net.wizards.client;
 
-import net.minecraft.util.Identifier;
+import net.minecraft.resources.Identifier;
 import net.rpg_foundation.armor_api.client.ArmorRenderers;
 import net.rpg_foundation.armor_api.client.GeoArmorRenderer;
 import net.spell_engine.api.effect.CustomModelStatusEffect;
@@ -57,7 +57,7 @@ public class WizardsClientMod {
         scaleUp.easing = Easing.EASE_OUT_BACK;
 
         var effect = new ModelEffect();
-        effect.model_id = Identifier.of(WizardsMod.ID, "spell_effect/frost_trap").toString();
+        effect.model_id = Identifier.fromNamespaceAndPath(WizardsMod.ID, "spell_effect/frost_trap").toString();
         effect.light_emission = LightEmission.GLOW_TRANSLUCENT;
         effect.duration = 40;
         effect.initial = List.of(translateInitial, scaleInitial);

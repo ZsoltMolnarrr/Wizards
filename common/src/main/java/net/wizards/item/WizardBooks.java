@@ -1,6 +1,5 @@
 package net.wizards.item;
 
-import net.minecraft.util.Identifier;
 import net.wizards.WizardsMod;
 
 import java.util.List;

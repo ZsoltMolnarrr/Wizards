@@ -1,9 +1,9 @@
 package net.wizards.neoforge;
 
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.Registry;
-import net.minecraft.registry.RegistryKeys;
-import net.minecraft.world.poi.PointOfInterestType;
+import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.world.entity.ai.village.poi.PoiType;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.common.NeoForge;
@@ -23,27 +23,27 @@ public final class NeoForgeMod {
     }
 
     public static void register(RegisterEvent event) {
-        event.register(RegistryKeys.SOUND_EVENT, reg -> {
+        event.register(Registries.SOUND_EVENT, reg -> {
             WizardsMod.registerSounds();
         });
-        event.register(RegistryKeys.ITEM, reg -> {
+        event.register(Registries.ITEM, reg -> {
             WizardsMod.registerEntities();
             WizardsMod.registerItems();
         });
-        event.register(RegistryKeys.STATUS_EFFECT, reg -> {
+        event.register(Registries.MOB_EFFECT, reg -> {
             WizardsMod.registerEffects();
         });
-        event.register(RegistryKeys.POINT_OF_INTEREST_TYPE, reg -> {
+        event.register(Registries.POINT_OF_INTEREST_TYPE, reg -> {
             // POI registration — vanilla registry insert. NeoForge's POI registry callback wires the
             // block-state -> POI mapping from the type's block states, so no Fabric API helper is needed.
             // Not sure why errors are thrown, but this seems to fix it.
             try {
-                Registry.register(Registries.POINT_OF_INTEREST_TYPE, WizardVillagers.POI_ID,
-                        new PointOfInterestType(WizardVillagers.poiBlockStates(),
+                Registry.register(BuiltInRegistries.POINT_OF_INTEREST_TYPE, WizardVillagers.POI_ID,
+                        new PoiType(WizardVillagers.poiBlockStates(),
                                 WizardVillagers.POI_TICKET_COUNT, WizardVillagers.POI_SEARCH_DISTANCE));
             } catch (Exception e) { }
         });
-        event.register(RegistryKeys.VILLAGER_PROFESSION, reg -> {
+        event.register(Registries.VILLAGER_PROFESSION, reg -> {
             WizardsMod.registerVillagers(); // registers the profession + builds WizardVillagers.TRADES
         });
     }

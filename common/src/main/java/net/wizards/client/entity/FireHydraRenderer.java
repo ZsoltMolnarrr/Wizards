@@ -1,31 +1,30 @@
 package net.wizards.client.entity;
 
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.render.Camera;
-import net.minecraft.client.render.RenderLayer;
-import net.minecraft.client.render.RenderLayers;
-import net.minecraft.client.render.VertexConsumer;
-import net.minecraft.client.render.command.OrderedRenderCommandQueue;
-import net.minecraft.client.render.entity.EntityRendererFactory;
-import net.minecraft.client.render.entity.LivingEntityRenderer;
-import net.minecraft.client.render.entity.MobEntityRenderer;
-import net.minecraft.client.render.state.CameraRenderState;
-import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.math.RotationAxis;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.client.Camera;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.SubmitNodeCollector;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
+import net.minecraft.client.renderer.entity.LivingEntityRenderer;
+import net.minecraft.client.renderer.entity.MobRenderer;
+import net.minecraft.client.renderer.rendertype.RenderType;
+import net.minecraft.client.renderer.rendertype.RenderTypes;
+import net.minecraft.client.renderer.state.CameraRenderState;
+import net.minecraft.resources.Identifier;
+import net.minecraft.world.phys.Vec3;
 import net.spell_engine.api.render.CustomLayers;
 import net.spell_engine.api.render.LightEmission;
 import net.wizards.WizardsMod;
 import net.wizards.entity.FireHydraEntity;
-
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.math.Axis;
 import java.util.ArrayList;
 import java.util.List;
 
 public class FireHydraRenderer
-        extends MobEntityRenderer<FireHydraEntity, SummonedEntityRenderState, FireHydraModel> {
+        extends MobRenderer<FireHydraEntity, SummonedEntityRenderState, FireHydraModel> {
     public static final Identifier TEXTURE =
-            Identifier.of(WizardsMod.ID, "textures/entity/fire_hydra.png");
+            Identifier.fromNamespaceAndPath(WizardsMod.ID, "textures/entity/fire_hydra.png");
 
     // The Fire Hydra uses a translucent, non-depth-writing render layer. During the normal entity
     // pass (which runs before translucent terrain, particles and clouds) the later passes paint over
@@ -45,48 +44,48 @@ public class FireHydraRenderer
     /// Draws the queued Fire Hydra bodies during the world's after-translucent pass. Loader-neutral —
     /// each platform's client entrypoint calls this from its own event (Fabric
     /// `WorldRenderEvents.END_MAIN`; NeoForge `RenderLevelStageEvent.AfterParticles`).
-    public static void renderAfterTranslucent(MatrixStack matrices, Camera camera, float tickDelta) {
+    public static void renderAfterTranslucent(PoseStack matrices, Camera camera, float tickDelta) {
         if (deferredQueue.isEmpty()) {
             return;
         }
-        var vertexConsumers = MinecraftClient.getInstance().getBufferBuilders().getEntityVertexConsumers();
-        Vec3d cam = camera.getCameraPos();
+        var vertexConsumers = Minecraft.getInstance().renderBuffers().bufferSource();
+        Vec3 cam = camera.position();
 
-        matrices.push();
+        matrices.pushPose();
         matrices.translate(-cam.x, -cam.y, -cam.z);
         for (Deferred deferred : deferredQueue) {
             var state = deferred.state();
-            matrices.push();
+            matrices.pushPose();
             matrices.translate(state.x, state.y, state.z);
             drawBody(deferred.model(), state, matrices, vertexConsumers.getBuffer(renderLayer));
-            matrices.pop();
+            matrices.popPose();
         }
-        matrices.pop();
-        vertexConsumers.draw();
+        matrices.popPose();
+        vertexConsumers.endBatch();
         deferredQueue.clear();
     }
 
     /// Reproduces `LivingEntityRenderer#render`'s transform chain for the model draw only (the
     /// sleeping / riptide / upside-down branches never apply to this summon).
     private static void drawBody(FireHydraModel model, SummonedEntityRenderState state,
-                                 MatrixStack matrices, VertexConsumer vertices) {
-        matrices.push();
-        float scale = state.baseScale;
+                                 PoseStack matrices, VertexConsumer vertices) {
+        matrices.pushPose();
+        float scale = state.scale;
         matrices.scale(scale, scale, scale);
-        matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(180.0F - state.bodyYaw));
+        matrices.mulPose(Axis.YP.rotationDegrees(180.0F - state.bodyRot));
         matrices.scale(-1.0F, -1.0F, 1.0F);
         matrices.translate(0.0F, -1.501F, 0.0F);
-        model.setAngles(state);
-        model.render(matrices, vertices, state.light, LivingEntityRenderer.getOverlay(state, 0.0F), -1);
-        matrices.pop();
+        model.setupAnim(state);
+        model.renderToBuffer(matrices, vertices, state.lightCoords, LivingEntityRenderer.getOverlayCoords(state, 0.0F), -1);
+        matrices.popPose();
     }
 
     /// Set for the duration of one `render` call so `getRenderLayer` — which the superclass calls
     /// from inside it — knows whether this frame's body is deferred. Render is single-threaded.
     private boolean deferBody = false;
 
-    public FireHydraRenderer(EntityRendererFactory.Context context) {
-        super(context, new FireHydraModel(context.getPart(FireHydraModel.LAYER)), 0.75f);
+    public FireHydraRenderer(EntityRendererProvider.Context context) {
+        super(context, new FireHydraModel(context.bakeLayer(FireHydraModel.LAYER)), 0.75f);
         //this.addFeature(new FireHydraGlowFeatureRenderer(this));
     }
 
@@ -96,8 +95,8 @@ public class FireHydraRenderer
     }
 
     @Override
-    public void updateRenderState(FireHydraEntity entity, SummonedEntityRenderState state, float tickProgress) {
-        super.updateRenderState(entity, state, tickProgress);
+    public void extractRenderState(FireHydraEntity entity, SummonedEntityRenderState state, float tickProgress) {
+        super.extractRenderState(entity, state, tickProgress);
         state.copyFrom(entity);
         state.attackAnimationSpeed = entity.getAttackAnimationSpeed(FireHydraModel.attackAnimationLengthTicks());
         state.spellReleaseAnimationSpeed = entity.getSpellReleaseAnimationSpeed(
@@ -105,12 +104,12 @@ public class FireHydraRenderer
     }
 
     @Override
-    public void render(SummonedEntityRenderState state, MatrixStack matrices,
-                       OrderedRenderCommandQueue queue, CameraRenderState cameraState) {
+    public void submit(SummonedEntityRenderState state, PoseStack matrices,
+                       SubmitNodeCollector queue, CameraRenderState cameraState) {
         // A dying hydra is drawn inline (the death animation is short and ordering hardly matters),
         // matching the 1.21.1 behaviour of only deferring live entities.
-        this.deferBody = state.deathTime <= 0.0F && !state.invisible;
-        super.render(state, matrices, queue, cameraState);
+        this.deferBody = state.deathTime <= 0.0F && !state.isInvisible;
+        super.submit(state, matrices, queue, cameraState);
         if (this.deferBody) {
             deferredQueue.add(new Deferred(this.getModel(), state));
         }
@@ -118,17 +117,17 @@ public class FireHydraRenderer
     }
 
     @Override
-    public Identifier getTexture(SummonedEntityRenderState state) {
+    public Identifier getTextureLocation(SummonedEntityRenderState state) {
         return TEXTURE;
     }
 
 //    public static final RenderLayer renderLayer = CustomLayers.spellObject(TEXTURE, LightEmission.GLOW_TRANSLUCENT, false);
-    public static final RenderLayer renderLayer = CustomLayers.spellObject(TEXTURE, LightEmission.GLOW, true);
+    public static final RenderType renderLayer = CustomLayers.spellObject(TEXTURE, LightEmission.GLOW, true);
 
     @Override
-    protected RenderLayer getRenderLayer(SummonedEntityRenderState state, boolean showBody, boolean translucent, boolean showOutline) {
+    protected RenderType getRenderType(SummonedEntityRenderState state, boolean showBody, boolean translucent, boolean showOutline) {
         if (showOutline) {
-            return RenderLayers.outlineNoCull(TEXTURE);
+            return RenderTypes.outline(TEXTURE);
         }
         return this.deferBody ? null : renderLayer;
     }
