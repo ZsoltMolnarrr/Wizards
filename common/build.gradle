@@ -45,7 +45,7 @@ dependencies {
 //    modImplementation("maven.modrinth:armor-model-api:${project.armor_model_api_version}-${platform}")
     modImplementation("maven.modrinth:tiny-config:${project.tiny_config_version}-${platform}")
 
-    modImplementation("net.foundation:structure_pool_api-${platform}:${project.structure_pool_api_version}")
+    modImplementation("net.rpg_foundation:structure_pool_api-${platform}:${project.structure_pool_api_version}")
 //    modImplementation("maven.modrinth:structure-pool-api:${project.structure_pool_api_version}-${platform}")
     modImplementation("net.rpg_series:runes-${platform}:${project.runes_version}")
 //    modImplementation("maven.modrinth:runes:${project.runes_version}-${platform}")
