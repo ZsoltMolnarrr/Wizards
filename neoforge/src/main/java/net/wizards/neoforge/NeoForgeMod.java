@@ -6,8 +6,6 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.world.entity.ai.village.poi.PoiType;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.common.Mod;
-import net.neoforged.neoforge.common.NeoForge;
-import net.neoforged.neoforge.event.village.VillagerTradesEvent;
 import net.neoforged.neoforge.registries.RegisterEvent;
 import net.wizards.WizardsMod;
 import net.wizards.villager.WizardVillagers;
@@ -18,8 +16,8 @@ public final class NeoForgeMod {
         // Run our common setup.
         WizardsMod.init();
         modBus.addListener(RegisterEvent.class, NeoForgeMod::register);
-        // Villager trades — game-bus event (fired per profession); replaces Fabric API's TradeOfferHelper.
-        NeoForge.EVENT_BUS.addListener(VillagerTradesEvent.class, NeoForgeMod::onVillagerTrades);
+        // 26.1: villager trades are data driven (`data/wizards/{villager_trade,trade_set}`) and
+        // NeoForge's `VillagerTradesEvent` is gone — nothing to hook up here any more.
     }
 
     public static void register(RegisterEvent event) {
@@ -44,19 +42,7 @@ public final class NeoForgeMod {
             } catch (Exception e) { }
         });
         event.register(Registries.VILLAGER_PROFESSION, reg -> {
-            WizardsMod.registerVillagers(); // registers the profession + builds WizardVillagers.TRADES
-        });
-    }
-
-    private static void onVillagerTrades(VillagerTradesEvent event) {
-        if (!event.getType().equals(WizardVillagers.PROFESSION_KEY)) {
-            return;
-        }
-        WizardVillagers.TRADES.forEach((tier, factories) -> {
-            var tierList = event.getTrades().get(tier.intValue());
-            if (tierList != null) {
-                tierList.addAll(factories);
-            }
+            WizardsMod.registerVillagers(); // registers the profession (its trade sets come from JSON)
         });
     }
 }

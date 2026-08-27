@@ -20,7 +20,7 @@ import net.spell_power.api.SpellSchools;
 import net.wizards.WizardsMod;
 import net.wizards.effect.WizardsEffects;
 import net.wizards.entity.WizardSummons;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;

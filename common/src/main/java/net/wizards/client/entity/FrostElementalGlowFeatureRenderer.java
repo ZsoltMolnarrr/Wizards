@@ -1,7 +1,7 @@
 package net.wizards.client.entity;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.minecraft.client.renderer.LightTexture;
+import net.minecraft.util.LightCoordsUtil;
 import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.client.renderer.entity.RenderLayerParent;
@@ -31,7 +31,7 @@ public class FrostElementalGlowFeatureRenderer
                 state,
                 matrices,
                 LAYER,
-                LightTexture.FULL_BRIGHT,
+                LightCoordsUtil.FULL_BRIGHT,
                 LivingEntityRenderer.getOverlayCoords(state, 0.0F),
                 -1,
                 null,

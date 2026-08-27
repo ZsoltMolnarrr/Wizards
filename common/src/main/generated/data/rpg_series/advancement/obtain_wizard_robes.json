@@ -26,7 +26,6 @@
       "translate": "advancements.rpg_series.obtain_wizard_robes.description"
     },
     "icon": {
-      "count": 1,
       "id": "wizards:wizard_robe_chest"
     },
     "title": {

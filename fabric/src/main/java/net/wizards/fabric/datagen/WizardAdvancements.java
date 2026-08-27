@@ -1,6 +1,6 @@
 package net.wizards.fabric.datagen;
 
-import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
+import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricAdvancementProvider;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.AdvancementHolder;
@@ -17,7 +17,8 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
-import net.minecraft.world.item.ItemStack;
+import net.minecraft.core.component.DataComponentPatch;
+import net.minecraft.world.item.ItemStackTemplate;
 import net.spell_engine.misc.criteria.SpellCastCriteria;
 import net.spell_engine.spellbinding.SpellBindingCriteria;
 import net.spell_engine.spellbinding.SpellBookCreationCriteria;
@@ -42,7 +43,7 @@ import java.util.function.Consumer;
 public class WizardAdvancements extends FabricAdvancementProvider {
     public static final String NAMESPACE = "rpg_series";
 
-    public WizardAdvancements(FabricDataOutput output, CompletableFuture<HolderLookup.Provider> registryLookup) {
+    public WizardAdvancements(FabricPackOutput output, CompletableFuture<HolderLookup.Provider> registryLookup) {
         super(output, registryLookup);
     }
 
@@ -144,31 +145,31 @@ public class WizardAdvancements extends FabricAdvancementProvider {
     // MARK: Builder shorthands
 
     /** Visible task: toast + chat announcement on. */
-    private static Entry task(String idPath, String parent, ItemStack icon,
+    private static Entry task(String idPath, String parent, ItemStackTemplate icon,
                               String criterionName, Criterion<?> criterion, String title, String description) {
         return advancement(idPath, parent, icon, AdvancementType.TASK, true, true, false, criterionName, criterion, title, description);
     }
 
     /** Challenge-framed task. */
-    private static Entry challenge(String idPath, String parent, ItemStack icon,
+    private static Entry challenge(String idPath, String parent, ItemStackTemplate icon,
                                    String criterionName, Criterion<?> criterion, String title, String description) {
         return advancement(idPath, parent, icon, AdvancementType.CHALLENGE, true, true, false, criterionName, criterion, title, description);
     }
 
     /** Task without toast or chat announcement (used for the practice/empowerment milestones). */
-    private static Entry silent(String idPath, String parent, ItemStack icon,
+    private static Entry silent(String idPath, String parent, ItemStackTemplate icon,
                                 String criterionName, Criterion<?> criterion, String title, String description) {
         return advancement(idPath, parent, icon, AdvancementType.TASK, false, false, false, criterionName, criterion, title, description);
     }
 
     /** Hidden task: not shown in the tree until earned. */
-    private static Entry secret(String idPath, String parent, ItemStack icon,
+    private static Entry secret(String idPath, String parent, ItemStackTemplate icon,
                                 String criterionName, Criterion<?> criterion, String title, String description) {
         return advancement(idPath, parent, icon, AdvancementType.TASK, true, true, true, criterionName, criterion, title, description);
     }
 
     @SuppressWarnings("deprecation") // Advancement.Builder.parent(Identifier) is the only way to reference parents built outside this provider.
-    private static Entry advancement(String idPath, String parent, ItemStack icon, AdvancementType frame,
+    private static Entry advancement(String idPath, String parent, ItemStackTemplate icon, AdvancementType frame,
                                      boolean showToast, boolean announceToChat, boolean hidden,
                                      String criterionName, Criterion<?> criterion, String title, String description) {
         var id = Identifier.fromNamespaceAndPath(NAMESPACE, idPath);
@@ -192,17 +193,20 @@ public class WizardAdvancements extends FabricAdvancementProvider {
 
     // MARK: Icon helpers
 
-    private static ItemStack item(String itemId) {
-        return new ItemStack(BuiltInRegistries.ITEM.getValue(Identifier.parse(itemId)));
+    /// 26.1: advancement icons are `ItemStackTemplate`s — no `ItemStack` may exist before registries load.
+    private static ItemStackTemplate item(String itemId) {
+        return new ItemStackTemplate(BuiltInRegistries.ITEM.getValue(Identifier.parse(itemId)));
     }
 
     /// 1.21.11: the vanilla `minecraft:item_model` component names an item-model *definition*
     /// (`assets/wizards/items/spell_book/<school>.json`) and Spell Engine sets it to the pool id
     /// verbatim, so the advancement icon must use the same id.
-    private static ItemStack spellBookIcon(String school) {
-        var stack = new ItemStack(BuiltInRegistries.ITEM.getValue(Identifier.fromNamespaceAndPath("spell_engine", "spell_book")));
-        stack.set(DataComponents.ITEM_MODEL, Identifier.fromNamespaceAndPath("wizards", "spell_book/" + school));
-        return stack;
+    private static ItemStackTemplate spellBookIcon(String school) {
+        return new ItemStackTemplate(
+                BuiltInRegistries.ITEM.getValue(Identifier.fromNamespaceAndPath("spell_engine", "spell_book")),
+                DataComponentPatch.builder()
+                        .set(DataComponents.ITEM_MODEL, Identifier.fromNamespaceAndPath("wizards", "spell_book/" + school))
+                        .build());
     }
 
     // MARK: Criterion helpers

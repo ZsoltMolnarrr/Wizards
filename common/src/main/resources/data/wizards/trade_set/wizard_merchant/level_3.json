@@ -1,0 +1,5 @@
+{
+  "amount": 2.0,
+  "random_sequence": "wizards:trade_set/wizard_merchant/level_3",
+  "trades": "#wizards:wizard_merchant/level_3"
+}

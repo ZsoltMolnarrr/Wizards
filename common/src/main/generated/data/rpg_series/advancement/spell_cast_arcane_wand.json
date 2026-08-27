@@ -14,7 +14,6 @@
       "translate": "advancements.rpg_series.spell_cast_arcane_wand.description"
     },
     "icon": {
-      "count": 1,
       "id": "wizards:wand_arcane"
     },
     "show_toast": false,

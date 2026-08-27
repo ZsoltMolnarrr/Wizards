@@ -1,0 +1,13 @@
+{
+  "gives": {
+    "count": 8,
+    "id": "runes:fire_stone"
+  },
+  "max_uses": 128.0,
+  "reputation_discount": 0.1,
+  "wants": {
+    "count": 2.0,
+    "id": "minecraft:emerald"
+  },
+  "xp": 3.0
+}

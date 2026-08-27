@@ -14,7 +14,7 @@ import net.spell_engine.api.spell.summon.SummonedEntityConfig;
 import net.spell_power.api.SpellSchools;
 import net.tiny_config.ConfigManager;
 import net.wizards.WizardsMod;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,12 +31,12 @@ public class WizardEntities {
         public final EntityType<T> type;
         /// Attribute defaults for summoned entities (seeded into Wizards' own config/wizards/summoned_entities.json).
         /// Null for entities that aren't spell-power-scaled summons.
-        @Nullable public final SummonedEntityConfig.Entry summonConfig;
+        public final SummonedEntityConfig.@Nullable Entry summonConfig;
 
         public Entry(Identifier id, String name, EntityType<T> type) {
             this(id, name, type, null);
         }
-        public Entry(Identifier id, String name, EntityType<T> type, @Nullable SummonedEntityConfig.Entry summonConfig) {
+        public Entry(Identifier id, String name, EntityType<T> type, SummonedEntityConfig.@Nullable Entry summonConfig) {
             this.id = id;
             this.name = name;
             this.type = type;

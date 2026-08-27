@@ -14,7 +14,6 @@
       "translate": "advancements.rpg_series.spell_cast_fire_wand.description"
     },
     "icon": {
-      "count": 1,
       "id": "wizards:wand_fire"
     },
     "show_toast": false,

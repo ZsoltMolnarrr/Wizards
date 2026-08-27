@@ -17,7 +17,6 @@
       "components": {
         "minecraft:item_model": "wizards:spell_book/fire"
       },
-      "count": 1,
       "id": "spell_engine:spell_book"
     },
     "show_toast": false,

@@ -16,7 +16,6 @@
       "components": {
         "minecraft:item_model": "wizards:spell_book/frost"
       },
-      "count": 1,
       "id": "spell_engine:spell_book"
     },
     "title": {
