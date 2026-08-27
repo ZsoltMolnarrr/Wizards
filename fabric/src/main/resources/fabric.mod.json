@@ -38,7 +38,7 @@
     "minecraft": ">=${minecraft_min_version}",
     "fabricloader": ">=0.19.3",
     "fabric-api": "*",
-    "java": ">=21",
+    "java": ">=25",
     "armor_model_api": ">=${armor_model_api_version}",
     "spell_engine": ">=${spell_engine_version}",
     "runes": ">=${runes_version}",

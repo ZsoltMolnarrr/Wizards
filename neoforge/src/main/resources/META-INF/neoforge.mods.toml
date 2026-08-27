@@ -16,7 +16,7 @@ logoFile = "icon.png"
 [[dependencies.wizards]]
 modId = "neoforge"
 type = "required"
-versionRange = "[21.11,)"
+versionRange = "[26.1,)"
 ordering = "NONE"
 side = "BOTH"
 

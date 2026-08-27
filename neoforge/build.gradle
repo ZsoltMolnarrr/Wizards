@@ -58,27 +58,27 @@ repositories {
 
 dependencies {
     neoForge "net.neoforged:neoforge:$rootProject.neoforge_version"
-    common(project(path: ':common', configuration: 'namedElements')) { transitive = false }
+    common(project(path: ':common')) { transitive = false }
     shadowBundle project(path: ':common', configuration: 'transformProductionNeoForge')
 
-    modImplementation("com.zigythebird.playeranim:PlayerAnimationLibNeo:${project.player_anim_version}")
-    modImplementation("me.shedaniel.cloth:cloth-config-${platform}:${project.cloth_config_version}")
-    modImplementation("net.rpg_foundation:armor_model_api-${platform}:${project.armor_model_api_version}")
-//    modImplementation("maven.modrinth:armor-model-api:${project.armor_model_api_version}-${platform}")
-    modImplementation("maven.modrinth:tiny-config:${project.tiny_config_version}-${platform}")
+    implementation("com.zigythebird.playeranim:PlayerAnimationLibNeo:${project.player_anim_version}")
+    implementation("me.shedaniel.cloth:cloth-config-${platform}:${project.cloth_config_version}")
+    implementation("net.rpg_foundation:armor_model_api-${platform}:${project.armor_model_api_version}")
+//    implementation("maven.modrinth:armor-model-api:${project.armor_model_api_version}-${platform}")
+    implementation("maven.modrinth:tiny-config:${project.tiny_config_version}-${platform}")
 
     // Curios - https://docs.illusivesoulworks.com/category/curios
-    modImplementation("top.theillusivec4.curios:curios-neoforge:${project.curios_version}")
+    implementation("top.theillusivec4.curios:curios-neoforge:${project.curios_version}")
 
-    modImplementation("net.rpg_foundation:structure_pool_api-${platform}:${project.structure_pool_api_version}")
-//    modImplementation("maven.modrinth:structure-pool-api:${project.structure_pool_api_version}-${platform}")
-    modImplementation("net.rpg_series:runes-${platform}:${project.runes_version}")
-//    modImplementation("maven.modrinth:runes:${project.runes_version}-${platform}")
-    modImplementation("net.spell_power:spell_power-${platform}:${project.spell_power_version}")
-//    modImplementation("maven.modrinth:spell-power:${project.spell_power_version}-${platform}")
-    modImplementation("net.rpg_foundation:ranged_weapon_api-${platform}:${project.ranged_weapon_api_version}")
-    modImplementation("net.spell_engine:spell_engine-${platform}:${project.spell_engine_version}") { transitive = false }
-//    modImplementation("maven.modrinth:spell-engine:${project.spell_engine_version}-${platform}")
+    implementation("net.rpg_foundation:structure_pool_api-${platform}:${project.structure_pool_api_version}")
+//    implementation("maven.modrinth:structure-pool-api:${project.structure_pool_api_version}-${platform}")
+    implementation("net.rpg_series:runes-${platform}:${project.runes_version}")
+//    implementation("maven.modrinth:runes:${project.runes_version}-${platform}")
+    implementation("net.spell_power:spell_power-${platform}:${project.spell_power_version}")
+//    implementation("maven.modrinth:spell-power:${project.spell_power_version}-${platform}")
+    implementation("net.rpg_foundation:ranged_weapon_api-${platform}:${project.ranged_weapon_api_version}")
+    implementation("net.spell_engine:spell_engine-${platform}:${project.spell_engine_version}") { transitive = false }
+//    implementation("maven.modrinth:spell-engine:${project.spell_engine_version}-${platform}")
 }
 
 processResources {
@@ -95,13 +95,29 @@ processResources {
     }
 }
 
-shadowJar {
-    configurations = [project.configurations.shadowBundle]
-    archiveClassifier = 'dev-shadow'
+// Minecraft is not obfuscated on this version, so there is no remapJar task.
+// The shaded jar is the mod jar that ships.
+jar {
+    archiveClassifier = 'dev'
 }
 
-remapJar {
-    inputFile.set shadowJar.archiveFile
+shadowJar {
+    configurations = [project.configurations.shadowBundle]
+    archiveClassifier = null
+}
+
+assemble.dependsOn shadowJar
+
+// Publish the shaded jar (common + platform classes) as the main artifact.
+configurations {
+    apiElements {
+        outgoing.artifacts.clear()
+        outgoing.artifact(shadowJar)
+    }
+    runtimeElements {
+        outgoing.artifacts.clear()
+        outgoing.artifact(shadowJar)
+    }
 }
 
 // Publishing is configured unconditionally: tasks only *run* when explicitly invoked
@@ -116,7 +132,7 @@ tasks.register("publishMod") {
 }
 
 publishMods {
-    file = remapJar.archiveFile          // Loom production jar (NOT the dev-shadow jar)
+    file = shadowJar.archiveFile         // the shaded jar is the shipped jar on 26.1+ (no remapJar)
     changelog = providers.provider { changelog_last_section() }   // lazy: read only at publish
     type = releaseTypeName == "release" ? me.modmuss50.mpp.ReleaseType.STABLE
             : releaseTypeName == "alpha" ? me.modmuss50.mpp.ReleaseType.ALPHA
