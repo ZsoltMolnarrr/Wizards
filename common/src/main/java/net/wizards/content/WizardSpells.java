@@ -483,7 +483,7 @@ public class WizardSpells {
         impact.action.summon = WizardSummons.arcaneEmitter();
         spell.impacts = List.of(impact);
 
-        SpellBuilder.Cost.cooldown(spell, 20);
+        SpellBuilder.Cost.cooldown(spell, 24);
         spell.cost.cooldown.haste_affected = false; // summon uptime shouldn't scale with haste
         SpellBuilder.Cost.item(spell, "runes:arcane_stone");
 

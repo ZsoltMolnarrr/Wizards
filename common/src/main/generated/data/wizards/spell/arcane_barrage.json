@@ -64,7 +64,7 @@
               "look_around": false
             },
             "lifespan": {
-              "active_seconds": 15
+              "active_seconds": 12
             },
             "sounds": {
               "spawn": {
@@ -200,7 +200,7 @@
   ],
   "cost": {
     "cooldown": {
-      "duration": 20.0,
+      "duration": 24.0,
       "haste_affected": false
     },
     "item": {

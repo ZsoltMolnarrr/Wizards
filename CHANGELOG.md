@@ -1,3 +1,7 @@
+# 3.1.2
+
+- Rebalanced Arcane Barrage: emitters last 12 sec (was 15), cooldown 24 sec (was 20), bringing uptime to 50%
+
 # 3.1.1
 
 - Replaced armor rendering dependency AzureLibArmor with ArmorModelAPI
