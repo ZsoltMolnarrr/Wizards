@@ -103,7 +103,7 @@ public class WizardSummons {
 
     public static Summon arcaneEmitter() {
         var b = new SummonBehaviour();
-        b.lifespan.active_seconds = 15;
+        b.lifespan.active_seconds = 12;
         b.is_attackable = false;
 
         b.sounds.spawn = new Sound(WizardsSounds.ARCANE_EMITTER_SPAWN.id());
