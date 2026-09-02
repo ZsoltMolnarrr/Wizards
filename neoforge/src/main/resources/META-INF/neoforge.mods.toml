@@ -11,12 +11,12 @@ authors = "Daedelus"
 description = '''
 Destroy your enemies with Arcane, Fire and Frost magic.
 '''
-logoFile = "icon.png"
+iconFile = "icon.png"
 
 [[dependencies.wizards]]
 modId = "neoforge"
 type = "required"
-versionRange = "[26.1,)"
+versionRange = "[26.2,)"
 ordering = "NONE"
 side = "BOTH"
 
