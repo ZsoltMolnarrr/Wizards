@@ -12,6 +12,7 @@ import net.minecraft.client.renderer.state.level.CameraRenderState;
 import net.minecraft.resources.Identifier;
 import net.spell_engine.api.render.CustomLayers;
 import net.spell_engine.api.render.LightEmission;
+import net.spell_engine.client.compatibility.ShaderCompatibility;
 import net.wizards.WizardsMod;
 import net.wizards.entity.FireHydraEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -22,18 +23,32 @@ public class FireHydraRenderer
     public static final Identifier TEXTURE =
             Identifier.fromNamespaceAndPath(WizardsMod.ID, "textures/entity/fire_hydra.png");
 
-    // The Fire Hydra uses a translucent, non-depth-writing render layer. Submitted normally it lands in
-    // the `translucentModels` phase, which vanilla executes before translucent terrain and before the
-    // translucent particle pass, so water/clouds/distant terrain and the hydra's own puddle particles
-    // paint over it. To avoid that, the body is not submitted during the entity pass: `getRenderType`
-    // returns null and the model is submitted by hand into the `afterTerrain` phase, which runs after
-    // `renderGroup(TRANSLUCENT)` (see `LevelRenderer#addMainPass`). Labels, shadow and the outline
-    // (glowing) pass still take the normal path.
+    // The Fire Hydra body is translucent. Submitted normally it lands in the `translucentModels` phase,
+    // which vanilla executes before translucent terrain and before the translucent particle pass, so
+    // water/distant terrain and the hydra's own puddle particles paint over it. To avoid that, the body
+    // is not submitted during the entity pass: `getRenderType` returns null and the model is submitted
+    // by hand into the `afterTerrain` phase, which runs after `renderGroup(TRANSLUCENT)` (see
+    // `LevelRenderer#addMainPass`). Labels, shadow and the outline (glowing) pass still take the normal
+    // path.
+    //
+    // Two ordering details inside that phase (26.2 in-game review, 2026-09-04):
+    // - Translucent particles are submitted into `afterTerrain` of order bucket 0, and within one bucket
+    //   the feature groups execute in feature-type registration order, which puts particles after a
+    //   model. The body therefore goes into order bucket `BODY_ORDER` (> 0): `executeTranslucentAfterTerrain`
+    //   walks the buckets ascending, so the body is drawn after every order-0 particle and blends over the
+    //   puddle instead of being covered by it.
+    // - Without a shader pack the body layer writes depth (`CustomLayers.beam(…, true)`: beacon-beam program,
+    //   alpha blend, no cull, depth write). Clouds are a separate pass after the main pass, depth-tested
+    //   against the main target; a non-depth-writing body leaves nothing for them to test against and they
+    //   paint straight over it. Quads are sorted back to front on upload, so the depth write does not hide
+    //   the body's own farther parts. With a shader pack the non-depth-writing GLOW layer stays: the pack's
+    //   compositing was reviewed and approved on it, and Iris draws its own clouds.
     //
     // 26.2: `MultiBufferSource` is gone, so the former "replay the model from a world render event"
     // hack is both impossible and unnecessary — the submit-node phases express the ordering directly.
-    // `SubmitNodeCollector#order(0)` is the collection vanilla's own `submitModel` writes into, and
-    // `SubmitNodeCollection#afterTerrain` is public, so no loader-specific API is needed.
+    // `SubmitNodeCollector#order(int)` and `SubmitNodeCollection#afterTerrain` are public, so no
+    // loader-specific API is needed.
+    private static final int BODY_ORDER = 1;
 
     /// Set for the duration of one `submit` call so `getRenderType` — which the superclass calls from
     /// inside it, with the model transform already applied to the pose stack — knows whether this
@@ -68,14 +83,14 @@ public class FireHydraRenderer
                        SubmitNodeCollector queue, CameraRenderState cameraState) {
         // A dying hydra is drawn inline (the death animation is short and ordering hardly matters),
         // matching the 1.21.1 behaviour of only deferring live entities.
-        SubmitNodeCollection collection = queue.order(0) instanceof SubmitNodeCollection c ? c : null;
+        SubmitNodeCollection collection = queue.order(BODY_ORDER) instanceof SubmitNodeCollection c ? c : null;
         this.deferBody = collection != null && state.deathTime <= 0.0F && !state.isInvisible;
         this.activePoseStack = matrices;
         this.deferredPose = null;
         super.submit(state, matrices, queue, cameraState);
         if (this.deferBody && this.deferredPose != null) {
             collection.afterTerrain.submit(new ModelFeatureRenderer.Submit<>(
-                    renderLayer,
+                    bodyLayer(),
                     this.deferredPose,
                     this.getModel(),
                     state,
@@ -95,8 +110,13 @@ public class FireHydraRenderer
         return TEXTURE;
     }
 
-//    public static final RenderLayer renderLayer = CustomLayers.spellObject(TEXTURE, LightEmission.GLOW_TRANSLUCENT, false);
-    public static final RenderType renderLayer = CustomLayers.spellObject(TEXTURE, LightEmission.GLOW, true);
+    /// Shader pack: translucent GLOW spell-object layer (no depth write). No pack: the depth-writing translucent
+    /// beam layer, see the class comment. Both are memoized in `CustomLayers`.
+    private static RenderType bodyLayer() {
+        return ShaderCompatibility.isShaderPackInUse()
+                ? CustomLayers.spellObject(TEXTURE, LightEmission.GLOW, true)
+                : CustomLayers.beam(TEXTURE, false, true);
+    }
 
     @Override
     protected RenderType getRenderType(SummonedEntityRenderState state, boolean showBody, boolean translucent, boolean showOutline) {
@@ -108,6 +128,6 @@ public class FireHydraRenderer
         if (showOutline) {
             return RenderTypes.outline(TEXTURE);
         }
-        return this.deferBody ? null : renderLayer;
+        return this.deferBody ? null : bodyLayer();
     }
 }
