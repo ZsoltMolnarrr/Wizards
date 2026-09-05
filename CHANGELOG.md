@@ -1,5 +1,6 @@
 # 3.1.2
 
+- Updated for Minecraft 26.2
 - Updated for Minecraft 26.1.2 (Java 25)
 - Rebalanced Arcane Barrage: emitters last 12 sec (was 15), cooldown 24 sec (was 20), bringing uptime to 50%
 
