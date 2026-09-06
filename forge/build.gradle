@@ -82,7 +82,15 @@ dependencies {
     // `localRuntime` keeps it out of the published POM.
     localRuntime("io.github.llamalad7:mixinextras-forge:${rootProject.mixin_extras_version}")
 
-    // StructurePoolAPI and Runes have no Forge artifact on 1.20.1 — see wizards-port-notes.md.
+    // Runes: dev runtime ONLY (Wizards does not compile against it — `runes:*` ids only).
+    // `modLocalRuntime` on the *production* jar, so Loom remaps it into this Yarn dev env. Do NOT use the
+    // `dev-shadow` classifier here: that jar still carries Mojmap/SRG class references, and FML's
+    // EventSubclassTransformer then dies with `NoClassDefFoundError: net/minecraft/world/item/Item`
+    // while building the ITEM RegisterEvent — which takes every other mod's item registration down with
+    // it (Wizards then NPEs on a null `wizardStaff.item()` in WizardVillagers).
+    modLocalRuntime("net.rpg_series:runes-forge:${rootProject.runes_version}")
+
+    // StructurePoolAPI has no Forge artifact on 1.20.1 — see wizards-port-notes.md.
 }
 
 processResources {

@@ -78,8 +78,8 @@ dependencies {
     // StructurePoolAPI: legacy Fabric-only artifact, used by the Fabric-side village injector.
     modImplementation("maven.modrinth:structure-pool-api:${rootProject.structure_pool_api_version}")
 
-    // Runes: legacy Fabric-only artifact, dev runtime ONLY (Wizards does not compile against it).
-    modLocalRuntime("maven.modrinth:runes:${rootProject.runes_version}")
+    // Runes: dev runtime ONLY (Wizards does not compile against it — `runes:*` ids only).
+    modLocalRuntime("net.rpg_series:runes-fabric:${rootProject.runes_version}")
 }
 
 processResources {

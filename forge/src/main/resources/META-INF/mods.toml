@@ -41,8 +41,8 @@ versionRange = "[1.10.5,)"
 ordering = "AFTER"
 side = "BOTH"
 
-# Runes has no Forge artifact on 1.20.1. Wizards no longer compiles against it — the wizard-merchant
-# workstation and its rune trades are resolved by registry id and simply stay inert when it is absent.
+# Runes is optional. Wizards does not compile against it — the wizard-merchant workstation and its rune
+# trades are resolved by registry id and simply stay inert when it is absent.
 [[dependencies.wizards]]
 modId = "runes"
 mandatory = false
