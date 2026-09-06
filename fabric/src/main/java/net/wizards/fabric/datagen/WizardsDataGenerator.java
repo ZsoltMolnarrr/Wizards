@@ -56,11 +56,10 @@ public class WizardsDataGenerator implements DataGeneratorEntrypoint {
     /// 1.20.1 / Fabric API 0.92: the datagen `WrapperLookup` is assembled from `BuiltinRegistries.REGISTRY_BUILDER`
     /// plus whatever each entrypoint contributes here — Fabric's `DynamicRegistries.registerSynced` only feeds the
     /// *runtime* `RegistryLoader`, not data generation. Without this, `FabricTagProvider<Spell>` dies with
-    /// "Registry minecraft:spell not found". The bootstrap is empty on purpose: the spell tags only ever use
-    /// `addOptional`/`addOptionalTag`, so no entries have to exist.
+    /// "Registry spell_engine:spell not found".
     @Override
     public void buildRegistry(RegistryBuilder registryBuilder) {
-        registryBuilder.addRegistry(SpellRegistry.KEY, context -> { });
+        RPGSeriesDataGen.buildRegistry(registryBuilder);
     }
 
     public static class ItemTagGenerator extends RPGSeriesDataGen.ItemTagGenerator {
