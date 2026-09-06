@@ -151,7 +151,7 @@ public class WizardSpells {
 
     public static Entry arcane_bolt = add(arcane_bolt());
     private static Entry arcane_bolt() {
-        var id = Identifier.of(WizardsMod.ID, "arcane_bolt");
+        var id = new Identifier(WizardsMod.ID, "arcane_bolt");
         var name = "Arcane Bolt";
         var description = "Shoots a bolt of energy, causing {damage} arcane spell damage.";
         var spell = SpellBuilder.createWeaponSpell();
@@ -205,7 +205,7 @@ public class WizardSpells {
 
     public static Entry arcane_blast = add(arcane_blast());
     private static Entry arcane_blast() {
-        var id = Identifier.of(WizardsMod.ID, "arcane_blast");
+        var id = new Identifier(WizardsMod.ID, "arcane_blast");
         var name = "Arcane Blast";
         var description = "Blasts the target, causing {damage} arcane damage. Grants Arcane Charge, stacking up to {effect_amplifier_cap} times.";
         var spell = SpellBuilder.createWeaponSpell();
@@ -254,7 +254,7 @@ public class WizardSpells {
 
     public static Entry arcane_missile = add(arcane_missile());
     private static Entry arcane_missile() {
-        var id = Identifier.of(WizardsMod.ID, "arcane_missile");
+        var id = new Identifier(WizardsMod.ID, "arcane_missile");
         var name = "Arcane Missiles";
         var description = "Continuously shoots bolts of energy piercing thru {pierce} targets, causing {damage} arcane damage every second.";
         var spell = SpellBuilder.createSpellActive();
@@ -324,7 +324,7 @@ public class WizardSpells {
 
     public static Entry arcane_explosion = add(arcane_explosion());
     private static Entry arcane_explosion() {
-        var id = Identifier.of(WizardsMod.ID, "arcane_explosion");
+        var id = new Identifier(WizardsMod.ID, "arcane_explosion");
         var name = "Arcane Explosion";
         var description = "Creates a magical explosion around you, causing {damage} arcane spell damage to nearby enemies.";
         var spell = SpellBuilder.createSpellActive();
@@ -386,7 +386,7 @@ public class WizardSpells {
 
     public static Entry arcane_beam = add(arcane_beam());
     private static Entry arcane_beam() {
-        var id = Identifier.of(WizardsMod.ID, "arcane_beam");
+        var id = new Identifier(WizardsMod.ID, "arcane_beam");
         var name = "Arcane Beam";
         var description = "Channels a beam of energy, dealing {damage} arcane damage every second. Consumes all Arcane Charges.";
         var spell = SpellBuilder.createSpellActive();
@@ -465,7 +465,7 @@ public class WizardSpells {
     private static Entry arcane_barrage() {
         var name = "Arcane Barrage";
         var description = "Conjures {summon_count} Arcane Emitters behind you, firing at your target or where you aim. They last {summon_duration} sec and are empowered by your Arcane Spell Power.";
-        var id = Identifier.of(WizardsMod.ID, "arcane_barrage");
+        var id = new Identifier(WizardsMod.ID, "arcane_barrage");
         var spell = SpellBuilder.createSpellActive();
         spell.school = SpellSchools.ARCANE;
         spell.tier = 3;
@@ -492,7 +492,7 @@ public class WizardSpells {
 
     public static Entry arcane_blink = add(arcane_blink());
     private static Entry arcane_blink() {
-        var id = Identifier.of(WizardsMod.ID, "arcane_blink");
+        var id = new Identifier(WizardsMod.ID, "arcane_blink");
         var name = "Blink";
         var description = "Teleports you forwards for {teleport_distance} blocks.";
         var spell = SpellBuilder.createSpellActive();
@@ -507,7 +507,7 @@ public class WizardSpells {
 
         spell.release = new Spell.Release();
         spell.release.animation = PlayerAnimation.of("spell_engine:one_handed_area_release");
-        spell.release.sound = new Sound(Identifier.of("minecraft", "entity.enderman.teleport"));
+        spell.release.sound = new Sound(new Identifier("minecraft", "entity.enderman.teleport"));
 
         var teleport = new Spell.Impact();
         teleport.action = new Spell.Impact.Action();
@@ -548,12 +548,12 @@ public class WizardSpells {
 
     public static Entry arcane_evocation = add(arcane_evocation());
     private static Entry arcane_evocation() {
-        var id = Identifier.of(WizardsMod.ID, "arcane_evocation");
+        var id = new Identifier(WizardsMod.ID, "arcane_evocation");
         var name = "Evocation";
         var description = "Channel to gain Evocation, stacking up to {effect_amplifier_cap} times, lasting {effect_duration} sec. Each stack increases spell critical strike chance and spell haste by "
-                + TooltipTokens.effect(WizardsEffects.evocation.id, 0, Identifier.of("spell_power:critical_chance"))
+                + TooltipTokens.effect(WizardsEffects.evocation.id, 0, new Identifier("spell_power:critical_chance"))
                 + ", but also increases damage you take by "
-                + TooltipTokens.effect(WizardsEffects.evocation.id, 0, Identifier.of("spell_engine:damage_taken"))
+                + TooltipTokens.effect(WizardsEffects.evocation.id, 0, new Identifier("spell_engine:damage_taken"))
                 + ".";
         var spell = SpellBuilder.createSpellActive();
         spell.school = SpellSchools.ARCANE;
@@ -600,7 +600,7 @@ public class WizardSpells {
 
     public static Entry fire_scorch = add(fire_scorch());
     private static Entry fire_scorch() {
-        var id = Identifier.of(WizardsMod.ID, "fire_scorch");
+        var id = new Identifier(WizardsMod.ID, "fire_scorch");
         var name = "Scorch";
         var description = "Scorches the target, causing {damage} fire spell damage and setting it on fire.";
         var spell = SpellBuilder.createWeaponSpell();
@@ -639,7 +639,7 @@ public class WizardSpells {
 
     public static Entry fireball = add(fireball());
     private static Entry fireball() {
-        var id = Identifier.of(WizardsMod.ID, "fireball");
+        var id = new Identifier(WizardsMod.ID, "fireball");
         var name = "Fireball";
         var description = "Launches an ball of fire, causing up to {damage} fire spell and setting the target on fire.";
         var spell = SpellBuilder.createWeaponSpell();
@@ -702,7 +702,7 @@ public class WizardSpells {
 
     public static Entry fire_blast = add(fire_blast());
     private static Entry fire_blast() {
-        var id = Identifier.of(WizardsMod.ID, "fire_blast");
+        var id = new Identifier(WizardsMod.ID, "fire_blast");
         var name = "Pyroblast";
         var description = "Launches an explosive ball of fire, causing up to {damage} fire spell damage in {impact_range} blocks radius.";
         var spell = SpellBuilder.createWeaponSpell();
@@ -775,7 +775,7 @@ public class WizardSpells {
 
     public static Entry fire_breath = add(fire_breath());
     private static Entry fire_breath() {
-        var id = Identifier.of(WizardsMod.ID, "fire_breath");
+        var id = new Identifier(WizardsMod.ID, "fire_breath");
         var name = "Fire Breath";
         var description = "Incinerates targets in front, dealing up to {damage} fire spell damage every second.";
         var spell = SpellBuilder.createSpellActive();
@@ -836,7 +836,7 @@ public class WizardSpells {
 
     public static Entry fire_slash = add(fire_slash());
     private static Entry fire_slash() {
-        var id = Identifier.of(WizardsMod.ID, "fire_slash");
+        var id = new Identifier(WizardsMod.ID, "fire_slash");
         var name = "Flame Slash";
         var description = "Launches a wide wave of flame, dealing {damage} fire spell damage to enemies in its path. The longer the cast is held, the harder it hits and the larger it grows.";
         var spell = SpellBuilder.createSpellActive();
@@ -917,7 +917,7 @@ public class WizardSpells {
 
     public static Entry fire_meteor = add(fire_meteor());
     private static Entry fire_meteor() {
-        var id = Identifier.of(WizardsMod.ID, "fire_meteor");
+        var id = new Identifier(WizardsMod.ID, "fire_meteor");
         var name = "Meteor";
         var description = "Crashes a meteors on the target, each causing up to {damage} fire spell damage within {impact_range} blocks.";
         var spell = SpellBuilder.createSpellActive();
@@ -1004,7 +1004,7 @@ public class WizardSpells {
 
     public static Entry firestorm = add(firestorm());
     private static Entry firestorm() {
-        var id = Identifier.of(WizardsMod.ID, "fire_storm");
+        var id = new Identifier(WizardsMod.ID, "fire_storm");
         var name = "Firestorm";
         var description = "Incinerates targets around you, dealing up to {damage} fire spell damage every second.";
         var spell = SpellBuilder.createSpellActive();
@@ -1077,7 +1077,7 @@ public class WizardSpells {
 
     public static Entry fire_wall = add(fire_wall());
     private static Entry fire_wall() {
-        var id = Identifier.of(WizardsMod.ID, "fire_wall");
+        var id = new Identifier(WizardsMod.ID, "fire_wall");
         var name = "Wall of Flames";
         var description = "Creates a wall of fire, lasting {cloud_duration} seconds, dealing up to {damage} fire spell damage continuously to enemies passing thru.";
 
@@ -1169,7 +1169,7 @@ public class WizardSpells {
     private static Entry fire_hydra() {
         var name = "Fire Hydra";
         var description = "Conjures a group of {summon_count} Fire Hydra heads near you, attacking nearby enemies. They last {summon_duration} sec and are empowered by your Fire Spell Power.";
-        var id = Identifier.of(WizardsMod.ID, "fire_hydra");
+        var id = new Identifier(WizardsMod.ID, "fire_hydra");
         var spell = SpellBuilder.createSpellActive();
         spell.school = SpellSchools.FIRE;
         spell.tier = 4;
@@ -1195,7 +1195,7 @@ public class WizardSpells {
 
     public static Entry frost_shard = add(frost_shard());
     private static Entry frost_shard() {
-        var id = Identifier.of(WizardsMod.ID, "frost_shard");
+        var id = new Identifier(WizardsMod.ID, "frost_shard");
         var name = "Frost Shard";
         var description = "Launches a frost shard that may bounce of walls, causing {damage} frost spell damage on impact.";
         var spell = SpellBuilder.createWeaponSpell();
@@ -1251,7 +1251,7 @@ public class WizardSpells {
 
     public static Entry frostbolt = add(frostbolt());
     private static Entry frostbolt() {
-        var id = Identifier.of(WizardsMod.ID, "frostbolt");
+        var id = new Identifier(WizardsMod.ID, "frostbolt");
         var name = "Frostbolt";
         var description = "Launches a ball of frost ricocheting to {ricochet} additional nearby targets, causing {damage} frost spell damage and slowing the target on impact.";
         var spell = SpellBuilder.createWeaponSpell();
@@ -1326,7 +1326,7 @@ public class WizardSpells {
 
     public static Entry frost_nova = add(frost_nova());
     private static Entry frost_nova() {
-        var id = Identifier.of(WizardsMod.ID, "frost_nova");
+        var id = new Identifier(WizardsMod.ID, "frost_nova");
         var name = "Frost Nova";
         var description = "Freezes targets around you for {effect_duration} seconds, causing {damage} frost spell damage and blocking their movement. Frozen targets are vulnerable to frost magic.";
         var spell = SpellBuilder.createSpellActive();
@@ -1388,7 +1388,7 @@ public class WizardSpells {
 
     public static Entry frost_spikes = add(frost_spikes());
     private static Entry frost_spikes() {
-        var id = Identifier.of(WizardsMod.ID, "frost_spikes");
+        var id = new Identifier(WizardsMod.ID, "frost_spikes");
         var name = "Frost Spikes";
         var description = "Raises a line of frost spikes from the ground, dealing {damage} frost spell damage and freezing enemies caught in their path for {effect_duration} sec. Frozen targets are vulnerable to frost magic.";
 
@@ -1500,7 +1500,7 @@ public class WizardSpells {
 
     public static Entry frost_shield = add(frost_shield());
     private static Entry frost_shield() {
-        var id = Identifier.of(WizardsMod.ID, "frost_shield");
+        var id = new Identifier(WizardsMod.ID, "frost_shield");
         var name = "Frost Shield";
         var description = "Protects you from attacks, projectiles and fire for {effect_duration} seconds, but also slows down your movement.";
         var spell = SpellBuilder.createSpellActive();
@@ -1542,7 +1542,7 @@ public class WizardSpells {
     private static Entry ice_lance() {
         var name = "Ice Lance";
         var description = "Launches a lance of ice, piercing through all enemies along its path, dealing {damage} frost spell damage and slowing targets for {effect_duration} sec. The longer the cast is held, the harder it hits, the larger and faster the lance, and the further it flies.";
-        var id = Identifier.of(WizardsMod.ID, "frost_lance");
+        var id = new Identifier(WizardsMod.ID, "frost_lance");
         var spell = SpellBuilder.createSpellActive();
         spell.school = SpellSchools.FROST;
         spell.tier = 3;
@@ -1634,7 +1634,7 @@ public class WizardSpells {
 
     public static Entry frost_blizzard = add(frost_blizzard());
     private static Entry frost_blizzard() {
-        var id = Identifier.of(WizardsMod.ID, "frost_blizzard");
+        var id = new Identifier(WizardsMod.ID, "frost_blizzard");
         var name = "Blizzard";
         var description = "Channels a rain of frost shards down onto your target and nearby enemies, dealing up to {damage} frost spell damage slowing the target, in {impact_range} blocks radius.";
         var spell = SpellBuilder.createSpellActive();
@@ -1729,7 +1729,7 @@ public class WizardSpells {
     private static Entry frost_elemental() {
         var name = "Frost Elemental";
         var description = "Summons a Frost Elemental to fight by your side for {summon_duration} sec, empowered by your Frost Spell Power.";
-        var id = Identifier.of(WizardsMod.ID, "frost_elemental");
+        var id = new Identifier(WizardsMod.ID, "frost_elemental");
         var spell = SpellBuilder.createSpellActive();
         spell.school = SpellSchools.FROST;
         spell.tier = 4;

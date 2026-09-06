@@ -1,23 +1,25 @@
 package net.wizards.villager;
 
 import com.google.common.collect.ImmutableSet;
-import net.fabric_extras.structure_pool.api.StructurePoolAPI;
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.util.Identifier;
+import net.minecraft.village.TradeOffer;
 import net.minecraft.village.TradeOffers;
 import net.minecraft.village.VillagerProfession;
 import net.minecraft.world.poi.PointOfInterestType;
-import net.runes.api.RuneItems;
-import net.runes.crafting.RuneCraftingBlock;
-import net.spell_engine.Platform;
 import net.wizards.WizardsMod;
 import net.wizards.item.WizardArmors;
 import net.wizards.item.WizardWeapons;
 import net.wizards.content.WizardsSounds;
+import net.wizards.village.VillageStructures;
 
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -25,20 +27,41 @@ import java.util.Set;
 
 public class WizardVillagers {
     public static final String WIZARD_MERCHANT = "wizard_merchant";
-    public static final Identifier POI_ID = Identifier.of(WizardsMod.ID, WIZARD_MERCHANT);
+    public static final Identifier POI_ID = new Identifier(WizardsMod.ID, WIZARD_MERCHANT);
     public static final int POI_TICKET_COUNT = 1;
     public static final int POI_SEARCH_DISTANCE = 10;
 
+    /// Runes is not on Wizards' compile classpath on the 1.20.1 line (it has no Forge artifact and its
+    /// 1.20.1 Fabric build is a legacy release). Everything Wizards needed from it — the rune-crafting
+    /// workstation block and the three rune items — is addressed by registry id instead, so the mod
+    /// builds and runs with or without Runes installed.
+    public static final Identifier RUNE_CRAFTING_BLOCK_ID = new Identifier("runes", "crafting_altar");
+    public static final Identifier ARCANE_RUNE_ID = new Identifier("runes", "arcane_stone");
+    public static final Identifier FIRE_RUNE_ID = new Identifier("runes", "fire_stone");
+    public static final Identifier FROST_RUNE_ID = new Identifier("runes", "frost_stone");
+
     /// The workstation block states for the wizard-merchant POI. Registration itself is loader-specific
-    /// (Fabric: `PointOfInterestHelper`; NeoForge: a plain `Registry.register` of a `PointOfInterestType`,
-    /// whose block-state mapping NeoForge wires up via its POI registry callback), so it lives in each
+    /// (Fabric: `PointOfInterestHelper`; Forge: a plain `Registry.register` of a `PointOfInterestType`,
+    /// whose block-state mapping Forge wires up via its POI registry callback), so it lives in each
     /// platform's entrypoint — this only exposes the shared state set.
+    ///
+    /// Empty when Runes is absent: the POI type still registers (so the profession and its advancement
+    /// stay valid), it simply has no block that can act as a workstation.
     public static Set<BlockState> poiBlockStates() {
-        return ImmutableSet.copyOf(RuneCraftingBlock.INSTANCE.getStateManager().getStates());
+        var block = runeCraftingBlock();
+        if (block == null) {
+            return ImmutableSet.of();
+        }
+        return ImmutableSet.copyOf(block.getStateManager().getStates());
+    }
+
+    private static Block runeCraftingBlock() {
+        var block = Registries.BLOCK.get(RUNE_CRAFTING_BLOCK_ID);
+        return block == Blocks.AIR ? null : block;
     }
 
     /// The registered wizard-merchant profession, set by {@link #register()}. Read by the loader-specific
-    /// trade-offer registration (Fabric `TradeOfferHelper` / NeoForge `VillagerTradesEvent`).
+    /// trade-offer registration (Fabric `TradeOfferHelper` / Forge `VillagerTradesEvent`).
     public static VillagerProfession PROFESSION;
 
     /// Trade offers per merchant tier (1..5), populated by {@link #register()}. The actual registration
@@ -46,8 +69,8 @@ public class WizardVillagers {
     public static final LinkedHashMap<Integer, List<TradeOffers.Factory>> TRADES = new LinkedHashMap<>();
 
     public static VillagerProfession registerProfession(String name, RegistryKey<PointOfInterestType> workStation) {
-        var id = Identifier.of(WizardsMod.ID, name);
-        return Registry.register(Registries.VILLAGER_PROFESSION, Identifier.of(WizardsMod.ID, name), new VillagerProfession(
+        var id = new Identifier(WizardsMod.ID, name);
+        return Registry.register(Registries.VILLAGER_PROFESSION, new Identifier(WizardsMod.ID, name), new VillagerProfession(
                 id.toString(),
                 (entry) -> {
                     return entry.matchesKey(workStation);
@@ -61,62 +84,39 @@ public class WizardVillagers {
         );
     }
 
-//    private static class Offer {
-//        int level;
-//        ItemStack input;
-//        ItemStack output;
-//        int maxUses;
-//        int experience;
-//        float priceMultiplier;
-//
-//        public Offer(int level, ItemStack input, ItemStack output, int maxUses, int experience, float priceMultiplier) {
-//            this.level = level;
-//            this.input = input;
-//            this.output = output;
-//            this.maxUses = maxUses;
-//            this.experience = experience;
-//            this.priceMultiplier = priceMultiplier;
-//        }
-//
-//        public static Offer buy(int level, ItemStack item, int price, int maxUses, int experience, float priceMultiplier) {
-//            return new Offer(level, item, new ItemStack(Items.EMERALD, price), maxUses, experience, priceMultiplier);
-//        }
-//
-//        public static Offer sell(int level, ItemStack item, int price, int maxUses, int experience, float priceMultiplier) {
-//            return new Offer(level, new ItemStack(Items.EMERALD, price), item, maxUses, experience, priceMultiplier);
-//        }
-//    }
+    /// Sells a Runes item, resolved lazily so registration order (and Runes' presence) does not matter:
+    /// a `TradeOffers.Factory` may return null, which vanilla treats as "no offer".
+    private static TradeOffers.Factory sellRune(Identifier runeId, int price, int count, int maxUses, int experience) {
+        return (entity, random) -> {
+            var item = Registries.ITEM.get(runeId);
+            if (item == Items.AIR) {
+                return null;
+            }
+            // 1.20.1 has no `SellItemFactory(Item, …, float)` overload — only the ItemStack one.
+            return new TradeOffers.SellItemFactory(new ItemStack(item), price, count, maxUses, experience, 0.1f).create(entity, random);
+        };
+    }
+
+    /// 1.20.1 only ships `BuyForOneEmeraldFactory` (always 1 emerald); the 1.21 `BuyItemFactory`
+    /// (item, count, maxUses, experience, emeraldAmount) is rebuilt here on the raw `TradeOffer` ctor.
+    private static TradeOffers.Factory buyForEmeralds(Item item, int count, int maxUses, int experience, int emeralds) {
+        return (entity, random) -> new TradeOffer(
+                new ItemStack(item, count), new ItemStack(Items.EMERALD, emeralds), maxUses, experience, 0.05F);
+    }
 
     public static void register() {
-        if (!Platform.util().isModLoaded("lithostitched")) {
-            // Only inject the village if the Lithostitched is not present
-            StructurePoolAPI.injectAll(WizardsMod.villageConfig.value);
-        }
+        // Vanilla-village structure injection — Fabric-only on 1.20.1 (see VillageStructures).
+        VillageStructures.injectIfAvailable();
+
         PROFESSION = registerProfession(
                 WIZARD_MERCHANT,
                 RegistryKey.of(Registries.POINT_OF_INTEREST_TYPE.getKey(), POI_ID));
-//        List<Offer> wizardMerchantOffers = List.of(
-//                Offer.sell(1, new ItemStack(RuneItems.get(RuneItems.RuneType.ARCANE), 8), 2, 128, 1, 0.01f),
-//                Offer.sell(1, new ItemStack(RuneItems.get(RuneItems.RuneType.FIRE), 8), 2, 128, 1, 0.01f),
-//                Offer.sell(1, new ItemStack(RuneItems.get(RuneItems.RuneType.FROST), 8), 2, 128, 1, 0.01f),
-//                Offer.sell(2, Weapons.wizardStaff.item().getDefaultStack(), 4, 12, 5, 0.1f),
-//                Offer.sell(2, Weapons.noviceWand.item().getDefaultStack(), 4, 12, 5, 0.1f),
-//                Offer.sell(2, Weapons.arcaneWand.item().getDefaultStack(), 18, 12, 8, 0.1f),
-//                Offer.sell(2, Weapons.fireWand.item().getDefaultStack(), 18, 12, 8, 0.1f),
-//                Offer.sell(2, Weapons.frostWand.item().getDefaultStack(), 18, 12, 8, 0.1f),
-//                Offer.buy(2, new ItemStack(Items.WHITE_WOOL, 5), 8, 12, 10, 0.05f),
-//                Offer.buy(2, new ItemStack(Items.LAPIS_LAZULI, 6), 12, 3, 10, 0.05f),
-//                Offer.sell(3, Armors.wizardRobeSet.head.getDefaultStack(), 15, 12, 13, 0.05f),
-//                Offer.sell(3, Armors.wizardRobeSet.feet.getDefaultStack(), 15, 12, 13, 0.05f),
-//                Offer.sell(4, Armors.wizardRobeSet.chest.getDefaultStack(), 20, 12, 15, 0.05f),
-//                Offer.sell(4, Armors.wizardRobeSet.legs.getDefaultStack(), 20, 12, 15, 0.05f)
-//            );
 
         TRADES.clear();
         TRADES.put(1, List.of(
-                new TradeOffers.SellItemFactory(RuneItems.get(RuneItems.RuneType.ARCANE), 2, 8, 128, 3, 0.1f),
-                new TradeOffers.SellItemFactory(RuneItems.get(RuneItems.RuneType.FIRE), 2, 8, 128, 3, 0.1f),
-                new TradeOffers.SellItemFactory(RuneItems.get(RuneItems.RuneType.FROST), 2, 8, 128, 3, 0.1f)
+                sellRune(ARCANE_RUNE_ID, 2, 8, 128, 3),
+                sellRune(FIRE_RUNE_ID, 2, 8, 128, 3),
+                sellRune(FROST_RUNE_ID, 2, 8, 128, 3)
         ));
         TRADES.put(2, List.of(
                 new TradeOffers.SellItemFactory(WizardWeapons.wizardStaff.item(), 4, 1, 12, 18),
@@ -125,16 +125,16 @@ public class WizardVillagers {
                 new TradeOffers.SellItemFactory(WizardWeapons.fireWand.item(), 18, 1, 12, 18),
                 new TradeOffers.SellItemFactory(WizardWeapons.frostWand.item(), 18, 1, 12, 18),
 
-                new TradeOffers.BuyItemFactory(Items.WHITE_WOOL, 10, 12, 5, 6),
-                new TradeOffers.BuyItemFactory(Items.LAPIS_LAZULI, 6, 3, 5, 12)
+                buyForEmeralds(Items.WHITE_WOOL, 10, 12, 5, 6),
+                buyForEmeralds(Items.LAPIS_LAZULI, 6, 3, 5, 12)
         ));
         TRADES.put(3, List.of(
-                new TradeOffers.SellItemFactory(WizardArmors.wizardRobeSet.head, 15, 1, 12, 16, 0.1F),
-                new TradeOffers.SellItemFactory(WizardArmors.wizardRobeSet.feet, 15, 1, 12, 16, 0.1F)
+                new TradeOffers.SellItemFactory(new ItemStack(WizardArmors.wizardRobeSet.head), 15, 1, 12, 16, 0.1F),
+                new TradeOffers.SellItemFactory(new ItemStack(WizardArmors.wizardRobeSet.feet), 15, 1, 12, 16, 0.1F)
         ));
         TRADES.put(4, List.of(
-                new TradeOffers.SellItemFactory(WizardArmors.wizardRobeSet.chest, 20, 1, 12, 16, 0.1F),
-                new TradeOffers.SellItemFactory(WizardArmors.wizardRobeSet.legs, 20, 1, 12, 16, 0.1F)
+                new TradeOffers.SellItemFactory(new ItemStack(WizardArmors.wizardRobeSet.chest), 20, 1, 12, 16, 0.1F),
+                new TradeOffers.SellItemFactory(new ItemStack(WizardArmors.wizardRobeSet.legs), 20, 1, 12, 16, 0.1F)
         ));
         TRADES.put(5, List.of(
                 (entity, random) -> new TradeOffers.SellEnchantedToolFactory(

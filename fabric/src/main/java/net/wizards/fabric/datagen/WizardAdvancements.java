@@ -3,29 +3,29 @@ package net.wizards.fabric.datagen;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricAdvancementProvider;
 import net.minecraft.advancement.Advancement;
-import net.minecraft.advancement.AdvancementCriterion;
-import net.minecraft.advancement.AdvancementEntry;
 import net.minecraft.advancement.AdvancementFrame;
-import net.minecraft.advancement.criterion.Criteria;
+import net.minecraft.advancement.AdvancementRewards;
+import net.minecraft.advancement.criterion.CriterionConditions;
 import net.minecraft.advancement.criterion.InventoryChangedCriterion;
 import net.minecraft.advancement.criterion.VillagerTradeCriterion;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.predicate.NbtPredicate;
 import net.minecraft.predicate.entity.EntityPredicate;
+import net.minecraft.predicate.entity.LootContextPredicate;
+import net.minecraft.predicate.item.ItemPredicate;
 import net.minecraft.registry.Registries;
-import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
-import net.spell_engine.api.spell.SpellDataComponents;
+import net.spell_engine.api.item.SpellItemData;
 import net.spell_engine.misc.criteria.SpellCastCriteria;
 import net.spell_engine.spellbinding.SpellBindingCriteria;
 import net.spell_engine.spellbinding.SpellBookCreationCriteria;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
-import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
 
 /**
@@ -42,21 +42,23 @@ import java.util.function.Consumer;
 public class WizardAdvancements extends FabricAdvancementProvider {
     public static final String NAMESPACE = "rpg_series";
 
-    public WizardAdvancements(FabricDataOutput output, CompletableFuture<RegistryWrapper.WrapperLookup> registryLookup) {
-        super(output, registryLookup);
+    /// 1.20.1 / Fabric API 0.92: `FabricAdvancementProvider` is registry-independent — a 1-arg constructor
+    /// and `generateAdvancement(Consumer<Advancement>)` (there is no `AdvancementEntry` wrapper yet).
+    public WizardAdvancements(FabricDataOutput output) {
+        super(output);
     }
 
     @Override
-    public void generateAdvancement(RegistryWrapper.WrapperLookup registryLookup, Consumer<AdvancementEntry> consumer) {
+    public void generateAdvancement(Consumer<Advancement> consumer) {
         for (var entry : entries()) {
             consumer.accept(entry.entry());
         }
     }
 
     /** A generated advancement paired with the plain-text strings behind its (id-derived) translation keys. */
-    public record Entry(AdvancementEntry entry, String title, String description) {
-        public String titleKey() { return translationKey(entry.id(), "title"); }
-        public String descriptionKey() { return translationKey(entry.id(), "description"); }
+    public record Entry(Advancement entry, String title, String description) {
+        public String titleKey() { return translationKey(entry.getId(), "title"); }
+        public String descriptionKey() { return translationKey(entry.getId(), "description"); }
     }
 
     static String translationKey(Identifier id, String suffix) {
@@ -133,7 +135,9 @@ public class WizardAdvancements extends FabricAdvancementProvider {
         list.add(task("obtain_wizard_robes", "rpg_series:misc_items", item("wizards:wizard_robe_chest"),
                 "wizard_robes", wizardRobes(),
                 "A Wizard Is Never Late", "Acquire a full set of Wizard Robes"));
-        list.add(secret("trade_with_wizard", "rpg_series:misc_items", item("runes:fire_stone"),
+        // 1.20.1: Runes is optional (no Forge artifact), so the icon must be an item that always exists —
+        // an unresolvable icon id makes the whole advancement fail to load.
+        list.add(secret("trade_with_wizard", "rpg_series:misc_items", item("minecraft:emerald"),
                 "trade_with_wizard", villagerTrade("wizards:wizard_merchant"),
                 "Magic Sale", "Trade with a Wizard Merchant villager"));
 
@@ -145,37 +149,45 @@ public class WizardAdvancements extends FabricAdvancementProvider {
 
     /** Visible task: toast + chat announcement on. */
     private static Entry task(String idPath, String parent, ItemStack icon,
-                              String criterionName, AdvancementCriterion<?> criterion, String title, String description) {
+                              String criterionName, CriterionConditions criterion, String title, String description) {
         return advancement(idPath, parent, icon, AdvancementFrame.TASK, true, true, false, criterionName, criterion, title, description);
     }
 
     /** Challenge-framed task. */
     private static Entry challenge(String idPath, String parent, ItemStack icon,
-                                   String criterionName, AdvancementCriterion<?> criterion, String title, String description) {
+                                   String criterionName, CriterionConditions criterion, String title, String description) {
         return advancement(idPath, parent, icon, AdvancementFrame.CHALLENGE, true, true, false, criterionName, criterion, title, description);
     }
 
     /** Task without toast or chat announcement (used for the practice/empowerment milestones). */
     private static Entry silent(String idPath, String parent, ItemStack icon,
-                                String criterionName, AdvancementCriterion<?> criterion, String title, String description) {
+                                String criterionName, CriterionConditions criterion, String title, String description) {
         return advancement(idPath, parent, icon, AdvancementFrame.TASK, false, false, false, criterionName, criterion, title, description);
     }
 
     /** Hidden task: not shown in the tree until earned. */
     private static Entry secret(String idPath, String parent, ItemStack icon,
-                                String criterionName, AdvancementCriterion<?> criterion, String title, String description) {
+                                String criterionName, CriterionConditions criterion, String title, String description) {
         return advancement(idPath, parent, icon, AdvancementFrame.TASK, true, true, true, criterionName, criterion, title, description);
     }
 
-    @SuppressWarnings("deprecation") // Advancement.Builder.parent(Identifier) is the only way to reference parents built outside this provider.
+    /// 1.20.1 `Advancement.Builder#build` refuses to build unless the parent *object* resolves
+    /// (`findParent(id -> null)`), so `parent(Identifier)` alone throws "Tried to build incomplete
+    /// advancement!". Cross-mod parents (the shared `rpg_series:*` tree) are therefore represented by a
+    /// bare stub carrying only the id — `Advancement#createTask` serialises `parent` from that id, so the
+    /// emitted JSON is identical to a hand-written `"parent": "rpg_series:..."`.
+    private static Advancement parentStub(Identifier parentId) {
+        return new Advancement(parentId, null, null, AdvancementRewards.NONE, Map.of(), new String[0][], false);
+    }
+
     private static Entry advancement(String idPath, String parent, ItemStack icon, AdvancementFrame frame,
                                      boolean showToast, boolean announceToChat, boolean hidden,
-                                     String criterionName, AdvancementCriterion<?> criterion, String title, String description) {
-        var id = Identifier.of(NAMESPACE, idPath);
+                                     String criterionName, CriterionConditions criterion, String title, String description) {
+        var id = new Identifier(NAMESPACE, idPath);
         // The original data-pack advancements did not send telemetry events (vanilla default is off),
         // so keep them untelemetered rather than using the telemetered Advancement.Builder.create().
         var entry = Advancement.Builder.createUntelemetered()
-                .parent(Identifier.of(parent))
+                .parent(parentStub(new Identifier(parent)))
                 .display(
                         icon,
                         Text.translatable(translationKey(id, "title")),
@@ -193,48 +205,47 @@ public class WizardAdvancements extends FabricAdvancementProvider {
     // MARK: Icon helpers
 
     private static ItemStack item(String itemId) {
-        return new ItemStack(Registries.ITEM.get(Identifier.of(itemId)));
+        return new ItemStack(Registries.ITEM.get(new Identifier(itemId)));
     }
 
     private static ItemStack spellBookIcon(String school) {
-        var stack = new ItemStack(Registries.ITEM.get(Identifier.of("spell_engine", "spell_book")));
-        stack.set(SpellDataComponents.ITEM_MODEL, Identifier.of("wizards", "item/spell_book/" + school));
+        var stack = new ItemStack(Registries.ITEM.get(new Identifier("spell_engine", "spell_book")));
+        // 1.20.1: no data components — the custom item model lives in the `spell_engine` NBT sub-compound.
+        SpellItemData.setItemModel(stack, new Identifier("wizards", "item/spell_book/" + school));
         return stack;
     }
 
     // MARK: Criterion helpers
 
-    private static AdvancementCriterion<?> spellBookCreation(String spellPool) {
-        return SpellBookCreationCriteria.INSTANCE.create(
-                new SpellBookCreationCriteria.Condition(Optional.empty(), Optional.of(spellPool)));
+    /// 1.20.1 criteria are plain `AbstractCriterionConditions` instances handed to
+    /// `Advancement.Builder#criterion(String, CriterionConditions)` — there is no `Criterion` wrapper.
+    private static CriterionConditions spellBookCreation(String spellPool) {
+        return new SpellBookCreationCriteria.Condition(Optional.of(spellPool));
     }
 
-    private static AdvancementCriterion<?> spellBinding(String spellPool, boolean complete) {
-        return SpellBindingCriteria.INSTANCE.create(
-                new SpellBindingCriteria.Condition(Optional.empty(), Optional.of(spellPool), Optional.of(complete)));
+    private static CriterionConditions spellBinding(String spellPool, boolean complete) {
+        return new SpellBindingCriteria.Condition(Optional.of(spellPool), Optional.of(complete));
     }
 
-    private static AdvancementCriterion<?> spellCast(String spell) {
-        return SpellCastCriteria.INSTANCE.create(
-                new SpellCastCriteria.Condition(Optional.empty(), Optional.of(spell), Optional.empty()));
+    private static CriterionConditions spellCast(String spell) {
+        return new SpellCastCriteria.Condition(LootContextPredicate.EMPTY, spell, null);
     }
 
-    private static AdvancementCriterion<?> wizardRobes() {
+    private static CriterionConditions wizardRobes() {
         return InventoryChangedCriterion.Conditions.items(
-                Registries.ITEM.get(Identifier.of("wizards:wizard_robe_head")),
-                Registries.ITEM.get(Identifier.of("wizards:wizard_robe_chest")),
-                Registries.ITEM.get(Identifier.of("wizards:wizard_robe_legs")),
-                Registries.ITEM.get(Identifier.of("wizards:wizard_robe_feet")));
+                Registries.ITEM.get(new Identifier("wizards:wizard_robe_head")),
+                Registries.ITEM.get(new Identifier("wizards:wizard_robe_chest")),
+                Registries.ITEM.get(new Identifier("wizards:wizard_robe_legs")),
+                Registries.ITEM.get(new Identifier("wizards:wizard_robe_feet")));
     }
 
-    private static AdvancementCriterion<?> villagerTrade(String profession) {
+    private static CriterionConditions villagerTrade(String profession) {
         var villagerData = new NbtCompound();
         villagerData.putString("profession", profession);
         var nbt = new NbtCompound();
         nbt.put("VillagerData", villagerData);
-        var villager = EntityPredicate.contextPredicateFromEntityPredicate(
-                EntityPredicate.Builder.create().nbt(new NbtPredicate(nbt)));
-        return Criteria.VILLAGER_TRADE.create(
-                new VillagerTradeCriterion.Conditions(Optional.empty(), Optional.of(villager), Optional.empty()));
+        var villager = EntityPredicate.asLootContextPredicate(
+                EntityPredicate.Builder.create().nbt(new NbtPredicate(nbt)).build());
+        return new VillagerTradeCriterion.Conditions(LootContextPredicate.EMPTY, villager, ItemPredicate.ANY);
     }
 }

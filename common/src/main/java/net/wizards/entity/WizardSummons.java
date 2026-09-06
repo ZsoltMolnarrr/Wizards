@@ -1,7 +1,9 @@
 package net.wizards.entity;
 
 import net.minecraft.entity.attribute.EntityAttributeModifier;
+import net.minecraft.entity.attribute.EntityAttribute;
 import net.minecraft.entity.attribute.EntityAttributes;
+import net.minecraft.registry.Registries;
 import net.spell_engine.api.datagen.SpellBuilder.Placements;
 import net.spell_engine.api.spell.Spell.Impact.Action.Summon;
 import net.spell_engine.api.spell.fx.ParticleGroupBuilder;
@@ -307,6 +309,11 @@ public class WizardSummons {
 
     // MARK: Scaling helpers
 
+    /// 1.20.1 `EntityAttribute` has no `getIdAsString()` — resolve through the registry instead.
+    private static String attributeId(EntityAttribute attribute) {
+        return Registries.ATTRIBUTE.getId(attribute).toString();
+    }
+
     /// Flat spell power every Wizard summon starts from, before the owner-scaled portion and on top of
     /// the entity's own innate base attribute. Uniform across the three summons by design — what varies
     /// per summon is the coefficient each one passes to {@link #schoolCombatScaling}.
@@ -329,14 +336,14 @@ public class WizardSummons {
         var s = school.id.toString();
         var entries = new ArrayList<AttributeScaling.Entry>();
         if (defensiveMultiplier > 0) {
-            entries.add(scalingEntry(EntityAttributes.GENERIC_MAX_HEALTH.getIdAsString(), s, 0, 2.0 * defensiveMultiplier));
-            entries.add(scalingEntry(EntityAttributes.GENERIC_ARMOR.getIdAsString(), s, 10 * defensiveMultiplier, 0.1 * defensiveMultiplier));
+            entries.add(scalingEntry(attributeId(EntityAttributes.GENERIC_MAX_HEALTH), s, 0, 2.0 * defensiveMultiplier));
+            entries.add(scalingEntry(attributeId(EntityAttributes.GENERIC_ARMOR), s, 10 * defensiveMultiplier, 0.1 * defensiveMultiplier));
         }
-        entries.add(scalingEntry(EntityAttributes.GENERIC_ATTACK_DAMAGE.getIdAsString(), s, 0, 0.5));
+        entries.add(scalingEntry(attributeId(EntityAttributes.GENERIC_ATTACK_DAMAGE), s, 0, 0.5));
         entries.add(scalingEntry(s, s, SPELL_POWER_BASE, spellPowerCoefficient)); // spell power feeds back into the school attribute
-        entries.add(scalingEntry(EntityAttributes.GENERIC_ATTACK_KNOCKBACK.getIdAsString(), s, 0, 0.1));
+        entries.add(scalingEntry(attributeId(EntityAttributes.GENERIC_ATTACK_KNOCKBACK), s, 0, 0.1));
         if (defensiveMultiplier > 0) {
-            entries.add(scalingEntry(EntityAttributes.GENERIC_KNOCKBACK_RESISTANCE.getIdAsString(), s, 5 * defensiveMultiplier, 0.05 * defensiveMultiplier));
+            entries.add(scalingEntry(attributeId(EntityAttributes.GENERIC_KNOCKBACK_RESISTANCE), s, 5 * defensiveMultiplier, 0.05 * defensiveMultiplier));
         }
         return entries;
     }
@@ -348,7 +355,7 @@ public class WizardSummons {
         var entry = new AttributeScaling.Entry();
         entry.attribute_id = targetAttribute;
         entry.modifiers = List.of(new AttributeScaling.Entry.OwnerModifier(
-                ownerAttribute, EntityAttributeModifier.Operation.ADD_VALUE, base, coefficient));
+                ownerAttribute, EntityAttributeModifier.Operation.ADDITION, base, coefficient));
         return entry;
     }
 

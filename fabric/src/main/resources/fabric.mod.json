@@ -35,12 +35,16 @@
     "wizards.mixins.json"
   ],
   "depends": {
-    "minecraft": ">=${minecraft_compat_version}",
-    "fabricloader": ">=${fabric_loader_version}",
-    "armor_model_api": ">=${armor_model_api_version}",
-    "spell_engine": ">=${spell_engine_version}",
-    "runes": ">=${runes_version}",
+    "minecraft": "~1.20.1",
+    "java": ">=17",
+    "fabricloader": ">=0.15.0",
+    "fabric-api": ">=0.92.0",
+    "armor_model_api": ">=1.0.0",
+    "spell_engine": ">=1.10.5",
     "structure_pool_api": "*"
+  },
+  "recommends": {
+    "runes": "*"
   },
   "custom": {
     "modmenu": {

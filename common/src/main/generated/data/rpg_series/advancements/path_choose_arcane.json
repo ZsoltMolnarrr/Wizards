@@ -1,0 +1,33 @@
+{
+  "parent": "rpg_series:classes",
+  "criteria": {
+    "book": {
+      "conditions": {
+        "spell_pool": "wizards:spell_book/arcane"
+      },
+      "trigger": "spell_engine:spell_book_creation"
+    }
+  },
+  "display": {
+    "announce_to_chat": true,
+    "description": {
+      "translate": "advancements.rpg_series.path_choose_arcane.description"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "spell_engine:spell_book",
+      "nbt": "{spell_engine:{item_model:\"wizards:item/spell_book/arcane\"}}"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "advancements.rpg_series.path_choose_arcane.title"
+    }
+  },
+  "requirements": [
+    [
+      "book"
+    ]
+  ],
+  "sends_telemetry_event": false
+}

@@ -94,7 +94,7 @@
                 "modifiers": [
                   {
                     "attribute_id": "spell_power:arcane",
-                    "operation": "ADD_VALUE",
+                    "operation": "ADDITION",
                     "base": 0.0,
                     "coefficient": 0.5
                   }
@@ -105,7 +105,7 @@
                 "modifiers": [
                   {
                     "attribute_id": "spell_power:arcane",
-                    "operation": "ADD_VALUE",
+                    "operation": "ADDITION",
                     "base": 1.5,
                     "coefficient": 0.25
                   }
@@ -116,7 +116,7 @@
                 "modifiers": [
                   {
                     "attribute_id": "spell_power:arcane",
-                    "operation": "ADD_VALUE",
+                    "operation": "ADDITION",
                     "base": 0.0,
                     "coefficient": 0.1
                   }

@@ -57,7 +57,7 @@ public class WizardsClientMod {
         scaleUp.easing = Easing.EASE_OUT_BACK;
 
         var effect = new ModelEffect();
-        effect.model_id = Identifier.of(WizardsMod.ID, "spell_effect/frost_trap").toString();
+        effect.model_id = new Identifier(WizardsMod.ID, "spell_effect/frost_trap").toString();
         effect.light_emission = LightEmission.GLOW_TRANSLUCENT;
         effect.duration = 40;
         effect.initial = List.of(translateInitial, scaleInitial);

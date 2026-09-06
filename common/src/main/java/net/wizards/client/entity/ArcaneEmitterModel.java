@@ -10,7 +10,7 @@ import net.wizards.WizardsMod;
 import net.wizards.entity.ArcaneEmitterEntity;
 
 public class ArcaneEmitterModel extends SinglePartEntityModel<ArcaneEmitterEntity> {
-    public static final EntityModelLayer LAYER = new EntityModelLayer(Identifier.of(WizardsMod.ID, "arcane_emitter"), "main");
+    public static final EntityModelLayer LAYER = new EntityModelLayer(new Identifier(WizardsMod.ID, "arcane_emitter"), "main");
 
 	private final ModelPart arcane_missile_small_portal;
 	private final ModelPart portal_part_1;
@@ -61,7 +61,9 @@ public class ArcaneEmitterModel extends SinglePartEntityModel<ArcaneEmitterEntit
 	}
 
 	@Override
-	public void render(MatrixStack matrices, VertexConsumer vertices, int light, int overlay, int color) {
-		arcane_missile_small_portal.render(matrices, vertices, light, overlay, color);
+	public void render(MatrixStack matrices, VertexConsumer vertices, int light, int overlay,
+					   float red, float green, float blue, float alpha) {
+		// 1.20.1: `Model#render` takes four float colour channels, not a packed ARGB int.
+		arcane_missile_small_portal.render(matrices, vertices, light, overlay, red, green, blue, alpha);
 	}
 }

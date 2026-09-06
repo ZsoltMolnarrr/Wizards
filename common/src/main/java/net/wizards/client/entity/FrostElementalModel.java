@@ -111,7 +111,7 @@ public class FrostElementalModel extends SinglePartEntityModel<FrostElementalEnt
 
 	// Basic render features
 
-	public static final EntityModelLayer TEXTURE = new EntityModelLayer(Identifier.of(WizardsMod.ID, "frost_elemental"), "main");
+	public static final EntityModelLayer TEXTURE = new EntityModelLayer(new Identifier(WizardsMod.ID, "frost_elemental"), "main");
 
 	private void setHeadAngles(float headYaw, float headPitch) {
 		headYaw = MathHelper.clamp(headYaw, -60, 60);
@@ -126,8 +126,10 @@ public class FrostElementalModel extends SinglePartEntityModel<FrostElementalEnt
 	}
 
 	@Override
-	public void render(MatrixStack matrices, VertexConsumer vertices, int light, int overlay, int color) {
-		root.render(matrices, vertices, light, overlay, color);
+	public void render(MatrixStack matrices, VertexConsumer vertices, int light, int overlay,
+					   float red, float green, float blue, float alpha) {
+		// 1.20.1: `Model#render` takes four float colour channels, not a packed ARGB int.
+		root.render(matrices, vertices, light, overlay, red, green, blue, alpha);
 	}
 
 	// Animations

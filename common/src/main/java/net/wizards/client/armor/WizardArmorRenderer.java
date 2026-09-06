@@ -35,8 +35,8 @@ public final class WizardArmorRenderer {
 
     private static GeoArmorRenderer make(String modelName, String textureName, String trimTextureName) {
         return GeoArmorRenderer.of(
-                Identifier.of(WizardsMod.ID, "geo/" + modelName + ".geo.json"),
-                Identifier.of(WizardsMod.ID, "textures/armor/" + textureName + ".png"))
-                .trim(Identifier.of(WizardsMod.ID, "armor/trim/" + trimTextureName), false);
+                new Identifier(WizardsMod.ID, "geo/" + modelName + ".geo.json"),
+                new Identifier(WizardsMod.ID, "textures/armor/" + textureName + ".png"))
+                .trim(new Identifier(WizardsMod.ID, "armor/trim/" + trimTextureName), false);
     }
 }

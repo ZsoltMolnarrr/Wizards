@@ -1,0 +1,34 @@
+{
+  "parent": "rpg_series:spell_novice_frost",
+  "criteria": {
+    "bind": {
+      "conditions": {
+        "complete": true,
+        "spell_pool": "wizards:spell_book/frost"
+      },
+      "trigger": "spell_engine:spell_binding"
+    }
+  },
+  "display": {
+    "announce_to_chat": true,
+    "description": {
+      "translate": "advancements.rpg_series.spell_master_frost.description"
+    },
+    "frame": "challenge",
+    "hidden": false,
+    "icon": {
+      "item": "wizards:staff_netherite_frost",
+      "nbt": "{Damage:0}"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "advancements.rpg_series.spell_master_frost.title"
+    }
+  },
+  "requirements": [
+    [
+      "bind"
+    ]
+  ],
+  "sends_telemetry_event": false
+}

@@ -1,0 +1,7 @@
+{
+  "values": [
+    { "id": "runes:arcane_stone", "required": false },
+    { "id": "runes:fire_stone", "required": false },
+    { "id": "runes:frost_stone", "required": false }
+  ]
+}

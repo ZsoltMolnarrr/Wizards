@@ -1,0 +1,57 @@
+modLoader = "javafml"
+loaderVersion = "[47,)"
+issueTrackerURL = "https://github.com/ZsoltMolnarrr/Wizards/issues"
+license = "All Rights Reserved"
+
+[[mods]]
+modId = "wizards"
+version = "${version}"
+displayName = "Wizards (RPG Series)"
+authors = "Daedelus"
+description = '''
+Destroy your enemies with Arcane, Fire and Frost magic.
+'''
+logoFile = "icon.png"
+
+[[dependencies.wizards]]
+modId = "forge"
+mandatory = true
+versionRange = "[47,)"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.wizards]]
+modId = "minecraft"
+mandatory = true
+versionRange = "[1.20.1,)"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.wizards]]
+modId = "armor_model_api"
+mandatory = true
+versionRange = "[1.0.0,)"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.wizards]]
+modId = "spell_engine"
+mandatory = true
+versionRange = "[1.10.5,)"
+ordering = "AFTER"
+side = "BOTH"
+
+# Runes has no Forge artifact on 1.20.1. Wizards no longer compiles against it — the wizard-merchant
+# workstation and its rune trades are resolved by registry id and simply stay inert when it is absent.
+[[dependencies.wizards]]
+modId = "runes"
+mandatory = false
+versionRange = "*"
+ordering = "AFTER"
+side = "BOTH"
+
+# StructurePoolAPI has no Forge artifact on 1.20.1; vanilla-village structure injection is Fabric-only
+# (Repurposed Structures / Lithostitched data-driven injection still works on both loaders).
+
+# Mixin configs are declared in the jar MANIFEST (`MixinConfigs:`) by Loom (`loom.forge.mixinConfig`),
+# not in this file — the `[[mixins]]` table is NeoForge-only.

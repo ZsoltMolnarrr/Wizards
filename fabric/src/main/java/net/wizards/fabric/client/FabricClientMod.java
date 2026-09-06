@@ -26,8 +26,9 @@ public final class FabricClientMod implements ClientModInitializer {
         EntityRendererRegistry.register(WizardEntities.FIRE_HYDRA.type, FireHydraRenderer::new);
 
         // Replay deferred Fire Hydra rendering after translucent terrain (see FireHydraRenderer).
+        // 1.20.1 / Fabric API 0.92: WorldRenderContext exposes a plain `tickDelta()` (no RenderTickCounter).
         WorldRenderEvents.AFTER_TRANSLUCENT.register(context ->
                 FireHydraRenderer.renderAfterTranslucent(context.matrixStack(), context.camera(),
-                        context.tickCounter().getTickDelta(true)));
+                        context.tickDelta()));
     }
 }

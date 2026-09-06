@@ -1,0 +1,40 @@
+{
+  "parent": "rpg_series:misc_items",
+  "criteria": {
+    "trade_with_wizard": {
+      "conditions": {
+        "villager": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "nbt": "{VillagerData:{profession:\"wizards:wizard_merchant\"}}"
+            }
+          }
+        ]
+      },
+      "trigger": "minecraft:villager_trade"
+    }
+  },
+  "display": {
+    "announce_to_chat": true,
+    "description": {
+      "translate": "advancements.rpg_series.trade_with_wizard.description"
+    },
+    "frame": "task",
+    "hidden": true,
+    "icon": {
+      "item": "minecraft:emerald"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "advancements.rpg_series.trade_with_wizard.title"
+    }
+  },
+  "requirements": [
+    [
+      "trade_with_wizard"
+    ]
+  ],
+  "sends_telemetry_event": false
+}

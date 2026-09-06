@@ -20,7 +20,7 @@ import java.util.List;
 
 public class FireHydraRenderer extends MobEntityRenderer<FireHydraEntity, FireHydraModel> {
     public static final Identifier TEXTURE =
-            Identifier.of(WizardsMod.ID, "textures/entity/fire_hydra.png");
+            new Identifier(WizardsMod.ID, "textures/entity/fire_hydra.png");
 
     // The Fire Hydra uses a translucent, non-depth-writing render layer. During the normal entity
     // pass (which runs before translucent terrain, particles and clouds) the later passes paint over

@@ -126,7 +126,7 @@
                 "modifiers": [
                   {
                     "attribute_id": "spell_power:fire",
-                    "operation": "ADD_VALUE",
+                    "operation": "ADDITION",
                     "base": 0.0,
                     "coefficient": 2.0
                   }
@@ -137,7 +137,7 @@
                 "modifiers": [
                   {
                     "attribute_id": "spell_power:fire",
-                    "operation": "ADD_VALUE",
+                    "operation": "ADDITION",
                     "base": 10.0,
                     "coefficient": 0.1
                   }
@@ -148,7 +148,7 @@
                 "modifiers": [
                   {
                     "attribute_id": "spell_power:fire",
-                    "operation": "ADD_VALUE",
+                    "operation": "ADDITION",
                     "base": 0.0,
                     "coefficient": 0.5
                   }
@@ -159,7 +159,7 @@
                 "modifiers": [
                   {
                     "attribute_id": "spell_power:fire",
-                    "operation": "ADD_VALUE",
+                    "operation": "ADDITION",
                     "base": 1.5,
                     "coefficient": 0.35
                   }
@@ -170,7 +170,7 @@
                 "modifiers": [
                   {
                     "attribute_id": "spell_power:fire",
-                    "operation": "ADD_VALUE",
+                    "operation": "ADDITION",
                     "base": 0.0,
                     "coefficient": 0.1
                   }
@@ -181,7 +181,7 @@
                 "modifiers": [
                   {
                     "attribute_id": "spell_power:fire",
-                    "operation": "ADD_VALUE",
+                    "operation": "ADDITION",
                     "base": 5.0,
                     "coefficient": 0.05
                   }

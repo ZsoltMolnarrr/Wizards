@@ -1,6 +1,5 @@
 package net.wizards;
 
-import net.fabric_extras.structure_pool.api.StructurePoolConfig;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.registry.Registries;
@@ -36,12 +35,8 @@ public class WizardsMod {
             .setDirectory(ID)
             .sanitize(true)
             .build();
-    public static ConfigManager<StructurePoolConfig> villageConfig = new ConfigManager<>
-            ("villages", Default.villageConfig)
-            .builder()
-            .setDirectory(ID)
-            .sanitize(true)
-            .build();
+    // NOTE (1.20.1): the village structure-pool config lives in the Fabric module
+    // (`net.wizards.fabric.village.FabricVillageStructures`) — StructurePoolAPI has no Forge artifact.
     public static ConfigManager<TweaksConfig> tweaksConfig = new ConfigManager<>
             ("tweaks", new TweaksConfig())
             .builder()
@@ -51,7 +46,6 @@ public class WizardsMod {
     public static void init() {
         equipmentConfig.refresh();
         effectsConfig.refresh();
-        villageConfig.refresh();
         tweaksConfig.refresh();
         if (Platform.util().isDevelopmentEnvironment()) {
             tweaksConfig.value.ignore_items_required_mods = true;

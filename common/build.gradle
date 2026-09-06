@@ -17,12 +17,6 @@ repositories {
     }
     maven { url 'https://maven.fabricmc.net' }
 
-    // Hosts `dev.emi:trinkets`, inherited transitively from SpellEngine's Fabric artifact.
-    maven {
-        name = "Sleeping Town"
-        url = "https://repo.sleeping.town/"
-    }
-
     mavenLocal()
 }
 
@@ -30,23 +24,21 @@ dependencies {
     // We depend on Fabric Loader here to use the Fabric @Environment annotations,
     // which get remapped to the correct annotations on each platform.
     // Do NOT use other classes from Fabric Loader.
-    modImplementation "net.fabricmc:fabric-loader:$project.fabric_loader_version"
-    modImplementation "net.fabricmc.fabric-api:fabric-api:$project.fabric_api_version"
+    modImplementation "net.fabricmc:fabric-loader:$rootProject.fabric_loader_version"
+    // No Fabric API in common: there is no Forgified Fabric API on the 1.20.1 line, so loader API
+    // usage stays in the platform modules (fabric/ and forge/).
 
-    modImplementation("dev.kosmx.player-anim:player-animation-lib-${platform}:${project.player_anim_version}")
-    modImplementation("me.shedaniel.cloth:cloth-config-${platform}:${project.cloth_config_version}")
-    modImplementation("maven.modrinth:armor-model-api:${project.armor_model_api_version}-${platform}")
-    modImplementation("maven.modrinth:tiny-config:${project.tiny_config_version}-${platform}")
+    modImplementation("dev.kosmx.player-anim:player-animation-lib-${platform}:${rootProject.player_anim_version}")
+    modImplementation("me.shedaniel.cloth:cloth-config-${platform}:${rootProject.cloth_config_version}")
 
-    modImplementation("maven.modrinth:structure-pool-api:${project.structure_pool_api_version}-${platform}")
-//    modImplementation("net.foundation:structure_pool_api-${platform}:${project.structure_pool_api_version}")
-    modImplementation("maven.modrinth:runes:${project.runes_version}-${platform}")
-//    modImplementation("net.rpg_series:runes-${platform}:${project.runes_version}")
-    modImplementation("maven.modrinth:spell-power:${project.spell_power_version}-${platform}")
-//    modImplementation("net.spell_power:spell_power-${platform}:${project.spell_power_version}")
-    modImplementation("maven.modrinth:spell-engine:${project.spell_engine_version}-${platform}")
-//    modImplementation("net.spell_engine:spell_engine-${platform}:${project.spell_engine_version}") { transitive = false }
+    // Ecosystem libraries from mavenLocal (published by their 1.20.1-modern ports).
+    modImplementation("net.rpg_foundation:armor_model_api-${platform}:${rootProject.armor_model_api_version}")
+    modImplementation("net.tiny_config:tiny_config-${platform}:${rootProject.tiny_config_version}")
+    modImplementation("net.spell_power:spell_power-${platform}:${rootProject.spell_power_version}")
+    modImplementation("net.spell_engine:spell_engine-${platform}:${rootProject.spell_engine_version}") { transitive = false }
 
-    // Compatibility
-    // Fabric specific
+    // StructurePoolAPI: legacy published Fabric-only artifact (no Forge port on 1.20.1). Village
+    // structure injection therefore lives behind the `net.wizards.village.VillageStructures` seam,
+    // whose only implementation is wired from the Fabric entrypoint.
+    // Runes is NOT on the compile classpath any more (registry-id lookups only) — see wizards-port-notes.md.
 }

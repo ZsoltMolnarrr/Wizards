@@ -1,0 +1,35 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "minecraft:iron_nugget_from_smelting_wand_frost"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    },
+    "has_wand_frost": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "wizards:wand_frost"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "requirements": [
+    [
+      "has_wand_frost",
+      "has_the_recipe"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "minecraft:iron_nugget_from_smelting_wand_frost"
+    ]
+  },
+  "sends_telemetry_event": false
+}

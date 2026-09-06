@@ -10,7 +10,7 @@ import net.wizards.entity.FrostElementalEntity;
 
 public class FrostElementalRenderer extends MobEntityRenderer<FrostElementalEntity, FrostElementalModel> {
     public static final Identifier TEXTURE =
-            Identifier.of(WizardsMod.ID, "textures/entity/frost_elemental.png");
+            new Identifier(WizardsMod.ID, "textures/entity/frost_elemental.png");
 
     private static final float FLOAT_AMPLITUDE = 0.1F;
     private static final float FLOAT_FREQUENCY = (float)(Math.PI / 20.0); // 2-second cycle (40 ticks)
@@ -21,8 +21,9 @@ public class FrostElementalRenderer extends MobEntityRenderer<FrostElementalEnti
     }
 
     @Override
-    protected void setupTransforms(FrostElementalEntity entity, MatrixStack matrices, float animationProgress, float bodyYaw, float tickDelta, float scale) {
-        super.setupTransforms(entity, matrices, animationProgress, bodyYaw, tickDelta, scale);
+    protected void setupTransforms(FrostElementalEntity entity, MatrixStack matrices, float animationProgress, float bodyYaw, float tickDelta) {
+        // 1.20.1 `LivingEntityRenderer#setupTransforms` has no trailing `float scale` parameter.
+        super.setupTransforms(entity, matrices, animationProgress, bodyYaw, tickDelta);
         matrices.translate(0.0, MathHelper.sin(animationProgress * FLOAT_FREQUENCY) * FLOAT_AMPLITUDE, 0.0);
     }
 

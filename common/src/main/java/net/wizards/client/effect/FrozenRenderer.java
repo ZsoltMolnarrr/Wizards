@@ -17,7 +17,7 @@ public class FrozenRenderer implements CustomModelStatusEffect.Renderer {
     // MARK: Renderer
     private static final RenderLayer RENDER_LAYER = CustomLayers.spellEffect(LightEmission.RADIATE, false);
 
-    public static final Identifier modelId = Identifier.of(WizardsMod.ID, "spell_effect/frost_trap");
+    public static final Identifier modelId = new Identifier(WizardsMod.ID, "spell_effect/frost_trap");
     @Override
     public void renderEffect(long appliedAtWorldTime, int amplifier, LivingEntity livingEntity, float delta, MatrixStack matrixStack, VertexConsumerProvider vertexConsumers, int light) {
         matrixStack.push();

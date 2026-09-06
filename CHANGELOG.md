@@ -1,3 +1,10 @@
+# 3.1.2.001
+
+- Ported to Minecraft 1.20.1 (Fabric + Forge 47). NeoForge is replaced by Forge on this line.
+- Village structure injection into vanilla villages is Fabric-only (StructurePoolAPI has no Forge build for 1.20.1).
+- Runes is now an optional dependency: the wizard-merchant workstation and its rune trades are resolved by
+  registry id and stay inert when Runes is not installed.
+
 # 3.1.2
 
 - Rebalanced Arcane Barrage: emitters last 12 sec (was 15), cooldown 24 sec (was 20), bringing uptime to 50%

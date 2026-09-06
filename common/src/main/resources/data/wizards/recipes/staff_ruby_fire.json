@@ -1,0 +1,37 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "fabric:all_mods_loaded",
+      "values": [
+        "betternether"
+      ]
+    }
+  ],
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "betternether"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "P": {
+      "item": "minecraft:blaze_powder"
+    },
+    "R": {
+      "item": "betternether:nether_ruby"
+    },
+    "M": {
+      "item": "betternether:cincinnasite_ingot"
+    }
+  },
+  "pattern": [
+    " RP",
+    " MR",
+    "M  "
+  ],
+  "result": {
+    "item": "wizards:staff_ruby_fire"
+  }
+}

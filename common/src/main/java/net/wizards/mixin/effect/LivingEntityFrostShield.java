@@ -55,7 +55,7 @@ public abstract class LivingEntityFrostShield implements FrostShielded {
     @Inject(method = "baseTick", at = @At("TAIL"))
     private void baseTick_TAIL_FrostShield(CallbackInfo ci) {
         var entity = (LivingEntity) ((Object)this);
-        hasFrostShield = entity.hasStatusEffect(WizardsEffects.frostShield.entry);
+        hasFrostShield = entity.hasStatusEffect(WizardsEffects.frostShield.effect);
         if (hasFrostShield && entity.isOnFire()) {
             entity.extinguish();
         }

@@ -6,11 +6,12 @@ import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricLanguageProvider;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricRecipeProvider;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagProvider;
-import net.minecraft.data.server.recipe.RecipeExporter;
+import net.minecraft.data.server.recipe.RecipeJsonProvider;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.Items;
 import net.minecraft.recipe.book.RecipeCategory;
+import net.minecraft.registry.RegistryBuilder;
 import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.registry.tag.TagKey;
 import net.minecraft.util.Identifier;
@@ -35,6 +36,7 @@ import net.wizards.item.WizardWeapons;
 import java.util.HashSet;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
+import java.util.function.Consumer;
 
 public class WizardsDataGenerator implements DataGeneratorEntrypoint {
     @Override
@@ -49,6 +51,16 @@ public class WizardsDataGenerator implements DataGeneratorEntrypoint {
         pack.addProvider(WeaponGen::new);
         pack.addProvider(WizardAdvancements::new);
         pack.addProvider(LangGen::new);
+    }
+
+    /// 1.20.1 / Fabric API 0.92: the datagen `WrapperLookup` is assembled from `BuiltinRegistries.REGISTRY_BUILDER`
+    /// plus whatever each entrypoint contributes here — Fabric's `DynamicRegistries.registerSynced` only feeds the
+    /// *runtime* `RegistryLoader`, not data generation. Without this, `FabricTagProvider<Spell>` dies with
+    /// "Registry minecraft:spell not found". The bootstrap is empty on purpose: the spell tags only ever use
+    /// `addOptional`/`addOptionalTag`, so no entries have to exist.
+    @Override
+    public void buildRegistry(RegistryBuilder registryBuilder) {
+        registryBuilder.addRegistry(SpellRegistry.KEY, context -> { });
     }
 
     public static class ItemTagGenerator extends RPGSeriesDataGen.ItemTagGenerator {
@@ -112,7 +124,7 @@ public class WizardsDataGenerator implements DataGeneratorEntrypoint {
             // school-specific staff group only, NOT wizard_staff (which spans every school).
             for (var book : WizardSpells.Book.values()) {
                 var school = book.name().toLowerCase();
-                var umbrella = getOrCreateTagBuilder(TagKey.of(SpellRegistry.KEY, Identifier.of(namespace, school)));
+                var umbrella = getOrCreateTagBuilder(TagKey.of(SpellRegistry.KEY, new Identifier(namespace, school)));
                 umbrella.addOptionalTag(SpellTags.spellBook(namespace, school));
                 umbrella.addOptionalTag(SpellTags.weapon(namespace, school + "_staff"));
             }
@@ -136,14 +148,14 @@ public class WizardsDataGenerator implements DataGeneratorEntrypoint {
     }
 
     public static class UnsmeltGenerator extends FabricRecipeProvider {
-        public UnsmeltGenerator(FabricDataOutput output, CompletableFuture<RegistryWrapper.WrapperLookup> registriesFuture) {
-            super(output, registriesFuture);
+        public UnsmeltGenerator(FabricDataOutput output) {
+            super(output);
         }
 
         public static int UNSMELT_TIME = 300;
 
         @Override
-        public void generate(RecipeExporter exporter) {
+        public void generate(Consumer<RecipeJsonProvider> exporter) {
             disassembleArmor(exporter, WizardArmors.wizardRobeSet, Items.LAPIS_LAZULI);
             disassembleArmor(exporter, WizardArmors.arcaneRobeSet, Items.ENDER_PEARL);
             disassembleArmor(exporter, WizardArmors.fireRobeSet, Items.BLAZE_POWDER);
@@ -176,7 +188,7 @@ public class WizardsDataGenerator implements DataGeneratorEntrypoint {
                     Items.NETHERITE_SCRAP);
         }
 
-        private static void disassembleArmor(RecipeExporter exporter, Armor.Set armorSet, Item output) {
+        private static void disassembleArmor(Consumer<RecipeJsonProvider> exporter, Armor.Set armorSet, Item output) {
             FabricRecipeProvider.offerSmelting(exporter,
                     armorSet.pieces(),
                     RecipeCategory.MISC,
@@ -195,7 +207,7 @@ public class WizardsDataGenerator implements DataGeneratorEntrypoint {
             );
         }
 
-        private static void disassemble(RecipeExporter exporter, List<ItemConvertible> items, Item output) {
+        private static void disassemble(Consumer<RecipeJsonProvider> exporter, List<ItemConvertible> items, Item output) {
             FabricRecipeProvider.offerSmelting(exporter,
                     items,
                     RecipeCategory.MISC,
@@ -240,8 +252,10 @@ public class WizardsDataGenerator implements DataGeneratorEntrypoint {
             super(dataOutput, registryLookup, WizardsMod.ID);
         }
 
+        /// 1.20.1 / Fabric API 0.92: `FabricLanguageProvider` is registry-independent — the callback takes
+        /// only the translation builder.
         @Override
-        public void generateTranslations(RegistryWrapper.WrapperLookup registryLookup, FabricLanguageProvider.TranslationBuilder builder) {
+        public void generateTranslations(FabricLanguageProvider.TranslationBuilder builder) {
             var namespace = WizardsMod.ID;
 
             // Creative tab

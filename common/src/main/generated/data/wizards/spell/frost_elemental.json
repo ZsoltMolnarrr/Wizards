@@ -114,7 +114,7 @@
                 "modifiers": [
                   {
                     "attribute_id": "spell_power:frost",
-                    "operation": "ADD_VALUE",
+                    "operation": "ADDITION",
                     "base": 0.0,
                     "coefficient": 1.0
                   }
@@ -125,7 +125,7 @@
                 "modifiers": [
                   {
                     "attribute_id": "spell_power:frost",
-                    "operation": "ADD_VALUE",
+                    "operation": "ADDITION",
                     "base": 5.0,
                     "coefficient": 0.05
                   }
@@ -136,7 +136,7 @@
                 "modifiers": [
                   {
                     "attribute_id": "spell_power:frost",
-                    "operation": "ADD_VALUE",
+                    "operation": "ADDITION",
                     "base": 0.0,
                     "coefficient": 0.5
                   }
@@ -147,7 +147,7 @@
                 "modifiers": [
                   {
                     "attribute_id": "spell_power:frost",
-                    "operation": "ADD_VALUE",
+                    "operation": "ADDITION",
                     "base": 1.5,
                     "coefficient": 0.45
                   }
@@ -158,7 +158,7 @@
                 "modifiers": [
                   {
                     "attribute_id": "spell_power:frost",
-                    "operation": "ADD_VALUE",
+                    "operation": "ADDITION",
                     "base": 0.0,
                     "coefficient": 0.1
                   }
@@ -169,7 +169,7 @@
                 "modifiers": [
                   {
                     "attribute_id": "spell_power:frost",
-                    "operation": "ADD_VALUE",
+                    "operation": "ADDITION",
                     "base": 2.5,
                     "coefficient": 0.025
                   }

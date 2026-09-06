@@ -4,9 +4,6 @@ import net.minecraft.item.ArmorItem;
 import net.minecraft.item.ArmorMaterial;
 import net.minecraft.item.Items;
 import net.minecraft.recipe.Ingredient;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.Registry;
-import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.Identifier;
 import net.spell_engine.rpg_series.config.ArmorSetConfig;
@@ -43,66 +40,67 @@ public class WizardArmors {
             Items.BLACK_WOOL);
     };
 
-    public static RegistryEntry<ArmorMaterial> material(String name,
+    /// 1.20.1: `ArmorMaterial` is a plain interface — no registry, no `Layer` list. SpellEngine's
+    /// `Armor.material(...)` builds a `CustomMaterial` whose `id` doubles as the (single) layer id,
+    /// so `textures/models/armor/<name>_layer_{1,2}.png` keeps working unchanged.
+    public static ArmorMaterial material(String name,
                                          int protectionHead, int protectionChest, int protectionLegs, int protectionFeet,
-                                         int enchantability, RegistryEntry<SoundEvent> equipSound, Supplier<Ingredient> repairIngredient) {
-        var material = new ArmorMaterial(
+                                         int enchantability, SoundEvent equipSound, Supplier<Ingredient> repairIngredient) {
+        return Armor.material(
+                new Identifier(WizardsMod.ID, name),
                 Map.of(
                 ArmorItem.Type.HELMET, protectionHead,
                 ArmorItem.Type.CHESTPLATE, protectionChest,
                 ArmorItem.Type.LEGGINGS, protectionLegs,
                 ArmorItem.Type.BOOTS, protectionFeet),
                 enchantability, equipSound, repairIngredient,
-                List.of(new ArmorMaterial.Layer(Identifier.of(WizardsMod.ID, name))),
-                0,0
-                );
-        return Registry.registerReference(Registries.ARMOR_MATERIAL, Identifier.of(WizardsMod.ID, name), material);
+                0, 0);
     }
 
-    public static RegistryEntry<ArmorMaterial> material_wizard = material(
+    public static ArmorMaterial material_wizard = material(
             "wizard_robe",
             1, 3, 2, 1,
             9,
-            WizardsSounds.WIZARD_ROBES_EQUIP.entry(), WOOL_INGREDIENTS);
+            WizardsSounds.WIZARD_ROBES_EQUIP.soundEvent(), WOOL_INGREDIENTS);
 
-    public static RegistryEntry<ArmorMaterial> material_arcane = material(
+    public static ArmorMaterial material_arcane = material(
             "arcane_robe",
             1, 3, 2, 1,
             10,
-            WizardsSounds.WIZARD_ROBES_EQUIP.entry(), WOOL_INGREDIENTS);
+            WizardsSounds.WIZARD_ROBES_EQUIP.soundEvent(), WOOL_INGREDIENTS);
 
-    public static RegistryEntry<ArmorMaterial> material_fire = material(
+    public static ArmorMaterial material_fire = material(
             "fire_robe",
             1, 3, 2, 1,
             10,
-            WizardsSounds.WIZARD_ROBES_EQUIP.entry(), WOOL_INGREDIENTS);
+            WizardsSounds.WIZARD_ROBES_EQUIP.soundEvent(), WOOL_INGREDIENTS);
 
-    public static RegistryEntry<ArmorMaterial> material_frost = material(
+    public static ArmorMaterial material_frost = material(
             "frost_robe",
             1, 3, 2, 1,
             10,
-            WizardsSounds.WIZARD_ROBES_EQUIP.entry(), WOOL_INGREDIENTS);
+            WizardsSounds.WIZARD_ROBES_EQUIP.soundEvent(), WOOL_INGREDIENTS);
 
-    public static RegistryEntry<ArmorMaterial> material_netherite_arcane = material(
+    public static ArmorMaterial material_netherite_arcane = material(
             "netherite_arcane_robe",
             1, 3, 2, 1,
             15,
-            WizardsSounds.WIZARD_ROBES_EQUIP.entry(), () -> { return Ingredient.ofItems(Items.NETHERITE_INGOT); });
+            WizardsSounds.WIZARD_ROBES_EQUIP.soundEvent(), () -> { return Ingredient.ofItems(Items.NETHERITE_INGOT); });
 
-    public static RegistryEntry<ArmorMaterial> material_netherite_fire = material(
+    public static ArmorMaterial material_netherite_fire = material(
             "netherite_fire_robe",
             1, 3, 2, 1,
             15,
-            WizardsSounds.WIZARD_ROBES_EQUIP.entry(), () -> { return Ingredient.ofItems(Items.NETHERITE_INGOT); });
+            WizardsSounds.WIZARD_ROBES_EQUIP.soundEvent(), () -> { return Ingredient.ofItems(Items.NETHERITE_INGOT); });
 
-    public static RegistryEntry<ArmorMaterial> material_netherite_frost = material(
+    public static ArmorMaterial material_netherite_frost = material(
             "netherite_frost_robe",
             1, 3, 2, 1,
             15,
-            WizardsSounds.WIZARD_ROBES_EQUIP.entry(), () -> { return Ingredient.ofItems(Items.NETHERITE_INGOT); });
+            WizardsSounds.WIZARD_ROBES_EQUIP.soundEvent(), () -> { return Ingredient.ofItems(Items.NETHERITE_INGOT); });
 
     public static final ArrayList<Armor.Entry> entries = new ArrayList<>();
-    private static Armor.Entry create(RegistryEntry<ArmorMaterial> material, Identifier id, int durability, Armor.Set.ItemFactory factory, ArmorSetConfig defaults, int tier) {
+    private static Armor.Entry create(ArmorMaterial material, Identifier id, int durability, Armor.Set.ItemFactory factory, ArmorSetConfig defaults, int tier) {
         var entry = Armor.Entry.create(
                 material,
                 id,
@@ -130,7 +128,7 @@ public class WizardArmors {
 
     public static final Armor.Set wizardRobeSet = create(
             material_wizard,
-            Identifier.of(WizardsMod.ID, "wizard_robe"),
+            new Identifier(WizardsMod.ID, "wizard_robe"),
             10,
             WizardArmor::new,
             ArmorSetConfig.with(
@@ -156,7 +154,7 @@ public class WizardArmors {
 
     public static final Armor.Set arcaneRobeSet = create(
             material_arcane,
-            Identifier.of(WizardsMod.ID, "arcane_robe"),
+            new Identifier(WizardsMod.ID, "arcane_robe"),
             20,
             WizardArmor::new,
             ArmorSetConfig.with(
@@ -186,7 +184,7 @@ public class WizardArmors {
 
     public static final Armor.Set fireRobeSet = create(
             material_fire,
-            Identifier.of(WizardsMod.ID, "fire_robe"),
+            new Identifier(WizardsMod.ID, "fire_robe"),
             20,
             WizardArmor::new,
             ArmorSetConfig.with(
@@ -216,7 +214,7 @@ public class WizardArmors {
 
     public static final Armor.Set frostRobeSet = create(
             material_frost,
-            Identifier.of(WizardsMod.ID, "frost_robe"),
+            new Identifier(WizardsMod.ID, "frost_robe"),
             20,
             WizardArmor::new,
             ArmorSetConfig.with(
@@ -247,7 +245,7 @@ public class WizardArmors {
 
     public static final Armor.Set netherite_arcane = create(
             material_netherite_arcane,
-            Identifier.of(WizardsMod.ID, "netherite_arcane_robe"),
+            new Identifier(WizardsMod.ID, "netherite_arcane_robe"),
             30,
             WizardArmor::new,
             ArmorSetConfig.with(
@@ -277,7 +275,7 @@ public class WizardArmors {
 
     public static final Armor.Set netherite_fire = create(
             material_netherite_fire,
-            Identifier.of(WizardsMod.ID, "netherite_fire_robe"),
+            new Identifier(WizardsMod.ID, "netherite_fire_robe"),
             30,
             WizardArmor::new,
             ArmorSetConfig.with(
@@ -307,7 +305,7 @@ public class WizardArmors {
 
     public static final Armor.Set netherite_frost = create(
             material_netherite_frost,
-            Identifier.of(WizardsMod.ID, "netherite_frost_robe"),
+            new Identifier(WizardsMod.ID, "netherite_frost_robe"),
             30,
             WizardArmor::new,
             ArmorSetConfig.with(

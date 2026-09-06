@@ -2,18 +2,17 @@ package net.wizards.fabric.datagen;
 
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricRecipeProvider;
-import net.minecraft.data.server.recipe.RecipeExporter;
+import net.minecraft.data.server.recipe.RecipeJsonProvider;
 import net.minecraft.data.server.recipe.ShapedRecipeJsonBuilder;
 import net.minecraft.item.Item;
 import net.minecraft.item.Items;
 import net.minecraft.recipe.book.RecipeCategory;
-import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.registry.tag.ItemTags;
 import net.spell_engine.rpg_series.item.Armor;
 import net.wizards.item.WizardArmors;
 import net.wizards.item.WizardWeapons;
 
-import java.util.concurrent.CompletableFuture;
+import java.util.function.Consumer;
 
 /**
  * Generates all crafting recipes for the Wizards mod using Fabric's built-in API.
@@ -22,12 +21,14 @@ import java.util.concurrent.CompletableFuture;
  */
 public class WizardRecipes extends FabricRecipeProvider {
 
-    public WizardRecipes(FabricDataOutput output, CompletableFuture<RegistryWrapper.WrapperLookup> registriesFuture) {
-        super(output, registriesFuture);
+    /// 1.20.1 / Fabric API 0.92: `FabricRecipeProvider` takes only the data output, and recipes are
+    /// exported through a `Consumer<RecipeJsonProvider>` (the `RecipeExporter` interface arrived in 1.20.2).
+    public WizardRecipes(FabricDataOutput output) {
+        super(output);
     }
 
     @Override
-    public void generate(RecipeExporter exporter) {
+    public void generate(Consumer<RecipeJsonProvider> exporter) {
         generateWandRecipes(exporter);
         generateStaffRecipes(exporter);
         generateArmorRecipes(exporter);
@@ -38,7 +39,7 @@ public class WizardRecipes extends FabricRecipeProvider {
     // WAND RECIPES
     // ========================================
 
-    private void generateWandRecipes(RecipeExporter exporter) {
+    private void generateWandRecipes(Consumer<RecipeJsonProvider> exporter) {
         // Novice Wand - coal + stick
         ShapedRecipeJsonBuilder.create(RecipeCategory.COMBAT, WizardWeapons.noviceWand.item())
                 .pattern(" C")
@@ -80,7 +81,7 @@ public class WizardRecipes extends FabricRecipeProvider {
     // STAFF RECIPES
     // ========================================
 
-    private void generateStaffRecipes(RecipeExporter exporter) {
+    private void generateStaffRecipes(Consumer<RecipeJsonProvider> exporter) {
         // Wizard Staff - quartz + stick
         ShapedRecipeJsonBuilder.create(RecipeCategory.COMBAT, WizardWeapons.wizardStaff.item())
                 .pattern("  Q")
@@ -135,7 +136,7 @@ public class WizardRecipes extends FabricRecipeProvider {
     // ARMOR RECIPES
     // ========================================
 
-    private void generateArmorRecipes(RecipeExporter exporter) {
+    private void generateArmorRecipes(Consumer<RecipeJsonProvider> exporter) {
         // Wizard Robes - wool + lapis lazuli
         generateArmorSet(exporter, WizardArmors.wizardRobeSet, Items.LAPIS_LAZULI);
 
@@ -152,7 +153,7 @@ public class WizardRecipes extends FabricRecipeProvider {
     /**
      * Generate all 4 armor pieces for a set using the standard robe patterns
      */
-    private void generateArmorSet(RecipeExporter exporter, Armor.Set set, Item specialIngredient) {
+    private void generateArmorSet(Consumer<RecipeJsonProvider> exporter, Armor.Set set, Item specialIngredient) {
         // Helmet/Head - pattern: "  W" / " W " / "WLW"
         ShapedRecipeJsonBuilder.create(RecipeCategory.COMBAT, set.head)
                 .pattern("  W")
@@ -197,7 +198,7 @@ public class WizardRecipes extends FabricRecipeProvider {
     // NETHERITE UPGRADE RECIPES
     // ========================================
 
-    private void generateNetheriteUpgrades(RecipeExporter exporter) {
+    private void generateNetheriteUpgrades(Consumer<RecipeJsonProvider> exporter) {
         // Wand upgrades
         offerNetheriteUpgradeRecipe(exporter, WizardWeapons.arcaneWand.item(), RecipeCategory.COMBAT, WizardWeapons.netheriteArcaneWand.item());
         offerNetheriteUpgradeRecipe(exporter, WizardWeapons.fireWand.item(), RecipeCategory.COMBAT, WizardWeapons.netheriteFireWand.item());

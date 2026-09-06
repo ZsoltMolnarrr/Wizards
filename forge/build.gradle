@@ -1,0 +1,165 @@
+plugins {
+    id 'com.gradleup.shadow'
+    id "me.modmuss50.mod-publish-plugin" version "2.1.1"
+}
+
+def platform = project.name;
+
+loom {
+    forge {
+        // Forge 47 reads mixin configs from the jar MANIFEST (`MixinConfigs: ...`), which Loom writes from
+        // this list (the NeoForge `[[mixins]]` table in mods.toml does not exist on Forge 47).
+        mixinConfig "wizards.mixins.json"
+    }
+}
+
+architectury {
+    platformSetupLoomIde()
+    forge()
+}
+
+def generatedResources = project(':common').file('src/main/generated')
+sourceSets {
+    main {
+        resources.srcDir generatedResources
+    }
+}
+
+configurations {
+    common {
+        canBeResolved = true
+        canBeConsumed = false
+    }
+    compileClasspath.extendsFrom common
+    runtimeClasspath.extendsFrom common
+    developmentForge.extendsFrom common
+
+    // Files in this configuration will be bundled into your mod using the Shadow plugin.
+    // Don't use the `shadow` configuration from the plugin itself as it's meant for excluding files.
+    shadowBundle {
+        canBeResolved = true
+        canBeConsumed = false
+    }
+}
+
+repositories {
+    maven { url 'https://maven.kosmx.dev/' }
+    maven { url 'https://maven.shedaniel.me/' }
+    maven {
+        name = 'Modrinth'
+        url = 'https://api.modrinth.com/maven'
+        content {
+            includeGroup 'maven.modrinth'
+        }
+    }
+    maven { url 'https://maven.fabricmc.net' }
+
+    // For Curios
+    maven { url 'https://maven.theillusivec4.top/' }
+
+    mavenLocal()
+}
+
+dependencies {
+    forge "net.minecraftforge:forge:$rootProject.forge_version"
+    common(project(path: ':common', configuration: 'namedElements')) { transitive = false }
+    shadowBundle project(path: ':common', configuration: 'transformProductionForge')
+
+    modImplementation("dev.kosmx.player-anim:player-animation-lib-forge:${rootProject.player_anim_version}")
+    modImplementation("me.shedaniel.cloth:cloth-config-${platform}:${rootProject.cloth_config_version}")
+
+    // Ecosystem libraries from mavenLocal (published by their 1.20.1-modern ports).
+    modImplementation("net.rpg_foundation:armor_model_api-${platform}:${rootProject.armor_model_api_version}")
+    modImplementation("net.tiny_config:tiny_config-${platform}:${rootProject.tiny_config_version}")
+    modImplementation("net.spell_power:spell_power-${platform}:${rootProject.spell_power_version}")
+    modImplementation("net.spell_engine:spell_engine-${platform}:${rootProject.spell_engine_version}")
+
+    // Curios 5.x (1.20.1) - https://docs.illusivesoulworks.com/category/curios
+    modImplementation("top.theillusivec4.curios:curios-forge:${rootProject.curios_version}")
+
+    // Forge 47 ships plain Mixin 0.8.5; SpellEngine's mixins need MixinExtras. It is JiJ'd in SpellEngine's
+    // production jar, but Loom does not load nested jars of classpath mods, so the dev runtime needs a pin.
+    // `localRuntime` keeps it out of the published POM.
+    localRuntime("io.github.llamalad7:mixinextras-forge:${rootProject.mixin_extras_version}")
+
+    // StructurePoolAPI and Runes have no Forge artifact on 1.20.1 — see wizards-port-notes.md.
+}
+
+processResources {
+    inputs.property 'version', project.version
+
+    filesMatching('META-INF/mods.toml') {
+        // Forge rejects the `+<mc>` build metadata in a Maven version range, so publish the bare mod version.
+        expand version: inputs.properties.version.toString().split('\\+')[0]
+    }
+}
+
+shadowJar {
+    configurations = [project.configurations.shadowBundle]
+    archiveClassifier = 'dev-shadow'
+}
+
+remapJar {
+    inputFile.set shadowJar.archiveFile
+}
+
+// Publishing is configured unconditionally: tasks only *run* when explicitly invoked
+// (e.g. `publishMod` in CI), and all credentials are lazy env providers, so a local
+// `build` — with none of the tokens present — is completely unaffected.
+def releaseTypeName = (project.findProperty('release_type') ?: 'beta').toString()
+
+// Local convenience alias -- CI invokes the per-destination publish tasks directly.
+tasks.register("publishMod") {
+    dependsOn(build)
+    finalizedBy(tasks.named("publishMods"))
+}
+
+publishMods {
+    file = remapJar.archiveFile          // Loom production jar (NOT the dev-shadow jar)
+    changelog = providers.provider { changelog_last_section() }   // lazy: read only at publish
+    type = releaseTypeName == "release" ? me.modmuss50.mpp.ReleaseType.STABLE
+            : releaseTypeName == "alpha" ? me.modmuss50.mpp.ReleaseType.ALPHA
+            : me.modmuss50.mpp.ReleaseType.BETA
+    version = "${project.version}-${platform}"   // per-loader suffix → unique Modrinth version
+    displayName = "${project.version}"
+    modLoaders.add("forge")
+
+    curseforge {
+        projectId = providers.environmentVariable("CURSEFORGE_PROJECT_ID")   // numeric id
+        accessToken = providers.environmentVariable("CURSEFORGE_API_KEY")
+        minecraftVersions.add(project.minecraft_version)
+        minecraftVersions.add(project.minecraft_compat_version)
+        client = true                    // >=1 of client/server REQUIRED by CurseForge (Error 1021)
+        server = true
+        changelogType = "markdown"
+        requires("armor-model-api", "spell-engine")
+    }
+
+    modrinth {
+        environment = me.modmuss50.mpp.platforms.modrinth.ModrinthEnvironment.CLIENT_AND_SERVER
+        projectId = providers.environmentVariable("MODRINTH_PROJECT_RAW_ID")
+        accessToken = providers.environmentVariable("MODRINTH_API_KEY")
+        minecraftVersions.add(project.minecraft_version)
+        minecraftVersions.add(project.minecraft_compat_version)
+        requires { slug = "armor-model-api" }
+        requires { slug = "spell-engine" }
+    }
+
+    // Each platform publishes its own GitHub release under a distinct, platform-suffixed
+    // tag (e.g. `1.0.0+1.21.1-neoforge`), so the two publish jobs don't collide.
+    github {
+        repository = providers.environmentVariable("GH_OWNER")
+                .zip(providers.environmentVariable("GH_REPO")) { owner, repo -> "$owner/$repo" }
+        accessToken = providers.environmentVariable("GH_API_KEY")
+        tagName = "${project.version}-${platform}"
+        // `commitish` is REQUIRED by the plugin. GITHUB_SHA is set automatically by GitHub
+        // Actions to the triggering commit — valid even in a detached-HEAD checkout.
+        commitish = providers.environmentVariable("GITHUB_SHA")
+    }
+}
+
+// GitHub release last: a failed mod upload aborts the build before the release exists.
+// Ordering only -- unselected tasks are ignored. Must sit after the publishMods block.
+tasks.named("publishGithub") {
+    mustRunAfter(tasks.named("publishCurseforge"), tasks.named("publishModrinth"))
+}

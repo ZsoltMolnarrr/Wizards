@@ -1,4 +1,5 @@
 {
+  "replace": false,
   "values": [
     {
       "id": "#wizards:spell_book/arcane",

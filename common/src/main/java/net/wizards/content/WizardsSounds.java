@@ -23,7 +23,7 @@ public class WizardsSounds {
         }
 
         public Entry(String name) {
-            this(Identifier.of(WizardsMod.ID, name));
+            this(new Identifier(WizardsMod.ID, name));
         }
 
         public Entry(Identifier id) {

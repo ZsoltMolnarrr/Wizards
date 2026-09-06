@@ -49,7 +49,7 @@ public class WizardEntities {
     }
 
     public static final Entry<FrostElementalEntity> FROST_ELEMENTAL = add(new Entry<>(
-            Identifier.of(WizardsMod.ID, "frost_elemental"),
+            new Identifier(WizardsMod.ID, "frost_elemental"),
             "Frost Elemental",
             EntityType.Builder.<FrostElementalEntity>create(FrostElementalEntity::new, SpawnGroup.MISC)
                     // dimensions(float, float) yields `changing` (fixed=false) so
@@ -58,7 +58,7 @@ public class WizardEntities {
                     // behaviour.dimensions is null). With `fixed`, scaled() is a no-op and
                     // getWidth()/getHeight() stay locked at base size — which silently shrinks
                     // the melee reach below the visible model size.
-                    .dimensions(1F, 2F)
+                    .setDimensions(1F, 2F)
                     .maxTrackingRange(64)
                     .trackingTickInterval(3)
                     // Vanilla build(String id) — the no-arg build() is a Fabric API interface-injected
@@ -67,24 +67,24 @@ public class WizardEntities {
             frostDefaults()));
 
     public static final Entry<ArcaneEmitterEntity> ARCANE_EMITTER = add(new Entry<>(
-            Identifier.of(WizardsMod.ID, "arcane_emitter"),
+            new Identifier(WizardsMod.ID, "arcane_emitter"),
             "Arcane Emitter",
             EntityType.Builder.<ArcaneEmitterEntity>create(ArcaneEmitterEntity::new, SpawnGroup.MISC)
                     // was fixed(); vanilla builder only yields `changing`, which is equivalent
                     // here since this entity carries no GENERIC_SCALE attribute.
-                    .dimensions(0.6F, 0.6F)
+                    .setDimensions(0.6F, 0.6F)
                     .maxTrackingRange(64)
                     .trackingTickInterval(3)
                     .build("arcane_emitter"),
             arcaneDefaults()));
 
     public static final Entry<FireHydraEntity> FIRE_HYDRA = add(new Entry<>(
-            Identifier.of(WizardsMod.ID, "fire_hydra"),
+            new Identifier(WizardsMod.ID, "fire_hydra"),
             "Fire Hydra",
             EntityType.Builder.<FireHydraEntity>create(FireHydraEntity::new, SpawnGroup.MISC)
                     // was fixed(); vanilla builder only yields `changing`, which is equivalent
                     // here since this entity carries no GENERIC_SCALE attribute.
-                    .dimensions(1.5F, 3.0F)
+                    .setDimensions(1.5F, 3.0F)
                     .maxTrackingRange(64)
                     .trackingTickInterval(3)
                     .build("fire_hydra"),

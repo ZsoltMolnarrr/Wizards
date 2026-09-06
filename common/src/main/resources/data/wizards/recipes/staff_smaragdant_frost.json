@@ -1,0 +1,37 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "fabric:all_mods_loaded",
+      "values": [
+        "betterend"
+      ]
+    }
+  ],
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "betterend"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "P": {
+      "item": "minecraft:prismarine_crystals"
+    },
+    "C": {
+      "item": "betterend:smaragdant_crystal_shard"
+    },
+    "M": {
+      "item": "betterend:aeternium_ingot"
+    }
+  },
+  "pattern": [
+    " CP",
+    " MC",
+    "M  "
+  ],
+  "result": {
+    "item": "wizards:staff_smaragdant_frost"
+  }
+}
