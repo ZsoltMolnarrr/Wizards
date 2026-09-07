@@ -19,7 +19,6 @@ import net.wizards.WizardsMod;
 import net.wizards.item.WizardArmors;
 import net.wizards.item.WizardWeapons;
 import net.wizards.content.WizardsSounds;
-import net.wizards.village.VillageStructures;
 
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -105,9 +104,6 @@ public class WizardVillagers {
     }
 
     public static void register() {
-        // Vanilla-village structure injection — Fabric-only on 1.20.1 (see VillageStructures).
-        VillageStructures.injectIfAvailable();
-
         PROFESSION = registerProfession(
                 WIZARD_MERCHANT,
                 RegistryKey.of(Registries.POINT_OF_INTEREST_TYPE.getKey(), POI_ID));

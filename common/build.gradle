@@ -37,8 +37,10 @@ dependencies {
     modImplementation("net.spell_power:spell_power-${platform}:${rootProject.spell_power_version}")
     modImplementation("net.spell_engine:spell_engine-${platform}:${rootProject.spell_engine_version}") { transitive = false }
 
-    // StructurePoolAPI: legacy published Fabric-only artifact (no Forge port on 1.20.1). Village
-    // structure injection therefore lives behind the `net.wizards.village.VillageStructures` seam,
-    // whose only implementation is wired from the Fabric entrypoint.
+    // StructurePoolAPI 1.2.1+ ships a Forge artifact too, and its `injectAll` touches no loader API,
+    // so the village injection and the `config/wizards/villages.json` config live here in `common`.
+    // The `-common` artifact carries the whole API surface and no loader dependency. NOT JiJ'd: it is
+    // a standalone library mod the player installs.
+    modImplementation("net.foundation:structure_pool_api-common:${rootProject.structure_pool_api_version}")
     // Runes is NOT on the compile classpath any more (registry-id lookups only) — see wizards-port-notes.md.
 }

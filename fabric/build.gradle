@@ -75,8 +75,8 @@ dependencies {
     modLocalRuntime("dev.onyxstudios.cardinal-components-api:cardinal-components-base:${rootProject.cardinal_components_version}")
     modLocalRuntime("dev.onyxstudios.cardinal-components-api:cardinal-components-entity:${rootProject.cardinal_components_version}")
 
-    // StructurePoolAPI: legacy Fabric-only artifact, used by the Fabric-side village injector.
-    modImplementation("maven.modrinth:structure-pool-api:${rootProject.structure_pool_api_version}")
+    // StructurePoolAPI (1.20.1-modern port; mavenLocal). NOT JiJ'd - standalone library mod.
+    modImplementation("net.foundation:structure_pool_api-${platform}:${rootProject.structure_pool_api_version}")
 
     // Runes: dev runtime ONLY (Wizards does not compile against it — `runes:*` ids only).
     modLocalRuntime("net.rpg_series:runes-fabric:${rootProject.runes_version}")

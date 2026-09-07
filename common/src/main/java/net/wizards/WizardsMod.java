@@ -4,6 +4,8 @@ import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
+import net.fabric_extras.structure_pool.api.StructurePoolAPI;
+import net.fabric_extras.structure_pool.api.StructurePoolConfig;
 import net.minecraft.text.Text;
 import net.spell_engine.Platform;
 import net.spell_engine.rpg_series.config.ConfigFile;
@@ -35,8 +37,12 @@ public class WizardsMod {
             .setDirectory(ID)
             .sanitize(true)
             .build();
-    // NOTE (1.20.1): the village structure-pool config lives in the Fabric module
-    // (`net.wizards.fabric.village.FabricVillageStructures`) — StructurePoolAPI has no Forge artifact.
+    public static ConfigManager<StructurePoolConfig> villageConfig = new ConfigManager<>
+            ("villages", Default.villageConfig)
+            .builder()
+            .setDirectory(ID)
+            .sanitize(true)
+            .build();
     public static ConfigManager<TweaksConfig> tweaksConfig = new ConfigManager<>
             ("tweaks", new TweaksConfig())
             .builder()
@@ -47,6 +53,17 @@ public class WizardsMod {
         equipmentConfig.refresh();
         effectsConfig.refresh();
         tweaksConfig.refresh();
+        villageConfig.refresh();
+        if (!Platform.util().isModLoaded("lithostitched")) {
+            // Only inject the towers if Lithostitched is not present - otherwise the data-driven
+            // paths in `resources/data/wizards` already do it.
+            //
+            // `injectAll` only *queues* the entries; StructurePoolAPI's own entrypoint applies them
+            // when the server starts (Fabric SERVER_STARTING / Forge ServerAboutToStartEvent, both
+            // before the spawn region generates). The queue is deliberately never cleared, so this
+            // must be called exactly once, here at mod init - never per world load.
+            StructurePoolAPI.injectAll(villageConfig.value);
+        }
         if (Platform.util().isDevelopmentEnvironment()) {
             tweaksConfig.value.ignore_items_required_mods = true;
         }

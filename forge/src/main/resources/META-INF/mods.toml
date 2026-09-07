@@ -50,8 +50,14 @@ versionRange = "*"
 ordering = "AFTER"
 side = "BOTH"
 
-# StructurePoolAPI has no Forge artifact on 1.20.1; vanilla-village structure injection is Fabric-only
-# (Repurposed Structures / Lithostitched data-driven injection still works on both loaders).
+# StructurePoolAPI injects the wizard towers into the *vanilla* village pools. Since 1.2.1 it has a
+# Forge artifact, so this is a hard dependency on both loaders (mirrors the `fabric.mod.json` entry).
+[[dependencies.wizards]]
+modId = "structure_pool_api"
+mandatory = true
+versionRange = "[1.2.1,)"
+ordering = "NONE"
+side = "BOTH"
 
 # Mixin configs are declared in the jar MANIFEST (`MixinConfigs:`) by Loom (`loom.forge.mixinConfig`),
 # not in this file — the `[[mixins]]` table is NeoForge-only.
