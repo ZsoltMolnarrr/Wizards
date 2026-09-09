@@ -15,7 +15,9 @@ import net.wizards.WizardsMod;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 public class WizardEntities {
 
@@ -140,11 +142,32 @@ public class WizardEntities {
     }
 
     public static void register() {
+        entityTypesToRegister().forEach((id, type) -> Registry.register(Registries.ENTITY_TYPE, id, type));
+        registerSummonedAttributes();
+    }
+
+    /// Every entity type Wizards adds, keyed by the id it registers under. Creation only — nothing is
+    /// written into the ENTITY_TYPE registry here, so a loader that registers entity types itself (Forge,
+    /// through the `RegisterEvent` helper) iterates this instead of calling {@link #register()}. Ids
+    /// already in the registry are skipped, so it is idempotent.
+    ///
+    /// The types themselves are built in this class's `<clinit>`; this only loads Wizards' own summoned
+    /// entity config, which {@link #registerSummonedAttributes()} then reads.
+    public static Map<Identifier, EntityType<?>> entityTypesToRegister() {
         summonConfig.refresh(); // load (or write) Wizards' own config file before reading values from it
+        var types = new LinkedHashMap<Identifier, EntityType<?>>();
         for (var entry : entries) {
-            // Attributes are registered right here with the freshly-built type, so type and attribute
-            // registration are a single co-located step — no required ordering between them.
-            Registry.register(Registries.ENTITY_TYPE, entry.id, entry.type);
+            if (Registries.ENTITY_TYPE.containsId(entry.id)) { continue; }
+            types.put(entry.id, entry.type);
+        }
+        return types;
+    }
+
+    /// Buffers each summon's base attributes through SpellEngine's summoned-entity seam. Writes no
+    /// registry of its own (SpellEngine flushes the buffer from its own attribute-creation event), so it
+    /// is safe to call from the ENTITY_TYPE window right after the registration loop.
+    public static void registerSummonedAttributes() {
+        for (var entry : entries) {
             if (entry.summonConfig != null) {
                 // Only summoned (living) entities carry a config; safe by construction.
                 @SuppressWarnings("unchecked")

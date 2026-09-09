@@ -79,12 +79,22 @@ public class WizardsMod {
         WizardsSounds.register();
     }
 
+    /// Builds the `wizards:generic` creative tab. Creation only — nothing is registered here, so a loader
+    /// that registers item groups itself (Forge) hands the result to its own `RegisterEvent` helper in the
+    /// ITEM_GROUP window, which is event 65 while ITEM is event 7. Built once; repeated calls return the
+    /// same instance. The icon is a supplier, so this does not depend on the robe being registered yet.
+    public static ItemGroup itemGroupToRegister() {
+        if (Group.WIZARDS == null) {
+            Group.WIZARDS = new ItemGroup.Builder(ItemGroup.Row.TOP, 0)
+                    .icon(() -> new ItemStack(WizardArmors.wizardRobeSet.head))
+                    .displayName(Text.translatable("itemGroup.wizards.general"))
+                    .build();
+        }
+        return Group.WIZARDS;
+    }
+
     public static void registerItems() {
-        Group.WIZARDS = new ItemGroup.Builder(ItemGroup.Row.TOP, 0)
-                .icon(() -> new ItemStack(WizardArmors.wizardRobeSet.head))
-                .displayName(Text.translatable("itemGroup.wizards.general"))
-                .build();
-        Registry.register(Registries.ITEM_GROUP, Group.KEY, Group.WIZARDS);
+        Registry.register(Registries.ITEM_GROUP, Group.KEY, itemGroupToRegister());
         WizardBooks.register();
         WizardWeapons.register(equipmentConfig.value.weapons);
         WizardArmors.register(equipmentConfig.value.armor_sets);

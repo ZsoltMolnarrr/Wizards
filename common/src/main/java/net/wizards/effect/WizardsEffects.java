@@ -119,14 +119,21 @@ public class WizardsEffects {
             )
     ));
 
-    public static void register(ConfigFile.Effects config) {
+    /// Attaches the behaviours Wizards' effects carry beyond their attribute modifiers. Creation only —
+    /// nothing is registered here, so a loader that registers the effects itself (Forge) calls this first
+    /// and then iterates `Effects.effectsToRegister(...)`. Every call takes the raw `StatusEffect` object,
+    /// so this does not depend on registration order. Idempotent.
+    public static void configure() {
         RemoveOnHit.configure(frozen.effect, RemoveOnHit.Trigger.DIRECT_HIT, 1, 1);
         Synchronized.configure(frostSlowness.effect, true);
         Synchronized.configure(frozen.effect, true);
         Synchronized.configure(frostShield.effect, true);
         Synchronized.configure(evocation.effect, true);
         Synchronized.configure(arcaneCharge.effect, true);
+    }
 
+    public static void register(ConfigFile.Effects config) {
+        configure();
         Effects.register(entries, config.effects);
     }
 }

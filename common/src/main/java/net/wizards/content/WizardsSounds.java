@@ -8,7 +8,9 @@ import net.minecraft.util.Identifier;
 import net.wizards.WizardsMod;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 public class WizardsSounds {
     public static final class Entry {
@@ -127,5 +129,22 @@ public class WizardsSounds {
         for (var entry: entries) {
             entry.entry = Registry.registerReference(Registries.SOUND_EVENT, entry.id(), entry.soundEvent());
         }
+    }
+
+    /// Every sound event Wizards adds, keyed by the id it registers under. Creation only — nothing is
+    /// written here, so a loader that registers sounds itself (Forge, through the `RegisterEvent` helper)
+    /// iterates this instead of calling {@link #register()}. Ids already in the registry are skipped, so it
+    /// is idempotent.
+    ///
+    /// The `Entry#entry` `RegistryEntry` is deliberately not filled in on that path: the Forge helper
+    /// returns void, and nothing outside this class ever reads that field (only lang/advancement datagen
+    /// touches sounds, and that runs on Fabric).
+    public static Map<Identifier, SoundEvent> soundsToRegister() {
+        var sounds = new LinkedHashMap<Identifier, SoundEvent>();
+        for (var entry: entries) {
+            if (entry.entry != null || Registries.SOUND_EVENT.containsId(entry.id())) { continue; }
+            sounds.put(entry.id(), entry.soundEvent());
+        }
+        return sounds;
     }
 }

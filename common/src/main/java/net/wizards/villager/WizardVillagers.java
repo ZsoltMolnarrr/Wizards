@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableSet;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
+import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -26,6 +27,7 @@ import java.util.Set;
 
 public class WizardVillagers {
     public static final String WIZARD_MERCHANT = "wizard_merchant";
+    public static final Identifier PROFESSION_ID = new Identifier(WizardsMod.ID, WIZARD_MERCHANT);
     public static final Identifier POI_ID = new Identifier(WizardsMod.ID, WIZARD_MERCHANT);
     public static final int POI_TICKET_COUNT = 1;
     public static final int POI_SEARCH_DISTANCE = 10;
@@ -40,9 +42,9 @@ public class WizardVillagers {
     public static final Identifier FROST_RUNE_ID = new Identifier("runes", "frost_stone");
 
     /// The workstation block states for the wizard-merchant POI. Registration itself is loader-specific
-    /// (Fabric: `PointOfInterestHelper`; Forge: a plain `Registry.register` of a `PointOfInterestType`,
-    /// whose block-state mapping Forge wires up via its POI registry callback), so it lives in each
-    /// platform's entrypoint — this only exposes the shared state set.
+    /// (Fabric: `PointOfInterestHelper`; Forge: a `PointOfInterestType` handed to the `RegisterEvent`
+    /// helper, whose block-state mapping Forge wires up via its POI registry callback), so it lives in
+    /// each platform's entrypoint — this only exposes the shared state set.
     ///
     /// Empty when Runes is absent: the POI type still registers (so the profession and its advancement
     /// stay valid), it simply has no block that can act as a workstation.
@@ -67,9 +69,9 @@ public class WizardVillagers {
     /// with the game is loader-specific and lives in each platform's entrypoint.
     public static final LinkedHashMap<Integer, List<TradeOffers.Factory>> TRADES = new LinkedHashMap<>();
 
-    public static VillagerProfession registerProfession(String name, RegistryKey<PointOfInterestType> workStation) {
+    public static VillagerProfession createProfession(String name, RegistryKey<PointOfInterestType> workStation) {
         var id = new Identifier(WizardsMod.ID, name);
-        return Registry.register(Registries.VILLAGER_PROFESSION, new Identifier(WizardsMod.ID, name), new VillagerProfession(
+        return new VillagerProfession(
                 id.toString(),
                 (entry) -> {
                     return entry.matchesKey(workStation);
@@ -79,8 +81,74 @@ public class WizardVillagers {
                 },
                 ImmutableSet.of(),
                 ImmutableSet.of(),
-                WizardsSounds.WIZARD_ROBES_EQUIP.soundEvent())
-        );
+                WizardsSounds.WIZARD_ROBES_EQUIP.soundEvent());
+    }
+
+    private static VillagerProfession professionToRegister;
+
+    /// Builds the wizard-merchant profession once, keyed by {@link #PROFESSION_ID}. Creation only —
+    /// nothing is registered here, so a loader that registers the profession itself (Forge, through the
+    /// `RegisterEvent` helper) hands this to its own registration API instead of duplicating the
+    /// construction.
+    public static VillagerProfession professionToRegister() {
+        if (professionToRegister == null) {
+            professionToRegister = createProfession(
+                    WIZARD_MERCHANT,
+                    RegistryKey.of(Registries.POINT_OF_INTEREST_TYPE.getKey(), POI_ID));
+        }
+        return professionToRegister;
+    }
+
+    /// Reads {@link #PROFESSION} back out of the registry, for a loader that registered the profession
+    /// itself. `VillagerTradesEvent` filtering and the Fabric trade registration both compare against that
+    /// field, and Forge's `RegisterEvent` helper returns void, so Forge calls this straight after its
+    /// registration loop. Throws naming the id if the profession never landed — which is also what catches
+    /// a silently mis-keyed `event.register` block.
+    public static void linkProfessionEntry() {
+        if (PROFESSION == null) {
+            PROFESSION = Registries.VILLAGER_PROFESSION
+                    .getOrEmpty(PROFESSION_ID)
+                    .orElseThrow(() -> new IllegalStateException(
+                            "Villager profession " + PROFESSION_ID + " is not in the registry — register it first"));
+        }
+    }
+
+    // MARK: Trade offers
+    //
+    // `TradeOffers.SellItemFactory` and `TradeOffers.SellEnchantedToolFactory` are package-private classes
+    // in the real 1.20.1 jar, and stay package-private after Forge's access transformer. They compile here
+    // only because a mod on `common`'s classpath contributes an access widener that the production runtime
+    // does not have, so calling them crashed the Forge server with
+    // `IllegalAccessError: failed to access class net.minecraft.world.entity.npc.VillagerTrades$ItemsForEmeralds`.
+    // Both are therefore rebuilt on the raw `TradeOffer` constructor, reproducing vanilla's arithmetic
+    // exactly. Same shape as `JewelryVillagers` / `TavernVillagers` (see jewelry-port-notes.md §4).
+
+    private static final float PRICE_MULTIPLIER = 0.05F;
+
+    /// Mirrors `TradeOffers.SellItemFactory(ItemStack, price, count, maxUses, experience, multiplier)`.
+    /// Vanilla rebuilds the sold stack as `new ItemStack(sell.getItem(), count)`, which drops NBT;
+    /// `copyWithCount` keeps it, as `TavernVillagers` does for its potion offers.
+    private static TradeOffers.Factory sell(ItemStack stack, int price, int count, int maxUses, int experience, float multiplier) {
+        return (entity, random) -> new TradeOffer(
+                new ItemStack(Items.EMERALD, price), stack.copyWithCount(count),
+                maxUses, experience, multiplier);
+    }
+
+    /// Mirrors `TradeOffers.SellItemFactory(Item, price, count, maxUses, experience)` — the 0.05F default.
+    private static TradeOffers.Factory sell(Item item, int price, int count, int maxUses, int experience) {
+        return sell(new ItemStack(item), price, count, maxUses, experience, PRICE_MULTIPLIER);
+    }
+
+    /// Mirrors `TradeOffers.SellEnchantedToolFactory(Item, basePrice, maxUses, experience, multiplier)`:
+    /// `5 + random.nextInt(15)` enchantment levels, no treasure enchantments, and the emerald price capped
+    /// at 64.
+    private static TradeOffers.Factory sellEnchanted(Item item, int basePrice, int maxUses, int experience, float multiplier) {
+        return (entity, random) -> {
+            int level = 5 + random.nextInt(15);
+            var tool = EnchantmentHelper.enchant(random, new ItemStack(item), level, false);
+            int price = Math.min(basePrice + level, 64);
+            return new TradeOffer(new ItemStack(Items.EMERALD, price), tool, maxUses, experience, multiplier);
+        };
     }
 
     /// Sells a Runes item, resolved lazily so registration order (and Runes' presence) does not matter:
@@ -91,8 +159,7 @@ public class WizardVillagers {
             if (item == Items.AIR) {
                 return null;
             }
-            // 1.20.1 has no `SellItemFactory(Item, …, float)` overload — only the ItemStack one.
-            return new TradeOffers.SellItemFactory(new ItemStack(item), price, count, maxUses, experience, 0.1f).create(entity, random);
+            return sell(new ItemStack(item), price, count, maxUses, experience, 0.1F).create(entity, random);
         };
     }
 
@@ -100,14 +167,17 @@ public class WizardVillagers {
     /// (item, count, maxUses, experience, emeraldAmount) is rebuilt here on the raw `TradeOffer` ctor.
     private static TradeOffers.Factory buyForEmeralds(Item item, int count, int maxUses, int experience, int emeralds) {
         return (entity, random) -> new TradeOffer(
-                new ItemStack(item, count), new ItemStack(Items.EMERALD, emeralds), maxUses, experience, 0.05F);
+                new ItemStack(item, count), new ItemStack(Items.EMERALD, emeralds), maxUses, experience, PRICE_MULTIPLIER);
     }
 
     public static void register() {
-        PROFESSION = registerProfession(
-                WIZARD_MERCHANT,
-                RegistryKey.of(Registries.POINT_OF_INTEREST_TYPE.getKey(), POI_ID));
+        PROFESSION = Registry.register(Registries.VILLAGER_PROFESSION, PROFESSION_ID, professionToRegister());
+        setupTrades();
+    }
 
+    /// Fills {@link #TRADES}. Creation only — the actual trade-offer wiring is loader-specific and lives in
+    /// each platform's entrypoint (Fabric `TradeOfferHelper` / Forge `VillagerTradesEvent`).
+    public static void setupTrades() {
         TRADES.clear();
         TRADES.put(1, List.of(
                 sellRune(ARCANE_RUNE_ID, 2, 8, 128, 3),
@@ -115,30 +185,27 @@ public class WizardVillagers {
                 sellRune(FROST_RUNE_ID, 2, 8, 128, 3)
         ));
         TRADES.put(2, List.of(
-                new TradeOffers.SellItemFactory(WizardWeapons.wizardStaff.item(), 4, 1, 12, 18),
-                new TradeOffers.SellItemFactory(WizardWeapons.noviceWand.item(), 4, 1, 12, 18),
-                new TradeOffers.SellItemFactory(WizardWeapons.arcaneWand.item(), 18, 1, 12, 18),
-                new TradeOffers.SellItemFactory(WizardWeapons.fireWand.item(), 18, 1, 12, 18),
-                new TradeOffers.SellItemFactory(WizardWeapons.frostWand.item(), 18, 1, 12, 18),
+                sell(WizardWeapons.wizardStaff.item(), 4, 1, 12, 18),
+                sell(WizardWeapons.noviceWand.item(), 4, 1, 12, 18),
+                sell(WizardWeapons.arcaneWand.item(), 18, 1, 12, 18),
+                sell(WizardWeapons.fireWand.item(), 18, 1, 12, 18),
+                sell(WizardWeapons.frostWand.item(), 18, 1, 12, 18),
 
                 buyForEmeralds(Items.WHITE_WOOL, 10, 12, 5, 6),
                 buyForEmeralds(Items.LAPIS_LAZULI, 6, 3, 5, 12)
         ));
         TRADES.put(3, List.of(
-                new TradeOffers.SellItemFactory(new ItemStack(WizardArmors.wizardRobeSet.head), 15, 1, 12, 16, 0.1F),
-                new TradeOffers.SellItemFactory(new ItemStack(WizardArmors.wizardRobeSet.feet), 15, 1, 12, 16, 0.1F)
+                sell(new ItemStack(WizardArmors.wizardRobeSet.head), 15, 1, 12, 16, 0.1F),
+                sell(new ItemStack(WizardArmors.wizardRobeSet.feet), 15, 1, 12, 16, 0.1F)
         ));
         TRADES.put(4, List.of(
-                new TradeOffers.SellItemFactory(new ItemStack(WizardArmors.wizardRobeSet.chest), 20, 1, 12, 16, 0.1F),
-                new TradeOffers.SellItemFactory(new ItemStack(WizardArmors.wizardRobeSet.legs), 20, 1, 12, 16, 0.1F)
+                sell(new ItemStack(WizardArmors.wizardRobeSet.chest), 20, 1, 12, 16, 0.1F),
+                sell(new ItemStack(WizardArmors.wizardRobeSet.legs), 20, 1, 12, 16, 0.1F)
         ));
         TRADES.put(5, List.of(
-                (entity, random) -> new TradeOffers.SellEnchantedToolFactory(
-                        WizardWeapons.arcaneStaff.item(), 40, 3, 30, 0F).create(entity, random),
-                (entity, random) -> new TradeOffers.SellEnchantedToolFactory(
-                        WizardWeapons.fireStaff.item(), 40, 3, 30, 0F).create(entity, random),
-                (entity, random) -> new TradeOffers.SellEnchantedToolFactory(
-                        WizardWeapons.frostStaff.item(), 40, 3, 30, 0F).create(entity, random)
+                sellEnchanted(WizardWeapons.arcaneStaff.item(), 40, 3, 30, 0F),
+                sellEnchanted(WizardWeapons.fireStaff.item(), 40, 3, 30, 0F),
+                sellEnchanted(WizardWeapons.frostStaff.item(), 40, 3, 30, 0F)
         ));
     }
 }
