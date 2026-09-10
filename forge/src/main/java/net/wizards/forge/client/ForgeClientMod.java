@@ -1,5 +1,6 @@
 package net.wizards.forge.client;
 
+import net.minecraft.client.util.math.MatrixStack;
 import net.minecraftforge.client.ConfigScreenHandler;
 import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.client.event.RenderLevelStageEvent;
@@ -26,6 +27,10 @@ import net.wizards.entity.WizardEntities;
 /// `ConfigScreenHandler.ConfigScreenFactory`, and `RenderLevelStageEvent.getPartialTick()` returns a
 /// plain float (no `RenderTickCounter`).
 public final class ForgeClientMod {
+    /// The camera-rotation pose stack of the frame being rendered, captured from an in-`render` stage
+    /// so AFTER_LEVEL can use it (see below). Render thread only; cleared on use.
+    private static MatrixStack viewPoseStack = null;
+
     public static void register(IEventBus modBus) {
         modBus.addListener(EventPriority.NORMAL, false, FMLClientSetupEvent.class, ForgeClientMod::onClientSetup);
         modBus.addListener(EventPriority.NORMAL, false, EntityRenderersEvent.RegisterLayerDefinitions.class,
@@ -39,15 +44,26 @@ public final class ForgeClientMod {
         ModLoadingContext.get().registerExtensionPoint(ConfigScreenHandler.ConfigScreenFactory.class,
                 () -> new ConfigScreenHandler.ConfigScreenFactory((client, parent) -> new ConfigMenuScreen(parent)));
 
-        // Replay deferred Fire Hydra rendering after the particle pass (see FireHydraRenderer).
-        // NOTE: must be AFTER_PARTICLES, not AFTER_TRANSLUCENT_BLOCKS. Vanilla renders particles
-        // *after* translucent terrain, so AFTER_TRANSLUCENT_BLOCKS fires before particles and the
-        // hydra's own puddle particle would paint over the model. AFTER_PARTICLES matches where
-        // Fabric's WorldRenderEvents.AFTER_TRANSLUCENT injects (just before clouds, after particles).
+        // Replay deferred Fire Hydra rendering once the whole world render is done (see
+        // FireHydraRenderer for why no earlier stage can work). AFTER_LEVEL is dispatched from
+        // GameRenderer, immediately after `WorldRenderer#render` returns - the same instruction Fabric's
+        // WorldRenderEvents.END is injected at, and past clouds, weather and the fabulous-graphics
+        // transparency compositing.
+        //
+        // AFTER_LEVEL's own `getPoseStack()` cannot be used: GameRenderer hands that dispatch its
+        // *projection* stack, not the camera-rotation stack every in-`render` stage gets. So the view
+        // stack is picked up from an earlier stage of the same frame - it is the one object
+        // `GameRenderer#renderWorld` created and passed into `render`, and its push/pops are balanced by
+        // the time the call returns, so it still carries exactly the camera rotation (including any roll
+        // a ViewportEvent applied).
         MinecraftForge.EVENT_BUS.addListener(EventPriority.NORMAL, false, RenderLevelStageEvent.class, render -> {
-            if (render.getStage() == RenderLevelStageEvent.Stage.AFTER_PARTICLES) {
-                FireHydraRenderer.renderAfterTranslucent(render.getPoseStack(), render.getCamera(),
-                        render.getPartialTick());
+            var stage = render.getStage();
+            if (stage == RenderLevelStageEvent.Stage.AFTER_PARTICLES) {
+                viewPoseStack = render.getPoseStack();
+            } else if (stage == RenderLevelStageEvent.Stage.AFTER_LEVEL && viewPoseStack != null) {
+                var matrices = viewPoseStack;
+                viewPoseStack = null;
+                FireHydraRenderer.renderAfterWorld(matrices, render.getCamera(), render.getPartialTick());
             }
         });
     }

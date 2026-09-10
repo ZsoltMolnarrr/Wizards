@@ -22,21 +22,32 @@ public class FireHydraRenderer extends MobEntityRenderer<FireHydraEntity, FireHy
     public static final Identifier TEXTURE =
             new Identifier(WizardsMod.ID, "textures/entity/fire_hydra.png");
 
-    // The Fire Hydra uses a translucent, non-depth-writing render layer. During the normal entity
-    // pass (which runs before translucent terrain, particles and clouds) the later passes paint over
-    // it, so parts of the model appear behind water/clouds/distant terrain. To fix this we don't draw
-    // during the normal pass: we queue the entity and replay the full model render AFTER_TRANSLUCENT,
-    // so it rasterizes on top. Mirrors Paladins' BarrierEntityRenderer.
+    // The Fire Hydra's texture is uniformly 50% alpha - it is meant to be seen through - so its layer
+    // blends and deliberately does NOT write depth (`writeMaskState(COLOR_MASK)`, see
+    // `CustomLayers.spellObject(.., translucent = true)`). A pass that writes no depth leaves nothing
+    // behind for later passes to test against: wherever the model covers sky rather than terrain, the
+    // depth buffer still holds the far plane there, so every world pass drawn after it paints straight
+    // over the model.
+    //
+    // That is why chasing the render stage never fixed this. Drawing in the normal entity pass let
+    // translucent terrain (water) paint over it; moving after translucent terrain handed the problem to
+    // particles; moving after particles handed it to clouds and weather, which are always last. The only
+    // stable answer for a non-depth-writing model is to draw it after *everything* the world renderer
+    // draws: we queue the entity during the normal pass and replay the full model render once the world
+    // render is complete. It is still depth-tested, so terrain, water and clouds genuinely in front of it
+    // still occlude it - it simply can no longer be overpainted by a pass that comes later.
     private static final List<Deferred> deferredQueue = new ArrayList<>();
     private boolean inDeferredPass = false;
 
     private record Deferred(FireHydraEntity entity, float yaw, float tickDelta, int light) {}
 
-    // Replays the queued Fire Hydra renders during the world's after-translucent pass. Loader-neutral —
-    // each platform's client entrypoint calls this from its own event (Fabric
-    // `WorldRenderEvents.AFTER_TRANSLUCENT`; NeoForge `RenderLevelStageEvent` AFTER_TRANSLUCENT_BLOCKS),
-    // mirroring SpellEngine's BeamRenderer.renderAfterTranslucent.
-    public static void renderAfterTranslucent(MatrixStack matrices, Camera camera, float tickDelta) {
+    /// Replays the queued Fire Hydra renders once the world render has finished. Loader-neutral - each
+    /// platform's client entrypoint calls this from the event that fires at that exact point: Fabric
+    /// `WorldRenderEvents.END` (injected at the RETURN of `WorldRenderer#render`), Forge
+    /// `RenderLevelStageEvent.Stage.AFTER_LEVEL` (dispatched immediately after that same call returns).
+    /// Both sit after clouds, weather and the fabulous-graphics transparency compositing, and before the
+    /// depth buffer is cleared for the held item - so the two loaders draw at the same instruction.
+    public static void renderAfterWorld(MatrixStack matrices, Camera camera, float tickDelta) {
         if (deferredQueue.isEmpty()) {
             return;
         }
@@ -76,7 +87,7 @@ public class FireHydraRenderer extends MobEntityRenderer<FireHydraEntity, FireHy
     public void render(FireHydraEntity entity, float yaw, float tickDelta,
                        MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light) {
         if (!inDeferredPass && entity.isAlive()) {
-            // Queue for the AFTER_TRANSLUCENT pass instead of drawing now.
+            // Queue for the end-of-world pass instead of drawing now.
             deferredQueue.add(new Deferred(entity, yaw, tickDelta, light));
             return;
         }
