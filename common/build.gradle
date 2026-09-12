@@ -31,16 +31,16 @@ dependencies {
     modImplementation("dev.kosmx.player-anim:player-animation-lib-${platform}:${rootProject.player_anim_version}")
     modImplementation("me.shedaniel.cloth:cloth-config-${platform}:${rootProject.cloth_config_version}")
 
-    // Ecosystem libraries from mavenLocal (published by their 1.20.1-modern ports).
-    modImplementation("net.rpg_foundation:armor_model_api-${platform}:${rootProject.armor_model_api_version}")
-    modImplementation("net.tiny_config:tiny_config-${platform}:${rootProject.tiny_config_version}")
+    // Ecosystem libraries: the Modrinth maven for the released ones, mavenLocal for the 1.20.1-modern ports.
+    modImplementation("maven.modrinth:armor-model-api:${rootProject.armor_model_api_version}-${platform}")
+    modImplementation("maven.modrinth:tiny-config:${rootProject.tiny_config_version}-${platform}")
     modImplementation("net.spell_power:spell_power-${platform}:${rootProject.spell_power_version}")
     modImplementation("net.spell_engine:spell_engine-${platform}:${rootProject.spell_engine_version}") { transitive = false }
 
     // StructurePoolAPI 1.2.1+ ships a Forge artifact too, and its `injectAll` touches no loader API,
     // so the village injection and the `config/wizards/villages.json` config live here in `common`.
-    // The `-common` artifact carries the whole API surface and no loader dependency. NOT JiJ'd: it is
-    // a standalone library mod the player installs.
-    modImplementation("net.foundation:structure_pool_api-common:${rootProject.structure_pool_api_version}")
+    // Modrinth serves only the per-loader jars, so `common` compiles against the `-fabric` flavour
+    // (this module's dummy platform). NOT JiJ'd: it is a standalone library mod the player installs.
+    modImplementation("maven.modrinth:structure-pool-api:${rootProject.structure_pool_api_version}-fabric")
     // Runes is NOT on the compile classpath any more (registry-id lookups only) — see wizards-port-notes.md.
 }
