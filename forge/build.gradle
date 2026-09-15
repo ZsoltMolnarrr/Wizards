@@ -68,11 +68,11 @@ dependencies {
     modImplementation("dev.kosmx.player-anim:player-animation-lib-forge:${rootProject.player_anim_version}")
     modImplementation("me.shedaniel.cloth:cloth-config-${platform}:${rootProject.cloth_config_version}")
 
-    // Ecosystem libraries: the Modrinth maven for the released ones, mavenLocal for the 1.20.1-modern ports.
+    // Ecosystem libraries: all resolved from the Modrinth maven.
     modImplementation("maven.modrinth:armor-model-api:${rootProject.armor_model_api_version}-${platform}")
     modImplementation("maven.modrinth:tiny-config:${rootProject.tiny_config_version}-${platform}")
-    modImplementation("net.spell_power:spell_power-${platform}:${rootProject.spell_power_version}")
-    modImplementation("net.spell_engine:spell_engine-${platform}:${rootProject.spell_engine_version}")
+    modImplementation("maven.modrinth:spell-power:${rootProject.spell_power_version}-${platform}")
+    modImplementation("maven.modrinth:spell-engine:${rootProject.spell_engine_version}-${platform}")
 
     // Curios 5.x (1.20.1) - https://docs.illusivesoulworks.com/category/curios
     modImplementation("top.theillusivec4.curios:curios-forge:${rootProject.curios_version}")
