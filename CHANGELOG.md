@@ -14,9 +14,41 @@
 > **Back up your world before updating.**
 
 - Ported to Minecraft 1.20.1 (Fabric + Forge 47). NeoForge is replaced by Forge on this line.
-- Village structure injection into vanilla villages is Fabric-only (StructurePoolAPI has no Forge build for 1.20.1).
-- Runes is now an optional dependency: the wizard-merchant workstation and its rune trades are resolved by
-  registry id and stay inert when Runes is not installed.
+- Runes is now an optional dependency; the wizard-merchant rune trades simply stay inert without it.
+
+### What's new since 1.4.1
+
+Everything below was released between 1.4.1 and 3.1.2 on newer Minecraft versions only.
+
+#### New spells
+
+- Spell books now hold **6 spells**: two choices on each of three tiers
+- New Arcane spells: **Arcane Explosion**, **Arcane Barrage**, **Evocation**
+- New Fire spells: **Flame Slash**, **Firestorm**, **Fire Hydra**
+- New Frost spells: **Frost Spikes**, **Frost Shield**, **Frost Elemental**
+- Staves and wands carry their school's spell (Arcane Blast, Frostbolt, Pyroblast); the Wizard Staff comes with spell choices
+- **Arcane Missiles** reworked: fires missiles continuously for 4 seconds
+
+#### New items & equipment
+
+- **Valkyrie Magister Staff**, found only in Aether dungeons
+- Armor trim support for all wizard robes
+- All recipes in the vanilla recipe book; smelting recipes disassemble wizard weapons and armor
+- Weapon and armor attributes rebalanced
+- Updated spell projectile models and textures, new models for Frost Trap and Frost Shield
+
+#### Progression & world
+
+- New spell-casting and wizard-trade advancements
+- Wizard towers also generate through Repurposed Structures and Lithostitched
+- Wizard villager trades and tower chest loot rebalanced
+
+#### Gameplay & balance
+
+- Frost spells deal +30% damage to freeze-vulnerable mobs and -30% to freeze-immune ones; Fire spells gain +30% critical strike chance against freeze-immune mobs
+- Frozen is only removed by a direct hit; Frost Nova no longer freezes bosses
+- Summon spells require a rune to cast, and their cooldowns ignore spell haste
+- Fully translated into 20 languages
 
 # 3.1.2
 
