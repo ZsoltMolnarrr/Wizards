@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "wizards:amethyst_shard_from_blasting_staff_arcane"
+        "recipes": "wizards:amethyst_shard_from_blasting_staff_arcane"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

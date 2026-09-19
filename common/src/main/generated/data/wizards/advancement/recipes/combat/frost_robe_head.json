@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "wizards:frost_robe_head"
+        "recipes": "wizards:frost_robe_head"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

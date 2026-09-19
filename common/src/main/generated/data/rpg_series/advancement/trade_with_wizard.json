@@ -3,15 +3,13 @@
   "criteria": {
     "trade_with_wizard": {
       "conditions": {
-        "villager": [
-          {
-            "condition": "minecraft:entity_properties",
-            "entity": "this",
-            "predicate": {
-              "minecraft:nbt": "{VillagerData:{profession:\"wizards:wizard_merchant\"}}"
-            }
+        "villager": {
+          "type": "minecraft:entity_properties",
+          "entity": "this",
+          "predicate": {
+            "minecraft:nbt": "{VillagerData:{profession:\"wizards:wizard_merchant\"}}"
           }
-        ]
+        }
       },
       "trigger": "minecraft:villager_trade"
     }

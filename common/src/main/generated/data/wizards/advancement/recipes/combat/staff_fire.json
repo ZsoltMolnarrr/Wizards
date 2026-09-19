@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "wizards:staff_fire"
+        "recipes": "wizards:staff_fire"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

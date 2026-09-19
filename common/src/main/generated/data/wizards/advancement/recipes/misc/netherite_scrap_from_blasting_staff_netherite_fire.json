@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "wizards:netherite_scrap_from_blasting_staff_netherite_fire"
+        "recipes": "wizards:netherite_scrap_from_blasting_staff_netherite_fire"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

@@ -3,7 +3,7 @@
   "criteria": {
     "has_the_recipe": {
       "conditions": {
-        "recipe": "wizards:lapis_lazuli_from_smelting_wizard_robe_legs"
+        "recipes": "wizards:lapis_lazuli_from_smelting_wizard_robe_legs"
       },
       "trigger": "minecraft:recipe_unlocked"
     },

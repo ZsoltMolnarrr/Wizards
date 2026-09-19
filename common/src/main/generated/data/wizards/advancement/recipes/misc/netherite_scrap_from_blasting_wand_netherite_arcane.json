@@ -3,7 +3,7 @@
   "criteria": {
     "has_the_recipe": {
       "conditions": {
-        "recipe": "wizards:netherite_scrap_from_blasting_wand_netherite_arcane"
+        "recipes": "wizards:netherite_scrap_from_blasting_wand_netherite_arcane"
       },
       "trigger": "minecraft:recipe_unlocked"
     },

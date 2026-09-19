@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "wizards:prismarine_crystals_from_blasting_staff_frost"
+        "recipes": "wizards:prismarine_crystals_from_blasting_staff_frost"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

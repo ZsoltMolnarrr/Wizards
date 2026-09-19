@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "wizards:netherite_fire_robe_head_smithing"
+        "recipes": "wizards:netherite_fire_robe_head_smithing"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

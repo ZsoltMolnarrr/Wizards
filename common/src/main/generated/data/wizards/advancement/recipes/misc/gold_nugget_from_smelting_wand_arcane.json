@@ -3,7 +3,7 @@
   "criteria": {
     "has_the_recipe": {
       "conditions": {
-        "recipe": "wizards:gold_nugget_from_smelting_wand_arcane"
+        "recipes": "wizards:gold_nugget_from_smelting_wand_arcane"
       },
       "trigger": "minecraft:recipe_unlocked"
     },

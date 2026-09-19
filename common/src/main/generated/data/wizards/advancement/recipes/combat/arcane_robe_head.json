@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "wizards:arcane_robe_head"
+        "recipes": "wizards:arcane_robe_head"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

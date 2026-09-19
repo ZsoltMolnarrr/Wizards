@@ -3,7 +3,7 @@
   "criteria": {
     "has_the_recipe": {
       "conditions": {
-        "recipe": "wizards:netherite_scrap_from_smelting_wand_netherite_frost"
+        "recipes": "wizards:netherite_scrap_from_smelting_wand_netherite_frost"
       },
       "trigger": "minecraft:recipe_unlocked"
     },

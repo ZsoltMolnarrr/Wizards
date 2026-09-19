@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "wizards:netherite_arcane_robe_chest_smithing"
+        "recipes": "wizards:netherite_arcane_robe_chest_smithing"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

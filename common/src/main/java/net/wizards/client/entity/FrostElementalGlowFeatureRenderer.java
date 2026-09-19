@@ -35,7 +35,6 @@ public class FrostElementalGlowFeatureRenderer
                 LivingEntityRenderer.getOverlayCoords(state, 0.0F),
                 -1,
                 null,
-                state.outlineColor,
-                null);
+                state.outlineColor);
     }
 }

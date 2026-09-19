@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "wizards:wand_arcane"
+        "recipes": "wizards:wand_arcane"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

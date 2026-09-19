@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "wizards:staff_netherite_arcane_smithing"
+        "recipes": "wizards:staff_netherite_arcane_smithing"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

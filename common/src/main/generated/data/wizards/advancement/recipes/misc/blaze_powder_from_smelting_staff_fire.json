@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "wizards:blaze_powder_from_smelting_staff_fire"
+        "recipes": "wizards:blaze_powder_from_smelting_staff_fire"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

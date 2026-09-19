@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "wizards:ender_pearl_from_smelting_arcane_robe_head"
+        "recipes": "wizards:ender_pearl_from_smelting_arcane_robe_head"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

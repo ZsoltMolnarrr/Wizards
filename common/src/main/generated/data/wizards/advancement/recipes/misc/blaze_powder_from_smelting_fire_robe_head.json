@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "wizards:blaze_powder_from_smelting_fire_robe_head"
+        "recipes": "wizards:blaze_powder_from_smelting_fire_robe_head"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

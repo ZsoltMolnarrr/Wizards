@@ -181,7 +181,8 @@ public class WizardAdvancements extends FabricAdvancementProvider {
                         icon,
                         Component.translatable(translationKey(id, "title")),
                         Component.translatable(translationKey(id, "description")),
-                        null,
+                        // 26.3: the nullable background parameter is gone; `rootDisplay(...)` is the
+                        // overload that takes one, and none of these are root advancements.
                         frame,
                         showToast,
                         announceToChat,

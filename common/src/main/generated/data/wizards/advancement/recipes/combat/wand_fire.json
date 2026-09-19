@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "wizards:wand_fire"
+        "recipes": "wizards:wand_fire"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

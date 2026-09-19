@@ -6,11 +6,13 @@ import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricLanguageProvider;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricRecipeProvider;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagsProvider;
+import net.minecraft.advancements.Advancement;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.recipes.RecipeCategory;
+import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.world.item.crafting.CookingBookCategory;
-import net.minecraft.data.recipes.RecipeOutput;
+import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.data.recipes.RecipeProvider;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
@@ -155,9 +157,12 @@ public class WizardsDataGenerator implements DataGeneratorEntrypoint {
         public static int UNSMELT_TIME = 300;
 
         /// 1.21.2+: the provider only supplies a `RecipeGenerator`, which owns the exporter.
+        /// 26.3: the generator is fed two `BootstrapContext`s (recipes, advancements).
         @Override
-        protected RecipeProvider createRecipeProvider(HolderLookup.Provider registries, RecipeOutput exporter) {
-            return new RecipeProvider(registries, exporter) {
+        protected RecipeProvider createRecipeProvider(HolderLookup.Provider registries,
+                                                      BootstrapContext<Recipe<?>> recipeOutput,
+                                                      BootstrapContext<Advancement> advancementOutput) {
+            return new RecipeProvider(recipeOutput, advancementOutput) {
                 @Override
                 public void buildRecipes() {
                     UnsmeltGenerator.generateAll(this);

@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "wizards:wand_frost"
+        "recipes": "wizards:wand_frost"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

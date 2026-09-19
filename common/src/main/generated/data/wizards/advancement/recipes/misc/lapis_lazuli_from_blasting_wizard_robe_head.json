@@ -3,7 +3,7 @@
   "criteria": {
     "has_the_recipe": {
       "conditions": {
-        "recipe": "wizards:lapis_lazuli_from_blasting_wizard_robe_head"
+        "recipes": "wizards:lapis_lazuli_from_blasting_wizard_robe_head"
       },
       "trigger": "minecraft:recipe_unlocked"
     },

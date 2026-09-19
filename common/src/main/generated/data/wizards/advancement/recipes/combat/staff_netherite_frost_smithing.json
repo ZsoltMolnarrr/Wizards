@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "wizards:staff_netherite_frost_smithing"
+        "recipes": "wizards:staff_netherite_frost_smithing"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

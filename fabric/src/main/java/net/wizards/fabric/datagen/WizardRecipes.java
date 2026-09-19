@@ -2,10 +2,12 @@ package net.wizards.fabric.datagen;
 
 import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricRecipeProvider;
+import net.minecraft.advancements.Advancement;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.recipes.RecipeCategory;
-import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.data.recipes.RecipeProvider;
+import net.minecraft.data.worldgen.BootstrapContext;
+import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
@@ -28,9 +30,12 @@ public class WizardRecipes extends FabricRecipeProvider {
 
     /// 1.21.2+ splits the provider from the generator: the provider is registered with the pack,
     /// the generator holds the exporter + the item registry lookup that every builder now needs.
+    /// 26.3: the generator is fed two `BootstrapContext`s (recipes, advancements) instead of a `RecipeOutput`.
     @Override
-    protected RecipeProvider createRecipeProvider(HolderLookup.Provider registries, RecipeOutput exporter) {
-        return new Generator(registries, exporter);
+    protected RecipeProvider createRecipeProvider(HolderLookup.Provider registries,
+                                                  BootstrapContext<Recipe<?>> recipeOutput,
+                                                  BootstrapContext<Advancement> advancementOutput) {
+        return new Generator(recipeOutput, advancementOutput);
     }
 
     @Override
@@ -39,8 +44,8 @@ public class WizardRecipes extends FabricRecipeProvider {
     }
 
     private static class Generator extends RecipeProvider {
-        Generator(HolderLookup.Provider registries, RecipeOutput exporter) {
-            super(registries, exporter);
+        Generator(BootstrapContext<Recipe<?>> recipeOutput, BootstrapContext<Advancement> advancementOutput) {
+            super(recipeOutput, advancementOutput);
         }
 
     @Override

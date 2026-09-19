@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "wizards:netherite_scrap_from_blasting_netherite_fire_robe_head"
+        "recipes": "wizards:netherite_scrap_from_blasting_netherite_fire_robe_head"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

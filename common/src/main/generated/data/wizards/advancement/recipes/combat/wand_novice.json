@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "wizards:wand_novice"
+        "recipes": "wizards:wand_novice"
       },
       "trigger": "minecraft:recipe_unlocked"
     }
