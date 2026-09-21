@@ -8,53 +8,7 @@
       "id": "#rpg_series:weapon_type/damage_wand",
       "required": false
     },
-    {
-      "id": "wizards:wizard_robe_head",
-      "required": false
-    },
-    {
-      "id": "wizards:wizard_robe_chest",
-      "required": false
-    },
-    {
-      "id": "wizards:wizard_robe_legs",
-      "required": false
-    },
-    {
-      "id": "wizards:wizard_robe_feet",
-      "required": false
-    },
-    {
-      "id": "wizards:frost_robe_head",
-      "required": false
-    },
-    {
-      "id": "wizards:frost_robe_chest",
-      "required": false
-    },
-    {
-      "id": "wizards:frost_robe_legs",
-      "required": false
-    },
-    {
-      "id": "wizards:frost_robe_feet",
-      "required": false
-    },
-    {
-      "id": "wizards:netherite_frost_robe_head",
-      "required": false
-    },
-    {
-      "id": "wizards:netherite_frost_robe_chest",
-      "required": false
-    },
-    {
-      "id": "wizards:netherite_frost_robe_legs",
-      "required": false
-    },
-    {
-      "id": "wizards:netherite_frost_robe_feet",
-      "required": false
-    }
+    "#wizards:armor_type/generic_robes",
+    "#wizards:armor_type/frost_robes"
   ]
 }

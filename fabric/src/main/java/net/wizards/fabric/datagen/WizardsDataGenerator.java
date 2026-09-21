@@ -63,28 +63,40 @@ public class WizardsDataGenerator implements DataGeneratorEntrypoint {
             generateWeaponTags(WizardWeapons.entries);
             generateArmorTags(WizardArmors.entries, RPGSeriesItemTags.ArmorMetaType.MAGIC);
 
+            var genericRobes = generateClassArmorTag("generic_robes",
+                    WizardArmors.entries.stream().filter(entry -> entry.name().equals("wizard_robe")).toList());
             for (var book: WizardSpells.Book.values()) {
                 var name = book.toString().toLowerCase();
+                var schoolRobes = generateClassArmorTag(name + "_robes",
+                        WizardArmors.entries.stream().filter(entry -> entry.name().contains(name)).toList());
                 generateLootAffiliation(name,
                         List.of(Equipment.WeaponType.DAMAGE_STAFF, Equipment.WeaponType.DAMAGE_WAND),
-                        WizardArmors.entries.stream()
-                                .filter(entry -> entry.name().equals("wizard_robe") || entry.name().contains(name))
-                                .toList());
+                        List.of(genericRobes, schoolRobes));
             }
+        }
+
+        /// Class armor tag: `wizards:armor_type/<name>`, holding every piece of the given armor sets
+        private TagKey<Item> generateClassArmorTag(String name, List<Armor.Entry> armors) {
+            var tagKey = TagKey.of(RegistryKeys.ITEM, Identifier.of(WizardsMod.ID, "armor_type/" + name));
+            var tag = getOrCreateTagBuilder(tagKey);
+            for (var armor: armors) {
+                for (var id: armor.armorSet().pieceIds()) {
+                    tag.addOptional((Identifier) id);
+                }
+            }
+            return tagKey;
         }
 
         /// Loot affiliation: items relevant for the wearer of the given spell book
         /// (`wizards:spell_book/<book>` -> `wizards:loot_affiliation/<book>`), these drop more often
         /// for them from the loot injected by Spell Engine.
-        private void generateLootAffiliation(String book, List<Equipment.WeaponType> weaponTypes, List<Armor.Entry> armors) {
+        private void generateLootAffiliation(String book, List<Equipment.WeaponType> weaponTypes, List<TagKey<Item>> armorTags) {
             var tag = getOrCreateTagBuilder(TagKey.of(RegistryKeys.ITEM, Identifier.of(WizardsMod.ID, "loot_affiliation/" + book)));
             for (var type: weaponTypes) {
                 tag.addOptionalTag(RPGSeriesItemTags.WeaponType.get(type));
             }
-            for (var armor: armors) {
-                for (var id: armor.armorSet().pieceIds()) {
-                    tag.addOptional((Identifier) id);
-                }
+            for (var armorTag: armorTags) {
+                tag.addTag(armorTag);
             }
         }
     }
