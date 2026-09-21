@@ -1,0 +1,60 @@
+{
+  "values": [
+    {
+      "id": "#rpg_series:weapon_type/damage_staff",
+      "required": false
+    },
+    {
+      "id": "#rpg_series:weapon_type/damage_wand",
+      "required": false
+    },
+    {
+      "id": "wizards:wizard_robe_head",
+      "required": false
+    },
+    {
+      "id": "wizards:wizard_robe_chest",
+      "required": false
+    },
+    {
+      "id": "wizards:wizard_robe_legs",
+      "required": false
+    },
+    {
+      "id": "wizards:wizard_robe_feet",
+      "required": false
+    },
+    {
+      "id": "wizards:fire_robe_head",
+      "required": false
+    },
+    {
+      "id": "wizards:fire_robe_chest",
+      "required": false
+    },
+    {
+      "id": "wizards:fire_robe_legs",
+      "required": false
+    },
+    {
+      "id": "wizards:fire_robe_feet",
+      "required": false
+    },
+    {
+      "id": "wizards:netherite_fire_robe_head",
+      "required": false
+    },
+    {
+      "id": "wizards:netherite_fire_robe_chest",
+      "required": false
+    },
+    {
+      "id": "wizards:netherite_fire_robe_legs",
+      "required": false
+    },
+    {
+      "id": "wizards:netherite_fire_robe_feet",
+      "required": false
+    }
+  ]
+}
