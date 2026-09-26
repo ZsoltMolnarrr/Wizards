@@ -1,0 +1,15 @@
+{
+  "replace": false,
+  "values": [
+    {
+      "id": "#rpg_series:weapon_type/damage_staff",
+      "required": false
+    },
+    {
+      "id": "#rpg_series:weapon_type/damage_wand",
+      "required": false
+    },
+    "#wizards:armor_type/generic_robes",
+    "#wizards:armor_type/arcane_robes"
+  ]
+}
