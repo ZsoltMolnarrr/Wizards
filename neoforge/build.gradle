@@ -70,9 +70,7 @@ dependencies {
     implementation("top.theillusivec4.curios:curios-neoforge:${project.curios_version}")
 
     implementation("maven.modrinth:structure-pool-api:${project.structure_pool_api_version}-${platform}")
-//  TODO 26.3: back to maven.modrinth once released
-//    implementation("maven.modrinth:runes:${project.runes_version}-${platform}")
-    implementation("net.rpg_series:runes-${platform}:${project.runes_version}")
+    implementation("maven.modrinth:runes:${project.runes_version}-${platform}")
     implementation("maven.modrinth:spell-power:${project.spell_power_version}-${platform}")
     implementation("maven.modrinth:ranged-weapon-api:${project.ranged_weapon_api_version}-${platform}")
 //  TODO 26.3: back to maven.modrinth once released
