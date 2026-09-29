@@ -80,9 +80,7 @@ dependencies {
     implementation("maven.modrinth:runes:${project.runes_version}-${platform}")
     implementation("maven.modrinth:spell-power:${project.spell_power_version}-${platform}")
     implementation("maven.modrinth:ranged-weapon-api:${project.ranged_weapon_api_version}-${platform}")
-//  TODO 26.3: back to maven.modrinth once released
-//    implementation("maven.modrinth:spell-engine:${project.spell_engine_version}-${platform}")
-    implementation("net.spell_engine:spell_engine-${platform}:${project.spell_engine_version}") { transitive = false }
+    implementation("maven.modrinth:spell-engine:${project.spell_engine_version}-${platform}")
 }
 
 processResources {
