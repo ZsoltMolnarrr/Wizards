@@ -17,14 +17,14 @@
 		{
 			"weight": 5,
 			"element": {
-				"element_type": "lithostitched:limited",
+				"element_type": "lithostitched:delegating",
 				"delegate": {
 					"element_type": "minecraft:single_pool_element",
 					"projection": "rigid",
 					"processors": "minecraft:empty",
 					"location": "wizards:village/plains/wizard_tower"
 				},
-  				"limit": 1
+  				"max_count": 1
 			}
 		}
 	]

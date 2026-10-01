@@ -1,3 +1,7 @@
+# 3.1.4
+
+- Fix worlds failing to load with Lithostitched 2.x (villages)
+
 # 3.1.3
 
 - Updated for Minecraft 26.3
